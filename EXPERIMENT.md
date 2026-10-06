@@ -4,12 +4,13 @@ This experiment tests whether a fresh agent writes stronger failing tests for a 
 Both arms write tests before any implementation exists, so the only difference is who writes the tests and what that writer remembers.
 The primary measure is the mutation score of each test suite against the feature's reference implementation.
 The method is a controlled benchmarking experiment without human participants, on real features from [FeatureBench](https://github.com/LiberCoders/FeatureBench).
-It runs separately on 2 models, Qwen3 27B and Claude Sonnet 5.5, both in the Pi coding agent harness.
+It runs separately on 2 models, Qwen3.6 27B and Claude Sonnet 5.5, both in the Pi coding agent harness.
 
 ## Status
 
 Design only: no run has happened yet.
-The [open decisions](#open-decisions) must be settled, and this file committed, before the pilot starts.
+Every open decision was settled on 2026-10-06, as listed in [settled decisions](#settled-decisions).
+This file is tagged `design-v1` before the harness is built.
 The task count and run count are then set from the pilot by the rules in [sample size](#sample-size).
 
 ## Why this question is open
@@ -59,9 +60,14 @@ The independent variable is who writes the failing tests.
 | --- | --- | --- |
 | A, control | The session that planned the implementation | Spec, repository, stub, its design note |
 | B, treatment | A fresh agent | Spec, repository, stub |
+| C, context | A fresh agent | Spec, repository, stub, arm A's design note |
 
-Both arms get the same spec, the same undeveloped repository, and the same stub.
+All arms get the same spec, the same undeveloped repository, and the same stub.
 Arm B lacks only arm A's design note and conversation.
+Arm C lacks only arm A's conversation: it gets arm A's design note from the same run, word for word, in its first message.
+The primary comparison is B against A.
+Arm C separates the 2 things that comparison bundles, as [secondary comparisons](#secondary-comparisons):
+C against A changes only the fresh context, and B against C changes only the design note.
 
 Arm B is a bare fresh agent with only the shared test-writing prompt.
 The experiment therefore tests the principle of a separate test writer, and not any particular test-writing agent or its prompt.
@@ -77,7 +83,8 @@ Without it, arms A and B would differ only by a short conversation, and a null r
 
 FeatureBench fixes each feature's interface in its problem statement, so neither arm designs the interface.
 The **stub** is made by a script from the [spec](#spec-for-each-task)'s interface descriptions: every listed function and class, at its listed path, with its signature, its docstring with doctest examples removed, and a body of `raise NotImplementedError`.
-Both arms therefore start from a byte-identical stub, and no text written by arm A reaches arm B.
+Every arm therefore starts from a byte-identical stub, and no text written by arm A reaches arm B.
+Arm C receives only arm A's design note.
 
 ### Alternatives not compared
 
@@ -91,27 +98,27 @@ Both arms run on every task, and each task's arm B score is compared with its ow
 Pairing removes differences in difficulty between tasks from the comparison.
 
 Treatments are not randomly assigned, because every task receives both.
-Arm order is fixed so that both arms of a pair run back to back under the same model state.
+Arm order is fixed so that the arms of a pair run back to back under the same model state.
 A fixed order lets anything that changes between the 2 sessions act as a confound.
 The [procedure](#procedure) limits this: arm B starts straight after arm A, and task and run pairs run in a random order.
 
 ## Controlled variables
 
-The following are held constant across both arms:
+The following are held constant across all arms:
 
-* **Model:** within each replication, both arms and every role use the same model, described in [models](#models).
+* **Model:** within each replication, every arm and every role use the same model, described in [models](#models).
 * **Harness:** both models run in the same pinned version of Pi, with the same system prompt and the same tools: read, write, edit, and bash.
   No Pi extension loads except the provider configuration, which is committed.
-* **Tasks:** the same tasks, with the spec text identical for both arms.
+* **Tasks:** the same tasks, with the spec text identical for every arm.
   The task count is set in [sample size](#sample-size).
 * **Stub:** the same scripted stub, byte for byte.
-* **Test-writing prompt:** the same instruction text in both arms.
-  Arm A sees it as its next turn, and arm B sees it as its first turn after the spec.
+* **Test-writing prompt:** the same instruction text in every arm.
+  Arm A sees it as its next turn, and arms B and C see it in their first message, after the spec and, for arm C, the design note.
 * **Implementation state:** no implementation of the feature exists in either arm while tests are written.
 * **Test framework:** `pytest`, matching FeatureBench's own tests.
 * **Tools:** file read and write and a shell inside the task's container, including running the tests against the stub to confirm that they fail.
 * **Environment:** the same container image per task, as described in [environment](#environment).
-* **Limits:** the same turn limit and token limit for test writing in both arms.
+* **Limits:** the same turn limit and token limit for test writing in every arm.
   Both limits count from the test-writing prompt, so arm A's design phase does not use up its test-writing budget.
   Arm A's design phase has its own turn and token limit.
 * **Context compaction:** Pi's automatic compaction is turned off with `"compaction": {"enabled": false}` in the committed settings.
@@ -119,7 +126,7 @@ The following are held constant across both arms:
   A session whose context overflows the model's context length ends there, and the [exclusion rules](#exclusions-and-missing-data) apply.
 * **Runs:** 3 independent runs per task per arm, each starting from a new session in a new container.
   The run count is checked in [sample size](#sample-size).
-* **Sampling settings:** the same for both arms within each model, and recorded, as described in [models](#models).
+* **Sampling settings:** the same for every arm within each model, and recorded, as described in [models](#models).
 
 ### Models
 
@@ -127,14 +134,16 @@ The whole experiment runs once per model, on the same tasks.
 
 | Model | Served by | Pinned as |
 | --- | --- | --- |
-| Qwen3 27B | The experimenter's local inference server, through an OpenAI-compatible API | Weights repository and revision, quantization, server software and version, context length |
+| Qwen3.6 27B | The experimenter's local llama.cpp server behind llama-swap, through an OpenAI-compatible API | `unsloth/Qwen3.6-27B-MTP-GGUF` at revision `5cb35eb3dcbf52dbce5f87dbc64df6aaffadcace`, file `Qwen3.6-27B-Q4_K_M.gguf`, llama.cpp build `b1-8ed274e`, context length 200,000 tokens, KV cache quantized to q4_0, MTP speculative decoding with 2 draft tokens, 1 slot |
 | Claude Sonnet 5.5 | The Anthropic API | Model ID `claude-sonnet-5-5` |
 
-Qwen3 27B has open weights, which meets the recommendation to include an open model as a baseline ([arXiv 2508.15503](https://arxiv.org/abs/2508.15503)).
-Its sampling settings are set explicitly and recorded.
+Qwen3.6 27B has open weights, which meets the recommendation to include an open model as a baseline ([arXiv 2508.15503](https://arxiv.org/abs/2508.15503)).
+Its sampling settings are set explicitly on the server: temperature 0.6, top-p 0.95, top-k 20, min-p 0, repeat penalty 1.0, and reasoning off.
+The harness records the server's `/props` output for every session, so a change in serving shows up in the manifests.
+The server has 1 slot, so Qwen sessions run one at a time.
 Sonnet runs with default sampling settings, which are recorded.
 
-Limits such as the context length may differ between the 2 models, but are the same for both arms within a model.
+Limits such as the context length may differ between the 2 models, but are the same for every arm within a model.
 The models also differ in size, serving, and quantization, so a comparison across models cannot isolate any one of these.
 Comparisons across models are therefore exploratory.
 
@@ -144,7 +153,13 @@ Every session and every test run happens in a Docker container built from the ta
 
 * **Images:** each task's image from FeatureBench's Docker Hub organisation, pinned by digest.
   Any layer added on top, such as the agent harness or the mutation tool, comes from a Dockerfile committed to this repository with every version pinned.
-* **A new container per session:** each arm A and arm B session starts from a fresh container, so nothing from one session can reach another.
+* **Preparation:** a FeatureBench image holds the complete repository at the task's commit, its git history, and a second copy at `/root/my_repo`.
+  Every container is prepared by the same committed script, which mirrors FeatureBench's own inference preparation.
+  It applies the task's removal patch to `/testbed`, deletes the fail-to-pass test files, deletes `/root/my_repo`, every `__pycache__` directory, and `/testbed/.git`, starts a new git repository with 1 commit, and applies the stub.
+  Sessions therefore never see the developers' fail-to-pass tests.
+* **Host:** an Apple M4 Max with 16 cores and 64 GB of memory, running Docker Desktop.
+  The images are built for `linux/amd64` and run under Rosetta emulation, which slows every run but applies equally to every arm.
+* **A new container per session:** each arm A, arm B, and arm C session starts from a fresh container, so nothing from one session can reach another.
 * **Network:** agent sessions may reach only their model's endpoint: the Anthropic API for Sonnet, and the local inference server for Qwen.
   Test runs and mutant runs have no network.
 * **Timeouts:** each test run against a mutant has a time limit of 3 times the suite's run time on the reference implementation.
@@ -162,6 +177,18 @@ The **mutation score** of a suite is the share of mutants it kills.
 
 Mutants are made only in the lines that the task's gold patch adds, because those lines are the feature under test.
 The rest of the repository is not mutated.
+
+The mutator is a small script committed to this repository, so every operator can be audited.
+It parses each changed file with Python's `ast` module and makes 1 mutant for each applicable operator at each node that starts on an added line:
+
+* **Comparison:** `<` and `<=`, `>` and `>=`, `==` and `!=`, `in` and `not in`, `is` and `is not` swap.
+* **Arithmetic:** `+` and `-`, `*` and `/`, `//` and `/` swap, and `%` becomes `*`, in binary and augmented assignments.
+* **Boolean:** `and` and `or` swap, and a `not` is removed.
+* **Constants:** `True` and `False` swap, an integer `k` becomes `k + 1`, and a non-empty string becomes `"XX"`.
+* **Return:** a returned value becomes `None`.
+* **Statement:** an expression statement, assignment, `raise`, `break`, or `continue` becomes `pass`.
+
+A mutant whose source equals the original after unparsing, or that fails to compile, is dropped before sampling.
 Each task's mutants are a random sample of at most 100, drawn once with a seed.
 Every suite, arm, and run on that task is scored against the same sample, so sampling error largely cancels in the paired difference.
 
@@ -215,8 +242,9 @@ These checks confirm it for every run:
 * **Design note present:** a script confirms that arm A's design note has an entry for every function and class in the interface descriptions, and lists at least 1 edge case.
   A run that fails is rerun once in a new session.
   A run that fails again is excluded, and every exclusion is reported with its reason.
-* **Design note isolated:** arm B runs in a new container that holds the undeveloped repository, the spec, and the stub, and nothing from arm A's session.
-  A script confirms that arm B's transcript reads no file outside that container's starting contents.
+* **Design note isolated:** arms B and C each run in a new container that holds the undeveloped repository, the spec, and the stub, and nothing from arm A's session.
+  Arm C's design note reaches it only through its first message.
+  A script confirms that each transcript reads no file outside that container's starting contents.
 * **Design note kept:** a script confirms that arm A's session file holds no `compaction` entry, so the design note was still in context when the tests were written.
   A run that fails is treated like a failed design-note check.
 
@@ -231,6 +259,8 @@ The tests are split into fail-to-pass tests, which check the feature, and pass-t
 * **Split:** the `fast` split, 100 tasks from 18 repositories that need no GPU.
 * **Licence:** the dataset is MIT-licensed, and each repository keeps its own licence.
   A script downloads the data at the pinned revision, and the repository does not store a copy.
+* **Gold patch:** the dataset's `patch` field is the removal patch, which turns the complete repository into the undeveloped one.
+  The gold patch is that patch reversed, without any file block that touches a fail-to-pass test file, as FeatureBench's own `preprocess_hf_patch` builds it.
 
 FeatureBench is used for 3 reasons.
 Each task is a real feature, with a median of about 470 added lines across 8 files in the `fast` split, which gives arm A real implementation planning to do.
@@ -243,13 +273,14 @@ Tasks are chosen in this order:
 
 1. Drop every task whose gold patch fails its fail-to-pass or pass-to-pass tests in this experiment's container.
 2. Drop every task whose scripted stub does not import cleanly, or breaks a pass-to-pass test.
-3. Draw 3 pilot tasks with a fixed random seed.
-4. Run the pilot, then set the task count from [sample size](#sample-size) and commit it here.
-5. Shuffle the rest with a second fixed seed, and take experiment tasks in that order until there are that many, skipping any task that would put more than 5 tasks from 1 repository in the set, pilot tasks included.
+3. Drop every task whose prepared container still holds the feature's code outside the undeveloped source, as checked under [assumptions](#assumptions).
+4. Draw 3 pilot tasks with a fixed random seed.
+5. Run the pilot, then set the task count from [sample size](#sample-size) and commit it here.
+6. Shuffle the rest with a second fixed seed, and take experiment tasks in that order until there are that many, skipping any task that would put more than 5 tasks from 1 repository in the set, pilot tasks included.
    The tasks after them, in the same order, are the replacements used by the [exclusion rules](#exclusions-and-missing-data).
    The `fast` split's tasks are spread unevenly, from 21 tasks in 1 repository to 1 task in each of 8 others, so this limit allows at most 52 tasks in total, and about 49 after the pilot.
 
-Each seed is recorded and committed here before the draw that uses it, so the commit history shows that no draw was chosen after the fact.
+Each seed is recorded and committed in `draws/` before the draw that uses it, so the commit history shows that no draw was chosen after the fact.
 Pilot tasks never appear in the experiment results.
 
 ### Fresh tasks
@@ -258,8 +289,10 @@ FeatureBench tasks come from popular repositories, with features created between
 The model has probably seen both the tasks and the repositories' code, so 5 fresh tasks are added as a contamination check.
 
 Each fresh task is generated with FeatureBench's own data pipeline from repository commits made after the later of the 2 models' release dates.
+Qwen3.6 27B was released on 2026-04-22 and Claude Sonnet 5.5 on 2026-09-28, so every fresh task comes from a commit made after 2026-09-28.
 A model cannot have trained on code published after its release, so this bound holds even when a training cutoff is not published.
-It is committed before the pilot and is not published before the run.
+Each fresh task is committed before the pilot and is not published before the run.
+When the pipeline yields fewer than 5 such tasks before the pilot, the experiment runs with those it yields, and the count is reported.
 
 Fresh tasks run through the same procedure as experiment tasks.
 Their results are reported separately and are not used in the decision rule, because 5 tasks are too few to decide on.
@@ -289,7 +322,7 @@ After the pilot, its σ and `n` are replaced by the values the pilot sets.
 * **Example:** at σ = 10, `n` = 47.
   20 tasks are enough only when σ is at most about 6.3.
 
-When `n` exceeds the [task cap](#open-decisions), the experiment runs the cap.
+When `n` exceeds the [task cap](#settled-decisions), the experiment runs the cap.
 A null result is then reported as inconclusive, and not as evidence of no effect.
 
 The decision rule also requires an observed difference of at least 5 points.
@@ -306,7 +339,8 @@ When s²w / 3 is more than half of σ², run-to-run noise dominates, and the run
 ### Spec for each task
 
 The **spec** is the FeatureBench problem statement: its task description and its interface descriptions.
-The implementation instructions in its note are removed, because both arms write tests and not code.
+The implementation instructions are removed, because every arm writes tests and not code.
+They are the `**NOTE**` block and the `### Clarification` block, which tell the agent to write code under `/testbed/` and repeat the first interface as an example.
 Doctest examples in the interface docstrings are also removed, because they are ready-made test cases and would narrow the difference between arms.
 A committed script makes both removals, and the stub is built from its output, so no doctest reaches either arm through the stub.
 
@@ -314,9 +348,10 @@ A committed script makes both removals, and the stub is built from its output, s
 
 Each model's task and run pairs are executed in their own random order, drawn with a third fixed seed.
 The 2 models may run at the same time, because their sessions share nothing.
-The seed is recorded and committed here before the first run.
+The seed is recorded and committed in `draws/` before the first run.
 Random order stops a change in the model or its API during the experiment from lining up with particular tasks.
-Arm B for a run starts straight after arm A for the same run, so both arms of a pair face the same model state.
+Arms B and C for a run start straight after arm A for the same run, so all arms of a run face the same model state.
+Arm C needs arm A's design note, so it always runs after arm A, and B and C run in a random order drawn from the same seed.
 Every session's start time is recorded.
 
 Each run of each task follows these steps:
@@ -328,11 +363,13 @@ Each run of each task follows these steps:
 4. Run the design-note and design-note-kept checks from the [manipulation check](#manipulation-check).
 5. Start a new container from the same image, apply the same stub, and start an arm B session with the spec.
 6. Have arm B write the tests with the same prompt, then drop the tests that pass against the stub and lock the suite, as in step 3.
-7. Run the isolation check from the [manipulation check](#manipulation-check).
-8. Run both suites 5 times against the reference implementation to mark invalid and flaky tests.
-9. Run both suites' valid tests against every sampled mutant.
+7. Start a new container in the same way, and start an arm C session with the spec and arm A's design note.
+   Have arm C write the tests with the same prompt, then drop and lock as in step 3.
+8. Run the isolation check from the [manipulation check](#manipulation-check) on arms B and C.
+9. Run every suite 5 times against the reference implementation to mark invalid and flaky tests.
+10. Run every suite's valid tests against every sampled mutant.
    On the first run of each task, also run its fail-to-pass tests against every sampled mutant for the [human reference](#human-reference-secondary).
-10. Store every transcript, artifact, and score as raw files.
+11. Store every transcript, artifact, and score as raw files.
 
 The pilot runs this procedure on 3 tasks with 3 runs each, on both models.
 It checks that the harness works end to end, measures the cost of each session and of each mutant run, and gives the variance estimates for [sample size](#sample-size).
@@ -343,7 +380,7 @@ Each pilot run adds a second arm B session, B′, in its own new container.
 The mean difference between B′ and B shows what the harness reports when both arms are the same, and should be close to 0.
 A clearly nonzero mean points to a fault in the harness, which is fixed before the experiment draw.
 
-One pilot run is published as a worked example: its spec, stub, design note, and both arms' tests.
+One pilot run is published as a worked example: its spec, stub, design note, and every arm's tests.
 
 ## Analysis
 
@@ -352,7 +389,7 @@ For each task, average each arm's mutation score and invalid rate over its valid
 Then compare the arms paired by task.
 
 * **Mean difference:** arm B minus arm A, in percentage points, with a 97.5% percentile bootstrap confidence interval over tasks.
-  The bootstrap uses 10,000 resamples and a fourth fixed seed, committed here before the first run.
+  The bootstrap uses 10,000 resamples and a fourth fixed seed, committed in `draws/` before the first run.
 * **Significance:** a two-sided Wilcoxon signed-rank test on the `n` paired differences, at a 2.5% significance level.
 * **Wins, ties, and losses:** the count of tasks where arm B scores higher, the same, or lower.
 * **Invalid rate:** the same mean difference and interval, for the guard.
@@ -363,6 +400,18 @@ Then compare the arms paired by task.
 * **Repository clustering:** the bootstrap is repeated with whole repositories resampled instead of tasks.
   Tasks from 1 repository share code and conventions, so their differences may not be independent.
   It is reported beside the primary interval and is not part of the decision rule.
+
+### Secondary comparisons
+
+These comparisons are pre-specified and reported in full, but they do not affect the [decision rule](#decision-rule):
+
+* **C minus A:** the effect of a fresh context, with the design note held.
+* **B minus C:** the effect of the design note, with a fresh context held.
+
+Each gets the same mean difference, 97.5% bootstrap interval, two-sided Wilcoxon signed-rank test, and wins, ties, and losses as the primary comparison.
+They use the bootstrap seed with 1 and 2 added, so each has its own resamples.
+The [sample size](#sample-size) is set for the primary comparison only, so these comparisons may be underpowered.
+A non-significant result for either one is reported as inconclusive.
 
 ### Test choice
 
@@ -375,8 +424,8 @@ The bootstrap interval reports the size of the effect.
 
 ### Exclusions and missing data
 
-A **pair** is the arm A session and the arm B session of 1 run of 1 task.
-Exclusions always remove a whole pair, so both arms keep the same runs.
+A **pair** is the arm A, arm B, and arm C sessions of 1 run of 1 task.
+Exclusions always remove a whole pair, so every arm keeps the same runs.
 
 * **Failed manipulation check:** an arm A session that fails the design-note or design-note-kept check is rerun once in a new session.
   When the rerun fails too, the pair is excluded.
@@ -422,7 +471,9 @@ The design rests on these assumptions:
 * **Mutation score:** mutation score measures test strength, as argued in [mutation score](#mutation-score-primary).
 * **Reference implementations:** every gold patch left after filtering is correct, because it passes its fail-to-pass and pass-to-pass tests.
 * **No implementation:** no implementation of the feature can be reached while either arm writes tests.
-  Before the pilot, a script confirms that no task's image holds git history or another copy of the gold patch's code.
+  The [preparation](#environment) removes the git history and the second copy that every image holds.
+  Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds.
+  A match anywhere, such as in an installed copy of the package under `site-packages`, drops the task.
   Network access during sessions is limited to the model API, so the code cannot be fetched from the original repository.
 
 ## Threats to validity
@@ -447,7 +498,8 @@ Each threat is listed with the check or mitigation that addresses it.
 
 * **Fresh context:** arm B lacks the design note, and it also starts with a shorter, fresh context.
   An effect could come from the fresh context rather than from the missing design reasoning.
-  The experiment tests the 2 differences together, unless the context arm in [open decisions](#open-decisions) is added to separate them.
+  The primary comparison tests the 2 differences together.
+  Arm C and the [secondary comparisons](#secondary-comparisons) separate them.
 * **Fixed arm order:** arm A always runs first, so a change between the 2 sessions could look like an effect.
   The [design](#design-and-arm-order) limits this by running arm B straight after arm A.
   The A/A check in the [procedure](#procedure) shows what the harness reports when both arms are the same.
@@ -501,24 +553,24 @@ Everything needed to rerun or check the experiment is in this repository or pinn
 * **Deviations:** any change to this design after the pilot is logged with its date and reason.
   Setting the task count and run count by the [sample size](#sample-size) rules is planned and is not a deviation.
 
+## Settled decisions
+
+These were settled on 2026-10-06, before the pilot:
+
+* **Qwen serving details:** as listed in [models](#models).
+* **Release dates:** Qwen3.6 27B on 2026-04-22, and Claude Sonnet 5.5 on 2026-09-28, which bound the [fresh tasks](#fresh-tasks).
+* **Cross-model arm:** not run.
+  2 sessions of 1 model may share blind spots, and this experiment does not test that.
+* **Context arm:** run, as arm C.
+* **Sizes:** 3 runs per task, a 5-point effect threshold, a 2-point validity margin, a planning σ of 10 points, and 100 mutants per task.
+* **Task cap:** 49, the most that the per-repository limit in the [objects](#objects) permits, so the cap never binds below the `n` from [sample size](#sample-size).
+* **Mutation tool:** the committed mutator described in [mutation score](#mutation-score-primary).
+* **Pi version:** 1.0.4, pinned for the whole experiment.
+  The pilot confirms that `compaction.enabled` set to `false` works.
+* **Public remote:** a public GitHub repository, which receives the `design-v1` tag.
+* **Seeds:** each is a random integer from Python's `secrets` module, committed in `draws/` before the draw that uses it.
+  `draws/pilot.seed` draws the pilot tasks, `draws/experiment.seed` the experiment tasks, `draws/order.seed` the run order, `draws/bootstrap.seed` the bootstrap, and `draws/mutants.seed` the mutant samples.
+
 ## Open decisions
 
-These must be settled before the pilot:
-
-* **Qwen serving details:** the exact weights repository and revision, quantization, server software and version, context length, and sampling settings.
-* **Release dates:** the release date of each model, to bound the [fresh tasks](#fresh-tasks).
-* **Cross-model arm:** arm B run on the other model, suggested by the cross-model review result.
-  Both models are already set up, so it adds 1 session per run, about half again the cost.
-* **Context arm:** a fresh agent given the spec, the stub, and arm A's design note.
-  It separates the effect of the missing design note from the effect of a fresh context.
-  It adds about half again to the cost of the experiment run.
-* **Sizes:** 3 runs per task, a 5-point effect threshold, a 2-point validity margin, a planning σ of 10 points, and 100 mutants per task.
-* **Task cap:** the most experiment tasks the budget allows, up to the about 49 that the per-repository limit in the [objects](#objects) permits.
-  At σ = 10 the [sample size](#sample-size) needs 47.
-* **Mutation tool:** a tool such as `mutmut`, pinned to one version, or a small mutator committed to this repository.
-  It must mutate only the lines a gold patch adds.
-  A committed mutator is easier to audit, and a known tool is easier to trust.
-* **Pi version:** the version used in the pilot, pinned for the whole experiment.
-  Version 1.0.4 is installed as of 2026-10-06.
-  Its docs list a `compaction.enabled` setting, and the pilot confirms that turning it off works.
-* **Public remote:** where the `design-v1` tag is pushed for its timestamp, such as a public GitHub repository or OSF.
+None.
