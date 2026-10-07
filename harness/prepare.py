@@ -71,10 +71,25 @@ def leak_lines(row, spec_text, undeveloped):
     return sorted(added, key=lambda s: (-len(s), s))[:20]
 
 
+LEAK_MIN_LINES = 5  # vendored copies of a feature held 7-17 of the 20 lines; incidental matches 1-2
+F2P_MAX_GOLD_FAIL = 0.05
+
+
+def f2p_count(r):
+    m = re.search(r"(\d+) passed", r["gold_f2p"]["summary"])
+    return (int(m.group(1)) if m else 0) + len(r["gold_f2p"]["failing"])
+
+
 def decide(r):
-    """The task filter (EXPERIMENT.md "Objects", steps 1-3), from a recorded filter report."""
-    return (r["gold_f2p"]["exit"] == 0 and r["gold_p2p"]["exit"] == 0 and r["stub_compiles"] and r["stub_imports"]
-            and r["stub_p2p"]["exit"] == 0 and not r["leak_hits"])
+    """The task filter (EXPERIMENT.md "Objects", steps 1-3), from a recorded filter report.
+
+    Tests that fail on the gold patch in this container fail for the environment (mostly network access),
+    on gold and stub alike, so they are excluded rather than dropping the task."""
+    n_f2p = f2p_count(r)
+    gold_ok = n_f2p > 0 and len(r["gold_f2p"]["failing"]) <= F2P_MAX_GOLD_FAIL * n_f2p
+    stub_breaks = set(r["stub_p2p"]["failing"]) - set(r["gold_p2p"]["failing"])
+    leak = [p for p, v in r["leak_hits"].items() if v["lines"] >= LEAK_MIN_LINES]
+    return gold_ok and r["stub_compiles"] and r["stub_imports"] and not stub_breaks and not leak
 
 
 def prepare(task_id, rows, seed):

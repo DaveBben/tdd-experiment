@@ -243,3 +243,20 @@ def test_pilot_rules_on_synthetic_pilot(tmp_path):
     m = r["per_model"][runs]
     assert m["tasks"] == 3 and m["aa"]["mean"] == 0 and m["aa"]["ok"]
     assert r["sigma"] == 10 and r["n"] == 47 and r["runs"] == 3  # small spread: the σ floor of 10 holds
+
+
+# --- task filter rule --------------------------------------------------------------
+
+def test_filter_rule():
+    from harness import prepare
+    base = {"gold_f2p": {"exit": 0, "failing": [], "summary": "== 40 passed in 1s =="},
+            "gold_p2p": {"exit": 1, "failing": ["t.py::net"], "summary": ""},
+            "stub_p2p": {"exit": 1, "failing": ["t.py::net"], "summary": ""},
+            "stub_compiles": True, "stub_imports": True,
+            "leak_hits": {"/site/numpy/x.py": {"lines": 2, "tracked": False}}}
+    assert prepare.decide(base)  # env failure shared by gold and stub, idiom-only leak hit: kept
+    assert not prepare.decide({**base, "leak_hits": {"/site/pip/_vendor/pkg/m.py": {"lines": 7, "tracked": False}}})
+    assert not prepare.decide({**base, "stub_p2p": {"exit": 1, "failing": ["t.py::net", "t.py::other"], "summary": ""}})
+    assert not prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a", "b", "c"], "summary": "37 passed"}})
+    assert prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a"], "summary": "39 passed"}})
+    assert not prepare.decide({**base, "stub_imports": False})

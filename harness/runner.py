@@ -61,7 +61,7 @@ def mutants(cmd, ids, muts):
         try:
             with open(path, "wb") as f:
                 f.write(src[: m["start"]] + m["new"].encode() + src[m["end"]:])
-            o, _, timed_out = pytest(cmd, ids, timeout=3 * ref_seconds)
+            o, _, timed_out = pytest(cmd, ids, timeout=max(3 * ref_seconds, ref_seconds + 10))
         finally:
             with open(path, "wb") as f:
                 f.write(src)

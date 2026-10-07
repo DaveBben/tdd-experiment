@@ -68,9 +68,10 @@ def ensure_prepared(row):
 
 
 def kept_tasks():
-    reports = glob.glob(os.path.join(ROOT, "tasks", "*", "filter.json"))
+    """Every task the filter keeps, decided afresh from its recorded report by the committed rule."""
+    reports = [json.load(open(p)) for p in glob.glob(os.path.join(ROOT, "tasks", "*", "filter.json"))]
     assert len(reports) == 100, f"only {len(reports)} of 100 tasks filtered"
-    return sorted(json.load(open(p))["task"] for p in reports if json.load(open(p))["keep"])
+    return sorted(r["task"] for r in reports if prepare.decide(r))
 
 
 def cmd_draw_pilot():

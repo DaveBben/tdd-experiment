@@ -172,7 +172,9 @@ Every session and every test run happens in a Docker container built from the ta
   Session containers sit on an internal Docker network whose only other member is a gateway that forwards to those 2 endpoints.
   The gateway adds the Anthropic API key, so no session container holds it.
   Test runs and mutant runs have no network.
-* **Timeouts:** each test run against a mutant has a time limit of 3 times the suite's run time on the reference implementation.
+* **Timeouts:** each test run against a mutant has a time limit of 3 times the suite's run time on the reference implementation, and at least that run time plus 10 seconds.
+  A suite can run in under a second, and 3 times that would let ordinary start-up jitter count as a kill.
+  The test command is FeatureBench's for each task, including its per-task exclusions with `-k`, and is the same for every arm.
   That reference run time is measured in the same batch as the suite's mutant runs, so both face the same machine load.
   A mutant that times out counts as killed, and timeout kills are counted separately for each arm.
 * **Resources:** every container is limited to 4 CPUs and 8 GB of memory, and the limits are recorded.
@@ -283,8 +285,10 @@ The results report each task's repository, the added line count and file count o
 
 Tasks are chosen in this order:
 
-1. Drop every task whose gold patch fails its fail-to-pass or pass-to-pass tests in this experiment's container.
-2. Drop every task whose scripted stub does not import cleanly, or breaks a pass-to-pass test.
+1. Drop every task whose gold patch fails more than 5% of its fail-to-pass tests in this experiment's container.
+   A test that fails on the gold patch fails for the environment, mostly because test runs have no network, so it is excluded rather than dropping the task: it fails on every implementation alike.
+   Such fail-to-pass tests are already invalid under [validity](#validity-guard), and such pass-to-pass tests are left out of step 2.
+2. Drop every task whose scripted stub does not import cleanly, or breaks a pass-to-pass test that passes on the gold patch.
 3. Drop every task whose prepared container still holds the feature's code outside the undeveloped source, as checked under [assumptions](#assumptions).
 4. Draw 3 pilot tasks with a fixed random seed.
 5. Run the pilot, then set the task count from [sample size](#sample-size) and commit it here.
@@ -487,7 +491,8 @@ The design rests on these assumptions:
   Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds, leaving out lines that also appear in the spec.
   It also leaves out lines that the undeveloped repository still holds in the files the gold patch changes.
   Both kinds reach every arm through the spec, the stub, or the repository itself, so a match on them shows no leak.
-  A match anywhere, such as in an installed copy of the package under `site-packages`, drops the task.
+  A file holding at least 5 of those lines anywhere, such as an installed copy of the package under `site-packages`, drops the task.
+  Real copies of a feature held 7 to 17 of the 20 lines when this was checked, and files that only share an idiom with it held 1 or 2.
   Network access during sessions is limited to the model API, so the code cannot be fetched from the original repository.
 
 ## Threats to validity
