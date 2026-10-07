@@ -10,6 +10,7 @@
 Layout: OUT/<task>/<arm>/<run>/attempt-<k>/ holds 1 session's raw outputs; OUT/<task>/<arm>/<run>/
 holds manifest.json, locked.json, and score.json for the attempt that counts.
 """
+import concurrent.futures
 import fcntl
 import glob
 import hashlib
@@ -259,28 +260,40 @@ def run_pair(row, model, base, order, spec_text, done):
 
 # --- scoring --------------------------------------------------------------------
 
-def cmd_score(tasks_file, out):
+SCORE_WORKERS = 8  # pytest is single-threaded; the VM has 12 cores, and a scorer needs under 1 GB
+
+
+def cmd_score(tasks_file, *outs, workers=SCORE_WORKERS):
+    """Score every unscored, non-excluded run under each OUT, and each task's human reference once, in parallel.
+    Each job runs in its own container and writes only its own files."""
     rows = data.load_rows()
+    jobs = []
     for task in open(tasks_file).read().split():
         row = rows[task]
         ensure_prepared(row)
         mutants = json.load(open(os.path.join(ROOT, "tasks", task, "mutants.json")))["mutants"]
         hdir = os.path.join(ROOT, "runs", "human", task)  # model-independent, scored once per task
         if not os.path.exists(os.path.join(hdir, "human_score.json")):
-            try:
-                score.score_human(row, hdir, mutants)
-            except Exception as e:  # noqa: BLE001
-                print(f"SCORE ERROR human {task}: {e!r}", flush=True)
-        for mpath in sorted(glob.glob(os.path.join(out, task, "*", "*", "manifest.json"))):
-            run_dir = os.path.dirname(mpath)
-            m = json.load(open(mpath))
-            if m.get("excluded") or os.path.exists(os.path.join(run_dir, "score.json")):
-                continue
-            try:
-                score.score(row, run_dir, mutants, os.path.join(run_dir, m["attempt_dir"], "tests"))
-                print("scored", run_dir, flush=True)
-            except Exception as e:  # noqa: BLE001 - an unscored run stays visible as missing score.json
-                print(f"SCORE ERROR {run_dir}: {e!r}", flush=True)
+            jobs.append((f"human {task}", score.score_human, (row, hdir, mutants)))
+        for out in outs:
+            for mpath in sorted(glob.glob(os.path.join(out, task, "*", "*", "manifest.json"))):
+                run_dir = os.path.dirname(mpath)
+                m = json.load(open(mpath))
+                if m.get("excluded") or os.path.exists(os.path.join(run_dir, "score.json")):
+                    continue
+                jobs.append((run_dir, score.score, (row, run_dir, mutants, os.path.join(run_dir, m["attempt_dir"], "tests"))))
+    print(f"scoring {len(jobs)} jobs with {workers} workers", flush=True)
+
+    def work(job):
+        name, fn, args = job
+        try:
+            fn(*args)
+            print("scored", name, flush=True)
+        except Exception as e:  # noqa: BLE001 - an unscored run stays visible as a missing score.json
+            print(f"SCORE ERROR {name}: {e!r}", flush=True)
+
+    with concurrent.futures.ThreadPoolExecutor(workers) as pool:
+        list(pool.map(work, jobs))
     cmd_ledger()
 
 
@@ -322,6 +335,6 @@ if __name__ == "__main__":
         budget = float(args[args.index("--budget") + 1]) if "--budget" in args else None
         cmd_sessions(args[0], args[1], int(args[2]), args[3], aa="--aa" in args, budget=budget)
     elif cmd == "score":
-        cmd_score(args[0], args[1])
+        cmd_score(args[0], *args[1:])
     elif cmd == "ledger":
         cmd_ledger()
