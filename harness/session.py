@@ -25,6 +25,8 @@ MODELS = {
 }
 # Pilot limits (EXPERIMENT.md "Controlled variables"); the final values are set from the pilot.
 LIMITS = {"design": {"turns": 100, "tokens": 5_000_000}, "tests": {"turns": 200, "tokens": 10_000_000}}
+# Arm A only, when the design phase ends with no note: 1 prompt to write it from what it learned (added after the pilot).
+NOTE_LIMIT = {"turns": 10, "tokens": 2_000_000}
 WALL_SECONDS = 2 * 3600
 PI_ENV = {"PI_CODING_AGENT_DIR": "/root/.pi-agent", "PI_OFFLINE": "1", "PI_TELEMETRY": "0",
           "PI_SKIP_VERSION_CHECK": "1"}
@@ -93,7 +95,7 @@ class Driver:
         A limit (turns, tokens, or this phase's wall clock) aborts the phase and keeps what it wrote. The phase
         crashed only when Pi rejected the prompt, exited, or its final response ended in an error after Pi's own
         retries; an error Pi recovered from is recorded but is not a crash."""
-        lim = LIMITS[phase]
+        lim = NOTE_LIMIT if phase == "note" else LIMITS[phase]
         st = {"phase": phase, "turns": 0, "tokens": 0, "input": 0, "output": 0, "cache_read": 0, "cache_write": 0,
               "cost": 0.0, "limit_reached": None, "stop_reasons": [], "errors": [], "compactions": 0,
               "crash": None, "started_at": _now()}
@@ -182,6 +184,12 @@ def run_session(row, arm, model_name, run_dir, spec_text, note=None):
                 if st["crash"]:
                     info["crashed"] = st["crash"]
                     break
+                if phase == "design" and docker.get(c, "/root/design_note.md") is None:
+                    st = drv.phase("note", prompt("design_note_now.md"))
+                    info["phases"].append(st)
+                    if st["crash"]:
+                        info["crashed"] = st["crash"]
+                        break
         finally:
             drv.close()
         if drv.p.returncode not in (0, None) and not info["crashed"]:

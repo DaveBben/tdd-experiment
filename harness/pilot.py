@@ -60,9 +60,11 @@ def usage(runs_dirs):
             info = json.load(open(os.path.join(root, "session.json")))
             sessions += 1
             for ph in info["phases"]:
+                cost += ph["cost"]
+                if ph["phase"] not in peak:
+                    continue  # the note prompt has its own fixed limit
                 peak[ph["phase"]]["turns"] = max(peak[ph["phase"]]["turns"], ph["turns"])
                 peak[ph["phase"]]["tokens"] = max(peak[ph["phase"]]["tokens"], ph["tokens"])
-                cost += ph["cost"]
                 limit_hits += bool(ph["limit_reached"])
     limits = {ph: {"turns": math.ceil(1.5 * v["turns"] / 10) * 10, "tokens": math.ceil(1.5 * v["tokens"] / 1e5) * 100_000}
               for ph, v in peak.items()}

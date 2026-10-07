@@ -1,0 +1,1 @@
+Your planning time is over. Write the design note to `/root/design_note.md` now, from what you have already learned, in the format asked for above: 1 section for each function and class in the interface descriptions, then a section headed `Edge cases`. Do not explore the repository any further.
