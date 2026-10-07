@@ -79,11 +79,13 @@ def validate_and_kill(row, test_dir, files, mutants, locked=None, locked_files=(
                                                               for f in locked_files)})
         valid = [i for i in ids if all(run.get(i) == "PASSED" for run in ref["runs"])]
         flaky = [i for i in ids if i not in valid and any(run.get(i) == "PASSED" for run in ref["runs"])]
-        # Tests that hung or crashed on the reference are left out of every mutant run, or each would hang again.
         stuck = sorted({i for run in ref["runs"] for i, o in run.items() if o in ("TIMEOUT", "CRASHED")})
+        # Every test that is not valid is left out of the mutant runs: one that hangs or crashes there would
+        # otherwise count as a kill without being a valid test.
+        not_valid = sorted(seen - set(valid))
         docker.put(c, "/tmp/mutants.json", json.dumps({"mutants": mutants}))
         docker.put(c, "/tmp/ids.json", json.dumps(valid))
-        docker.put(c, "/tmp/skip.json", json.dumps(stuck))
+        docker.put(c, "/tmp/skip.json", json.dumps(not_valid))
         if valid:
             kills = _runner(c, test_cmd(row), "mutants", sorted({_file(i) for i in valid}), "/tmp/mutants.json",
                             "/tmp/ids.json", "/tmp/skip.json")

@@ -29,6 +29,7 @@ LOG = "/tmp/tdd_events.jsonl"
 SKIP = "/tmp/tdd_skip.json"
 HARD_TEST = 60  # seconds for 1 test, and at least twice the task's own pytest --timeout (10 to 120 s)
 EXIT_GRACE = 10  # seconds a process may take to exit after its session finished
+STARTUP_LIMIT = 300  # seconds for start-up and root collection, which loads conftests; slow under emulation
 RUN_LIMIT = 1800  # seconds for 1 pytest process; a backstop behind the watchdog
 PLUGIN = '''
 import json, os
@@ -36,6 +37,7 @@ import json, os
 _LOG = os.environ["TDD_LOG"]  # read now: a test may clear os.environ
 _SKIP = os.environ.get("TDD_SKIP")
 _f = open(_LOG, "a", buffering=1)
+_f.write(json.dumps({"collect": ""}) + "\\n")  # start-up, conftests included, is watched like collection
 
 
 def _emit(**kw):
@@ -151,13 +153,18 @@ def pytest(cmd, files, timeout=RUN_LIMIT, cwd="/testbed", skip=()):
         if exited:
             if running is not None and done_at is None:
                 stuck = ("crash", running)  # the process died inside this test
+            elif collecting is not None and done_at is None:
+                stuck = ("collect", collecting)  # it died while collecting
             break
-        if running is not None and now - since > hard:
+        if done_at is not None:
+            if now - done_at <= EXIT_GRACE:
+                continue  # every test reported; give the process its grace period, whatever the run limit
+            # the process just will not exit: stop it and keep its outcomes
+        elif running is not None and now - since > hard:
             stuck = ("hang", running)
-        elif collecting is not None and now - since > hard:
+        elif collecting is not None and now - since > (
+                hard if collecting.split("::")[0].endswith(".py") else STARTUP_LIMIT):  # dirs load conftests
             stuck = ("collect", collecting)
-        elif done_at is not None and now - done_at > EXIT_GRACE:
-            pass  # every test reported; the process just will not exit
         elif now - start > timeout:
             timed_out = True
             stuck = ("hang", running) if running else ("collect", collecting) if collecting else None
@@ -208,6 +215,7 @@ def run_all(cmd, files, cwd="/testbed"):
             merged[node] = "TIMEOUT" if kind == "hang" else "CRASHED"
             skip = set(merged)
         else:
+            node = node.split("::")[0]  # a hang in a class's collection belongs to its file
             gone = [f for f in files if f == node or f.startswith(node.rstrip("/") + "/") or node in ("", ".")]
             if not gone:
                 break
@@ -252,8 +260,10 @@ def mutants(cmd, files, muts, ids, root="/testbed", skip=()):
             with open(path, "wb") as f:
                 f.write(src)
         failing = sorted(i for i in ids if o.get(i, "MISSING") != "PASSED")
-        timeout = timed_out or stuck is not None
-        results.append({"id": m["id"], "killed": timeout or bool(failing), "timeout": timeout, "failing": failing})
+        timeout = timed_out or (stuck is not None and stuck[0] != "crash")
+        killed_by_crash = stuck is not None and stuck[0] == "crash"
+        results.append({"id": m["id"], "killed": timeout or killed_by_crash or bool(failing), "timeout": timeout,
+                        "failing": failing})
     if not ids:
         results = [{"id": m["id"], "killed": False, "timeout": False, "failing": []} for m in muts]
     return {"ref_seconds": ref_seconds, "limit_seconds": limit, "results": results, "used_ids": ids,

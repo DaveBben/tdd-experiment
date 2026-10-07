@@ -623,6 +623,9 @@ Changes made after the pilot started, each with its date, reason, and expected e
   A test the process crashes in is marked as crashed and handled the same way, and a test file whose collection hangs counts as a collection error.
   A hanging test now invalidates only itself, the same way in every arm, and it is left out of that suite's mutant runs, where it would otherwise hang again.
   A process that has reported every test but does not exit is stopped after 10 seconds and keeps its outcomes.
-  In a mutant run, a hang still counts as a kill.
+  Start-up and directory collection, which load `conftest.py` files and are slow under emulation, have a limit of 300 seconds.
+  Every test that is not valid is left out of the suite's mutant runs, so only valid tests can kill a mutant, and when the reference run of a suite's mutant step itself hangs, no test of that suite counts.
+  In a mutant run, a hang still counts as a kill, and a crash counts as a kill but not as a timeout kill.
+  The pilot's scores came from the runner before this change; every pilot reference run took at most 24 seconds and no pilot mutant was killed by a timeout, so none of them would change, and they are kept as recorded in the ledger.
 * **2026-10-07, budget accounting.**
   The spending cap now counts every session's cost, reruns included; it had counted only the final attempt's.

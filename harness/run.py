@@ -163,13 +163,14 @@ def write_manifest(row, model, run_dir, adir, extra):
          "input_tokens": sum(p["input"] for p in phases), "output_tokens": sum(p["output"] for p in phases),
          "cache_read_tokens": sum(p["cache_read"] for p in phases), "cost": sum(p["cost"] for p in phases),
          "limit_reached": [p["limit_reached"] for p in phases], **extra}
-    json.dump(m, open(os.path.join(run_dir, "manifest.json"), "w"), indent=1)
+    score.write_json(os.path.join(run_dir, "manifest.json"), m)
 
 
 def excluded_manifest(run_dir, reason):
     os.makedirs(run_dir, exist_ok=True)
-    json.dump({"harness_commit": harness_commit(), "seed": seed("order"), "started_at": None, "finished_at": None,
-               "excluded": reason}, open(os.path.join(run_dir, "manifest.json"), "w"), indent=1)
+    score.write_json(os.path.join(run_dir, "manifest.json"), {
+        "harness_commit": harness_commit(), "seed": seed("order"), "started_at": None, "finished_at": None,
+        "excluded": reason})
 
 
 def cmd_setup(tasks_file):
@@ -309,6 +310,11 @@ def cmd_ledger(runs_dir="runs", ledger="runs.sha256"):
         have = {l.split("  ", 1)[1].strip() for l in open(ledger) if l.strip()}
     new = []
     for root, _, files in os.walk(runs_dir):
+        # A session still being written has no manifest yet: hash its files once its run is finished.
+        parts = os.path.relpath(root, runs_dir).split(os.sep)
+        attempt = next((i for i, p in enumerate(parts) if p.startswith("attempt-")), None)
+        if attempt is not None and not os.path.exists(os.path.join(runs_dir, *parts[:attempt], "manifest.json")):
+            continue
         for f in sorted(files):
             if ".tmp-" in f or f.endswith(".lock"):
                 continue  # an atomic write in progress, or a lock: not raw output

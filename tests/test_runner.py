@@ -144,3 +144,30 @@ def test_process_that_will_not_exit_keeps_its_outcomes(repo, monkeypatch):
     o, _, secs, timed_out, stuck = runner.pytest(CMD, ["test_tdd_noexit.py"], cwd=str(repo), timeout=60)
     assert o == {"test_tdd_noexit.py::test_t": "PASSED"} and not timed_out and stuck is None and secs < 30
 
+
+
+def test_invalid_test_hanging_under_a_mutant_is_not_a_kill(repo, monkeypatch):
+    """Re-review finding: a test that is not valid must not run in mutant runs at all."""
+    (repo / "test_tdd_bad.py").write_text(
+        "from mod import double\n\ndef test_ok():\n    assert double(1) == 2\n\n"
+        "def test_bad():\n    if double(2) == 6:\n        sum(range(10**14))\n    assert False\n")
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    wrong = {"id": 0, "path": "mod.py", "start": 26, "end": 31, "new": "x * 3"}
+    res = runner.mutants(CMD, ["test_tdd_bad.py"], [wrong], ["test_tdd_bad.py::test_ok"], root=str(repo),
+                         skip=["test_tdd_bad.py::test_bad"])
+    assert res["results"][0] == {"id": 0, "killed": True, "timeout": False, "failing": ["test_tdd_bad.py::test_ok"]}
+
+
+def test_class_collection_hang_loses_only_its_file(repo, monkeypatch):
+    (repo / "test_tdd_cls.py").write_text(
+        "import pytest\n\nclass TestC:\n    @pytest.mark.parametrize('x', [sum(range(10**14))])\n"
+        "    def test_x(self, x):\n        pass\n")
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    o, errors, _ = runner.run_all(CMD, ["test_tdd_a.py", "test_tdd_cls.py"], cwd=str(repo))
+    assert o["test_tdd_a.py::test_kills"] == "PASSED" and "test_tdd_cls.py" in errors
+
+
+def test_crash_during_collection_loses_only_its_file(repo):
+    (repo / "test_tdd_colcrash.py").write_text("import os\nos._exit(3)\n")
+    o, errors, _ = runner.run_all(CMD, ["test_tdd_a.py", "test_tdd_colcrash.py"], cwd=str(repo))
+    assert o["test_tdd_a.py::test_kills"] == "PASSED" and "test_tdd_colcrash.py" in errors
