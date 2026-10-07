@@ -19,6 +19,7 @@ import random
 import subprocess
 import sys
 import time
+import traceback
 
 from harness import checks, data, docker, prepare, score, session
 
@@ -212,7 +213,7 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
             run_pair(row, model, base, order, spec_text, done)
         except Exception as e:  # noqa: BLE001 - log it and go on; the pair stays incomplete and is visible
             errors_in_a_row += 1
-            print(f"PAIR ERROR {task} run {r}: {e!r}", flush=True)
+            print(f"PAIR ERROR {task} run {r}: {e!r}\n{traceback.format_exc()}", flush=True)
             if errors_in_a_row >= HALT_AFTER:
                 print(f"HALT: {HALT_AFTER} pair errors in a row", flush=True)
                 return
