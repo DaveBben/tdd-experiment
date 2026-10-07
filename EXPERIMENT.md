@@ -485,7 +485,8 @@ The design rests on these assumptions:
 * **No implementation:** no implementation of the feature can be reached while either arm writes tests.
   The [preparation](#environment) removes the git history and the second copy that every image holds.
   Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds, leaving out lines that also appear in the spec.
-  Those lines, mostly docstrings, reach every arm through the spec and the stub, so a match on them shows no leak.
+  It also leaves out lines that the undeveloped repository still holds in the files the gold patch changes.
+  Both kinds reach every arm through the spec, the stub, or the repository itself, so a match on them shows no leak.
   A match anywhere, such as in an installed copy of the package under `site-packages`, drops the task.
   Network access during sessions is limited to the model API, so the code cannot be fetched from the original repository.
 
