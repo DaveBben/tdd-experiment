@@ -5,6 +5,7 @@ and the mutant sample. Writes tasks/<task>/{spec.md, stub.diff, filter.json, mut
 """
 import collections
 import json
+import re
 import os
 import sys
 import uuid
@@ -34,9 +35,12 @@ cd {TB} && git init -q && git add -A && git -c user.name=tdd -c user.email=tdd@l
 
 
 def run_tests(c, cmd, files, timeout=1800):
+    """{exit, failing: [node IDs that failed or errored], summary: pytest's last line}."""
     files = " ".join(f"'{f}'" for f in files)
     r = docker.run(c, f"{docker.CONDA} && {cmd} {files}", check=False, timeout=timeout)
-    return r.returncode, r.stdout[-3000:]
+    failing = sorted({m.group(2) for m in re.finditer(r"(?m)^(FAILED|ERROR) (\S+)", r.stdout)})
+    lines = r.stdout.strip().splitlines()
+    return {"exit": r.returncode, "failing": failing, "summary": lines[-1] if lines else ""}
 
 
 def can_import(c, path):
@@ -65,6 +69,12 @@ def leak_lines(row, spec_text, undeveloped):
                 if s and s not in spec_lines:
                     added.add(s)
     return sorted(added, key=lambda s: (-len(s), s))[:20]
+
+
+def decide(r):
+    """The task filter (EXPERIMENT.md "Objects", steps 1-3), from a recorded filter report."""
+    return (r["gold_f2p"]["exit"] == 0 and r["gold_p2p"]["exit"] == 0 and r["stub_compiles"] and r["stub_imports"]
+            and r["stub_p2p"]["exit"] == 0 and not r["leak_hits"])
 
 
 def prepare(task_id, rows, seed):
@@ -123,15 +133,23 @@ def prepare(task_id, rows, seed):
                        for p, _ in data._file_blocks(data.gold_patch(row))]
         lines = leak_lines(row, spec_text, undeveloped)
         docker.put(st, "/tmp/leak.txt", "\n".join(lines) + "\n")
-        hits = docker.run(st, "grep -rIlF -f /tmp/leak.txt / --exclude-dir=proc --exclude-dir=sys --exclude-dir=dev"
-                              " 2>/dev/null; rm /tmp/leak.txt", check=False).stdout.split()
-        report["leak_hits"] = [h for h in hits if h != "/tmp/leak.txt"]
+        out_ = docker.run(st, "grep -rIoF -f /tmp/leak.txt / --exclude-dir=proc --exclude-dir=sys --exclude-dir=dev"
+                              " 2>/dev/null; rm /tmp/leak.txt", check=False).stdout
+        tracked = set(docker.run(st, f"cd {TB} && git ls-files").stdout.split("\n"))
+        matched = collections.defaultdict(set)
+        for line in out_.splitlines():
+            path, _, text = line.partition(":")
+            if path != "/tmp/leak.txt":
+                matched[path].add(text)
+        # Per file: how many of the candidate lines it holds, and whether it is tracked undeveloped source.
+        report["leak_lines"] = len(lines)
+        report["leak_hits"] = {p: {"lines": len(v), "tracked": p.startswith(TB + "/") and p[len(TB) + 1:] in tracked}
+                               for p, v in sorted(matched.items())}
         docker.sh("commit", st, docker.tag(row, "stub"))
     finally:
         docker.stop(st)
 
-    report["keep"] = (report["gold_f2p"][0] == 0 and report["gold_p2p"][0] == 0 and report["stub_compiles"]
-                      and report["stub_imports"] and report["stub_p2p"][0] == 0 and not report["leak_hits"])
+    report["keep"] = decide(report)
     json.dump(report, open(os.path.join(out, "filter.json"), "w"), indent=1)
     return report
 
@@ -141,5 +159,4 @@ if __name__ == "__main__":
     seed = int(open(os.path.join(ROOT, "draws", "mutants.seed")).read())
     for t in sys.argv[1:]:
         r = prepare(t, rows, seed)
-        print(t, "keep" if r["keep"] else "DROP", {k: (v[0] if isinstance(v, list) and len(v) == 2 and isinstance(v[0], int) else v)
-                                                   for k, v in r.items() if k not in ("task", "image", "test_cmd")})
+        print(t, "keep" if r["keep"] else "drop")

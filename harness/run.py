@@ -51,7 +51,8 @@ def cmd_filter(prefixes):
         docker.sh("pull", "--platform", "linux/amd64", image)
         for t in tasks:
             r = prepare.prepare(t, rows, seed("mutants"))
-            print(t, "keep" if r["keep"] else "drop", flush=True)
+            print(t, "keep" if r["keep"] else "drop", {k: r[k]["exit"] for k in ("gold_f2p", "gold_p2p", "stub_p2p")},
+              "leak files:", len(r["leak_hits"]), flush=True)
         for t in tasks:
             docker.sh("rmi", docker.tag(rows[t], "ref"), docker.tag(rows[t], "stub"), check=False)
         docker.sh("rmi", image, check=False)
@@ -105,15 +106,18 @@ def _write(name, tasks):
 
 def run_arm(row, arm, model, run_dir, spec_text, note=None, check=None):
     """Run 1 arm, rerunning once after a crash or a failed check. Returns (attempt_dir, manifest)."""
-    reason = None
-    for attempt in (1, 2):
+    # Raw outputs are never overwritten: an attempt left by an interrupted harness keeps its directory.
+    prior = len(glob.glob(os.path.join(run_dir, "attempt-*")))
+    reason = "harness interrupted" if prior else None
+    for tries in (1, 2):
+        attempt = prior + tries
         adir = os.path.join(run_dir, f"attempt-{attempt}")
         info = session.run_session(row, arm, model, adir, spec_text, note)
         problem = info["crashed"] or (check(adir) if check else None)
         if not problem:
             return adir, {"attempt": attempt, "rerun_reason": reason, "excluded": None}
         reason = problem
-    return adir, {"attempt": 2, "rerun_reason": reason, "excluded": f"failed twice: {reason}"}
+    return adir, {"attempt": attempt, "rerun_reason": reason, "excluded": f"failed twice: {reason}"}
 
 
 def design_check(spec_text):
@@ -165,17 +169,24 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False):
             built.add(task)
         spec_text = open(os.path.join(ROOT, "tasks", task, "spec.md")).read()
         base = lambda arm: os.path.join(out, task, arm, str(r))
-        if os.path.exists(os.path.join(base(order[-1]), "manifest.json")):
-            continue  # this pair is done
+        done = lambda arm: os.path.exists(os.path.join(base(arm), "manifest.json"))
+        if all(done(a) for a in ["A", *order]):
+            continue
         print(f"{task} run {r}: A then {order}", flush=True)
-        adir, extra = run_arm(row, "A", model, base("A"), spec_text, check=design_check(spec_text))
-        write_manifest(row, model, base("A"), adir, extra)
+        if done("A"):
+            extra = json.load(open(os.path.join(base("A"), "manifest.json")))
+            adir = os.path.join(base("A"), extra.get("attempt_dir", ""))
+        else:
+            adir, extra = run_arm(row, "A", model, base("A"), spec_text, check=design_check(spec_text))
+            write_manifest(row, model, base("A"), adir, extra)
         if extra["excluded"]:
-            for arm in order:
+            for arm in [a for a in order if not done(a)]:
                 excluded_manifest(base(arm), "pair excluded: arm A " + extra["excluded"])
             continue
         note = _read(os.path.join(adir, "design_note.md"))
         for arm in order:
+            if done(arm):
+                continue
             pi_arm = "B" if arm == "B2" else arm
             bdir, bextra = run_arm(row, pi_arm, model, base(arm), spec_text, note=note if arm == "C" else None)
             bextra["isolation_suspects"] = checks.isolation_suspects(row, os.path.join(bdir, "session.jsonl"))

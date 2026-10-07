@@ -3,6 +3,7 @@ import ast
 import json
 import os
 import re
+import uuid
 
 from harness import data, docker, stub
 
@@ -62,13 +63,12 @@ def isolation_suspects(row, session_path):
     reads = sorted({_abs(a.get("path")) for n, a, err in calls if n == "read" and not err} - written - {None})
     if not reads:
         return []
-    c = docker.start(docker.tag(row, "agent"), f"iso-{os.getpid()}-{abs(hash(session_path)) % 10**8}")
+    c = docker.start(docker.tag(row, "agent"), f"iso-{uuid.uuid4().hex[:8]}")
     try:
         docker.put(c, "/tmp/paths.json", json.dumps(reads))
-        r = docker.run(c, "python3 -c \"import json,os;print(json.dumps([p for p in json.load(open('/tmp/paths.json'))"
-                          " if not os.path.exists(p)]))\" 2>/dev/null || "
-                          f"{docker.CONDA} && python -c \"import json,os;print(json.dumps([p for p in json.load(open('/tmp/paths.json'))"
-                          " if not os.path.exists(p)]))\"")
+        docker.put(c, "/tmp/missing.py", "import json,os\nprint(json.dumps([p for p in json.load(open('/tmp/paths.json'))"
+                                         " if not os.path.exists(p)]))\n")
+        r = docker.run(c, f"{docker.CONDA} && python /tmp/missing.py")
         return json.loads(r.stdout)
     finally:
         docker.stop(c)
