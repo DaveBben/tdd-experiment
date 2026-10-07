@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 14 passed in 0.08s =============================="
+  "summary": "============================== 14 passed in 0.07s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 95 passed in 1.04s =============================="
+  "summary": "============================== 95 passed in 0.95s =============================="
  },
  "mutant_pool": 205,
  "stub_compiles": true,
@@ -18,22 +18,21 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 95 passed in 1.05s =============================="
+  "summary": "============================== 95 passed in 0.96s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/pandas/core/generic.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/pandas/tests/frame/methods/test_sample.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/pandas/tests/test_common.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/base.py": 1,
+  "pandas/core/common.py": 13,
+  "pandas/core/groupby/groupby.py": 16,
+  "pandas/core/groupby/ops.py": 34,
+  "pandas/core/indexes/base.py": 0,
+  "pandas/core/sample.py": 44,
+  "pandas/core/sorting.py": 29
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
+ "keep": true
 }

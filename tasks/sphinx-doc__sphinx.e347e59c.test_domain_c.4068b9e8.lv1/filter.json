@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 35 passed in 2.08s =============================="
+  "summary": "============================== 35 passed in 2.05s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 81 passed in 1.13s =============================="
+  "summary": "============================== 81 passed in 1.10s =============================="
  },
  "mutant_pool": 408,
  "stub_compiles": true,
@@ -20,16 +20,18 @@
   "failing": [],
   "summary": "============================== 81 passed in 1.47s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/sphinx/domains/cpp/_parser.py": {
-   "lines": 2,
-   "tracked": true
-  },
-  "/testbed/sphinx/domains/cpp/_symbol.py": {
-   "lines": 10,
-   "tracked": true
-  }
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/builders/linkcheck.py": 1,
+  "sphinx/domains/c/_ast.py": 0,
+  "sphinx/domains/c/_parser.py": 20,
+  "sphinx/domains/c/_symbol.py": 30,
+  "sphinx/util/cfamily.py": 1,
+  "sphinx/util/docfields.py": 2,
+  "sphinx/util/docutils.py": 0,
+  "sphinx/util/nodes.py": 1
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

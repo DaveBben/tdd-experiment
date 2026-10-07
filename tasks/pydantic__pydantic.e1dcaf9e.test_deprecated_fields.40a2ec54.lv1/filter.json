@@ -20,7 +20,18 @@
   "failing": [],
   "summary": "         1 xfailed"
  },
- "leak_lines": 20,
+ "library": "pydantic",
+ "leak_candidates": {
+  "pydantic/_internal/_decorators.py": 14,
+  "pydantic/_internal/_fields.py": 6,
+  "pydantic/_internal/_generate_schema.py": 28,
+  "pydantic/_internal/_mock_val_ser.py": 7,
+  "pydantic/_internal/_model_construction.py": 7,
+  "pydantic/fields.py": 23,
+  "pydantic/functional_validators.py": 2,
+  "pydantic/json_schema.py": 19
+ },
  "leak_hits": {},
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

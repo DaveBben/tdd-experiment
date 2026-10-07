@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 36 passed in 0.25s =============================="
+  "summary": "============================== 36 passed in 0.23s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 711 passed, 71 skipped in 1.48s ========================"
+  "summary": "======================= 711 passed, 71 skipped in 1.38s ========================"
  },
  "mutant_pool": 461,
  "stub_compiles": true,
@@ -18,9 +18,23 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 711 passed, 71 skipped in 1.39s ========================"
+  "summary": "======================= 711 passed, 71 skipped in 1.37s ========================"
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/fits/card.py": 8,
+  "astropy/io/fits/column.py": 42,
+  "astropy/io/fits/hdu/base.py": 2,
+  "astropy/io/fits/hdu/compressed/_tiled_compression.py": 37,
+  "astropy/io/fits/hdu/compressed/compressed.py": 1,
+  "astropy/io/fits/hdu/groups.py": 1,
+  "astropy/io/fits/hdu/hdulist.py": 1,
+  "astropy/io/fits/hdu/image.py": 2,
+  "astropy/io/fits/hdu/table.py": 1,
+  "astropy/io/fits/header.py": 101,
+  "astropy/io/fits/util.py": 3
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 16 passed in 3.12s =============================="
+  "summary": "============================== 16 passed in 3.14s =============================="
  },
  "mutant_pool": 430,
  "stub_compiles": true,
@@ -18,26 +18,28 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 16 passed in 3.14s =============================="
+  "summary": "============================== 16 passed in 3.05s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/dense.py": {
-   "lines": 7,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/domainmatrix.py": {
-   "lines": 2,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/rref.py": {
-   "lines": 4,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/sdm.py": {
-   "lines": 6,
-   "tracked": false
-  }
+ "library": "sympy",
+ "leak_candidates": {
+  "sympy/external/pythonmpq.py": 4,
+  "sympy/polys/compatibility.py": 2,
+  "sympy/polys/densebasic.py": 5,
+  "sympy/polys/densetools.py": 12,
+  "sympy/polys/domains/domain.py": 6,
+  "sympy/polys/euclidtools.py": 1,
+  "sympy/polys/factortools.py": 1,
+  "sympy/polys/matrices/dense.py": 46,
+  "sympy/polys/matrices/domainmatrix.py": 138,
+  "sympy/polys/matrices/domainscalar.py": 1,
+  "sympy/polys/matrices/rref.py": 46,
+  "sympy/polys/matrices/sdm.py": 99,
+  "sympy/polys/numberfields/modules.py": 0,
+  "sympy/polys/polyclasses.py": 0,
+  "sympy/polys/rootisolation.py": 0,
+  "sympy/polys/sqfreetools.py": 1
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

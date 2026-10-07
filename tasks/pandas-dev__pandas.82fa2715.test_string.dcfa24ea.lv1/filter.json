@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 336 passed, 1 skipped, 11 xfailed in 0.77s =================="
+  "summary": "================== 336 passed, 1 skipped, 11 xfailed in 0.70s =================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 49 passed in 0.23s =============================="
+  "summary": "============================== 49 passed in 0.22s =============================="
  },
  "mutant_pool": 164,
  "stub_compiles": true,
@@ -18,9 +18,25 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 49 passed in 0.24s =============================="
+  "summary": "============================== 49 passed in 0.21s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/arraylike.py": 41,
+  "pandas/core/arrays/base.py": 5,
+  "pandas/core/arrays/datetimelike.py": 1,
+  "pandas/core/arrays/masked.py": 1,
+  "pandas/core/ops/__init__.py": 1,
+  "pandas/core/ops/array_ops.py": 97,
+  "pandas/core/ops/invalid.py": 11
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_dynamo/polyfills/__init__.py": {
+   "pandas/core/ops/invalid.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": true
 }

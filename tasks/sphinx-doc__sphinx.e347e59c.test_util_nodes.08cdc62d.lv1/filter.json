@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 95 passed, 5 skipped in 0.73s ========================="
+  "summary": "======================== 95 passed, 5 skipped in 0.75s ========================="
  },
  "mutant_pool": 90,
  "stub_compiles": true,
@@ -18,446 +18,355 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 95 passed, 5 skipped in 1.13s ========================="
+  "summary": "======================== 95 passed, 5 skipped in 1.12s ========================="
  },
- "leak_lines": 20,
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/builders/gettext.py": 1,
+  "sphinx/domains/javascript.py": 1,
+  "sphinx/domains/python/__init__.py": 0,
+  "sphinx/domains/python/_object.py": 0,
+  "sphinx/domains/rst.py": 1,
+  "sphinx/domains/std/__init__.py": 1,
+  "sphinx/ext/extlinks.py": 1,
+  "sphinx/transforms/i18n.py": 0,
+  "sphinx/util/nodes.py": 55
+ },
  "leak_hits": {
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/core.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/examples.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/frontend.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/io.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/af.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ar.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ca.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/cs.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/da.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/de.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/en.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/eo.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/es.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/fa.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/fi.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/fr.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/gl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/he.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/it.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ja.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ka.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ko.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/lt.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/lv.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/nl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/pl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/pt_br.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/ru.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/sk.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/sv.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/uk.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/zh_cn.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/languages/zh_tw.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/nodes.py": {
-   "lines": 3,
-   "tracked": false
+   "sphinx/util/nodes.py": 9
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/null.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/admonitions.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/body.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/html.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/images.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/misc.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/parts.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/references.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/tables.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/af.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ar.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ca.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/cs.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/da.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/de.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/en.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/eo.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/es.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/fa.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/fi.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/fr.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/gl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/he.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/it.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ja.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ka.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ko.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/lt.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/lv.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/nl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/pl.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/pt_br.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/ru.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/sk.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/sv.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/uk.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/zh_cn.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/languages/zh_tw.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/roles.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/states.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/tableparser.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/readers/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/readers/doctree.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/readers/pep.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/readers/standalone.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/statemachine.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/components.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/frontmatter.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/misc.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/parts.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/peps.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/references.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/universal.py": {
-   "lines": 2,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/writer_aux.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/utils/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/utils/_typing.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/utils/urischemes.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/docutils_xml.py": {
-   "lines": 2,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/html4css1/__init__.py": {
-   "lines": 2,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/latex2e/__init__.py": {
-   "lines": 2,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/null.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/odf_odt/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/odf_odt/prepstyles.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/odf_odt/pygmentsformatter.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/pep_html/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/pseudoxml.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 2
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/s5_html/__init__.py": {
-   "lines": 1,
-   "tracked": false
+   "sphinx/util/nodes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pygments/lexers/algebra.py": {
+   "sphinx/util/nodes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pygments/lexers/julia.py": {
+   "sphinx/util/nodes.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

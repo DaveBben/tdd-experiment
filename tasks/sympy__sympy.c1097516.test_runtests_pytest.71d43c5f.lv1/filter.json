@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 22 passed in 0.44s =============================="
+  "summary": "============================== 22 passed in 0.43s =============================="
  },
  "gold_p2p": {
   "exit": 0,
@@ -20,12 +20,11 @@
   "failing": [],
   "summary": "======================== 31 passed, 7 skipped in 0.96s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/testing/runtests_pytest.py": {
-   "lines": 19,
-   "tracked": false
-  }
+ "library": "sympy",
+ "leak_candidates": {
+  "sympy/testing/runtests_pytest.py": 64
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

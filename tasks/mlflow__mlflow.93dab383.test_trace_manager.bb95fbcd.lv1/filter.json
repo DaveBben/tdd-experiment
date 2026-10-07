@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 10 passed in 4.12s =============================="
+  "summary": "============================== 10 passed in 4.14s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 68 passed in 3.50s =============================="
+  "summary": "============================== 68 passed in 3.79s =============================="
  },
  "mutant_pool": 102,
  "stub_compiles": true,
@@ -18,9 +18,19 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 68 passed in 3.83s =============================="
+  "summary": "============================== 68 passed in 3.80s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/entities/span.py": 9,
+  "mlflow/entities/trace_data.py": 8,
+  "mlflow/store/model_registry/abstract_store.py": 0,
+  "mlflow/tracing/trace_manager.py": 49,
+  "mlflow/tracing/utils/prompt.py": 16,
+  "mlflow/tracing/utils/timeout.py": 10,
+  "mlflow/tracing/utils/truncation.py": 22
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

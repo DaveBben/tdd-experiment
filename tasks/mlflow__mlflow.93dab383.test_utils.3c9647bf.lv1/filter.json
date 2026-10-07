@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 52 passed in 2.02s =============================="
+  "summary": "============================== 52 passed in 1.87s =============================="
  },
  "mutant_pool": 97,
  "stub_compiles": true,
@@ -18,18 +18,15 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 52 passed in 1.87s =============================="
+  "summary": "============================== 52 passed in 1.94s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/mlflow/deployments/utils.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/mlflow/gateway/utils.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/environment_variables.py": 1,
+  "mlflow/gateway/__init__.py": 1,
+  "mlflow/gateway/utils.py": 54
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 50 passed, 10 xfailed in 1.08s ========================"
+  "summary": "======================== 50 passed, 10 xfailed in 0.99s ========================"
  },
  "gold_p2p": {
   "exit": 0,
@@ -18,18 +18,35 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 158 passed, 23 skipped in 0.54s ========================"
+  "summary": "======================= 158 passed, 23 skipped in 0.59s ========================"
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/cosmology/__init__.py": 1,
+  "astropy/cosmology/_src/core.py": 11,
+  "astropy/cosmology/_src/funcs/__init__.py": 1,
+  "astropy/cosmology/_src/funcs/comparison.py": 41,
+  "astropy/cosmology/_src/io/builtin/model.py": 3,
+  "astropy/cosmology/_src/io/builtin/table.py": 1,
+  "astropy/cosmology/_src/io/builtin/utils.py": 5,
+  "astropy/cosmology/_src/parameter/core.py": 23,
+  "astropy/modeling/core.py": 15,
+  "astropy/table/index.py": 8,
+  "astropy/table/row.py": 1,
+  "astropy/table/sorted_array.py": 2,
+  "astropy/table/table.py": 23,
+  "astropy/units/core.py": 4,
+  "astropy/units/physical.py": 1,
+  "astropy/utils/data_info.py": 25
+ },
  "leak_hits": {
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/numpy/lib/_ufunclike_impl.py": {
-   "lines": 1,
-   "tracked": false
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/_add_newdocs.py": {
+   "astropy/cosmology/_src/funcs/comparison.py": 1
   },
   "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_ufunclike_impl.py": {
-   "lines": 1,
-   "tracked": false
+   "astropy/cosmology/_src/funcs/comparison.py": 2
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

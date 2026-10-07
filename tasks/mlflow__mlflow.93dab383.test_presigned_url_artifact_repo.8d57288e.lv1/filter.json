@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 18 passed in 0.08s =============================="
+  "summary": "============================== 18 passed in 0.07s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 41 passed in 12.56s =============================="
+  "summary": "============================= 41 passed in 12.81s =============================="
  },
  "mutant_pool": 61,
  "stub_compiles": true,
@@ -18,14 +18,34 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 41 passed in 12.61s =============================="
+  "summary": "============================= 41 passed in 12.55s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/data/delta_dataset_source.py": 0,
+  "mlflow/store/_unity_catalog/registry/rest_store.py": 0,
+  "mlflow/store/_unity_catalog/registry/uc_oss_rest_store.py": 0,
+  "mlflow/store/artifact/artifact_repo.py": 19,
+  "mlflow/store/artifact/azure_data_lake_artifact_repo.py": 1,
+  "mlflow/store/artifact/databricks_artifact_repo.py": 0,
+  "mlflow/store/artifact/databricks_artifact_repo_resources.py": 0,
+  "mlflow/store/artifact/gcs_artifact_repo.py": 0,
+  "mlflow/store/artifact/optimized_s3_artifact_repo.py": 1,
+  "mlflow/store/artifact/presigned_url_artifact_repo.py": 1,
+  "mlflow/store/artifact/unity_catalog_models_artifact_repo.py": 0,
+  "mlflow/store/artifact/unity_catalog_oss_models_artifact_repo.py": 0,
+  "mlflow/store/model_registry/rest_store.py": 0,
+  "mlflow/store/tracking/databricks_rest_store.py": 0,
+  "mlflow/store/tracking/rest_store.py": 0,
+  "mlflow/utils/_unity_catalog_utils.py": 0,
+  "mlflow/utils/async_logging/async_artifacts_logging_queue.py": 3,
+  "mlflow/utils/proto_json_utils.py": 40
+ },
  "leak_hits": {
-  "/testbed/mlflow/server/handlers.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/google/protobuf/json_format.py": {
+   "mlflow/utils/proto_json_utils.py": 2
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

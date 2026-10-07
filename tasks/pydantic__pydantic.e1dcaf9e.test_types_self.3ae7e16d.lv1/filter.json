@@ -20,7 +20,27 @@
   "failing": [],
   "summary": "        56 passed"
  },
- "leak_lines": 20,
- "leak_hits": {},
- "keep": false
+ "library": "pydantic",
+ "leak_candidates": {
+  "pydantic/_internal/_generate_schema.py": 88,
+  "pydantic/_internal/_known_annotated_metadata.py": 107,
+  "pydantic/_internal/_validate_call.py": 30,
+  "pydantic/json_schema.py": 39,
+  "pydantic/main.py": 12,
+  "pydantic/type_adapter.py": 3,
+  "pydantic/validate_call_decorator.py": 22
+ },
+ "leak_hits": {
+  "/lib/python3.10/_collections_abc.py": {
+   "pydantic/_internal/_generate_schema.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/_collections_abc.py": {
+   "pydantic/_internal/_generate_schema.py": 1
+  },
+  "/usr/lib/python3.10/_collections_abc.py": {
+   "pydantic/_internal/_generate_schema.py": 1
+  }
+ },
+ "unscanned_archives": [],
+ "keep": true
 }

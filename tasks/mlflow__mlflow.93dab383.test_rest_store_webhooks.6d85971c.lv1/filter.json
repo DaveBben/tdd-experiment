@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 12 passed, 1 warning in 8.77s ========================="
+  "summary": "======================== 12 passed, 1 warning in 8.75s ========================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 195 passed in 5.37s =============================="
+  "summary": "============================= 195 passed in 5.17s =============================="
  },
  "mutant_pool": 220,
  "stub_compiles": true,
@@ -18,9 +18,60 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 195 passed in 5.85s =============================="
+  "summary": "============================= 195 passed in 5.73s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/data/delta_dataset_source.py": 0,
+  "mlflow/server/handlers.py": 0,
+  "mlflow/store/_unity_catalog/registry/rest_store.py": 0,
+  "mlflow/store/_unity_catalog/registry/uc_oss_rest_store.py": 0,
+  "mlflow/store/artifact/databricks_artifact_repo.py": 0,
+  "mlflow/store/artifact/databricks_artifact_repo_resources.py": 0,
+  "mlflow/store/artifact/databricks_models_artifact_repo.py": 0,
+  "mlflow/store/artifact/dbfs_artifact_repo.py": 0,
+  "mlflow/store/artifact/http_artifact_repo.py": 0,
+  "mlflow/store/artifact/presigned_url_artifact_repo.py": 0,
+  "mlflow/store/artifact/unity_catalog_models_artifact_repo.py": 0,
+  "mlflow/store/artifact/unity_catalog_oss_models_artifact_repo.py": 0,
+  "mlflow/store/entities/paged_list.py": 1,
+  "mlflow/store/model_registry/base_rest_store.py": 0,
+  "mlflow/store/model_registry/rest_store.py": 0,
+  "mlflow/store/tracking/databricks_rest_store.py": 0,
+  "mlflow/store/tracking/rest_store.py": 0,
+  "mlflow/tracking/request_header/databricks_request_header_provider.py": 2,
+  "mlflow/tracking/request_header/default_request_header_provider.py": 1,
+  "mlflow/tracking/request_header/registry.py": 18,
+  "mlflow/utils/_unity_catalog_utils.py": 0,
+  "mlflow/utils/databricks_utils.py": 0,
+  "mlflow/utils/proto_json_utils.py": 18,
+  "mlflow/utils/request_utils.py": 38,
+  "mlflow/utils/rest_utils.py": 142,
+  "mlflow/utils/string_utils.py": 3
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/azure/storage/blob/_shared/authentication.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/google/_async_resumable_media/requests/__init__.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/google/cloud/storage/_media/requests/__init__.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/google/resumable_media/requests/__init__.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/cpu/amp/grad_scaler.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/cuda/amp/grad_scaler.py": {
+   "mlflow/utils/rest_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/fsdp/sharded_grad_scaler.py": {
+   "mlflow/utils/rest_utils.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

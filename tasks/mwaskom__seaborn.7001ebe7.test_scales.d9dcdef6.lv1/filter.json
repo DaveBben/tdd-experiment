@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 102 passed, 1 xfailed in 2.49s ========================"
+  "summary": "======================== 102 passed, 1 xfailed in 2.50s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 96 passed, 55 skipped in 1.50s ========================"
+  "summary": "======================== 96 passed, 55 skipped in 1.47s ========================"
  },
  "mutant_pool": 641,
  "stub_compiles": true,
@@ -18,9 +18,32 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 96 passed, 55 skipped in 1.52s ========================"
+  "summary": "======================== 96 passed, 55 skipped in 1.47s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "seaborn",
+ "leak_candidates": {
+  "seaborn/_core/properties.py": 41,
+  "seaborn/_core/scales.py": 108,
+  "seaborn/external/husl.py": 28,
+  "seaborn/palettes.py": 20
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/_cm.py": {
+   "seaborn/palettes.py": 3
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/axis.py": {
+   "seaborn/_core/scales.py": 6
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/dates.py": {
+   "seaborn/_core/scales.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/scale.py": {
+   "seaborn/_core/scales.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/ticker.py": {
+   "seaborn/_core/scales.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

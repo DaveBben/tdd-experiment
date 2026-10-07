@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 31 passed in 0.46s =============================="
+  "summary": "============================== 31 passed in 0.48s =============================="
  },
  "gold_p2p": {
   "exit": 0,
@@ -18,9 +18,13 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 14 passed in 0.28s =============================="
+  "summary": "============================== 14 passed in 0.29s =============================="
  },
- "leak_lines": 20,
+ "library": "metaflow",
+ "leak_candidates": {
+  "metaflow/cmd/develop/stub_generator.py": 155
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

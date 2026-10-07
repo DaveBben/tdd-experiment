@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 321 passed in 0.96s =============================="
+  "summary": "============================= 321 passed in 0.82s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 657 passed in 1.75s =============================="
+  "summary": "============================= 657 passed in 1.54s =============================="
  },
  "mutant_pool": 397,
  "stub_compiles": true,
@@ -18,18 +18,30 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 657 passed in 1.81s =============================="
+  "summary": "============================= 657 passed in 1.56s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/pandas/core/arrays/string_.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/pandas/core/dtypes/dtypes.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/array_algos/take.py": 1,
+  "pandas/core/arrays/timedeltas.py": 11,
+  "pandas/core/base.py": 1,
+  "pandas/core/dtypes/base.py": 10,
+  "pandas/core/frame.py": 0,
+  "pandas/core/groupby/generic.py": 1,
+  "pandas/core/groupby/groupby.py": 71,
+  "pandas/core/groupby/ops.py": 30,
+  "pandas/core/indexes/base.py": 0,
+  "pandas/core/indexes/multi.py": 0,
+  "pandas/core/indexes/range.py": 3,
+  "pandas/core/methods/describe.py": 1,
+  "pandas/core/reshape/merge.py": 0,
+  "pandas/core/series.py": 0,
+  "pandas/core/sorting.py": 102,
+  "pandas/util/_validators.py": 12
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
+ "keep": true
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 54 passed in 0.22s =============================="
+  "summary": "============================== 54 passed in 0.23s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 75 passed in 0.55s =============================="
+  "summary": "============================== 75 passed in 0.56s =============================="
  },
  "mutant_pool": 801,
  "stub_compiles": true,
@@ -24,9 +24,45 @@
    "astropy/units/core.py::astropy.units.core.set_enabled_equivalencies",
    "astropy/units/core.py::astropy.units.core.set_enabled_units"
   ],
-  "summary": "========================= 5 failed, 70 passed in 0.55s ========================="
+  "summary": "========================= 5 failed, 70 passed in 0.52s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/cosmology/_src/core.py": 12,
+  "astropy/cosmology/_src/default.py": 18,
+  "astropy/cosmology/_src/io/builtin/mapping.py": 10,
+  "astropy/cosmology/_src/parameter/core.py": 23,
+  "astropy/cosmology/realizations.py": 5,
+  "astropy/io/ascii/__init__.py": 1,
+  "astropy/io/ascii/core.py": 203,
+  "astropy/io/ascii/ecsv.py": 1,
+  "astropy/io/ascii/ui.py": 207,
+  "astropy/io/registry/core.py": 6,
+  "astropy/io/registry/interface.py": 1,
+  "astropy/table/meta.py": 19,
+  "astropy/table/row.py": 13,
+  "astropy/table/serialize.py": 65,
+  "astropy/table/table.py": 10,
+  "astropy/units/core.py": 3,
+  "astropy/utils/data_info.py": 2
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/distutils/conv_template.py": {
+   "astropy/cosmology/_src/default.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_format_impl.py": {
+   "astropy/cosmology/_src/default.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py": {
+   "astropy/table/row.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/yaml/constructor.py": {
+   "astropy/table/meta.py": 2
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/ruamel/yaml/constructor.py": {
+   "astropy/table/meta.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": false
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 49 passed in 0.23s =============================="
+  "summary": "============================== 49 passed in 0.22s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 67 passed, 1 xfailed in 0.97s ========================="
+  "summary": "======================== 67 passed, 1 xfailed in 0.96s ========================="
  },
  "mutant_pool": 819,
  "stub_compiles": true,
@@ -18,42 +18,56 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 67 passed, 1 xfailed in 1.00s ========================="
+  "summary": "======================== 67 passed, 1 xfailed in 1.01s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/assumptions/refine.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/core/relational.py": {
-   "lines": 4,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/matrices/reductions.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/dense.py": {
-   "lines": 3,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/domainmatrix.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/polyutils.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/simplify/simplify.py": {
-   "lines": 8,
-   "tracked": false
-  },
-  "/testbed/sympy/assumptions/refine.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "sympy",
+ "leak_candidates": {
+  "sympy/assumptions/relation/equality.py": 1,
+  "sympy/calculus/accumulationbounds.py": 1,
+  "sympy/core/expr.py": 1,
+  "sympy/core/mod.py": 1,
+  "sympy/core/numbers.py": 46,
+  "sympy/core/power.py": 1,
+  "sympy/core/relational.py": 39,
+  "sympy/external/pythonmpq.py": 2,
+  "sympy/functions/combinatorial/numbers.py": 1,
+  "sympy/functions/elementary/integers.py": 1,
+  "sympy/geometry/ellipse.py": 0,
+  "sympy/geometry/line.py": 0,
+  "sympy/geometry/parabola.py": 0,
+  "sympy/geometry/point.py": 1,
+  "sympy/geometry/polygon.py": 0,
+  "sympy/matrices/decompositions.py": 8,
+  "sympy/matrices/eigen.py": 4,
+  "sympy/matrices/inverse.py": 7,
+  "sympy/matrices/reductions.py": 11,
+  "sympy/matrices/solvers.py": 1,
+  "sympy/matrices/utilities.py": 0,
+  "sympy/polys/compatibility.py": 4,
+  "sympy/polys/densearith.py": 6,
+  "sympy/polys/densetools.py": 0,
+  "sympy/polys/domains/compositedomain.py": 6,
+  "sympy/polys/domains/domain.py": 2,
+  "sympy/polys/domains/field.py": 0,
+  "sympy/polys/euclidtools.py": 5,
+  "sympy/polys/factortools.py": 1,
+  "sympy/polys/matrices/dense.py": 60,
+  "sympy/polys/matrices/domainmatrix.py": 229,
+  "sympy/polys/matrices/rref.py": 1,
+  "sympy/polys/matrices/sdm.py": 16,
+  "sympy/polys/orthopolys.py": 2,
+  "sympy/polys/polyclasses.py": 1,
+  "sympy/polys/polyutils.py": 13,
+  "sympy/polys/sqfreetools.py": 0,
+  "sympy/sets/sets.py": 1,
+  "sympy/simplify/__init__.py": 0,
+  "sympy/simplify/simplify.py": 143,
+  "sympy/solvers/ode/subscheck.py": 1,
+  "sympy/solvers/ode/systems.py": 0,
+  "sympy/solvers/solveset.py": 1,
+  "sympy/utilities/iterables.py": 20
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

@@ -5,14 +5,14 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============ 166 passed, 13 skipped, 2 xfailed, 1 xpassed in 1.54s ============="
+  "summary": "============ 166 passed, 13 skipped, 2 xfailed, 1 xpassed in 0.95s ============="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [
    "test_unicode_plus_minus.py::test_foo"
   ],
-  "summary": "======================== 196 passed, 1 skipped in 1.31s ========================"
+  "summary": "======================== 196 passed, 1 skipped in 1.09s ========================"
  },
  "mutant_pool": 465,
  "stub_compiles": true,
@@ -22,9 +22,131 @@
   "failing": [
    "test_unicode_plus_minus.py::test_foo"
   ],
-  "summary": "======================== 196 passed, 1 skipped in 1.17s ========================"
+  "summary": "======================== 196 passed, 1 skipped in 1.10s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pytest",
+ "leak_candidates": {
+  "src/_pytest/_py/path.py": 240
+ },
+ "leak_hits": {
+  "/lib/python3.10/cgi.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3.10/pyclbr.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3.10/shutil.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3.10/test/support/os_helper.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/colorama/win32.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/cgi.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl!pip/_vendor/colorama/win32.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl!pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl!pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/pyclbr.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/shutil.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/PIL/Image.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/torch/_dynamo/trace_rules.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/torch/_inductor/lowering.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/triton/runtime/cache.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/test/support/os_helper.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/cgi.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/colorama/win32.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/pyclbr.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/shutil.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda/core/portability.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda_content_trust/authentication.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/colorama/win32.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/test/support/os_helper.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3.10/cgi.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3.10/pyclbr.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3.10/shutil.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3.10/test/support/os_helper.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/colorama/win32.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/msgpack/ext.py": {
+   "src/_pytest/_py/path.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/msgpack/fallback.py": {
+   "src/_pytest/_py/path.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 17 passed, 2 skipped in 0.14s ========================="
+  "summary": "======================== 17 passed, 2 skipped in 0.13s ========================="
  },
  "gold_p2p": {
   "exit": 0,
@@ -18,9 +18,16 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "=================== 96 passed, 5 skipped, 2 xfailed in 0.61s ==================="
+  "summary": "=================== 96 passed, 5 skipped, 2 xfailed in 0.58s ==================="
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/visualization/basic_rgb.py": 26,
+  "astropy/visualization/interval.py": 25,
+  "astropy/visualization/lupton_rgb.py": 1,
+  "astropy/visualization/stretch.py": 6
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

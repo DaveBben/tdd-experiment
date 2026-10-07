@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 18 passed in 0.88s =============================="
+  "summary": "============================== 18 passed in 0.82s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 101 passed, 6 skipped, 1 warning in 0.69s ==================="
+  "summary": "================== 101 passed, 6 skipped, 1 warning in 0.70s ==================="
  },
  "mutant_pool": 151,
  "stub_compiles": true,
@@ -20,7 +20,20 @@
   "failing": [],
   "summary": "================== 101 passed, 6 skipped, 1 warning in 1.24s ==================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "xarray",
+ "leak_candidates": {
+  "xarray/backends/chunks.py": 86,
+  "xarray/backends/zarr.py": 1,
+  "xarray/coding/cftimeindex.py": 0,
+  "xarray/core/common.py": 5,
+  "xarray/groupers.py": 0,
+  "xarray/namedarray/parallelcompat.py": 0
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/flox/xrutils.py": {
+   "xarray/core/common.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 12 passed, 1 skipped in 2.85s ========================="
+  "summary": "======================== 12 passed, 1 skipped in 2.84s ========================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 137 passed in 2.00s =============================="
+  "summary": "============================= 137 passed in 1.97s =============================="
  },
  "mutant_pool": 509,
  "stub_compiles": true,
@@ -20,16 +20,87 @@
   "failing": [],
   "summary": "============================= 137 passed in 2.42s =============================="
  },
- "leak_lines": 20,
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/builders/gettext.py": 69,
+  "sphinx/builders/html/__init__.py": 1,
+  "sphinx/builders/latex/__init__.py": 1,
+  "sphinx/builders/texinfo.py": 0,
+  "sphinx/domains/c/__init__.py": 0,
+  "sphinx/domains/citation.py": 3,
+  "sphinx/domains/cpp/__init__.py": 0,
+  "sphinx/domains/cpp/_symbol.py": 6,
+  "sphinx/domains/javascript.py": 14,
+  "sphinx/domains/math.py": 15,
+  "sphinx/domains/python/__init__.py": 0,
+  "sphinx/domains/rst.py": 2,
+  "sphinx/domains/std/__init__.py": 1,
+  "sphinx/environment/adapters/toctree.py": 7,
+  "sphinx/ext/extlinks.py": 2,
+  "sphinx/ext/todo.py": 13,
+  "sphinx/jinja2glue.py": 3,
+  "sphinx/transforms/__init__.py": 1,
+  "sphinx/transforms/i18n.py": 0,
+  "sphinx/transforms/post_transforms/__init__.py": 1,
+  "sphinx/transforms/post_transforms/code.py": 19,
+  "sphinx/util/docutils.py": 14,
+  "sphinx/util/i18n.py": 35,
+  "sphinx/util/nodes.py": 46,
+  "sphinx/util/template.py": 1,
+  "sphinx/versioning.py": 5,
+  "sphinx/writers/manpage.py": 1,
+  "sphinx/writers/texinfo.py": 1
+ },
  "leak_hits": {
-  "/testbed/sphinx/builders/__init__.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.10/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
   },
-  "/testbed/sphinx/writers/latex.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.11/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/lib/python3/dist-packages/setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/docutils_xml.py": {
+   "sphinx/builders/gettext.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/utils/__init__.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pygments/lexers/algebra.py": {
+   "sphinx/util/nodes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pygments/lexers/julia.py": {
+   "sphinx/util/nodes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 1
+  },
+  "/usr/lib/python3.10/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/usr/lib/python3.11/distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
+  },
+  "/usr/lib/python3/dist-packages/setuptools/_distutils/command/check.py": {
+   "sphinx/util/docutils.py": 2
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

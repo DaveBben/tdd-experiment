@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 18 passed in 0.85s =============================="
+  "summary": "============================== 18 passed in 0.83s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 88 passed in 10.19s =============================="
+  "summary": "============================== 88 passed in 9.74s =============================="
  },
  "mutant_pool": 79,
  "stub_compiles": true,
@@ -18,9 +18,15 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 88 passed in 10.30s =============================="
+  "summary": "============================= 88 passed in 10.62s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/entities/assessment_source.py": 10,
+  "mlflow/entities/trace_data.py": 7,
+  "mlflow/genai/judges/tools/search_traces.py": 73
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

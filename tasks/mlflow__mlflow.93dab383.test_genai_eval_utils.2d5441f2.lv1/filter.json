@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 20 passed in 0.25s =============================="
+  "summary": "============================== 20 passed in 0.24s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 71 passed in 11.74s =============================="
+  "summary": "============================= 71 passed in 11.49s =============================="
  },
  "mutant_pool": 68,
  "stub_compiles": true,
@@ -18,9 +18,17 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 71 passed in 12.12s =============================="
+  "summary": "============================= 71 passed in 11.41s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/cli/genai_eval_utils.py": 70
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/fsdp/_init_utils.py": {
+   "mlflow/cli/genai_eval_utils.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

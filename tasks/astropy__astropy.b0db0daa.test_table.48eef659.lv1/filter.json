@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 43 passed, 4 skipped in 0.35s ========================="
+  "summary": "======================== 43 passed, 4 skipped in 0.34s ========================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 191 passed, 103 skipped in 1.67s ======================="
+  "summary": "======================= 191 passed, 103 skipped in 1.57s ======================="
  },
  "mutant_pool": 445,
  "stub_compiles": true,
@@ -18,9 +18,27 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 191 passed, 103 skipped in 1.58s ======================="
+  "summary": "======================= 191 passed, 103 skipped in 1.56s ======================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/votable/converters.py": 42,
+  "astropy/io/votable/tree.py": 80,
+  "astropy/table/row.py": 4,
+  "astropy/table/table.py": 37,
+  "astropy/units/format/base.py": 2,
+  "astropy/units/quantity_helper/function_helpers.py": 25,
+  "astropy/utils/xml/check.py": 3,
+  "astropy/utils/xml/writer.py": 2
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/_internal.py": {
+   "astropy/io/votable/tree.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/triton/compiler/code_generator.py": {
+   "astropy/io/votable/tree.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

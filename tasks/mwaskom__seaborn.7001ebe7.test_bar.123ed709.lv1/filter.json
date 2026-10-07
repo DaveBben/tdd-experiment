@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 16 passed in 2.81s =============================="
+  "summary": "============================== 16 passed in 2.67s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 159 passed, 5 skipped in 3.53s ========================"
+  "summary": "======================== 159 passed, 5 skipped in 3.43s ========================"
  },
  "mutant_pool": 139,
  "stub_compiles": true,
@@ -18,22 +18,14 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 159 passed, 5 skipped in 3.38s ========================"
+  "summary": "======================== 159 passed, 5 skipped in 3.44s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/seaborn/_marks/base.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/seaborn/_marks/dot.py": {
-   "lines": 4,
-   "tracked": true
-  },
-  "/testbed/seaborn/_marks/line.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "seaborn",
+ "leak_candidates": {
+  "seaborn/_core/scales.py": 1,
+  "seaborn/_marks/bar.py": 42
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

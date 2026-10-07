@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 48 passed, 3 skipped in 0.78s ========================="
+  "summary": "======================== 48 passed, 3 skipped in 0.93s ========================="
  },
  "mutant_pool": 261,
  "stub_compiles": true,
@@ -18,18 +18,15 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 48 passed, 3 skipped in 0.77s ========================="
+  "summary": "======================== 48 passed, 3 skipped in 0.78s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/astropy/utils/masked/function_helpers.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/astropy/utils/shapes.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/uncertainty/core.py": 150,
+  "astropy/uncertainty/function_helpers.py": 21,
+  "astropy/units/quantity_helper/function_helpers.py": 26
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

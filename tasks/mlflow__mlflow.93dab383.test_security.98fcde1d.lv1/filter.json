@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 94 passed in 1.71s =============================="
+  "summary": "============================== 94 passed in 1.70s =============================="
  },
  "mutant_pool": 102,
  "stub_compiles": true,
@@ -18,14 +18,27 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 94 passed in 1.72s =============================="
+  "summary": "============================== 94 passed in 1.70s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/server/security.py": 23,
+  "mlflow/server/security_utils.py": 35
+ },
  "leak_hits": {
-  "/testbed/mlflow/server/fastapi_security.py": {
-   "lines": 4,
-   "tracked": true
+  "/lib/python3.10/ipaddress.py": {
+   "mlflow/server/security_utils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ipaddress.py": {
+   "mlflow/server/security_utils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/blackd/middlewares.py": {
+   "mlflow/server/security.py": 1
+  },
+  "/usr/lib/python3.10/ipaddress.py": {
+   "mlflow/server/security_utils.py": 2
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

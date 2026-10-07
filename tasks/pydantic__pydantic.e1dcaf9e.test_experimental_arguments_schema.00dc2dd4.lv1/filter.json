@@ -20,12 +20,17 @@
   "failing": [],
   "summary": "         3 xfailed"
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/pydantic/fields.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "pydantic",
+ "leak_candidates": {
+  "pydantic/_internal/_fields.py": 21,
+  "pydantic/_internal/_generate_schema.py": 50,
+  "pydantic/_internal/_namespace_utils.py": 22,
+  "pydantic/_internal/_typing_extra.py": 3,
+  "pydantic/_internal/_utils.py": 3,
+  "pydantic/aliases.py": 16,
+  "pydantic/experimental/arguments_schema.py": 12
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

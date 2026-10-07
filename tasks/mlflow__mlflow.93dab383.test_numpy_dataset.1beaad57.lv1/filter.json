@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "====================== 112 passed, 1 deselected in 30.31s ======================"
+  "summary": "====================== 112 passed, 1 deselected in 30.22s ======================"
  },
  "mutant_pool": 321,
  "stub_compiles": true,
@@ -18,9 +18,34 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "====================== 112 passed, 1 deselected in 30.62s ======================"
+  "summary": "====================== 112 passed, 1 deselected in 30.47s ======================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/data/dataset.py": 9,
+  "mlflow/data/dataset_source.py": 0,
+  "mlflow/data/dataset_source_registry.py": 29,
+  "mlflow/data/digest_utils.py": 14,
+  "mlflow/data/evaluation_dataset.py": 115,
+  "mlflow/data/huggingface_dataset.py": 0,
+  "mlflow/data/numpy_dataset.py": 1,
+  "mlflow/data/pandas_dataset.py": 0,
+  "mlflow/data/schema.py": 18,
+  "mlflow/data/spark_dataset.py": 1,
+  "mlflow/data/tensorflow_dataset.py": 1,
+  "mlflow/models/signature.py": 0,
+  "mlflow/models/utils.py": 0,
+  "mlflow/tracking/context/git_context.py": 1,
+  "mlflow/types/schema.py": 2,
+  "mlflow/types/utils.py": 80
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/indexes/accessors.py": {
+   "mlflow/types/utils.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/tmp/pytest-of-root/pytest-0/test_parse_pip_requirements0/fake.whl"
+ ],
  "keep": true
 }

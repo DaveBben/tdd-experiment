@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 51 passed, 1 deselected in 0.85s ======================="
+  "summary": "======================= 51 passed, 1 deselected in 0.84s ======================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 20 passed in 0.81s =============================="
+  "summary": "============================== 20 passed in 0.82s =============================="
  },
  "mutant_pool": 1063,
  "stub_compiles": true,
@@ -18,14 +18,43 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 20 passed in 1.07s =============================="
+  "summary": "============================== 20 passed in 1.02s =============================="
  },
- "leak_lines": 20,
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/builders/text.py": 1,
+  "sphinx/config.py": 11,
+  "sphinx/domains/python/__init__.py": 0,
+  "sphinx/domains/python/_annotations.py": 7,
+  "sphinx/environment/adapters/toctree.py": 77,
+  "sphinx/ext/autodoc/typehints.py": 29,
+  "sphinx/ext/intersphinx/__init__.py": 4,
+  "sphinx/ext/intersphinx/_load.py": 37,
+  "sphinx/ext/intersphinx/_resolve.py": 105,
+  "sphinx/ext/intersphinx/_shared.py": 17,
+  "sphinx/ext/napoleon/docstring.py": 18,
+  "sphinx/transforms/post_transforms/__init__.py": 1,
+  "sphinx/util/inventory.py": 2,
+  "sphinx/util/nodes.py": 4,
+  "sphinx/writers/text.py": 66
+ },
  "leak_hits": {
-  "/testbed/sphinx/writers/latex.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.10/textwrap.py": {
+   "sphinx/writers/text.py": 4
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/_html_base.py": {
+   "sphinx/writers/text.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/textwrap.py": {
+   "sphinx/writers/text.py": 4
+  },
+  "/opt/miniconda3/lib/python3.11/textwrap.py": {
+   "sphinx/writers/text.py": 4
+  },
+  "/usr/lib/python3.10/textwrap.py": {
+   "sphinx/writers/text.py": 4
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

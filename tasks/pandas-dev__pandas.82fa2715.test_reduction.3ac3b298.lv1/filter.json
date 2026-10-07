@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 47 passed in 0.14s =============================="
+  "summary": "============================== 47 passed in 0.13s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 156 passed in 0.42s =============================="
+  "summary": "============================= 156 passed in 0.39s =============================="
  },
  "mutant_pool": 691,
  "stub_compiles": true,
@@ -20,12 +20,61 @@
   "failing": [],
   "summary": "+ /opt/miniconda3/envs/testbed/bin/ninja"
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/algorithms.py": 0,
+  "pandas/core/array_algos/masked_reductions.py": 22,
+  "pandas/core/arrays/base.py": 1,
+  "pandas/core/common.py": 9,
+  "pandas/core/dtypes/base.py": 0,
+  "pandas/core/dtypes/cast.py": 7,
+  "pandas/core/dtypes/concat.py": 0,
+  "pandas/core/groupby/generic.py": 5,
+  "pandas/core/groupby/groupby.py": 29,
+  "pandas/core/groupby/ops.py": 2,
+  "pandas/core/nanops.py": 148
+ },
  "leak_hits": {
-  "/testbed/pandas/core/groupby/groupby.py": {
-   "lines": 2,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/array/reductions.py": {
+   "pandas/core/nanops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/array/tests/test_array_core.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/array/tests/test_cupy_reductions.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/array/tests/test_reductions.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/backends.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/tests/test_arithmetics_reduction.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/tests/test_dataframe.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/tests/test_groupby.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/tests/test_ufunc.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numba/tests/test_linalg.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/special/_basic.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/xarray/coding/times.py": {
+   "pandas/core/array_algos/masked_reductions.py": 1,
+   "pandas/core/nanops.py": 1
   }
  },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": false
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 162 passed, 6 skipped, 2 xfailed in 0.51s ==================="
+  "summary": "================== 162 passed, 6 skipped, 2 xfailed in 0.46s ==================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 212 passed in 9.40s =============================="
+  "summary": "============================= 212 passed in 9.59s =============================="
  },
  "mutant_pool": 1213,
  "stub_compiles": true,
@@ -20,7 +20,42 @@
   "failing": [],
   "summary": "+ /opt/miniconda3/envs/testbed/bin/ninja"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/compat/numpy/function.py": 8,
+  "pandas/core/algorithms.py": 1,
+  "pandas/core/arraylike.py": 30,
+  "pandas/core/arrays/arrow/array.py": 0,
+  "pandas/core/common.py": 2,
+  "pandas/core/dtypes/common.py": 0,
+  "pandas/core/dtypes/inference.py": 12,
+  "pandas/core/generic.py": 0,
+  "pandas/core/groupby/generic.py": 88,
+  "pandas/core/groupby/groupby.py": 377,
+  "pandas/core/groupby/ops.py": 48,
+  "pandas/core/indexers/__init__.py": 1,
+  "pandas/core/indexers/utils.py": 12,
+  "pandas/core/indexes/base.py": 0,
+  "pandas/core/internals/managers.py": 30,
+  "pandas/core/internals/ops.py": 39,
+  "pandas/core/nanops.py": 39,
+  "pandas/core/reshape/concat.py": 7,
+  "pandas/core/reshape/pivot.py": 0,
+  "pandas/core/sorting.py": 23
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/legend_handler.pyi": {
+   "pandas/core/internals/ops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/lines.pyi": {
+   "pandas/core/internals/ops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/mlab.pyi": {
+   "pandas/core/internals/ops.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": false
 }

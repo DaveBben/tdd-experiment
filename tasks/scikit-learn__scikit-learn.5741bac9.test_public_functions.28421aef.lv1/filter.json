@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 218 passed in 0.68s =============================="
+  "summary": "============================= 218 passed in 0.67s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 788 passed, 35 skipped in 5.52s ========================"
+  "summary": "======================= 788 passed, 35 skipped in 5.77s ========================"
  },
  "mutant_pool": 303,
  "stub_compiles": true,
@@ -18,9 +18,28 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 788 passed, 35 skipped in 5.82s ========================"
+  "summary": "======================= 788 passed, 35 skipped in 5.55s ========================"
  },
- "leak_lines": 20,
+ "library": "scikit-learn",
+ "leak_candidates": {
+  "sklearn/cluster/__init__.py": 4,
+  "sklearn/cluster/_affinity_propagation.py": 7,
+  "sklearn/cluster/_dbscan.py": 6,
+  "sklearn/cluster/_mean_shift.py": 11,
+  "sklearn/cluster/_spectral.py": 5,
+  "sklearn/covariance/__init__.py": 2,
+  "sklearn/covariance/_graph_lasso.py": 8,
+  "sklearn/covariance/_shrunk_covariance.py": 7,
+  "sklearn/decomposition/__init__.py": 2,
+  "sklearn/decomposition/_dict_learning.py": 14,
+  "sklearn/decomposition/_nmf.py": 9,
+  "sklearn/decomposition/_sparse_pca.py": 1,
+  "sklearn/discriminant_analysis.py": 1,
+  "sklearn/utils/_available_if.py": 4,
+  "sklearn/utils/_param_validation.py": 44,
+  "sklearn/utils/_set_output.py": 1
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

@@ -20,12 +20,14 @@
   "failing": [],
   "summary": "        44 passed"
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/pydantic/main.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "pydantic",
+ "leak_candidates": {
+  "pydantic/_internal/_generate_schema.py": 25,
+  "pydantic/experimental/pipeline.py": 54,
+  "pydantic/json_schema.py": 40,
+  "pydantic/type_adapter.py": 6
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

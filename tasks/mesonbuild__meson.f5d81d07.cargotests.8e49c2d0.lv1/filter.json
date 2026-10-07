@@ -5,14 +5,14 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 16 passed in 0.29s =============================="
+  "summary": "============================== 16 passed in 0.31s =============================="
  },
  "gold_p2p": {
   "exit": 1,
   "failing": [
    "unittests/failuretests.py::FailureTests::test_dependency"
   ],
-  "summary": "============= 1 failed, 102 passed, 2 skipped in 67.61s (0:01:07) =============="
+  "summary": "============= 1 failed, 102 passed, 2 skipped in 68.96s (0:01:08) =============="
  },
  "mutant_pool": 197,
  "stub_compiles": true,
@@ -22,9 +22,37 @@
   "failing": [
    "unittests/failuretests.py::FailureTests::test_dependency"
   ],
-  "summary": "============= 1 failed, 102 passed, 2 skipped in 67.72s (0:01:07) =============="
+  "summary": "============= 1 failed, 102 passed, 2 skipped in 68.57s (0:01:08) =============="
  },
- "leak_lines": 20,
- "leak_hits": {},
- "keep": false
+ "library": "meson",
+ "leak_candidates": {
+  "mesonbuild/cargo/cfg.py": 5,
+  "mesonbuild/cargo/interpreter.py": 34,
+  "mesonbuild/cargo/manifest.py": 6,
+  "mesonbuild/cargo/toml.py": 5,
+  "mesonbuild/cargo/version.py": 35,
+  "mesonbuild/wrap/wrap.py": 2
+ },
+ "leak_hits": {
+  "/lib/python3/dist-packages/setuptools/package_index.py": {
+   "mesonbuild/cargo/interpreter.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/package_index.py": {
+   "mesonbuild/cargo/interpreter.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!setuptools/package_index.py": {
+   "mesonbuild/cargo/interpreter.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/package_index.py": {
+   "mesonbuild/cargo/interpreter.py": 1
+  },
+  "/usr/lib/python3/dist-packages/setuptools/package_index.py": {
+   "mesonbuild/cargo/interpreter.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/testbed/test cases/common/153 wrap file should not failed/subprojects/packagecache/zlib-1.2.8-8-wrap.zip",
+  "/testbed/test cases/common/153 wrap file should not failed/subprojects/packagecache/zlib-1.2.8.tar.gz"
+ ],
+ "keep": true
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 11 passed, 1 skipped in 3.10s ========================="
+  "summary": "======================== 11 passed, 1 skipped in 2.62s ========================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 54 passed, 1 warning in 6.22s ========================="
+  "summary": "======================== 54 passed, 1 warning in 5.61s ========================="
  },
  "mutant_pool": 83,
  "stub_compiles": true,
@@ -18,9 +18,17 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 54 passed, 1 warning in 6.96s ========================="
+  "summary": "======================== 54 passed, 1 warning in 6.54s ========================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/genai/evaluation/base.py": 1,
+  "mlflow/genai/optimize/util.py": 1,
+  "mlflow/genai/scorers/base.py": 7,
+  "mlflow/genai/scorers/builtin_scorers.py": 4,
+  "mlflow/genai/scorers/validation.py": 56
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

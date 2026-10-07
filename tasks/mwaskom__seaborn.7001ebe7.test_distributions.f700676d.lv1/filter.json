@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 258 passed, 1 skipped in 23.73s ========================"
+  "summary": "======================= 258 passed, 1 skipped in 22.98s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 162 passed, 4 skipped in 5.24s ========================"
+  "summary": "======================== 162 passed, 4 skipped in 5.18s ========================"
  },
  "mutant_pool": 961,
  "stub_compiles": true,
@@ -18,9 +18,32 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 162 passed, 4 skipped in 5.19s ========================"
+  "summary": "======================== 162 passed, 4 skipped in 5.16s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "seaborn",
+ "leak_candidates": {
+  "seaborn/_base.py": 318,
+  "seaborn/_compat.py": 0,
+  "seaborn/_stats/base.py": 5,
+  "seaborn/axisgrid.py": 70,
+  "seaborn/distributions.py": 7,
+  "seaborn/external/husl.py": 28,
+  "seaborn/external/kde.py": 2,
+  "seaborn/matrix.py": 1,
+  "seaborn/palettes.py": 23,
+  "seaborn/utils.py": 67
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/_cm.py": {
+   "seaborn/palettes.py": 3
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/axes/_base.py": {
+   "seaborn/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/colors.py": {
+   "seaborn/utils.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

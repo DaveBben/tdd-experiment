@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 34 passed in 0.48s =============================="
+  "summary": "============================== 34 passed in 0.47s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "=================== 39 passed, 1 xfailed, 1 warning in 3.61s ==================="
+  "summary": "=================== 39 passed, 1 xfailed, 1 warning in 3.31s ==================="
  },
  "mutant_pool": 158,
  "stub_compiles": true,
@@ -18,9 +18,25 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "=================== 39 passed, 1 xfailed, 1 warning in 3.35s ==================="
+  "summary": "=================== 39 passed, 1 xfailed, 1 warning in 3.86s ==================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "xarray",
+ "leak_candidates": {
+  "xarray/__init__.py": 1,
+  "xarray/backends/api.py": 1,
+  "xarray/core/datatree.py": 1,
+  "xarray/core/datatree_mapping.py": 1,
+  "xarray/core/formatting.py": 1,
+  "xarray/core/treenode.py": 125
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/click/core.py": {
+   "xarray/core/treenode.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/__init__.pyi": {
+   "xarray/core/treenode.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

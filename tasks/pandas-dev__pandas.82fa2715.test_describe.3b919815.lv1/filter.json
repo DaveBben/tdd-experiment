@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 546 passed in 1.22s =============================="
+  "summary": "============================= 546 passed in 1.21s =============================="
  },
  "mutant_pool": 1475,
  "stub_compiles": true,
@@ -18,14 +18,60 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 546 passed in 1.26s =============================="
+  "summary": "============================= 546 passed in 1.30s =============================="
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/algorithms.py": 1,
+  "pandas/core/common.py": 2,
+  "pandas/core/dtypes/astype.py": 4,
+  "pandas/core/dtypes/cast.py": 2,
+  "pandas/core/dtypes/common.py": 0,
+  "pandas/core/dtypes/concat.py": 34,
+  "pandas/core/dtypes/inference.py": 10,
+  "pandas/core/frame.py": 3,
+  "pandas/core/generic.py": 1,
+  "pandas/core/groupby/generic.py": 31,
+  "pandas/core/groupby/groupby.py": 41,
+  "pandas/core/groupby/ops.py": 55,
+  "pandas/core/indexes/base.py": 1,
+  "pandas/core/indexes/datetimelike.py": 1,
+  "pandas/core/indexes/multi.py": 0,
+  "pandas/core/indexing.py": 1,
+  "pandas/core/internals/__init__.py": 1,
+  "pandas/core/internals/concat.py": 80,
+  "pandas/core/internals/construction.py": 0,
+  "pandas/core/methods/describe.py": 44,
+  "pandas/core/nanops.py": 31,
+  "pandas/core/reshape/concat.py": 46,
+  "pandas/core/reshape/melt.py": 1,
+  "pandas/core/reshape/merge.py": 0,
+  "pandas/core/reshape/pivot.py": 0,
+  "pandas/core/reshape/reshape.py": 206,
+  "pandas/core/series.py": 1,
+  "pandas/core/sorting.py": 108,
+  "pandas/io/formats/console.py": 27,
+  "pandas/io/formats/format.py": 34,
+  "pandas/io/formats/printing.py": 62,
+  "pandas/io/parsers/c_parser_wrapper.py": 1,
+  "pandas/util/_validators.py": 12
+ },
  "leak_hits": {
-  "/testbed/pandas/core/dtypes/concat.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/mypy/types.py": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/_dataset.pyx": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/testing/_internal/common_nn.py": {
+   "pandas/core/reshape/reshape.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
+ "keep": true
 }

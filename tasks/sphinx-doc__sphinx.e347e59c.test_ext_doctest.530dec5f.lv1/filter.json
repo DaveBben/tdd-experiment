@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 11 passed in 0.71s =============================="
+  "summary": "============================== 11 passed in 0.70s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 124 passed in 4.11s =============================="
+  "summary": "============================= 124 passed in 4.09s =============================="
  },
  "mutant_pool": 391,
  "stub_compiles": true,
@@ -18,9 +18,27 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 124 passed in 4.51s =============================="
+  "summary": "============================= 124 passed in 4.60s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/ext/doctest.py": 176,
+  "sphinx/transforms/post_transforms/code.py": 5
+ },
+ "leak_hits": {
+  "/lib/python3.10/doctest.py": {
+   "sphinx/ext/doctest.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/doctest.py": {
+   "sphinx/ext/doctest.py": 2
+  },
+  "/opt/miniconda3/lib/python3.11/doctest.py": {
+   "sphinx/ext/doctest.py": 2
+  },
+  "/usr/lib/python3.10/doctest.py": {
+   "sphinx/ext/doctest.py": 2
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

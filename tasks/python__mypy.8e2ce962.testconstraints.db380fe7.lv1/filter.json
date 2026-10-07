@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 10 passed in 0.34s =============================="
+  "summary": "============================== 10 passed in 0.33s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 83 passed, 1 skipped in 35.16s ========================"
+  "summary": "======================== 83 passed, 1 skipped in 34.37s ========================"
  },
  "mutant_pool": 78,
  "stub_compiles": true,
@@ -25,9 +25,16 @@
    "mypyc/test/test_commandline.py::TestCommandLine::commandline.test::testOnlyWarningOutput",
    "mypyc/test/test_commandline.py::TestCommandLine::commandline.test::testSubPackage"
   ],
-  "summary": "=================== 6 failed, 77 passed, 1 skipped in 20.54s ==================="
+  "summary": "=================== 6 failed, 77 passed, 1 skipped in 20.03s ==================="
  },
- "leak_lines": 20,
+ "library": "mypy",
+ "leak_candidates": {
+  "mypy/constraints.py": 60,
+  "mypy/expandtype.py": 0,
+  "mypy/type_visitor.py": 2,
+  "mypy/types.py": 5
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": false
 }

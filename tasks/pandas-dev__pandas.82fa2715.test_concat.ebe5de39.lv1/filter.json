@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 146 passed, 8 xfailed in 1.74s ========================"
+  "summary": "======================== 146 passed, 8 xfailed in 1.70s ========================"
  },
  "mutant_pool": 338,
  "stub_compiles": true,
@@ -18,9 +18,38 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 146 passed, 8 xfailed in 1.64s ========================"
+  "summary": "======================== 146 passed, 8 xfailed in 1.72s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/__init__.py": 1,
+  "pandas/core/algorithms.py": 1,
+  "pandas/core/common.py": 1,
+  "pandas/core/dtypes/cast.py": 12,
+  "pandas/core/dtypes/concat.py": 54,
+  "pandas/core/frame.py": 1,
+  "pandas/core/generic.py": 0,
+  "pandas/core/indexes/base.py": 2,
+  "pandas/core/indexes/datetimelike.py": 1,
+  "pandas/core/indexing.py": 1,
+  "pandas/core/internals/concat.py": 1,
+  "pandas/core/methods/describe.py": 0,
+  "pandas/core/resample.py": 0,
+  "pandas/core/reshape/api.py": 0,
+  "pandas/core/reshape/concat.py": 103,
+  "pandas/core/reshape/melt.py": 1,
+  "pandas/core/reshape/pivot.py": 0,
+  "pandas/core/window/rolling.py": 0,
+  "pandas/io/json/_json.py": 0,
+  "pandas/io/parsers/c_parser_wrapper.py": 1
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/dask_expr/_collection.py": {
+   "pandas/core/reshape/concat.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": true
 }

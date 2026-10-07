@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 27 passed in 4.82s =============================="
+  "summary": "============================== 27 passed in 4.75s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 29 passed in 0.80s =============================="
+  "summary": "============================== 29 passed in 0.73s =============================="
  },
  "mutant_pool": 979,
  "stub_compiles": true,
@@ -18,9 +18,70 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 29 passed in 0.92s =============================="
+  "summary": "============================== 29 passed in 0.93s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/application.py": 6,
+  "sphinx/builders/dummy.py": 0,
+  "sphinx/builders/html/__init__.py": 2,
+  "sphinx/builders/latex/transforms.py": 27,
+  "sphinx/builders/latex/util.py": 1,
+  "sphinx/builders/singlehtml.py": 52,
+  "sphinx/config.py": 11,
+  "sphinx/directives/patches.py": 18,
+  "sphinx/domains/math.py": 6,
+  "sphinx/environment/__init__.py": 1,
+  "sphinx/environment/adapters/toctree.py": 8,
+  "sphinx/ext/imgmath.py": 97,
+  "sphinx/ext/mathjax.py": 1,
+  "sphinx/transforms/post_transforms/code.py": 0,
+  "sphinx/util/_timestamps.py": 6,
+  "sphinx/util/math.py": 21,
+  "sphinx/util/nodes.py": 1,
+  "sphinx/util/png.py": 7,
+  "sphinx/util/template.py": 2,
+  "sphinx/writers/html5.py": 8,
+  "sphinx/writers/latex.py": 172
+ },
+ "leak_hits": {
+  "/lib/python3/dist-packages/mesonbuild/backend/ninjabackend.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/lib/python3/dist-packages/mesonbuild/coredata.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/_distutils/file_util.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/body.py": {
+   "sphinx/directives/patches.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/latex2e/__init__.py": {
+   "sphinx/writers/latex.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/writers/odf_odt/__init__.py": {
+   "sphinx/writers/latex.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/_distutils/file_util.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinxcontrib/htmlhelp/__init__.py": {
+   "sphinx/builders/singlehtml.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinxcontrib/jsmath/__init__.py": {
+   "sphinx/ext/mathjax.py": 1
+  },
+  "/usr/lib/python3/dist-packages/mesonbuild/backend/ninjabackend.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/usr/lib/python3/dist-packages/mesonbuild/coredata.py": {
+   "sphinx/ext/imgmath.py": 1
+  },
+  "/usr/share/python3/debpython/files.py": {
+   "sphinx/ext/imgmath.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

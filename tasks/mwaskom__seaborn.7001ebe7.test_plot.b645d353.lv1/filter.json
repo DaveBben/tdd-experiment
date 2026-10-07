@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 197 passed, 5 xfailed in 9.29s ========================"
+  "summary": "======================== 197 passed, 5 xfailed in 9.10s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 245 passed in 3.51s =============================="
+  "summary": "============================= 245 passed in 3.47s =============================="
  },
  "mutant_pool": 173,
  "stub_compiles": true,
@@ -18,9 +18,81 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 245 passed in 3.45s =============================="
+  "summary": "============================= 245 passed in 3.50s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "seaborn",
+ "leak_candidates": {
+  "seaborn/_core/plot.py": 87,
+  "seaborn/external/version.py": 1
+ },
+ "leak_hits": {
+  "/lib/python3/dist-packages/pip/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/lib/python3/dist-packages/pkg_resources/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/lib/python3/dist-packages/setuptools/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl!pip/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/torch/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/virtualenv/seed/wheels/embed/setuptools-75.3.2-py3-none-any.whl!setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/virtualenv/seed/wheels/embed/setuptools-80.9.0-py3-none-any.whl!setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/virtualenv/seed/wheels/embed/wheel-0.45.1-py3-none-any.whl!wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!pkg_resources/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!setuptools/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pkg_resources/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/wheel/vendored/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pkg_resources/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  },
+  "/usr/lib/python3/dist-packages/setuptools/_vendor/packaging/version.py": {
+   "seaborn/external/version.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

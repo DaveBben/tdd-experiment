@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 39 passed, 1 xfailed in 5.70s ========================="
+  "summary": "======================== 39 passed, 1 xfailed in 5.40s ========================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 64 passed in 0.14s =============================="
+  "summary": "============================== 64 passed in 0.13s =============================="
  },
  "mutant_pool": 1624,
  "stub_compiles": true,
@@ -18,18 +18,133 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 64 passed in 0.15s =============================="
+  "summary": "============================== 64 passed in 0.14s =============================="
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/__init__.py": 1,
+  "pandas/_testing/asserters.py": 0,
+  "pandas/api/extensions/__init__.py": 0,
+  "pandas/compat/numpy/function.py": 4,
+  "pandas/core/_numba/executor.py": 11,
+  "pandas/core/algorithms.py": 27,
+  "pandas/core/apply.py": 0,
+  "pandas/core/array_algos/quantile.py": 0,
+  "pandas/core/array_algos/take.py": 0,
+  "pandas/core/arrays/_mixins.py": 1,
+  "pandas/core/arrays/arrow/array.py": 0,
+  "pandas/core/arrays/base.py": 1,
+  "pandas/core/arrays/categorical.py": 0,
+  "pandas/core/arrays/datetimelike.py": 20,
+  "pandas/core/arrays/datetimes.py": 72,
+  "pandas/core/arrays/interval.py": 0,
+  "pandas/core/arrays/masked.py": 0,
+  "pandas/core/arrays/sparse/accessor.py": 0,
+  "pandas/core/arrays/sparse/array.py": 0,
+  "pandas/core/arrays/timedeltas.py": 29,
+  "pandas/core/common.py": 0,
+  "pandas/core/computation/eval.py": 0,
+  "pandas/core/computation/ops.py": 1,
+  "pandas/core/computation/pytables.py": 1,
+  "pandas/core/dtypes/base.py": 0,
+  "pandas/core/dtypes/cast.py": 35,
+  "pandas/core/dtypes/common.py": 0,
+  "pandas/core/dtypes/concat.py": 46,
+  "pandas/core/dtypes/dtypes.py": 0,
+  "pandas/core/dtypes/inference.py": 12,
+  "pandas/core/dtypes/missing.py": 8,
+  "pandas/core/frame.py": 3,
+  "pandas/core/generic.py": 0,
+  "pandas/core/groupby/generic.py": 1,
+  "pandas/core/groupby/groupby.py": 5,
+  "pandas/core/groupby/grouper.py": 133,
+  "pandas/core/groupby/ops.py": 0,
+  "pandas/core/indexers/__init__.py": 1,
+  "pandas/core/indexers/utils.py": 12,
+  "pandas/core/indexes/api.py": 7,
+  "pandas/core/indexes/base.py": 3,
+  "pandas/core/indexes/datetimelike.py": 1,
+  "pandas/core/indexes/frozen.py": 0,
+  "pandas/core/indexes/interval.py": 0,
+  "pandas/core/indexes/multi.py": 0,
+  "pandas/core/indexing.py": 1,
+  "pandas/core/internals/blocks.py": 4,
+  "pandas/core/internals/concat.py": 1,
+  "pandas/core/internals/construction.py": 96,
+  "pandas/core/internals/managers.py": 13,
+  "pandas/core/methods/describe.py": 0,
+  "pandas/core/missing.py": 0,
+  "pandas/core/nanops.py": 0,
+  "pandas/core/ops/array_ops.py": 0,
+  "pandas/core/resample.py": 0,
+  "pandas/core/reshape/api.py": 0,
+  "pandas/core/reshape/concat.py": 100,
+  "pandas/core/reshape/melt.py": 1,
+  "pandas/core/reshape/merge.py": 0,
+  "pandas/core/reshape/pivot.py": 0,
+  "pandas/core/reshape/reshape.py": 163,
+  "pandas/core/reshape/tile.py": 1,
+  "pandas/core/series.py": 0,
+  "pandas/core/sorting.py": 84,
+  "pandas/core/tools/timedeltas.py": 1,
+  "pandas/core/util/numba_.py": 1,
+  "pandas/core/window/ewm.py": 1,
+  "pandas/core/window/rolling.py": 1,
+  "pandas/io/formats/format.py": 1,
+  "pandas/io/formats/info.py": 22,
+  "pandas/io/formats/printing.py": 34,
+  "pandas/io/html.py": 0,
+  "pandas/io/json/_json.py": 0,
+  "pandas/io/parsers/c_parser_wrapper.py": 1,
+  "pandas/io/pytables.py": 1,
+  "pandas/util/_validators.py": 48
+ },
  "leak_hits": {
-  "/testbed/pandas/core/dtypes/concat.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.10/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
   },
-  "/testbed/pandas/core/internals/blocks.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/_pytest/logging.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/dask_expr/_collection.py": {
+   "pandas/core/reshape/concat.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/mypy/types.py": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/fromnumeric.py": {
+   "pandas/core/algorithms.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/ma/core.py": {
+   "pandas/core/algorithms.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/_dataset.pyx": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/polys/polyfuncs.py": {
+   "pandas/core/internals/construction.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/testing/_internal/common_nn.py": {
+   "pandas/core/reshape/reshape.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/xarray/core/dataset.py": {
+   "pandas/io/formats/info.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/usr/lib/python3.10/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
+ "keep": true
 }

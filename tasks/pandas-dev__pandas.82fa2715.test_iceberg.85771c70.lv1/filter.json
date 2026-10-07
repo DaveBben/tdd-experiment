@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 11 passed, 3 warnings in 1.68s ========================"
+  "summary": "======================== 11 passed, 3 warnings in 1.72s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 1924 passed in 4.42s ============================="
+  "summary": "============================= 1924 passed in 4.18s ============================="
  },
  "mutant_pool": 37,
  "stub_compiles": true,
@@ -18,14 +18,52 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 1924 passed in 4.37s ============================="
+  "summary": "============================= 1924 passed in 4.24s ============================="
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/api/internals.py": 26,
+  "pandas/core/frame.py": 1,
+  "pandas/io/api.py": 1,
+  "pandas/io/iceberg.py": 32
+ },
  "leak_hits": {
-  "/testbed/pandas/core/internals/api.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_vendor/rich/prompt.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/tests/parquet/test_data_types.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/tests/parquet/test_datetime.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/tests/parquet/test_pandas.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/tests/parquet/test_parquet_file.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyiceberg/io/pyarrow.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyiceberg/table/__init__.py": {
+   "pandas/io/iceberg.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/rich/prompt.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.0.1-py3-none-any.whl!pip/_vendor/rich/prompt.py": {
+   "pandas/io/iceberg.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.3-py3-none-any.whl!pip/_vendor/rich/prompt.py": {
+   "pandas/io/iceberg.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
+ "keep": true
 }

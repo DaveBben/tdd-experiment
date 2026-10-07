@@ -49,7 +49,7 @@
    "test_x456.py::test",
    "test_xfail_handling.py::test_b"
   ],
-  "summary": "======================= 288 passed, 11 skipped in 8.62s ========================"
+  "summary": "======================= 288 passed, 11 skipped in 8.45s ========================"
  },
  "mutant_pool": 184,
  "stub_compiles": true,
@@ -96,9 +96,14 @@
    "test_x456.py::test",
    "test_xfail_handling.py::test_b"
   ],
-  "summary": "======================= 288 passed, 11 skipped in 9.21s ========================"
+  "summary": "======================= 288 passed, 11 skipped in 8.40s ========================"
  },
- "leak_lines": 20,
+ "library": "pytest",
+ "leak_candidates": {
+  "src/_pytest/assertion/util.py": 16,
+  "src/_pytest/raises.py": 89
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

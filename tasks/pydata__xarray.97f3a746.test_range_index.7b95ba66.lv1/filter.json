@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 117 passed, 1 xfailed, 1 warning in 3.97s ==================="
+  "summary": "================== 117 passed, 1 xfailed, 1 warning in 3.78s ==================="
  },
  "mutant_pool": 352,
  "stub_compiles": true,
@@ -18,14 +18,365 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 117 passed, 1 xfailed, 1 warning in 4.00s ==================="
+  "summary": "================== 117 passed, 1 xfailed, 1 warning in 3.41s ==================="
  },
- "leak_lines": 20,
+ "library": "xarray",
+ "leak_candidates": {
+  "xarray/__init__.py": 1,
+  "xarray/coding/times.py": 1,
+  "xarray/computation/apply_ufunc.py": 1,
+  "xarray/core/common.py": 8,
+  "xarray/core/coordinate_transform.py": 7,
+  "xarray/core/coordinates.py": 3,
+  "xarray/core/dataarray.py": 0,
+  "xarray/core/dataset.py": 2,
+  "xarray/core/datatree.py": 0,
+  "xarray/core/duck_array_ops.py": 7,
+  "xarray/core/extension_array.py": 1,
+  "xarray/core/formatting.py": 4,
+  "xarray/core/groupby.py": 0,
+  "xarray/core/indexes.py": 90,
+  "xarray/core/indexing.py": 28,
+  "xarray/core/utils.py": 15,
+  "xarray/core/variable.py": 35,
+  "xarray/groupers.py": 1,
+  "xarray/namedarray/core.py": 4,
+  "xarray/namedarray/pycompat.py": 8,
+  "xarray/structure/alignment.py": 0,
+  "xarray/structure/merge.py": 2
+ },
  "leak_hits": {
-  "/testbed/xarray/indexes/nd_point_index.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.10/argparse.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3.10/asyncio/base_events.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3.10/http/server.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3.10/locale.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3.10/test/libregrtest/save_env.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3.10/turtle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3/dist-packages/mesonbuild/mesonlib/universal.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/lib/python3/dist-packages/setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/argparse.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/asyncio/base_events.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/dataclasses.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/_vendor/typeguard/_checkers.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/http/server.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/idlelib/editor.py": {
+   "xarray/core/indexes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/locale.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/dask_expr/_expr.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/dask_expr/_shuffle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/shuffle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/distributed/utils.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fontTools/colorLib/builder.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/h5py/_hl/files.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/hypothesis/extra/ghostwriter.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jinja2/filters.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/lxml/etree.pyx": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/cbook.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/colorbar.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/colorizer.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/colors.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/rcsetup.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/mpmath/ctx_iv.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/mpmath/math2.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/networkx/classes/multigraph.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/networkx/classes/reportviews.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/networkx/drawing/nx_latex.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numba/tests/test_dyn_array.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/records.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/tests/test_array_coercion.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_iotools.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/ma/core.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy_groupies/aggregate_purepy.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/arrays/datetimelike.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/cast.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/common.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/indexes/base.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/indexes/category.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/internals/blocks.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/nanops.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/io/common.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/io/json/_json.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/io/pytables.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/io/sql.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/tests/extension/base/accumulate.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/tests/extension/base/reduce.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/types.pxi": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pydap/parsers/das.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/requests_cache/_utils.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/requests_cache/policy/expiration.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/_lib/_util.py": {
+   "xarray/core/common.py": 3
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/_lib/tests/test_array_api.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/signal/_peak_finding.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/sparse/_sputils.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/spatial/tests/test_distance.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/special/tests/test_basic.py": {
+   "xarray/core/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/_vendor/typeguard/_checkers.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/shapefile.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinx/ext/autodoc/importer.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinx/ext/autodoc/typehints.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinx/util/logging.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/core/expr.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/core/function.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/polys/domains/domain.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/simplify/simplify.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/stats/stochastic_process_types.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.0.1-py3-none-any.whl!pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.3-py3-none-any.whl!pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/setuptools-75.3.2-py3-none-any.whl!setuptools/_vendor/typeguard/_checkers.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/setuptools-75.3.2-py3-none-any.whl!setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/setuptools-80.9.0-py3-none-any.whl!setuptools/_vendor/typeguard/_checkers.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/setuptools-80.9.0-py3-none-any.whl!setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/turtle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/argparse.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/asyncio/base_events.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/dataclasses.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/http/server.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/idlelib/editor.py": {
+   "xarray/core/indexes.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/locale.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/boltons/funcutils.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda_content_trust/common.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pycparser/ply/yacc.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/dist.py": {
+   "xarray/core/variable.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/turtle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/argparse.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/asyncio/base_events.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/http/server.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/locale.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/test/libregrtest/save_env.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3.10/turtle.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3/dist-packages/mesonbuild/mesonlib/universal.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/urllib3/util/timeout.py": {
+   "xarray/core/utils.py": 1
+  },
+  "/usr/lib/python3/dist-packages/setuptools/dist.py": {
+   "xarray/core/variable.py": 1
   }
  },
+ "unscanned_archives": [],
  "keep": false
 }

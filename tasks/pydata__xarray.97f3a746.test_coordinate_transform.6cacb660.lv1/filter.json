@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 14 passed in 0.45s =============================="
+  "summary": "============================== 14 passed in 0.44s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 74 passed in 0.70s =============================="
+  "summary": "============================== 74 passed in 0.68s =============================="
  },
  "mutant_pool": 897,
  "stub_compiles": true,
@@ -18,9 +18,96 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 74 passed in 1.03s =============================="
+  "summary": "============================== 74 passed in 1.02s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "xarray",
+ "leak_candidates": {
+  "xarray/coding/frequencies.py": 1,
+  "xarray/coding/times.py": 2,
+  "xarray/compat/array_api_compat.py": 9,
+  "xarray/computation/apply_ufunc.py": 2,
+  "xarray/core/common.py": 3,
+  "xarray/core/coordinate_transform.py": 16,
+  "xarray/core/coordinates.py": 16,
+  "xarray/core/dataarray.py": 2,
+  "xarray/core/dataset.py": 4,
+  "xarray/core/dataset_utils.py": 1,
+  "xarray/core/datatree.py": 0,
+  "xarray/core/dtypes.py": 18,
+  "xarray/core/duck_array_ops.py": 44,
+  "xarray/core/formatting.py": 119,
+  "xarray/core/formatting_html.py": 0,
+  "xarray/core/groupby.py": 0,
+  "xarray/core/indexes.py": 70,
+  "xarray/core/indexing.py": 135,
+  "xarray/core/nputils.py": 16,
+  "xarray/core/utils.py": 14,
+  "xarray/core/variable.py": 11,
+  "xarray/groupers.py": 1,
+  "xarray/namedarray/core.py": 4,
+  "xarray/namedarray/pycompat.py": 4,
+  "xarray/namedarray/utils.py": 22,
+  "xarray/structure/concat.py": 2,
+  "xarray/structure/merge.py": 107
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/flox/xrdtypes.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/flox/xrutils.py": {
+   "xarray/core/duck_array_ops.py": 9
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/tests/test_numeric.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/algorithms.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/arrays/datetimes.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/astype.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/cast.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/common.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/dtypes.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/dtypes/missing.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/indexes/base.py": {
+   "xarray/core/dtypes.py": 1,
+   "xarray/core/indexing.py": 1,
+   "xarray/core/formatting.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/internals/blocks.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/internals/managers.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/missing.py": {
+   "xarray/core/dtypes.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/scipy/_lib/array_api_compat/common/_helpers.py": {
+   "xarray/compat/array_api_compat.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/tblib/pickling_support.py": {
+   "xarray/structure/merge.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/zarr/core/dtype/__init__.py": {
+   "xarray/core/dtypes.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

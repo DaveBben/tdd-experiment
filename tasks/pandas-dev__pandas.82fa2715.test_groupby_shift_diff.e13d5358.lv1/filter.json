@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 47 passed in 0.19s =============================="
+  "summary": "============================== 47 passed in 0.16s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 444 passed, 48 skipped, 3 xfailed in 1.81s =================="
+  "summary": "================== 444 passed, 48 skipped, 3 xfailed in 1.66s =================="
  },
  "mutant_pool": 1210,
  "stub_compiles": true,
@@ -18,9 +18,67 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 444 passed, 48 skipped, 3 xfailed in 1.78s =================="
+  "summary": "================== 444 passed, 48 skipped, 3 xfailed in 1.69s =================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/core/array_algos/take.py": 6,
+  "pandas/core/arraylike.py": 1,
+  "pandas/core/arrays/base.py": 2,
+  "pandas/core/arrays/timedeltas.py": 8,
+  "pandas/core/base.py": 8,
+  "pandas/core/common.py": 11,
+  "pandas/core/frame.py": 0,
+  "pandas/core/groupby/generic.py": 29,
+  "pandas/core/groupby/groupby.py": 65,
+  "pandas/core/groupby/grouper.py": 135,
+  "pandas/core/groupby/ops.py": 67,
+  "pandas/core/indexes/base.py": 0,
+  "pandas/core/indexes/datetimes.py": 1,
+  "pandas/core/indexes/multi.py": 0,
+  "pandas/core/internals/managers.py": 4,
+  "pandas/core/internals/ops.py": 39,
+  "pandas/core/ops/__init__.py": 0,
+  "pandas/core/ops/array_ops.py": 34,
+  "pandas/core/reshape/concat.py": 7,
+  "pandas/core/reshape/merge.py": 0,
+  "pandas/core/sorting.py": 103,
+  "pandas/io/formats/console.py": 27,
+  "pandas/io/formats/format.py": 5,
+  "pandas/io/formats/printing.py": 72,
+  "pandas/tseries/frequencies.py": 45
+ },
+ "leak_hits": {
+  "/lib/python3.10/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/_pytest/logging.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/legend_handler.pyi": {
+   "pandas/core/internals/ops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/lines.pyi": {
+   "pandas/core/internals/ops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/mlab.pyi": {
+   "pandas/core/internals/ops.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/xarray/coding/frequencies.py": {
+   "pandas/tseries/frequencies.py": 3
+  },
+  "/opt/miniconda3/lib/python3.11/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  },
+  "/usr/lib/python3.10/logging/__init__.py": {
+   "pandas/core/groupby/grouper.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": true
 }

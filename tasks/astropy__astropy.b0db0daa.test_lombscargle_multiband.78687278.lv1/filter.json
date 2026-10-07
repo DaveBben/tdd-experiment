@@ -7,12 +7,12 @@
   "failing": [
    "astropy/timeseries/periodograms/lombscargle_multiband/tests/test_lombscargle_multiband.py::test_absolute_times[False]"
   ],
-  "summary": "======================== 1 failed, 959 passed in 11.38s ========================"
+  "summary": "======================== 1 failed, 959 passed in 11.17s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 66 passed in 2.13s =============================="
+  "summary": "============================== 66 passed in 2.11s =============================="
  },
  "mutant_pool": 256,
  "stub_compiles": true,
@@ -20,9 +20,24 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 66 passed in 2.12s =============================="
+  "summary": "============================== 66 passed in 2.14s =============================="
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/table/table.py": 16,
+  "astropy/time/core.py": 11,
+  "astropy/time/formats.py": 16,
+  "astropy/time/utils.py": 27,
+  "astropy/timeseries/core.py": 17,
+  "astropy/timeseries/periodograms/bls/core.py": 1,
+  "astropy/timeseries/periodograms/lombscargle/implementations/utils.py": 61,
+  "astropy/timeseries/periodograms/lombscargle_multiband/core.py": 0,
+  "astropy/units/core.py": 4,
+  "astropy/units/physical.py": 1,
+  "astropy/utils/masked/function_helpers.py": 8,
+  "astropy/utils/shapes.py": 1
+ },
  "leak_hits": {},
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

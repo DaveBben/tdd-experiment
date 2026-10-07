@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 119 passed in 27.38s ============================="
+  "summary": "============================= 119 passed in 27.03s ============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 354 passed, 2 skipped in 22.19s ========================"
+  "summary": "======================= 354 passed, 2 skipped in 21.65s ========================"
  },
  "mutant_pool": 465,
  "stub_compiles": true,
@@ -18,9 +18,45 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 354 passed, 2 skipped in 22.31s ========================"
+  "summary": "======================= 354 passed, 2 skipped in 21.65s ========================"
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "seaborn",
+ "leak_candidates": {
+  "seaborn/_base.py": 66,
+  "seaborn/_compat.py": 3,
+  "seaborn/_statistics.py": 14,
+  "seaborn/algorithms.py": 35,
+  "seaborn/axisgrid.py": 62,
+  "seaborn/categorical.py": 0,
+  "seaborn/relational.py": 1,
+  "seaborn/utils.py": 39
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/matplotlib/axes/_base.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/dtypes/cast.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/groupby/generic.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/indexes/multi.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/resample.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/tools/times.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/core/window/rolling.py": {
+   "seaborn/_statistics.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/torchvision/transforms/v2/_utils.py": {
+   "seaborn/_base.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

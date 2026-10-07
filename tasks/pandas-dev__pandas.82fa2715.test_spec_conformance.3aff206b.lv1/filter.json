@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 1947 passed, 1 xfailed in 4.00s ========================"
+  "summary": "======================= 1947 passed, 1 xfailed in 3.70s ========================"
  },
  "mutant_pool": 383,
  "stub_compiles": true,
@@ -18,14 +18,39 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================= 1947 passed, 1 xfailed in 4.04s ========================"
+  "summary": "======================= 1947 passed, 1 xfailed in 3.80s ========================"
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/compat/numpy/function.py": 5,
+  "pandas/core/common.py": 5,
+  "pandas/core/dtypes/base.py": 9,
+  "pandas/core/indexing.py": 2,
+  "pandas/core/interchange/buffer.py": 1,
+  "pandas/core/interchange/column.py": 116,
+  "pandas/core/interchange/dataframe.py": 20,
+  "pandas/core/interchange/utils.py": 34,
+  "pandas/core/nanops.py": 66
+ },
  "leak_hits": {
-  "/testbed/pandas/core/interchange/dataframe_protocol.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/backends.py": {
+   "pandas/core/interchange/column.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/partitionquantiles.py": {
+   "pandas/core/interchange/column.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fastparquet/util.py": {
+   "pandas/core/interchange/column.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/interchange/column.py": {
+   "pandas/core/interchange/column.py": 14
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pyarrow/interchange/dataframe.py": {
+   "pandas/core/interchange/dataframe.py": 1
   }
  },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": false
 }

@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 19 passed in 1.01s =============================="
+  "summary": "============================== 19 passed in 1.02s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 122 passed in 1.32s =============================="
+  "summary": "============================= 122 passed in 1.33s =============================="
  },
  "mutant_pool": 413,
  "stub_compiles": true,
@@ -20,36 +20,146 @@
   "failing": [],
   "summary": "============================= 122 passed in 1.33s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/artifacts/__init__.py": 0,
+  "mlflow/data/artifact_dataset_sources.py": 0,
+  "mlflow/data/dataset.py": 6,
+  "mlflow/data/dataset_source.py": 0,
+  "mlflow/entities/evaluation_dataset.py": 0,
+  "mlflow/entities/lifecycle_stage.py": 1,
+  "mlflow/entities/span.py": 9,
+  "mlflow/entities/trace_data.py": 1,
+  "mlflow/gateway/utils.py": 0,
+  "mlflow/genai/labeling/stores.py": 1,
+  "mlflow/genai/scorers/registry.py": 1,
+  "mlflow/genai/utils/display_utils.py": 0,
+  "mlflow/models/model.py": 0,
+  "mlflow/models/signature.py": 0,
+  "mlflow/projects/backend/local.py": 0,
+  "mlflow/store/artifact/artifact_repository_registry.py": 1,
+  "mlflow/store/artifact/local_artifact_repo.py": 0,
+  "mlflow/store/db/utils.py": 107,
+  "mlflow/store/model_registry/dbmodels/models.py": 0,
+  "mlflow/store/model_registry/file_store.py": 0,
+  "mlflow/store/tracking/abstract_store.py": 3,
+  "mlflow/store/tracking/dbmodels/models.py": 0,
+  "mlflow/store/tracking/sqlalchemy_store.py": 92,
+  "mlflow/tracing/client.py": 1,
+  "mlflow/tracking/__init__.py": 0,
+  "mlflow/tracking/_model_registry/utils.py": 0,
+  "mlflow/tracking/_tracking_service/client.py": 0,
+  "mlflow/tracking/_tracking_service/utils.py": 4,
+  "mlflow/tracking/artifact_utils.py": 1,
+  "mlflow/tracking/client.py": 0,
+  "mlflow/tracking/fluent.py": 1,
+  "mlflow/tracking/registry.py": 5,
+  "mlflow/utils/async_logging/async_logging_queue.py": 6,
+  "mlflow/utils/autologging_utils/client.py": 0,
+  "mlflow/utils/conda.py": 0,
+  "mlflow/utils/environment.py": 0,
+  "mlflow/utils/file_utils.py": 14,
+  "mlflow/utils/os.py": 2,
+  "mlflow/utils/process.py": 0,
+  "mlflow/utils/string_utils.py": 0,
+  "mlflow/utils/time.py": 3,
+  "mlflow/utils/timeout.py": 0,
+  "mlflow/utils/uri.py": 91,
+  "mlflow/utils/validation.py": 6,
+  "mlflow/utils/virtualenv.py": 0,
+  "tests/conftest.py": 0,
+  "tests/entities/conftest.py": 0,
+  "tests/helper_functions.py": 0
+ },
  "leak_hits": {
-  "/testbed/mlflow/data/huggingface_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3.10/test/libregrtest/setup.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
   },
-  "/testbed/mlflow/data/meta_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3/dist-packages/pip/_internal/models/link.py": {
+   "mlflow/utils/uri.py": 1
   },
-  "/testbed/mlflow/data/numpy_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3/dist-packages/pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
   },
-  "/testbed/mlflow/data/pandas_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
   },
-  "/testbed/mlflow/data/spark_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/alembic/config.py": {
+   "mlflow/store/db/utils.py": 1
   },
-  "/testbed/mlflow/data/tensorflow_dataset.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/graphene/types/uuid.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
   },
-  "/testbed/mlflow/store/model_registry/sqlalchemy_store.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/moto/kms/policy_validator.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pandas/core/generic.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_internal/models/link.py": {
+   "mlflow/utils/uri.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_internal/network/auth.py": {
+   "mlflow/utils/uri.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/base.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/provision.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/dialects/sqlite/pysqlite.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/engine/base.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/testing/engines.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/testing/suite/test_results.py": {
+   "mlflow/store/db/utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.0.1-py3-none-any.whl!pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.3-py3-none-any.whl!pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/werkzeug/testapp.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda/common/configuration.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_internal/models/link.py": {
+   "mlflow/utils/uri.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_internal/network/auth.py": {
+   "mlflow/utils/uri.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/usr/lib/python3.10/test/libregrtest/setup.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_internal/models/link.py": {
+   "mlflow/utils/uri.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/urllib3/util/url.py": {
+   "mlflow/store/tracking/sqlalchemy_store.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

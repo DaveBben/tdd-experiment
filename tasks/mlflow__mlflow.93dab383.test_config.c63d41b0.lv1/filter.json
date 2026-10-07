@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 13 passed in 0.06s =============================="
+  "summary": "============================== 13 passed in 0.05s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 73 passed, 1 skipped, 1 warning in 15.52s ==================="
+  "summary": "================== 73 passed, 1 skipped, 1 warning in 17.53s ==================="
  },
  "mutant_pool": 41,
  "stub_compiles": true,
@@ -18,9 +18,16 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 73 passed, 1 skipped, 1 warning in 15.26s ==================="
+  "summary": "================== 73 passed, 1 skipped, 1 warning in 18.02s ==================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/claude_code/cli.py": 1,
+  "mlflow/claude_code/config.py": 36,
+  "mlflow/claude_code/hooks.py": 1,
+  "mlflow/claude_code/tracing.py": 1
+ },
  "leak_hits": {},
+ "unscanned_archives": [],
  "keep": true
 }

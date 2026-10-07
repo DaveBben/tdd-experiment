@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 14 passed in 0.94s =============================="
+  "summary": "============================== 14 passed in 0.87s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 52 passed in 2.64s =============================="
+  "summary": "============================== 52 passed in 2.48s =============================="
  },
  "mutant_pool": 132,
  "stub_compiles": true,
@@ -18,9 +18,25 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 52 passed in 3.00s =============================="
+  "summary": "============================== 52 passed in 2.86s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/genai/__init__.py": 0,
+  "mlflow/genai/judges/__init__.py": 1,
+  "mlflow/genai/judges/make_judge.py": 43,
+  "mlflow/genai/scorers/__init__.py": 1,
+  "mlflow/genai/scorers/base.py": 28,
+  "mlflow/genai/scorers/scorer_utils.py": 49
+ },
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_inductor/autotune_process.py": {
+   "mlflow/genai/scorers/scorer_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_inductor/codegen/rocm/rocm_benchmark_request.py": {
+   "mlflow/genai/scorers/scorer_utils.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

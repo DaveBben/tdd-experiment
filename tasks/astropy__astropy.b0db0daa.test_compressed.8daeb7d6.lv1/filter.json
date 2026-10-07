@@ -5,14 +5,14 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 90 passed, 2 skipped in 4.57s ========================="
+  "summary": "======================== 90 passed, 2 skipped in 4.78s ========================="
  },
  "gold_p2p": {
   "exit": 1,
   "failing": [
    "astropy/time/tests/test_basic.py::TestBasic::test_simple"
   ],
-  "summary": "================== 1 failed, 399 passed, 25 skipped in 2.91s ==================="
+  "summary": "================== 1 failed, 399 passed, 25 skipped in 2.82s ==================="
  },
  "mutant_pool": 817,
  "stub_compiles": true,
@@ -22,9 +22,46 @@
   "failing": [
    "astropy/time/tests/test_basic.py::TestBasic::test_simple"
   ],
-  "summary": "================== 1 failed, 399 passed, 25 skipped in 2.87s ==================="
+  "summary": "================== 1 failed, 399 passed, 25 skipped in 2.92s ==================="
  },
- "leak_lines": 20,
- "leak_hits": {},
- "keep": false
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/fits/column.py": 22,
+  "astropy/io/fits/convenience.py": 32,
+  "astropy/io/fits/file.py": 33,
+  "astropy/io/fits/hdu/base.py": 7,
+  "astropy/io/fits/hdu/compressed/_codecs.py": 13,
+  "astropy/io/fits/hdu/compressed/_quantization.py": 17,
+  "astropy/io/fits/hdu/compressed/_tiled_compression.py": 99,
+  "astropy/io/fits/hdu/compressed/compressed.py": 1,
+  "astropy/io/fits/hdu/compressed/header.py": 8,
+  "astropy/io/fits/hdu/compressed/section.py": 5,
+  "astropy/io/fits/hdu/compressed/utils.py": 16,
+  "astropy/io/fits/hdu/groups.py": 1,
+  "astropy/io/fits/hdu/hdulist.py": 0,
+  "astropy/io/fits/hdu/image.py": 1,
+  "astropy/io/fits/header.py": 50,
+  "astropy/io/fits/tests/test_core.py": 1,
+  "astropy/io/fits/util.py": 33,
+  "astropy/io/fits/verify.py": 4
+ },
+ "leak_hits": {
+  "/lib/python3.10/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/plotting/pygletplot/plot_interval.py": {
+   "astropy/io/fits/convenience.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/usr/lib/python3.10/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  }
+ },
+ "unscanned_archives": [],
+ "keep": true
 }

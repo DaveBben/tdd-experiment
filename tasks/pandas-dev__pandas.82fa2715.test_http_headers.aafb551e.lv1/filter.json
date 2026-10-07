@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 26 passed, 3 xfailed in 13.03s ========================"
+  "summary": "======================== 26 passed, 3 xfailed in 13.11s ========================"
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 645 passed in 1.25s =============================="
+  "summary": "============================= 645 passed in 1.19s =============================="
  },
  "mutant_pool": 969,
  "stub_compiles": true,
@@ -18,9 +18,142 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 645 passed in 1.29s =============================="
+  "summary": "============================= 645 passed in 1.21s =============================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/_testing/contexts.py": 0,
+  "pandas/core/frame.py": 1,
+  "pandas/core/generic.py": 1,
+  "pandas/core/indexes/api.py": 0,
+  "pandas/core/indexes/base.py": 14,
+  "pandas/core/tools/numeric.py": 1,
+  "pandas/io/api.py": 2,
+  "pandas/io/clipboards.py": 1,
+  "pandas/io/common.py": 203,
+  "pandas/io/excel/_base.py": 1,
+  "pandas/io/feather_format.py": 1,
+  "pandas/io/formats/csvs.py": 0,
+  "pandas/io/formats/format.py": 31,
+  "pandas/io/formats/html.py": 15,
+  "pandas/io/html.py": 70,
+  "pandas/io/json/__init__.py": 1,
+  "pandas/io/json/_json.py": 24,
+  "pandas/io/orc.py": 1,
+  "pandas/io/parquet.py": 46,
+  "pandas/io/parsers/readers.py": 66,
+  "pandas/io/pickle.py": 11,
+  "pandas/io/pytables.py": 1,
+  "pandas/io/sas/sasreader.py": 1,
+  "pandas/io/spss.py": 2,
+  "pandas/io/sql.py": 1,
+  "pandas/io/stata.py": 46,
+  "pandas/io/xml.py": 1,
+  "pandas/util/_validators.py": 3
+ },
+ "leak_hits": {
+  "/lib/python3.10/_pyio.py": {
+   "pandas/io/parsers/readers.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/_pyio.py": {
+   "pandas/io/parsers/readers.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/aiobotocore/utils.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/aiohttp/web_app.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/boto3/session.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/auth.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/client.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/config.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/credentials.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/handlers.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/httpchecksum.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/httpsession.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/model.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/regions.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/response.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/retries/standard.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/retryhandler.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/session.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/signers.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/stub.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/tokens.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/utils.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/array/core.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/bag/avro.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/io/json.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/dask/dataframe/io/orc/core.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fsspec/core.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fsspec/generic.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fsspec/utils.py": {
+   "pandas/io/common.py": 4
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/moto/sqs/models.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/s3transfer/utils.py": {
+   "pandas/io/common.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/_pyio.py": {
+   "pandas/io/parsers/readers.py": 1
+  },
+  "/usr/lib/python3.10/_pyio.py": {
+   "pandas/io/parsers/readers.py": 1
+  }
+ },
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": false
 }

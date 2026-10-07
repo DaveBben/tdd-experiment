@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 45 passed in 1.79s =============================="
+  "summary": "============================== 45 passed in 1.78s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 30 passed, 4 skipped in 0.79s ========================="
+  "summary": "======================== 30 passed, 4 skipped in 0.73s ========================="
  },
  "mutant_pool": 458,
  "stub_compiles": true,
@@ -18,9 +18,428 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 30 passed, 4 skipped in 1.07s ========================="
+  "summary": "======================== 30 passed, 4 skipped in 1.05s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "sphinx",
+ "leak_candidates": {
+  "sphinx/builders/linkcheck.py": 179,
+  "sphinx/directives/patches.py": 6,
+  "sphinx/transforms/post_transforms/images.py": 7,
+  "sphinx/util/docfields.py": 1,
+  "sphinx/util/http_date.py": 8,
+  "sphinx/util/nodes.py": 1,
+  "sphinx/util/requests.py": 27
+ },
+ "leak_hits": {
+  "/lib/python3.10/binhex.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/codeop.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/gettext.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/imp.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/os.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/pkgutil.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/pydoc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/test/support/import_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/test/support/warnings_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.10/unittest/runner.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3.11/distutils/config.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3/dist-packages/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/lib/python3/dist-packages/setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/aifc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/codeop.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/distutils/config.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/distutils/tests/test_bdist.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/setuptools-79.0.1-py3-none-any.whl!setuptools/tests/test_build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/imp.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/lib2to3/tests/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/locale.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/os.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/pkgutil.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/pydoc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/re/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/IPython/core/completer.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/IPython/core/inputtransformer2.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/_pytest/_code/source.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/_pytest/outcomes.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/defusedxml/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/core.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/frontend.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/io.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/parsers/rst/directives/body.py": {
+   "sphinx/directives/patches.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/docutils/transforms/peps.py": {
+   "sphinx/builders/linkcheck.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jedi/inference/docstrings.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/networkx/drawing/layout.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/networkx/drawing/tests/test_pylab.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/tests/test_deprecations.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/tests/test_indexing.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/tests/test_multiarray.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_pytesttester.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/conftest.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/_polynomial_impl.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/lib/tests/test_io.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/ma/tests/test_core.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/random/tests/test_random.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/random/tests/test_randomstate.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/testing/tests/test_utils.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/parso/python/errors.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/psutil/tests/test_unicode.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/psutil/tests/test_windows.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/setuptools/tests/test_build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinxcontrib/devhelp/__init__.py": {
+   "sphinx/builders/linkcheck.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sphinxcontrib/qthelp/__init__.py": {
+   "sphinx/builders/linkcheck.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/diffgeom/rn.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/parsing/tests/test_ast_parser.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/physics/vector/tests/test_point.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/testing/runtests.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/utilities/exceptions.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_dynamo/variables/builder.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_functorch/pytree_hacks.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_subclasses/fake_utils.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_subclasses/meta_utils.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/autograd/gradcheck.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/_shard/checkpoint/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/_sharded_tensor/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/_sharding_spec/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/checkpoint/state_dict.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/distributed/optim/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/overrides.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/testing/_internal/common_utils.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torchvision/io/_video_opt.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torchvision/io/video_reader.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/triton/compiler/code_generator.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/urllib3/connection.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/urllib3/http2/connection.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/sndhdr.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/sunau.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/test/support/import_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/test/support/warnings_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/unittest/runner.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/aifc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/codeop.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/distutils/config.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/distutils/tests/test_bdist.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl!setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/imp.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/lib2to3/tests/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/locale.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/os.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/pkgutil.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/pydoc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/re/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda/shell/conda.xsh": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/tqdm/auto.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/tqdm/contrib/bells.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/tqdm/notebook.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/xontrib/conda.xsh": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/sndhdr.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/sunau.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/test/support/import_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/test/support/warnings_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/unittest/runner.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/binhex.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/codeop.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/gettext.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/imp.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/os.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/pkgutil.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/pydoc.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/test/support/import_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/test/support/warnings_helper.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.10/unittest/runner.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3.11/distutils/config.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_internal/operations/install/wheel.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pkg_resources/__init__.py": {
+   "sphinx/util/requests.py": 1
+  },
+  "/usr/lib/python3/dist-packages/setuptools/build_meta.py": {
+   "sphinx/util/requests.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

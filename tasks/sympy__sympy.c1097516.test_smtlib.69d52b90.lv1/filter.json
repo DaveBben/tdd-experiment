@@ -18,42 +18,33 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 49 passed, 1 xfailed in 0.75s ========================="
+  "summary": "======================== 49 passed, 1 xfailed in 0.76s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/assumptions/handlers/ntheory.py": {
-   "lines": 2,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/assumptions/relation/equality.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/calculus/accumulationbounds.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/core/expr.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/core/numbers.py": {
-   "lines": 2,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/functions/combinatorial/numbers.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/printing/printer.py": {
-   "lines": 1,
-   "tracked": false
-  },
-  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/printing/smtlib.py": {
-   "lines": 7,
-   "tracked": false
-  }
+ "library": "sympy",
+ "leak_candidates": {
+  "sympy/assumptions/handlers/ntheory.py": 2,
+  "sympy/assumptions/relation/equality.py": 1,
+  "sympy/calculus/accumulationbounds.py": 1,
+  "sympy/combinatorics/permutations.py": 1,
+  "sympy/core/evalf.py": 10,
+  "sympy/core/expr.py": 1,
+  "sympy/core/mod.py": 1,
+  "sympy/core/numbers.py": 9,
+  "sympy/core/power.py": 1,
+  "sympy/core/relational.py": 8,
+  "sympy/functions/combinatorial/numbers.py": 1,
+  "sympy/functions/elementary/integers.py": 1,
+  "sympy/physics/quantum/spin.py": 1,
+  "sympy/plotting/intervalmath/interval_arithmetic.py": 1,
+  "sympy/polys/domains/finitefield.py": 1,
+  "sympy/polys/domains/gmpyintegerring.py": 1,
+  "sympy/polys/domains/integerring.py": 1,
+  "sympy/polys/domains/pythonintegerring.py": 1,
+  "sympy/printing/printer.py": 6,
+  "sympy/printing/smtlib.py": 30,
+  "sympy/solvers/diophantine/diophantine.py": 1
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

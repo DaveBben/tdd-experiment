@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 13 passed in 0.06s =============================="
+  "summary": "============================== 13 passed in 0.05s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 293 passed, 3 xfailed in 9.37s ========================"
+  "summary": "======================== 293 passed, 3 xfailed in 8.71s ========================"
  },
  "mutant_pool": 83,
  "stub_compiles": true,
@@ -18,9 +18,19 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 293 passed, 3 xfailed in 9.97s ========================"
+  "summary": "======================== 293 passed, 3 xfailed in 8.73s ========================"
  },
- "leak_lines": 20,
+ "library": "pandas",
+ "leak_candidates": {
+  "pandas/compat/numpy/function.py": 0,
+  "pandas/core/arrays/arrow/accessors.py": 14,
+  "pandas/core/arrays/arrow/array.py": 5,
+  "pandas/core/dtypes/missing.py": 6,
+  "pandas/util/_validators.py": 64
+ },
  "leak_hits": {},
+ "unscanned_archives": [
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/jupyterlite_core/tests/fixtures/the-smallest-extension-0.1.0-py_0.conda"
+ ],
  "keep": true
 }

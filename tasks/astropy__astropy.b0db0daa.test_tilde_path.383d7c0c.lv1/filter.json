@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 816 passed, 2 skipped, 8 xfailed in 4.44s ==================="
+  "summary": "================== 816 passed, 2 skipped, 8 xfailed in 4.51s ==================="
  },
  "mutant_pool": 924,
  "stub_compiles": true,
@@ -18,9 +18,96 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================== 816 passed, 2 skipped, 8 xfailed in 4.53s ==================="
+  "summary": "================== 816 passed, 2 skipped, 8 xfailed in 4.71s ==================="
  },
- "leak_lines": 20,
- "leak_hits": {},
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/fits/card.py": 1,
+  "astropy/io/fits/column.py": 79,
+  "astropy/io/fits/convenience.py": 32,
+  "astropy/io/fits/file.py": 138,
+  "astropy/io/fits/fitsrec.py": 18,
+  "astropy/io/fits/hdu/base.py": 79,
+  "astropy/io/fits/hdu/compressed/compressed.py": 1,
+  "astropy/io/fits/hdu/groups.py": 1,
+  "astropy/io/fits/hdu/hdulist.py": 1,
+  "astropy/io/fits/hdu/image.py": 2,
+  "astropy/io/fits/hdu/nonstandard.py": 1,
+  "astropy/io/fits/hdu/streaming.py": 1,
+  "astropy/io/fits/hdu/table.py": 2,
+  "astropy/io/fits/header.py": 135,
+  "astropy/io/fits/scripts/fitsheader.py": 2,
+  "astropy/io/fits/util.py": 37,
+  "astropy/utils/data.py": 2
+ },
+ "leak_hits": {
+  "/lib/python3.10/codecs.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/lib/python3.10/mailbox.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/lib/python3.10/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/lib/python3.10/zipfile.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/lib/python3/dist-packages/pip/_internal/network/lazy_wheel.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/codecs.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/mailbox.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_internal/network/lazy_wheel.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/plotting/pygletplot/plot_interval.py": {
+   "astropy/io/fits/convenience.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/zipfile.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/opt/miniconda3/lib/python3.11/codecs.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/mailbox.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/conda_package_streaming/lazy_wheel.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_internal/network/lazy_wheel.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/zipfile.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/usr/lib/python3.10/codecs.py": {
+   "astropy/io/fits/file.py": 1
+  },
+  "/usr/lib/python3.10/mailbox.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/usr/lib/python3.10/unittest/signals.py": {
+   "astropy/io/fits/util.py": 1
+  },
+  "/usr/lib/python3.10/zipfile.py": {
+   "astropy/io/fits/file.py": 2
+  },
+  "/usr/lib/python3/dist-packages/pip/_internal/network/lazy_wheel.py": {
+   "astropy/io/fits/file.py": 1
+  }
+ },
+ "unscanned_archives": [],
  "keep": true
 }

@@ -20,7 +20,17 @@
   "failing": [],
   "summary": "        66 passed"
  },
- "leak_lines": 20,
+ "library": "pydantic",
+ "leak_candidates": {
+  "pydantic/_internal/_dataclasses.py": 10,
+  "pydantic/_internal/_decorators.py": 3,
+  "pydantic/_internal/_fields.py": 4,
+  "pydantic/_internal/_generate_schema.py": 21,
+  "pydantic/fields.py": 23,
+  "pydantic/json_schema.py": 53,
+  "pydantic/main.py": 2
+ },
  "leak_hits": {},
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

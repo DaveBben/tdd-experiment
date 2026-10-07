@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================ 713 passed, 168 skipped, 3 warnings in 18.50s ================="
+  "summary": "================ 713 passed, 168 skipped, 3 warnings in 19.11s ================="
  },
  "mutant_pool": 152,
  "stub_compiles": true,
@@ -18,22 +18,20 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "================ 713 passed, 168 skipped, 3 warnings in 18.25s ================="
+  "summary": "================ 713 passed, 168 skipped, 3 warnings in 18.53s ================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/sklearn/inspection/_partial_dependence.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/sklearn/inspection/_plot/decision_boundary.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/sklearn/inspection/_plot/partial_dependence.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "scikit-learn",
+ "leak_candidates": {
+  "sklearn/calibration.py": 0,
+  "sklearn/metrics/_plot/confusion_matrix.py": 0,
+  "sklearn/metrics/_plot/precision_recall_curve.py": 0,
+  "sklearn/metrics/_plot/regression.py": 36,
+  "sklearn/metrics/_plot/roc_curve.py": 0,
+  "sklearn/model_selection/_plot.py": 0,
+  "sklearn/utils/_optional_dependencies.py": 7,
+  "sklearn/utils/_plotting.py": 17
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

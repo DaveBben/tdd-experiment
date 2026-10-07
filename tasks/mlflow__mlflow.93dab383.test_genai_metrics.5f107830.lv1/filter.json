@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "====================== 162 passed, 37 warnings in 17.42s ======================="
+  "summary": "====================== 162 passed, 37 warnings in 17.28s ======================="
  },
  "mutant_pool": 329,
  "stub_compiles": true,
@@ -18,14 +18,144 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "====================== 162 passed, 37 warnings in 17.50s ======================="
+  "summary": "====================== 162 passed, 37 warnings in 17.78s ======================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/metrics/base.py": 4,
+  "mlflow/metrics/genai/__init__.py": 0,
+  "mlflow/metrics/genai/base.py": 5,
+  "mlflow/metrics/genai/genai_metric.py": 158,
+  "mlflow/metrics/genai/metric_definitions.py": 1,
+  "mlflow/metrics/genai/prompt_template.py": 13,
+  "mlflow/metrics/genai/prompts/v1.py": 7,
+  "mlflow/models/__init__.py": 0,
+  "mlflow/models/evaluation/__init__.py": 0,
+  "mlflow/models/evaluation/base.py": 71,
+  "mlflow/utils/class_utils.py": 3
+ },
  "leak_hits": {
-  "/testbed/tests/evaluate/test_default_evaluator.py": {
-   "lines": 2,
-   "tracked": true
+  "/lib/python3.10/inspect.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/lib/python3/dist-packages/pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/config.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/botocore/vendored/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fontTools/ttLib/scaleUpem.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/matplotlib/artist.py": {
+   "mlflow/models/evaluation/base.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/moto/batch/models.py": {
+   "mlflow/metrics/genai/prompts/v1.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/moto/timestreaminfluxdb/models.py": {
+   "mlflow/metrics/genai/prompts/v1.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/mypy/stubgenc.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sqlalchemy/util/compat.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/core/basic.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/core/evalf.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/core/expr.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/interactive/traversal.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/stats/stochastic_process_types.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/tensor/array/expressions/array_expressions.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/sympy/tensor/tensor.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_dynamo/variables/higher_order_ops.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_inductor/runtime/triton_heuristics.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/_lazy/extract_compiled_graph.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/testing/_internal/optests/make_fx.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/utils/checkpoint.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/utils/hooks.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torchgen/packaged/autograd/gen_variable_type.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.0.1-py3-none-any.whl!pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/virtualenv/seed/wheels/embed/pip-25.3-py3-none-any.whl!pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/boltons/funcutils.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/usr/lib/python3.10/inspect.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/urllib3/packages/six.py": {
+   "mlflow/metrics/genai/genai_metric.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

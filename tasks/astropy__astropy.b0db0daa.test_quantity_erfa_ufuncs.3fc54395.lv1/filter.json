@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 43 passed, 1 xfailed in 0.19s ========================="
+  "summary": "======================== 43 passed, 1 xfailed in 0.21s ========================="
  },
  "gold_p2p": {
   "exit": 1,
@@ -22,9 +22,17 @@
   "failing": [
    "astropy/coordinates/tests/test_iau_fullstack.py::test_iau_fullstack[fullstack_obsconditions0-min_alt0-tol0-fullstack_locations0-fullstack_times0]"
   ],
-  "summary": "================== 1 failed, 279 passed, 19 skipped in 1.35s ==================="
+  "summary": "================== 1 failed, 279 passed, 19 skipped in 1.32s ==================="
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/units/core.py": 5,
+  "astropy/units/physical.py": 5,
+  "astropy/units/quantity_helper/erfa.py": 13,
+  "astropy/units/quantity_helper/function_helpers.py": 18,
+  "astropy/units/structured.py": 40
+ },
  "leak_hits": {},
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

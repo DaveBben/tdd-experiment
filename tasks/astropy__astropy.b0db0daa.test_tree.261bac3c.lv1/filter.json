@@ -5,7 +5,7 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 29 passed in 0.18s =============================="
+  "summary": "============================== 29 passed in 0.17s =============================="
  },
  "gold_p2p": {
   "exit": 1,
@@ -23,7 +23,7 @@
    "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_take",
    "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_transpose"
   ],
-  "summary": "======================== 66 passed, 12 errors in 1.77s ========================="
+  "summary": "======================== 66 passed, 12 errors in 1.72s ========================="
  },
  "mutant_pool": 173,
  "stub_compiles": true,
@@ -44,18 +44,18 @@
    "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_take",
    "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_transpose"
   ],
-  "summary": "======================== 66 passed, 12 errors in 1.80s ========================="
+  "summary": "======================== 66 passed, 12 errors in 1.76s ========================="
  },
- "leak_lines": 20,
- "leak_hits": {
-  "/testbed/astropy/io/votable/xmlutil.py": {
-   "lines": 1,
-   "tracked": true
-  },
-  "/testbed/astropy/utils/xml/check.py": {
-   "lines": 1,
-   "tracked": true
-  }
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/votable/converters.py": 10,
+  "astropy/io/votable/exceptions.py": 12,
+  "astropy/io/votable/tree.py": 38,
+  "astropy/io/votable/ucd.py": 12,
+  "astropy/utils/xml/check.py": 12,
+  "astropy/utils/xml/iterparser.py": 19
  },
- "keep": false
+ "leak_hits": {},
+ "unscanned_archives": [],
+ "keep": true
 }

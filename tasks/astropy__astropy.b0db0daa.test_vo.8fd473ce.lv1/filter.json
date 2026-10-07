@@ -5,12 +5,12 @@
  "gold_f2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================= 184 passed in 1.07s =============================="
+  "summary": "============================= 184 passed in 1.06s =============================="
  },
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 16 passed, 6 skipped in 0.35s ========================="
+  "summary": "======================== 16 passed, 6 skipped in 0.40s ========================="
  },
  "mutant_pool": 297,
  "stub_compiles": true,
@@ -18,14 +18,45 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "======================== 16 passed, 6 skipped in 0.32s ========================="
+  "summary": "======================== 16 passed, 6 skipped in 0.28s ========================="
  },
- "leak_lines": 20,
+ "library": "astropy",
+ "leak_candidates": {
+  "astropy/io/votable/converters.py": 1,
+  "astropy/io/votable/exceptions.py": 12,
+  "astropy/io/votable/tree.py": 51,
+  "astropy/io/votable/ucd.py": 12,
+  "astropy/table/table.py": 11,
+  "astropy/units/format/base.py": 26,
+  "astropy/utils/data_info.py": 2,
+  "astropy/utils/misc.py": 31,
+  "astropy/utils/xml/check.py": 13,
+  "astropy/utils/xml/iterparser.py": 19,
+  "astropy/utils/xml/validate.py": 9
+ },
  "leak_hits": {
-  "/testbed/astropy/units/format/generic.py": {
-   "lines": 1,
-   "tracked": true
+  "/lib/python3/dist-packages/pip/_vendor/distlib/index.py": {
+   "astropy/utils/xml/validate.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/ensurepip/_bundled/pip-24.0-py3-none-any.whl!pip/_vendor/distlib/index.py": {
+   "astropy/utils/xml/validate.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/_core/_internal.py": {
+   "astropy/io/votable/tree.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/triton/compiler/code_generator.py": {
+   "astropy/io/votable/tree.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/ensurepip/_bundled/pip-23.2.1-py3-none-any.whl!pip/_vendor/distlib/index.py": {
+   "astropy/utils/xml/validate.py": 1
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/distlib/index.py": {
+   "astropy/utils/xml/validate.py": 1
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/distlib/index.py": {
+   "astropy/utils/xml/validate.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }

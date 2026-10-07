@@ -10,7 +10,7 @@
  "gold_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 30 passed in 6.00s =============================="
+  "summary": "============================== 30 passed in 5.29s =============================="
  },
  "mutant_pool": 208,
  "stub_compiles": true,
@@ -18,14 +18,32 @@
  "stub_p2p": {
   "exit": 0,
   "failing": [],
-  "summary": "============================== 30 passed in 5.00s =============================="
+  "summary": "============================== 30 passed in 6.03s =============================="
  },
- "leak_lines": 20,
+ "library": "mlflow",
+ "leak_candidates": {
+  "mlflow/utils/jsonpath_utils.py": 106
+ },
  "leak_hits": {
-  "/testbed/mlflow/utils/jsonpath_utils.py": {
-   "lines": 1,
-   "tracked": true
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/fastapi/encoders.py": {
+   "mlflow/utils/jsonpath_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/moto/datapipeline/utils.py": {
+   "mlflow/utils/jsonpath_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/numpy/f2py/crackfortran.py": {
+   "mlflow/utils/jsonpath_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/pydantic/json_schema.py": {
+   "mlflow/utils/jsonpath_utils.py": 2
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/torch/utils/viz/_cycles.py": {
+   "mlflow/utils/jsonpath_utils.py": 1
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/werkzeug/debug/repr.py": {
+   "mlflow/utils/jsonpath_utils.py": 1
   }
  },
- "keep": false
+ "unscanned_archives": [],
+ "keep": true
 }
