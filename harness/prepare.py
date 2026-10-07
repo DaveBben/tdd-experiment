@@ -20,9 +20,11 @@ def undevelop(c, row):
     bytecode, and history removed."""
     docker.put(c, "/tmp/removal.patch", row["patch"])
     f2p = " ".join(f"'{f}'" for f in row["FAIL_TO_PASS"])
+    # FeatureBench's environment fix (featurebench/environment_fixes/mlflow.py): parallel package copies.
+    extra = f"{TB}/libs/skinny/mlflow {TB}/libs/tracing/mlflow" if row["repo"] == "mlflow/mlflow" else ""
     docker.run(c, f"""set -e
 cd {TB} && git apply --whitespace=nowarn /tmp/removal.patch && rm -f {f2p} /tmp/removal.patch
-rm -rf /root/my_repo {TB}/.git
+rm -rf /root/my_repo {TB}/.git {extra}
 find / -xdev -name __pycache__ -type d -prune -exec rm -rf {{}} + 2>/dev/null || true""")
 
 
