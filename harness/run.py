@@ -40,15 +40,33 @@ def harness_commit():
 # --- filtering and draws --------------------------------------------------------
 
 def cmd_filter(prefixes):
+    """Prepare and filter tasks 1 image at a time, removing each image afterwards: disk holds only a few."""
     rows = data.load_rows()
+    by_image = {}
     for t in sorted(rows):
-        if prefixes and not any(t.startswith(p) for p in prefixes):
-            continue
-        if os.path.exists(os.path.join(ROOT, "tasks", t, "filter.json")):
-            continue
-        docker.sh("pull", "--platform", "linux/amd64", docker.image_ref(rows[t]))
-        r = prepare.prepare(t, rows, seed("mutants"))
-        print(t, "keep" if r["keep"] else "drop", flush=True)
+        if (not prefixes or any(t.startswith(p) for p in prefixes)) and \
+                not os.path.exists(os.path.join(ROOT, "tasks", t, "filter.json")):
+            by_image.setdefault(docker.image_ref(rows[t]), []).append(t)
+    for image, tasks in sorted(by_image.items()):
+        docker.sh("pull", "--platform", "linux/amd64", image)
+        for t in tasks:
+            r = prepare.prepare(t, rows, seed("mutants"))
+            print(t, "keep" if r["keep"] else "drop", flush=True)
+        for t in tasks:
+            docker.sh("rmi", docker.tag(rows[t], "ref"), docker.tag(rows[t], "stub"), check=False)
+        docker.sh("rmi", image, check=False)
+
+
+def ensure_prepared(row):
+    """Re-create a drawn task's images when they were removed after filtering; preparation is deterministic."""
+    if docker.sh("image", "inspect", docker.tag(row, "ref"), check=False).returncode == 0:
+        return
+    docker.sh("pull", "--platform", "linux/amd64", docker.image_ref(row))
+    before = json.load(open(os.path.join(ROOT, "tasks", row["instance_id"], "filter.json")))
+    mutants = open(os.path.join(ROOT, "tasks", row["instance_id"], "mutants.json")).read()
+    after = prepare.prepare(row["instance_id"], {row["instance_id"]: row}, seed("mutants"))
+    assert after["keep"] == before["keep"] and \
+        open(os.path.join(ROOT, "tasks", row["instance_id"], "mutants.json")).read() == mutants, "preparation changed"
 
 
 def kept_tasks():
@@ -142,6 +160,7 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False):
     for (task, r), order in zip(pairs, orders):
         row = rows[task]
         if task not in built:
+            ensure_prepared(row)
             session.build_agent_image(row)
             built.add(task)
         spec_text = open(os.path.join(ROOT, "tasks", task, "spec.md")).read()
@@ -172,6 +191,7 @@ def cmd_score(tasks_file, out):
     rows = data.load_rows()
     for task in open(tasks_file).read().split():
         row = rows[task]
+        ensure_prepared(row)
         mutants = json.load(open(os.path.join(ROOT, "tasks", task, "mutants.json")))["mutants"]
         tdir = os.path.join(ROOT, "tasks", task)
         if not os.path.exists(os.path.join(tdir, "human_score.json")):
