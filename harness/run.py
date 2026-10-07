@@ -10,6 +10,7 @@
 Layout: OUT/<task>/<arm>/<run>/attempt-<k>/ holds 1 session's raw outputs; OUT/<task>/<arm>/<run>/
 holds manifest.json, locked.json, and score.json for the attempt that counts.
 """
+import fcntl
 import glob
 import hashlib
 import json
@@ -149,7 +150,21 @@ def excluded_manifest(run_dir, reason):
                "excluded": reason}, open(os.path.join(run_dir, "manifest.json"), "w"), indent=1)
 
 
-def cmd_sessions(model, tasks_file, runs, out, aa=False):
+def cmd_setup(tasks_file):
+    """Prepare (if needed) and build every drawn task's images once, before parallel runs start."""
+    rows = data.load_rows()
+    session.ensure_gateway()
+    for task in open(tasks_file).read().split():
+        ensure_prepared(rows[task])
+        session.build_agent_image(rows[task])
+        print("ready", task, flush=True)
+
+
+def spent(out):
+    return sum(json.load(open(p)).get("cost") or 0 for p in glob.glob(os.path.join(out, "*", "*", "*", "manifest.json")))
+
+
+def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
     rows = data.load_rows()
     tasks = open(tasks_file).read().split()
     rng = random.Random(f"{seed('order')}:{model}")
@@ -158,13 +173,11 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False):
     later = ["B", "C"] + (["B2"] if aa else [])
     orders = [rng.sample(later, len(later)) for _ in pairs]
     session.ensure_gateway()
-    built = set()
     for (task, r), order in zip(pairs, orders):
         row = rows[task]
-        if task not in built:
-            ensure_prepared(row)
-            session.build_agent_image(row)
-            built.add(task)
+        if budget is not None and spent(out) >= budget:
+            print(f"BUDGET STOP: spent {spent(out):.2f} of {budget}", flush=True)
+            return
         spec_text = open(os.path.join(ROOT, "tasks", task, "spec.md")).read()
         base = lambda arm: os.path.join(out, task, arm, str(r))
         done = lambda arm: os.path.exists(os.path.join(base(arm), "manifest.json"))
@@ -191,6 +204,7 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False):
             if bextra["isolation_suspects"] and not bextra["excluded"]:
                 bextra["excluded"] = "isolation check"
             write_manifest(row, model, base(arm), bdir, bextra)
+        print(f"done {task} run {r}; spent {spent(out):.2f}", flush=True)
         cmd_ledger()
 
 
@@ -220,6 +234,8 @@ def cmd_score(tasks_file, out):
 def cmd_ledger(runs_dir="runs", ledger="runs.sha256"):
     """Append a hash for every file under runs/ not yet in the ledger. Never rewrites a line."""
     runs_dir, ledger = os.path.join(ROOT, runs_dir), os.path.join(ROOT, ledger)
+    lock = open(ledger + ".lock", "w")
+    fcntl.flock(lock, fcntl.LOCK_EX)  # the 2 models' runs append concurrently
     have = set()
     if os.path.exists(ledger):
         have = {l.split("  ", 1)[1].strip() for l in open(ledger) if l.strip()}
@@ -245,8 +261,11 @@ if __name__ == "__main__":
         cmd_draw_pilot()
     elif cmd == "draw-experiment":
         cmd_draw_experiment(int(args[0]))
+    elif cmd == "setup":
+        cmd_setup(args[0])
     elif cmd == "sessions":
-        cmd_sessions(args[0], args[1], int(args[2]), args[3], aa="--aa" in args)
+        budget = float(args[args.index("--budget") + 1]) if "--budget" in args else None
+        cmd_sessions(args[0], args[1], int(args[2]), args[3], aa="--aa" in args, budget=budget)
     elif cmd == "score":
         cmd_score(args[0], args[1])
     elif cmd == "ledger":

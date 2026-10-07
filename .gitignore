@@ -3,3 +3,4 @@
 .env
 smoke/
 logs/
+runs.sha256.lock
