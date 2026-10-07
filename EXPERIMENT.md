@@ -629,3 +629,7 @@ Changes made after the pilot started, each with its date, reason, and expected e
   The pilot's scores came from the runner before this change; every pilot reference run took at most 24 seconds and no pilot mutant was killed by a timeout, so none of them would change, and they are kept as recorded in the ledger.
 * **2026-10-07, budget accounting.**
   The spending cap now counts every session's cost, reruns included; it had counted only the final attempt's.
+* **2026-10-07, pilot differences viewed.**
+  The design says the pilot's difference between arms is never analysed.
+  Before deciding whether to run the main experiment at its estimated cost and duration, the experimenter viewed each pilot task's mean score per arm.
+  Pilot data stays out of every reported result, but a decision to run, change, or stop the main experiment after this view is conditioned on it, and is reported as such.
