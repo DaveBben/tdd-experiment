@@ -1,0 +1,224 @@
+"""Orchestrator: filter tasks, draw, run sessions in the drawn order, score, and keep the ledger.
+
+    bin/h python -m harness.run filter [REPO_PREFIX ...]        prepare + filter every task (of those repos)
+    bin/h python -m harness.run draw-pilot                      -> draws/pilot.txt
+    bin/h python -m harness.run draw-experiment N               -> draws/experiment.txt, draws/replacements.txt
+    bin/h python -m harness.run sessions MODEL TASKS RUNS OUT [--aa]
+    bin/h python -m harness.run score TASKS OUT
+    bin/h python -m harness.run ledger
+
+Layout: OUT/<task>/<arm>/<run>/attempt-<k>/ holds 1 session's raw outputs; OUT/<task>/<arm>/<run>/
+holds manifest.json, locked.json, and score.json for the attempt that counts.
+"""
+import glob
+import hashlib
+import json
+import os
+import random
+import subprocess
+import sys
+
+from harness import checks, data, docker, prepare, score, session
+
+ROOT = docker.ROOT
+CAP_PER_REPO = 5
+
+
+def seed(name):
+    return int(open(os.path.join(ROOT, "draws", f"{name}.seed")).read())
+
+
+def repo(task):
+    return task.split(".")[0]
+
+
+def harness_commit():
+    return subprocess.run(["git", "-c", "safe.directory=*", "-C", ROOT, "rev-parse", "HEAD"],
+                          capture_output=True, text=True).stdout.strip()
+
+
+# --- filtering and draws --------------------------------------------------------
+
+def cmd_filter(prefixes):
+    rows = data.load_rows()
+    for t in sorted(rows):
+        if prefixes and not any(t.startswith(p) for p in prefixes):
+            continue
+        if os.path.exists(os.path.join(ROOT, "tasks", t, "filter.json")):
+            continue
+        docker.sh("pull", "--platform", "linux/amd64", docker.image_ref(rows[t]))
+        r = prepare.prepare(t, rows, seed("mutants"))
+        print(t, "keep" if r["keep"] else "drop", flush=True)
+
+
+def kept_tasks():
+    reports = glob.glob(os.path.join(ROOT, "tasks", "*", "filter.json"))
+    assert len(reports) == 100, f"only {len(reports)} of 100 tasks filtered"
+    return sorted(json.load(open(p))["task"] for p in reports if json.load(open(p))["keep"])
+
+
+def cmd_draw_pilot():
+    kept = kept_tasks()
+    random.Random(seed("pilot")).shuffle(kept)
+    _write("pilot.txt", kept[:3])
+
+
+def cmd_draw_experiment(n):
+    pilot = open(os.path.join(ROOT, "draws", "pilot.txt")).read().split()
+    rest = [t for t in kept_tasks() if t not in pilot]
+    random.Random(seed("experiment")).shuffle(rest)
+    per_repo, order = {}, []
+    for t in pilot:
+        per_repo[repo(t)] = per_repo.get(repo(t), 0) + 1
+    for t in rest:
+        if per_repo.get(repo(t), 0) < CAP_PER_REPO:
+            per_repo[repo(t)] = per_repo.get(repo(t), 0) + 1
+            order.append(t)
+    _write("experiment.txt", order[:n])
+    _write("replacements.txt", order[n:])
+
+
+def _write(name, tasks):
+    open(os.path.join(ROOT, "draws", name), "w").write("\n".join(tasks) + "\n")
+    print(f"draws/{name}: {len(tasks)} tasks")
+
+
+# --- sessions -------------------------------------------------------------------
+
+def run_arm(row, arm, model, run_dir, spec_text, note=None, check=None):
+    """Run 1 arm, rerunning once after a crash or a failed check. Returns (attempt_dir, manifest)."""
+    reason = None
+    for attempt in (1, 2):
+        adir = os.path.join(run_dir, f"attempt-{attempt}")
+        info = session.run_session(row, arm, model, adir, spec_text, note)
+        problem = info["crashed"] or (check(adir) if check else None)
+        if not problem:
+            return adir, {"attempt": attempt, "rerun_reason": reason, "excluded": None}
+        reason = problem
+    return adir, {"attempt": 2, "rerun_reason": reason, "excluded": f"failed twice: {reason}"}
+
+
+def design_check(spec_text):
+    def check(adir):
+        note = _read(os.path.join(adir, "design_note.md"))
+        ok, reasons = checks.design_note_ok(note, spec_text)
+        if not ok:
+            return "design note: " + "; ".join(reasons)
+        if not checks.no_compaction(os.path.join(adir, "session.jsonl")):
+            return "design note not kept: compaction"
+        return None
+    return check
+
+
+def write_manifest(row, model, run_dir, adir, extra):
+    info = json.load(open(os.path.join(adir, "session.json")))
+    phases = info["phases"]
+    m = {"harness_commit": harness_commit(), "seed": seed("order"), "started_at": info["started_at"],
+         "finished_at": info["finished_at"], "image": docker.image_ref(row), "model_id": info["model"],
+         "thinking": info["thinking"], "cpus": docker.CPUS, "memory": docker.MEMORY,
+         "attempt_dir": os.path.basename(adir), "turns": sum(p["turns"] for p in phases),
+         "input_tokens": sum(p["input"] for p in phases), "output_tokens": sum(p["output"] for p in phases),
+         "cache_read_tokens": sum(p["cache_read"] for p in phases), "cost": sum(p["cost"] for p in phases),
+         "limit_reached": [p["limit_reached"] for p in phases], **extra}
+    json.dump(m, open(os.path.join(run_dir, "manifest.json"), "w"), indent=1)
+
+
+def excluded_manifest(run_dir, reason):
+    os.makedirs(run_dir, exist_ok=True)
+    json.dump({"harness_commit": harness_commit(), "seed": seed("order"), "started_at": None, "finished_at": None,
+               "excluded": reason}, open(os.path.join(run_dir, "manifest.json"), "w"), indent=1)
+
+
+def cmd_sessions(model, tasks_file, runs, out, aa=False):
+    rows = data.load_rows()
+    tasks = open(tasks_file).read().split()
+    rng = random.Random(f"{seed('order')}:{model}")
+    pairs = [(t, r) for t in tasks for r in range(1, runs + 1)]
+    rng.shuffle(pairs)
+    later = ["B", "C"] + (["B2"] if aa else [])
+    orders = [rng.sample(later, len(later)) for _ in pairs]
+    session.ensure_gateway()
+    built = set()
+    for (task, r), order in zip(pairs, orders):
+        row = rows[task]
+        if task not in built:
+            session.build_agent_image(row)
+            built.add(task)
+        spec_text = open(os.path.join(ROOT, "tasks", task, "spec.md")).read()
+        base = lambda arm: os.path.join(out, task, arm, str(r))
+        if os.path.exists(os.path.join(base(order[-1]), "manifest.json")):
+            continue  # this pair is done
+        print(f"{task} run {r}: A then {order}", flush=True)
+        adir, extra = run_arm(row, "A", model, base("A"), spec_text, check=design_check(spec_text))
+        write_manifest(row, model, base("A"), adir, extra)
+        if extra["excluded"]:
+            for arm in order:
+                excluded_manifest(base(arm), "pair excluded: arm A " + extra["excluded"])
+            continue
+        note = _read(os.path.join(adir, "design_note.md"))
+        for arm in order:
+            pi_arm = "B" if arm == "B2" else arm
+            bdir, bextra = run_arm(row, pi_arm, model, base(arm), spec_text, note=note if arm == "C" else None)
+            bextra["isolation_suspects"] = checks.isolation_suspects(row, os.path.join(bdir, "session.jsonl"))
+            if bextra["isolation_suspects"] and not bextra["excluded"]:
+                bextra["excluded"] = "isolation check"
+            write_manifest(row, model, base(arm), bdir, bextra)
+        cmd_ledger()
+
+
+# --- scoring --------------------------------------------------------------------
+
+def cmd_score(tasks_file, out):
+    rows = data.load_rows()
+    for task in open(tasks_file).read().split():
+        row = rows[task]
+        mutants = json.load(open(os.path.join(ROOT, "tasks", task, "mutants.json")))["mutants"]
+        tdir = os.path.join(ROOT, "tasks", task)
+        if not os.path.exists(os.path.join(tdir, "human_score.json")):
+            score.score_human(row, tdir, mutants)
+        for mpath in sorted(glob.glob(os.path.join(out, task, "*", "*", "manifest.json"))):
+            run_dir = os.path.dirname(mpath)
+            m = json.load(open(mpath))
+            if m.get("excluded") or os.path.exists(os.path.join(run_dir, "score.json")):
+                continue
+            score.score(row, run_dir, mutants, os.path.join(run_dir, m["attempt_dir"], "tests"))
+            print("scored", run_dir, flush=True)
+    cmd_ledger()
+
+
+# --- ledger ---------------------------------------------------------------------
+
+def cmd_ledger(runs_dir="runs", ledger="runs.sha256"):
+    """Append a hash for every file under runs/ not yet in the ledger. Never rewrites a line."""
+    runs_dir, ledger = os.path.join(ROOT, runs_dir), os.path.join(ROOT, ledger)
+    have = set()
+    if os.path.exists(ledger):
+        have = {l.split("  ", 1)[1].strip() for l in open(ledger) if l.strip()}
+    new = []
+    for root, _, files in os.walk(runs_dir):
+        for f in sorted(files):
+            rel = os.path.relpath(os.path.join(root, f), os.path.dirname(ledger))
+            if rel not in have:
+                new.append(f"{hashlib.sha256(open(os.path.join(root, f), 'rb').read()).hexdigest()}  {rel}\n")
+    with open(ledger, "a") as f:
+        f.writelines(sorted(new, key=lambda l: l.split("  ", 1)[1]))
+
+
+def _read(path):
+    return open(path, encoding="utf-8", errors="replace").read() if os.path.exists(path) else None
+
+
+if __name__ == "__main__":
+    cmd, args = sys.argv[1], sys.argv[2:]
+    if cmd == "filter":
+        cmd_filter(args)
+    elif cmd == "draw-pilot":
+        cmd_draw_pilot()
+    elif cmd == "draw-experiment":
+        cmd_draw_experiment(int(args[0]))
+    elif cmd == "sessions":
+        cmd_sessions(args[0], args[1], int(args[2]), args[3], aa="--aa" in args)
+    elif cmd == "score":
+        cmd_score(args[0], args[1])
+    elif cmd == "ledger":
+        cmd_ledger()

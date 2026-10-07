@@ -50,12 +50,12 @@ def ensure_gateway():
     if docker.sh("network", "inspect", NETWORK, check=False).returncode:
         docker.sh("network", "create", "--internal", NETWORK)
     if docker.sh("inspect", GATEWAY, check=False).returncode == 0:
+        docker.sh("start", GATEWAY)  # a no-op when it is already running
         return
     nginx = "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
     docker.sh("create", "--name", GATEWAY, "-e", f"QWEN_HOST={QWEN_HOST}", "-e", "ANTHROPIC_API_KEY",
               "-e", "NGINX_ENVSUBST_FILTER=^(QWEN_HOST|ANTHROPIC_API_KEY)$", nginx)
-    docker.sh("cp", os.path.join(ROOT, "docker", "gateway.conf.template"),
-              f"{GATEWAY}:/etc/nginx/templates/default.conf.template")
+    docker.sh("cp", os.path.join(ROOT, "docker", "gateway"), f"{GATEWAY}:/etc/nginx/templates")
     docker.sh("network", "connect", "--alias", "gateway", NETWORK, GATEWAY)
     docker.sh("start", GATEWAY)
 

@@ -15,8 +15,7 @@ def _container(row, kind):
     return docker.start(docker.tag(row, kind), f"score-{kind}-{uuid.uuid4().hex[:8]}")
 
 
-def _copy_tests(c, run_dir):
-    tests = os.path.join(run_dir, "tests")
+def _copy_tests(c, tests):
     paths = []
     for root, _, files in os.walk(tests):
         for f in files:
@@ -39,11 +38,11 @@ def test_cmd(row):
     return f"{s['test_cmd']} --timeout={s['timeout_one']}"
 
 
-def lock(row, run_dir):
+def lock(row, run_dir, tests_dir):
     """Run the suite against the stub; keep only the tests that fail (or error) there."""
     c = _container(row, "stub")
     try:
-        files = _copy_tests(c, run_dir)
+        files = _copy_tests(c, tests_dir)
         outcome = _runner(c, test_cmd(row), "outcomes", files, 1)["runs"][0] if files else {}
     finally:
         docker.stop(c)
@@ -81,9 +80,9 @@ def validate_and_kill(row, test_dir, targets, mutants, repeats=5, copy=True):
     }
 
 
-def score(row, run_dir, mutants):
-    locked = lock(row, run_dir)
-    res = validate_and_kill(row, run_dir, locked["locked"], mutants)
+def score(row, run_dir, mutants, tests_dir):
+    locked = lock(row, run_dir, tests_dir)
+    res = validate_and_kill(row, tests_dir, locked["locked"], mutants)
     res["dropped_passing"] = locked["dropped_passing"]
     json.dump(res, open(os.path.join(run_dir, "score.json"), "w"), indent=1)
     return res
