@@ -266,3 +266,11 @@ def test_filter_rule():
     assert not prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a", "b", "c"], "summary": "37 passed"}})
     assert prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a"], "summary": "39 passed"}})
     assert not prepare.decide({**base, "stub_imports": False})
+
+
+def test_edge_case_section_detection():
+    from harness import checks
+    assert checks.edge_cases_listed("# Note\n## Edge Cases\n\n### Part A\n1. **Zero**: raise\n## Next\n")
+    assert checks.edge_cases_listed("## Edge cases\n- empty input\n")
+    assert not checks.edge_cases_listed("## Edge cases\nNone really.\n## Other\n- item\n")
+    assert not checks.edge_cases_listed("## Design\n- item\n")

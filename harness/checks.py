@@ -28,9 +28,21 @@ def design_note_ok(note, spec_text):
     if not note:
         return False, ["no design note"]
     missing = [n for n in interface_names(spec_text) if n not in note]
-    edge = re.search(r"(?im)^#+\s*edge cases?\b.*\n((?:\s*\n)*)\s*([-*]|\d+\.)\s+\S", note)
+    edge = edge_cases_listed(note)
     reasons = [f"missing entries: {missing}"] * bool(missing) + ["no edge cases listed"] * (not edge)
     return not reasons, reasons
+
+
+def edge_cases_listed(note):
+    """True when a heading named "Edge cases" has at least 1 list item anywhere in its section, sub-headings included."""
+    m = re.search(r"(?im)^(#+)\s*edge cases?\b.*$", note)
+    if not m:
+        return False
+    level = len(m.group(1))
+    rest = note[m.end():]
+    end = re.search(r"(?m)^#{1,%d}\s" % level, rest)
+    section = rest[: end.start()] if end else rest
+    return bool(re.search(r"(?m)^\s*([-*+]|\d+[.)])\s+\S", section))
 
 
 def session_entries(path):
