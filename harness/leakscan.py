@@ -36,8 +36,9 @@ def main(cand_path):
             hits.setdefault(path, {}).setdefault(gold, set()).add(text)
 
     if owner:
-        out = subprocess.run(["grep", "-rIoF", "-f", patterns, "/"] + [f"--exclude-dir={d[1:]}" for d in SKIP],
-                             capture_output=True, text=True, errors="replace").stdout
+        tops = [os.path.join("/", d) for d in os.listdir("/") if os.path.join("/", d) not in SKIP]
+        out = subprocess.run(["grep", "-rIoF", "-f", patterns, *tops], capture_output=True, text=True, errors="replace",
+                             env=dict(os.environ, LC_ALL="C")).stdout
         for line in out.splitlines():
             path, _, text = line.partition(":")
             if path not in (patterns, cand_path):

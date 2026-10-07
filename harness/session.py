@@ -206,8 +206,8 @@ def collect(c, run_dir, arm):
         if data is not None:
             open(os.path.join(run_dir, dst), "wb").write(data)
     # Untracked and ignored files both count: a test file in a git-ignored directory is still a new file.
-    status = docker.run(c, "cd /testbed && git status --porcelain --untracked-files=all --ignored", check=False).stdout
-    tests = [l[3:] for l in status.splitlines() if l[:3] in ("?? ", "!! ")
+    status = docker.run(c, "cd /testbed && git status --porcelain -z --untracked-files=all --ignored", check=False).stdout
+    tests = [l[3:] for l in status.split("\0") if l[:3] in ("?? ", "!! ")
              and os.path.basename(l[3:]).startswith("test_tdd_") and l.endswith(".py")]
     for path in tests:
         content = docker.get(c, f"/testbed/{path}")
@@ -217,7 +217,7 @@ def collect(c, run_dir, arm):
         os.makedirs(os.path.dirname(out), exist_ok=True)
         open(out, "wb").write(content)
     diff = docker.run(c, "cd /testbed && git diff", check=False).stdout
-    open(os.path.join(run_dir, "changes.txt"), "w").write(status + "\n" + diff)
+    open(os.path.join(run_dir, "changes.txt"), "w").write(status.replace("\0", "\n") + "\n" + diff)
     # Every path the session created or changed anywhere in the container, for the isolation check.
     open(os.path.join(run_dir, "container_diff.txt"), "w").write(docker.sh("diff", c, check=False).stdout)
 

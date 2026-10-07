@@ -31,11 +31,13 @@ def load(runs_dir, tasks=None):
                 d = os.path.join(runs_dir, task, a, r)
                 try:
                     manifest = json.load(open(os.path.join(d, "manifest.json")))
-                    score = json.load(open(os.path.join(d, "score.json")))
                 except OSError:
                     break
                 if manifest.get("excluded"):
                     break
+                if not os.path.exists(os.path.join(d, "score.json")):
+                    raise RuntimeError(f"{d} is not excluded but has no score.json: score it first")
+                score = json.load(open(os.path.join(d, "score.json")))
                 pair[a] = score
             else:
                 pairs.append(pair)

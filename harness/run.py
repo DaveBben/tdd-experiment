@@ -18,11 +18,14 @@ import os
 import random
 import subprocess
 import sys
+import time
 
 from harness import checks, data, docker, prepare, score, session
 
 ROOT = docker.ROOT
 CAP_PER_REPO = 5
+API_BACKOFF = 600
+HALT_AFTER = 3  # consecutive pair errors: something is down, so stop instead of burning through pairs
 REPLACEMENTS = 5
 
 
@@ -124,6 +127,11 @@ def run_arm(row, arm, model, run_dir, spec_text, note=None, check=None):
         attempt = prior + tries
         adir = os.path.join(run_dir, f"attempt-{attempt}")
         info = session.run_session(row, arm, model, adir, spec_text, note)
+        if (info["crashed"] or "").startswith(("harness error", "collect error")):
+            # The harness, not the agent, failed: write no manifest, so the pair is retried on resume.
+            raise RuntimeError(info["crashed"])
+        if tries == 1 and (info["crashed"] or "").startswith("final response error"):
+            time.sleep(API_BACKOFF)  # an API outage outlasted Pi's retries; give it time before the 1 rerun
         problem = info["crashed"] or (check(adir) if check else None)
         if not problem:
             return adir, {"attempt": attempt, "rerun_reason": reason, "excluded": None}
@@ -186,6 +194,9 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
     later = ["B", "C"] + (["B2"] if aa else [])
     orders = [rng.sample(later, len(later)) for _ in pairs]
     session.ensure_gateway(model)
+    for task in tasks:
+        session.build_agent_image(rows[task])  # cached and cheap; guarantees the image matches the prepared stub
+    errors_in_a_row = 0
     for (task, r), order in zip(pairs, orders):
         row = rows[task]
         if budget is not None and spent(out) >= budget:
@@ -200,8 +211,14 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
         try:
             run_pair(row, model, base, order, spec_text, done)
         except Exception as e:  # noqa: BLE001 - log it and go on; the pair stays incomplete and is visible
+            errors_in_a_row += 1
             print(f"PAIR ERROR {task} run {r}: {e!r}", flush=True)
+            if errors_in_a_row >= HALT_AFTER:
+                print(f"HALT: {HALT_AFTER} pair errors in a row", flush=True)
+                return
+            time.sleep(API_BACKOFF)
             continue
+        errors_in_a_row = 0
         print(f"done {task} run {r}; spent {spent(out):.2f}", flush=True)
         cmd_ledger()
 
@@ -226,9 +243,10 @@ def run_pair(row, model, base, order, spec_text, done):
         try:
             bextra["isolation_suspects"] = checks.isolation_suspects(
                 row, os.path.join(bdir, "session.jsonl"), os.path.join(bdir, "container_diff.txt"))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001 - an unchecked session cannot be trusted
             bextra["isolation_suspects"] = None
             bextra["isolation_check_error"] = repr(e)
+            bextra["excluded"] = bextra["excluded"] or "isolation check could not run"
         if bextra["isolation_suspects"] and not bextra["excluded"]:
             bextra["excluded"] = "isolation check"
         write_manifest(row, model, base(arm), bdir, bextra)
@@ -244,7 +262,10 @@ def cmd_score(tasks_file, out):
         mutants = json.load(open(os.path.join(ROOT, "tasks", task, "mutants.json")))["mutants"]
         hdir = os.path.join(ROOT, "runs", "human", task)  # model-independent, scored once per task
         if not os.path.exists(os.path.join(hdir, "human_score.json")):
-            score.score_human(row, hdir, mutants)
+            try:
+                score.score_human(row, hdir, mutants)
+            except Exception as e:  # noqa: BLE001
+                print(f"SCORE ERROR human {task}: {e!r}", flush=True)
         for mpath in sorted(glob.glob(os.path.join(out, task, "*", "*", "manifest.json"))):
             run_dir = os.path.dirname(mpath)
             m = json.load(open(mpath))

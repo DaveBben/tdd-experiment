@@ -74,7 +74,8 @@ def validate_and_kill(row, test_dir, files, mutants, locked=None, locked_files=(
         if locked is None:
             ids = sorted(seen)
         else:
-            ids = sorted(set(locked) | {i for i in seen if _file(i) in set(locked_files)})
+            ids = sorted(set(locked) | {i for i in seen if any(_file(i) == f or _file(i).startswith(f + "/")
+                                                              for f in locked_files)})
         valid = [i for i in ids if all(run.get(i) == "PASSED" for run in ref["runs"])]
         flaky = [i for i in ids if i not in valid and any(run.get(i) == "PASSED" for run in ref["runs"])]
         docker.put(c, "/tmp/mutants.json", json.dumps({"mutants": mutants}))

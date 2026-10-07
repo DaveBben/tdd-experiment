@@ -105,8 +105,11 @@ def decide(r):
 
 
 def leaks(r):
-    """Files holding a copy of a gold file, and unscanned archives named after the package."""
+    """Files holding a copy of a gold file, and unscanned archives named after the package. A task none of whose
+    gold files has the 3 distinctive lines a copy must show cannot be checked, and counts as leaking."""
     n = r["leak_candidates"]
+    if not any(k >= 3 for k in n.values()):
+        return ["no gold file has 3 distinctive lines to search for"]
     found = [f"{p} <- {g}" for p, d in r["leak_hits"].items() for g, k in d.items() if k >= leak_threshold(n[g])]
     lib = r["library"].lower().replace("-", "_")
     return found + [a for a in r["unscanned_archives"] if lib in os.path.basename(a).lower().replace("-", "_")]
@@ -167,8 +170,11 @@ def prepare(task_id, rows, seed):
         cands = leak_candidates(row, spec_text)
         # Drop lines the undeveloped repository itself holds anywhere: they show nothing about a leak.
         docker.put(st, "/tmp/cand.txt", "\n".join({l for ls in cands.values() for l in ls}) + "\n")
-        present = set(docker.run(st, f"cd {TB} && git ls-files -z | xargs -0 grep -hoF -f /tmp/cand.txt 2>/dev/null;"
-                                     " rm /tmp/cand.txt", check=False).stdout.splitlines())
+        # Whole matching lines, then a substring test here: grep -o reports only the longest of overlapping patterns.
+        repo_lines = docker.run(st, f"cd {TB} && git ls-files -z | LC_ALL=C xargs -0 grep -hF -f /tmp/cand.txt 2>/dev/null;"
+                                    " rm /tmp/cand.txt", check=False).stdout.splitlines()
+        every = {l for ls in cands.values() for l in ls}
+        present = {cand for cand in every if any(cand in line for line in repo_lines)}
         cands = {g: [l for l in ls if l not in present] for g, ls in cands.items()}
         docker.put(st, "/tmp/leakscan.py", open(os.path.join(ROOT, "harness", "leakscan.py")).read())
         docker.put(st, "/tmp/cands.json", json.dumps(cands))

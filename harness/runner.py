@@ -20,6 +20,8 @@ PLUGIN_DIR = "/tmp/tdd_plugin"
 PLUGIN = '''
 import json, os
 
+_PATH = os.environ["TDD_OUTCOMES"]  # read now: a test may clear os.environ
+_RANK = {"PASSED": 0, "SKIPPED": 1, "XFAIL": 1, "XPASS": 1, "FAILED": 2, "ERROR": 2}
 _out = {}
 _collect_errors = []
 
@@ -42,12 +44,12 @@ def pytest_runtest_logreport(report):
         outcome = "SKIPPED"
     else:
         outcome = "PASSED"
-    # The worst phase wins: PASSED only when setup, call, and teardown all passed.
-    _out[report.nodeid] = outcome if prev in (None, "PASSED") else prev
+    # The worst phase wins: PASSED only when setup, call, and teardown all passed; a failure outranks a skip.
+    _out[report.nodeid] = outcome if prev is None or _RANK[outcome] > _RANK[prev] else prev
 
 
 def pytest_sessionfinish(session):
-    with open(os.environ["TDD_OUTCOMES"], "w") as f:
+    with open(_PATH, "w") as f:
         json.dump({"tests": _out, "collection_errors": _collect_errors}, f)
 '''
 ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", TDD_OUTCOMES="/tmp/tdd_outcomes.json",
@@ -93,8 +95,11 @@ def outcomes(cmd, files, repeats, cwd="/testbed"):
 
 
 def mutants(cmd, files, muts, ids, root="/testbed"):
-    """Each mutant is killed when any test in `ids` is not PASSED, or the run times out."""
-    _, _, ref_seconds, _ = pytest(cmd, files, cwd=root)
+    """Each mutant is killed when any test in `ids` is not PASSED, or the run times out. Only tests that also
+    pass in this run of the same file subset on the unmutated reference count; any other is reported."""
+    ref, _, ref_seconds, _ = pytest(cmd, files, cwd=root)
+    dropped = sorted(i for i in ids if ref.get(i) != "PASSED")
+    ids = [i for i in ids if ref.get(i) == "PASSED"]
     limit = max(3 * ref_seconds, ref_seconds + 10)
     results = []
     for m in muts:
@@ -111,7 +116,8 @@ def mutants(cmd, files, muts, ids, root="/testbed"):
         failing = sorted(i for i in ids if o.get(i, "MISSING") != "PASSED")
         results.append({"id": m["id"], "killed": timed_out or bool(failing), "timeout": timed_out,
                         "failing": failing})
-    return {"ref_seconds": ref_seconds, "limit_seconds": limit, "results": results}
+    return {"ref_seconds": ref_seconds, "limit_seconds": limit, "results": results, "used_ids": ids,
+            "dropped_not_passing_in_subset": dropped}
 
 
 if __name__ == "__main__":

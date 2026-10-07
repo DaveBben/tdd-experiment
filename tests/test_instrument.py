@@ -258,7 +258,9 @@ def test_filter_rule():
     assert prepare.decide(base)  # env failure shared by gold and stub, idiom-only hit, unrelated archive: kept
     assert not prepare.decide({**base, "leak_hits": {"/env2/pkg/a.py": {"pkg/a.py": 10}}})  # copy of a.py
     assert prepare.decide({**base, "leak_hits": {"/env2/pkg/a.py": {"pkg/a.py": 9}}})
-    assert not prepare.decide({**base, "leak_hits": {"/w.whl!pkg/b.py": {"pkg/b.py": 3}}})  # small file, threshold 3
+    small = {**base, "leak_candidates": {"pkg/a.py": 70, "pkg/b.py": 4}}
+    assert not prepare.decide({**small, "leak_hits": {"/w.whl!pkg/b.py": {"pkg/b.py": 3}}})  # small file, threshold 3
+    assert not prepare.decide({**base, "leak_candidates": {"pkg/b.py": 2}})  # nothing big enough to search for
     assert not prepare.decide({**base, "unscanned_archives": ["/x/pkg-2.0-py_0.conda"]})
     assert not prepare.decide({**base, "stub_p2p": {"exit": 1, "failing": ["t.py::net", "t.py::other"], "summary": ""}})
     assert not prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a", "b", "c"], "summary": "37 passed"}})
