@@ -222,3 +222,24 @@ def test_exclusion_drops_whole_pair_and_thin_tasks(tmp_path):
     data_ = analyze.load(runs)
     assert len(data_["org__repo0.task0"]["A"]) == 2  # pair 1 dropped from every arm
     assert "org__repo1.task1" not in data_  # 1 pair left: task dropped
+
+
+# --- pilot rules -------------------------------------------------------------------
+
+def test_sample_size_formula_matches_design():
+    from harness import pilot
+    assert pilot.n_for(10) == 47  # EXPERIMENT.md: "at σ = 10, n = 47"
+    assert pilot.n_for(6.3) <= 20 < pilot.n_for(6.5)  # "20 tasks are enough only when σ is at most about 6.3"
+
+
+def test_pilot_rules_on_synthetic_pilot(tmp_path):
+    from harness import pilot
+    runs = write_runs(tmp_path, 0, tasks=3)
+    for b in (tmp_path).glob("*/B/*"):
+        b2 = b.parent.parent / "B2" / b.name
+        b2.mkdir(parents=True)
+        (b2 / "score.json").write_text((b / "score.json").read_text())
+    r = pilot.main([runs])
+    m = r["per_model"][runs]
+    assert m["tasks"] == 3 and m["aa"]["mean"] == 0 and m["aa"]["ok"]
+    assert r["sigma"] == 10 and r["n"] == 47 and r["runs"] == 3  # small spread: the σ floor of 10 holds
