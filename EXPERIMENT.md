@@ -602,3 +602,23 @@ These were settled on 2026-10-06, before the pilot:
 ## Open decisions
 
 None.
+
+## Deviation log
+
+Changes made after the pilot started, each with its date, reason, and expected effect on the result.
+
+* **2026-10-07, arm A design-note prompt.**
+  In the pilot, Sonnet on the pandas task used up the design phase's token limit exploring before it wrote any note, in both attempts of every run, so those pairs were excluded.
+  That would drop the largest tasks for 1 model only.
+  When arm A's design phase now ends without a note, arm A gets 1 more prompt, committed in `prompts/design_note_now.md`, asking it to write the note from what it has learned, with a limit of 10 turns.
+  It changes only arm A's design phase, and the manipulation check still applies to the note.
+* **2026-10-07, parallel scoring.**
+  Scoring used 1 of the virtual machine's 12 cores, so suites are now scored 8 at a time, each in its own container.
+  Each suite's mutant time limit is still measured against its own reference run in the same container, and timeout kills are counted and reported separately, so the extra machine load reaches the score only through timeout kills.
+* **2026-10-07, hanging tests.**
+  In the pilot, 1 agent-written test computed a number with 100 million digits on the reference implementation, in C code that pytest's per-test timeout cannot interrupt, so every reference run of its suite hung until the run limit and all 8 of its tests were lost.
+  The test runner now watches each test from outside pytest and stops a test that runs longer than 60 seconds; that test is marked as timed out, which makes it invalid, and the rest of the suite is run again without it.
+  A hanging test now invalidates only itself, the same way in every arm.
+  In a mutant run, a hang still counts as a kill.
+* **2026-10-07, budget accounting.**
+  The spending cap now counts every session's cost, reruns included; it had counted only the final attempt's.

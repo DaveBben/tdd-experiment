@@ -73,3 +73,36 @@ def test_mutant_kills_by_valid_ids(repo):
     assert [r["killed"] for r in res["results"]] == [True, False]
     assert res["results"][0]["failing"] == sorted(ids)
     assert open(repo / "mod.py").read() == "def double(x):\n    return x * 2\n"  # restored
+
+
+HANG_SUITE = '''
+import time
+from mod import double
+
+def test_a():
+    assert double(1) == 2
+
+def test_hang():
+    sum(range(10**14))  # C code holding the GIL: no thread inside pytest can interrupt it
+
+def test_z():
+    assert double(5) == 10
+'''
+
+
+def test_hanging_test_invalidates_only_itself(repo, monkeypatch):
+    (repo / "test_tdd_hang.py").write_text(HANG_SUITE)
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    start = __import__("time").monotonic()
+    res = runner.outcomes(CMD, ["test_tdd_hang.py"], 1, cwd=str(repo))
+    assert res["runs"][0] == {"test_tdd_hang.py::test_a": "PASSED", "test_tdd_hang.py::test_hang": "TIMEOUT",
+                              "test_tdd_hang.py::test_z": "PASSED"}
+    assert __import__("time").monotonic() - start < 30
+
+
+def test_mutant_that_hangs_is_a_timeout_kill(repo, monkeypatch):
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    hang = {"id": 0, "path": "mod.py", "start": 26, "end": 31, "new": "__import__('time').sleep(1000)"}
+    res = runner.mutants(CMD, ["test_tdd_a.py"], [hang], ["test_tdd_a.py::test_kills"], root=str(repo))
+    assert res["results"][0]["killed"] and res["results"][0]["timeout"]
+    assert open(repo / "mod.py").read() == "def double(x):\n    return x * 2\n"
