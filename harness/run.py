@@ -310,6 +310,8 @@ def cmd_ledger(runs_dir="runs", ledger="runs.sha256"):
     new = []
     for root, _, files in os.walk(runs_dir):
         for f in sorted(files):
+            if ".tmp-" in f or f.endswith(".lock"):
+                continue  # an atomic write in progress, or a lock: not raw output
             rel = os.path.relpath(os.path.join(root, f), os.path.dirname(ledger))
             if rel not in have:
                 new.append(f"{hashlib.sha256(open(os.path.join(root, f), 'rb').read()).hexdigest()}  {rel}\n")

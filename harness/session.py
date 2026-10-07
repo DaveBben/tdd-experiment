@@ -168,7 +168,7 @@ def run_session(row, arm, model_name, run_dir, spec_text, note=None):
     Any harness error becomes a crash of this session, never an exception that stops the run."""
     os.makedirs(run_dir, exist_ok=True)
     model = MODELS[model_name]
-    info = {"arm": arm, "model": model["model"], "thinking": model["thinking"], "limits": LIMITS,
+    info = {"arm": arm, "model": model["model"], "thinking": model["thinking"], "limits": {**LIMITS, "note": NOTE_LIMIT},
             "wall_seconds_per_phase": WALL_SECONDS, "started_at": _now(), "phases": [], "crashed": None}
     c = None
     try:

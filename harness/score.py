@@ -1,6 +1,7 @@
 """Lock a suite against the stub, mark invalid and flaky tests on the reference, and run the mutants.
 Every step runs in a new container with no network.
 """
+import fcntl
 import json
 import os
 import uuid
@@ -55,7 +56,7 @@ def lock(row, run_dir, tests_dir):
     out = {"files": files, "stub_outcomes": outcome, "locked": locked, "locked_files": sorted(collect_errors),
            "dropped_passing": sum(o == "PASSED" for o in outcome.values()),
            "dropped_other": sum(o not in ("PASSED", "FAILED", "ERROR") for o in outcome.values())}
-    json.dump(out, open(os.path.join(run_dir, "locked.json"), "w"), indent=1)
+    write_json(os.path.join(run_dir, "locked.json"), out)
     return out
 
 
@@ -78,11 +79,14 @@ def validate_and_kill(row, test_dir, files, mutants, locked=None, locked_files=(
                                                               for f in locked_files)})
         valid = [i for i in ids if all(run.get(i) == "PASSED" for run in ref["runs"])]
         flaky = [i for i in ids if i not in valid and any(run.get(i) == "PASSED" for run in ref["runs"])]
+        # Tests that hung or crashed on the reference are left out of every mutant run, or each would hang again.
+        stuck = sorted({i for run in ref["runs"] for i, o in run.items() if o in ("TIMEOUT", "CRASHED")})
         docker.put(c, "/tmp/mutants.json", json.dumps({"mutants": mutants}))
         docker.put(c, "/tmp/ids.json", json.dumps(valid))
+        docker.put(c, "/tmp/skip.json", json.dumps(stuck))
         if valid:
             kills = _runner(c, test_cmd(row), "mutants", sorted({_file(i) for i in valid}), "/tmp/mutants.json",
-                            "/tmp/ids.json")
+                            "/tmp/ids.json", "/tmp/skip.json")
         else:
             kills = {"ref_seconds": None, "results": [{"id": m["id"], "killed": False, "timeout": False, "failing": []}
                                                       for m in mutants]}
@@ -90,7 +94,7 @@ def validate_and_kill(row, test_dir, files, mutants, locked=None, locked_files=(
         docker.stop(c)
     killed = [r for r in kills["results"] if r["killed"]]
     return {
-        "reference_runs": ref, "tests": ids, "valid": valid, "flaky": flaky, "kills": kills,
+        "reference_runs": ref, "tests": ids, "stuck_on_reference": stuck, "valid": valid, "flaky": flaky, "kills": kills,
         "mutation_score": 100 * len(killed) / len(mutants),
         "invalid_rate": 100 * (len(ids) - len(valid)) / len(ids) if ids else 0.0,
         "suite_size": len(valid),
@@ -104,13 +108,26 @@ def score(row, run_dir, mutants, tests_dir):
     locked = lock(row, run_dir, tests_dir)
     res = validate_and_kill(row, tests_dir, locked["files"], mutants, locked["locked"], locked["locked_files"])
     res["dropped_passing"] = locked["dropped_passing"]
-    json.dump(res, open(os.path.join(run_dir, "score.json"), "w"), indent=1)
+    write_json(os.path.join(run_dir, "score.json"), res)
     return res
 
 
 def score_human(row, out_dir, mutants):
     """FeatureBench's fail-to-pass tests against the same mutants (they are in the reference image)."""
     os.makedirs(out_dir, exist_ok=True)
-    res = validate_and_kill(row, out_dir, list(row["FAIL_TO_PASS"]), mutants, copy=False)
-    json.dump(res, open(os.path.join(out_dir, "human_score.json"), "w"), indent=1)
-    return res
+    with open(out_dir.rstrip("/") + ".lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)  # 2 model runs may both reach the same task
+        path = os.path.join(out_dir, "human_score.json")
+        if os.path.exists(path):
+            return json.load(open(path))
+        res = validate_and_kill(row, out_dir, list(row["FAIL_TO_PASS"]), mutants, copy=False)
+        write_json(path, res)
+        return res
+
+
+def write_json(path, obj):
+    """Write atomically, so a ledger run from another process never hashes a half-written file."""
+    tmp = f"{path}.tmp-{uuid.uuid4().hex[:8]}"
+    with open(tmp, "w") as f:
+        json.dump(obj, f, indent=1)
+    os.replace(tmp, path)

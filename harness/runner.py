@@ -18,6 +18,7 @@ until every test has one: a hanging test invalidates only itself. In a mutant ru
 """
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
@@ -26,7 +27,8 @@ import time
 PLUGIN_DIR = "/tmp/tdd_plugin"
 LOG = "/tmp/tdd_events.jsonl"
 SKIP = "/tmp/tdd_skip.json"
-HARD_TEST = 60  # seconds for 1 test; each task's own pytest-timeout (10-20 s) fails a slow test well before this
+HARD_TEST = 60  # seconds for 1 test, and at least twice the task's own pytest --timeout (10 to 120 s)
+EXIT_GRACE = 10  # seconds a process may take to exit after its session finished
 RUN_LIMIT = 1800  # seconds for 1 pytest process; a backstop behind the watchdog
 PLUGIN = '''
 import json, os
@@ -41,9 +43,18 @@ def _emit(**kw):
     _f.flush()
 
 
+def pytest_collectstart(collector):
+    _emit(collect=collector.nodeid)
+
+
 def pytest_collectreport(report):
+    _emit(collected=report.nodeid)
     if report.failed:
         _emit(collect_error=report.nodeid)
+
+
+def pytest_sessionfinish(session):
+    _emit(done=1)
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -79,7 +90,7 @@ def pytest_runtest_logreport(report):
         outcome = "PASSED"
     _emit(id=report.nodeid, outcome=outcome)
 '''
-RANK = {"PASSED": 0, "SKIPPED": 1, "XFAIL": 1, "XPASS": 1, "FAILED": 2, "ERROR": 2, "TIMEOUT": 2}
+RANK = {"PASSED": 0, "SKIPPED": 1, "XFAIL": 1, "XPASS": 1, "FAILED": 2, "ERROR": 2, "TIMEOUT": 2, "CRASHED": 2}
 ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", TDD_LOG=LOG, TDD_HARD=str(HARD_TEST),
            PYTHONPATH=PLUGIN_DIR + (os.pathsep + os.environ["PYTHONPATH"] if os.environ.get("PYTHONPATH") else ""))
 
@@ -89,8 +100,10 @@ def _q(s):
 
 
 def pytest(cmd, files, timeout=RUN_LIMIT, cwd="/testbed", skip=()):
-    """1 pytest process: ({nodeid: outcome}, [collection errors], seconds, timed_out, hung test or None).
-    The worst phase wins: PASSED only when setup, call, and teardown all passed; a failure outranks a skip."""
+    """1 pytest process. Returns (outcomes {nodeid: outcome}, collection errors, seconds, timed_out, stuck), where
+    stuck is None or (kind, nodeid): ("hang", id) for a test that ran past the watchdog, ("crash", id) for a test
+    the process died in, ("collect", node) for a collector that hung. The worst phase wins: PASSED only when setup, call, and teardown
+    all passed; a failure outranks a skip."""
     os.makedirs(PLUGIN_DIR, exist_ok=True)
     with open(os.path.join(PLUGIN_DIR, "tdd_outcomes.py"), "w") as f:
         f.write(PLUGIN)
@@ -102,36 +115,52 @@ def pytest(cmd, files, timeout=RUN_LIMIT, cwd="/testbed", skip=()):
         with open(SKIP, "w") as f:
             json.dump(sorted(skip), f)
         env["TDD_SKIP"] = SKIP
+    m = re.search(r"--timeout[= ](\d+)", cmd)
+    hard = max(float(env["TDD_HARD"]), 2 * int(m.group(1)) if m else 0)
     start = time.monotonic()
     p = subprocess.Popen(f"{cmd} -p tdd_outcomes -p no:cacheprovider --continue-on-collection-errors "
                          + " ".join(_q(f) for f in files), shell=True, cwd=cwd, stdout=subprocess.DEVNULL,
                          stderr=subprocess.DEVNULL, env=env, executable="/bin/bash", start_new_session=True)
-    timed_out, hung, running, since, pos = False, None, None, None, 0
-    hard = float(env["TDD_HARD"])
+    timed_out, stuck, pos = False, None, 0
+    running, collecting, since, done_at = None, None, None, None
     while True:
+        exited = True
         try:
             p.wait(timeout=0.5)  # returns at once when pytest exits
-            break
         except subprocess.TimeoutExpired:
-            pass
+            exited = False
         now = time.monotonic()
-        if os.path.exists(LOG):  # follow the log: which test is running, and since when
-            with open(LOG, encoding="utf-8", errors="replace") as f:
+        if os.path.exists(LOG):  # follow the log: what is running, and since when
+            with open(LOG, encoding="utf-8", errors="replace") as f:  # json.dumps output is ASCII
                 f.seek(pos)
                 chunk = f.read()
-            done = chunk.rfind("\n") + 1
-            pos += len(chunk[:done].encode("utf-8"))
-            for line in chunk[:done].splitlines():
+            whole = chunk.rfind("\n") + 1
+            pos += whole
+            for line in chunk[:whole].splitlines():
                 ev = _parse(line)
                 if "start" in ev:
                     running, since = ev["start"], now
                 elif "finish" in ev:
                     running = None
+                elif "collect" in ev:
+                    collecting, since = ev["collect"], now
+                elif "collected" in ev:
+                    collecting = None
+                elif "done" in ev:
+                    done_at = now
+        if exited:
+            if running is not None and done_at is None:
+                stuck = ("crash", running)  # the process died inside this test
+            break
         if running is not None and now - since > hard:
-            hung = running
+            stuck = ("hang", running)
+        elif collecting is not None and now - since > hard:
+            stuck = ("collect", collecting)
+        elif done_at is not None and now - done_at > EXIT_GRACE:
+            pass  # every test reported; the process just will not exit
         elif now - start > timeout:
             timed_out = True
-            hung = running
+            stuck = ("hang", running) if running else ("collect", collecting) if collecting else None
         else:
             continue
         os.killpg(p.pid, signal.SIGKILL)  # the whole group: tests may have spawned processes
@@ -147,7 +176,7 @@ def pytest(cmd, files, timeout=RUN_LIMIT, cwd="/testbed", skip=()):
                 out[ev["id"]] = ev["outcome"] if prev is None or RANK[ev["outcome"]] > RANK[prev] else prev
             elif "collect_error" in ev:
                 errors.append(ev["collect_error"])
-    return out, errors, seconds, timed_out, hung
+    return out, errors, seconds, timed_out, stuck
 
 
 def _parse(line):
@@ -158,20 +187,36 @@ def _parse(line):
 
 
 def run_all(cmd, files, cwd="/testbed"):
-    """Every test's outcome, rerunning without a hung test until none is left: ({id: outcome}, errors, seconds)."""
-    merged, errors, total, skip = {}, [], 0.0, set()
-    for _ in range(1000):  # bounded: each pass with a hang removes at least 1 test
-        out, errs, secs, timed_out, hung = pytest(cmd, files, cwd=cwd, skip=skip)
+    """Every test's outcome: a test that hangs or crashes is TIMEOUT or CRASHED, a file whose collection hangs is a
+    collection error, and the suite runs again without them (and without tests already decided) until a pass ends
+    cleanly. Returns ({id: outcome}, collection errors, seconds)."""
+    merged, errors, total, skip, files = {}, set(), 0.0, set(), list(files)
+    for _ in range(1000):  # bounded: each pass that does not end cleanly removes at least 1 test or file
+        out, errs, secs, timed_out, stuck = pytest(cmd, files, cwd=cwd, skip=skip)
         total += secs
-        for k, v in out.items():
-            if k != hung:
-                merged[k] = v
-        errors = sorted(set(errors) | set(errs))
-        if hung is None or hung in skip:
+        errors |= set(errs)
+        if stuck is None:
+            if timed_out:
+                break  # hung outside any test or collector: keep only what reported before the run limit
+            merged.update({k: v for k, v in out.items() if k not in merged})
             break
-        merged[hung] = "TIMEOUT"
-        skip = set(merged)
-    return merged, errors, total
+        kind, node = stuck
+        merged.update({k: v for k, v in out.items() if k not in merged and k != node})
+        if kind in ("hang", "crash"):
+            if node in merged:
+                break  # cannot happen: a decided test is deselected; stop rather than loop
+            merged[node] = "TIMEOUT" if kind == "hang" else "CRASHED"
+            skip = set(merged)
+        else:
+            gone = [f for f in files if f == node or f.startswith(node.rstrip("/") + "/") or node in ("", ".")]
+            if not gone:
+                break
+            errors |= set(gone)
+            files = [f for f in files if f not in gone]
+            skip = set(merged)
+            if not files:
+                break
+    return merged, sorted(errors), total
 
 
 def outcomes(cmd, files, repeats, cwd="/testbed"):
@@ -184,28 +229,33 @@ def outcomes(cmd, files, repeats, cwd="/testbed"):
     return {"runs": runs, "seconds": secs, "collection_errors": errs}
 
 
-def mutants(cmd, files, muts, ids, root="/testbed"):
-    """Each mutant is killed when any test in `ids` is not PASSED, or the run times out or hangs. Only tests that
-    also pass in this run of the same file subset on the unmutated reference count; any other is reported."""
-    ref, _, ref_seconds, _, _ = pytest(cmd, files, cwd=root)
+def mutants(cmd, files, muts, ids, root="/testbed", skip=()):
+    """Each mutant is killed when any test in `ids` is not PASSED, or the run times out or hangs. Tests in `skip`
+    (those that hung or crashed on the reference) are deselected in every run. Only tests that also pass in this
+    run of the same files on the unmutated reference count; any other is reported."""
+    ref, _, ref_seconds, ref_timed_out, ref_stuck = pytest(cmd, files, cwd=root, skip=skip)
+    if ref_timed_out or ref_stuck:
+        ref = {}  # the subset reference run itself failed: no test can be trusted, so none counts
     dropped = sorted(i for i in ids if ref.get(i) != "PASSED")
     ids = [i for i in ids if ref.get(i) == "PASSED"]
     limit = max(3 * ref_seconds, ref_seconds + 10)
     results = []
-    for m in muts:
+    for m in muts if ids else []:
         path = os.path.join(root, m["path"])
         with open(path, "rb") as f:
             src = f.read()
         try:
             with open(path, "wb") as f:
                 f.write(src[: m["start"]] + m["new"].encode() + src[m["end"]:])
-            o, _, _, timed_out, hung = pytest(cmd, files, timeout=limit, cwd=root)
+            o, _, _, timed_out, stuck = pytest(cmd, files, timeout=limit, cwd=root, skip=skip)
         finally:
             with open(path, "wb") as f:
                 f.write(src)
         failing = sorted(i for i in ids if o.get(i, "MISSING") != "PASSED")
-        timeout = timed_out or hung is not None
+        timeout = timed_out or stuck is not None
         results.append({"id": m["id"], "killed": timeout or bool(failing), "timeout": timeout, "failing": failing})
+    if not ids:
+        results = [{"id": m["id"], "killed": False, "timeout": False, "failing": []} for m in muts]
     return {"ref_seconds": ref_seconds, "limit_seconds": limit, "results": results, "used_ids": ids,
             "dropped_not_passing_in_subset": dropped}
 
@@ -216,5 +266,6 @@ if __name__ == "__main__":
     if mode == "outcomes":
         res = outcomes(cmd, files, int(sys.argv[4]))
     else:
-        res = mutants(cmd, files, json.load(open(sys.argv[4]))["mutants"], json.load(open(sys.argv[5])))
+        skip = json.load(open(sys.argv[6])) if len(sys.argv) > 6 else []
+        res = mutants(cmd, files, json.load(open(sys.argv[4]))["mutants"], json.load(open(sys.argv[5])), skip=skip)
     json.dump(res, sys.stdout)

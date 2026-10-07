@@ -106,3 +106,41 @@ def test_mutant_that_hangs_is_a_timeout_kill(repo, monkeypatch):
     res = runner.mutants(CMD, ["test_tdd_a.py"], [hang], ["test_tdd_a.py::test_kills"], root=str(repo))
     assert res["results"][0]["killed"] and res["results"][0]["timeout"]
     assert open(repo / "mod.py").read() == "def double(x):\n    return x * 2\n"
+
+
+def test_mutant_runs_skip_a_test_that_hung_on_the_reference(repo, monkeypatch):
+    """Review finding: without the skip, every mutant hit the watchdog and counted as killed."""
+    (repo / "test_tdd_hang.py").write_text(HANG_SUITE)
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    identity = {"id": 0, "path": "mod.py", "start": 26, "end": 31, "new": "x * 2"}
+    wrong = {"id": 1, "path": "mod.py", "start": 26, "end": 31, "new": "x * 3"}
+    res = runner.mutants(CMD, ["test_tdd_hang.py"], [identity, wrong],
+                         ["test_tdd_hang.py::test_a", "test_tdd_hang.py::test_z"], root=str(repo),
+                         skip=["test_tdd_hang.py::test_hang"])
+    assert [(r["killed"], r["timeout"]) for r in res["results"]] == [(False, False), (True, False)]
+
+
+def test_collection_hang_loses_only_its_file(repo, monkeypatch):
+    (repo / "test_tdd_colhang.py").write_text("sum(range(10**14))\n\ndef test_never():\n    pass\n")
+    monkeypatch.setitem(runner.ENV, "TDD_HARD", "2")
+    o, errors, _ = runner.run_all(CMD, ["test_tdd_a.py", "test_tdd_colhang.py"], cwd=str(repo))
+    assert o["test_tdd_a.py::test_kills"] == "PASSED" and "test_tdd_colhang.py" in errors
+    assert not any(k.startswith("test_tdd_colhang.py::") for k in o)
+
+
+def test_crash_inside_a_test_is_crashed_and_the_rest_still_run(repo):
+    (repo / "test_tdd_crash.py").write_text(
+        "import os\nfrom mod import double\n\ndef test_a():\n    assert double(1) == 2\n\n"
+        "def test_crash():\n    os._exit(3)\n\ndef test_z():\n    assert double(5) == 10\n")
+    o, _, _ = runner.run_all(CMD, ["test_tdd_crash.py"], cwd=str(repo))
+    assert o == {"test_tdd_crash.py::test_a": "PASSED", "test_tdd_crash.py::test_crash": "CRASHED",
+                 "test_tdd_crash.py::test_z": "PASSED"}
+
+
+def test_process_that_will_not_exit_keeps_its_outcomes(repo, monkeypatch):
+    (repo / "test_tdd_noexit.py").write_text(
+        "import threading, time\n\ndef test_t():\n    threading.Thread(target=time.sleep, args=(1000,)).start()\n")
+    monkeypatch.setattr(runner, "EXIT_GRACE", 1)
+    o, _, secs, timed_out, stuck = runner.pytest(CMD, ["test_tdd_noexit.py"], cwd=str(repo), timeout=60)
+    assert o == {"test_tdd_noexit.py::test_t": "PASSED"} and not timed_out and stuck is None and secs < 30
+
