@@ -40,7 +40,7 @@ def harness_commit():
 # --- filtering and draws --------------------------------------------------------
 
 def cmd_filter(prefixes):
-    """Prepare and filter tasks 1 image at a time, removing each image afterwards: disk holds only a few."""
+    """Prepare and filter tasks 1 image at a time. Images stay cached for the pilot and main run."""
     rows = data.load_rows()
     by_image = {}
     for t in sorted(rows):
@@ -53,9 +53,6 @@ def cmd_filter(prefixes):
             r = prepare.prepare(t, rows, seed("mutants"))
             print(t, "keep" if r["keep"] else "drop", {k: r[k]["exit"] for k in ("gold_f2p", "gold_p2p", "stub_p2p")},
               "leak files:", len(r["leak_hits"]), flush=True)
-        for t in tasks:
-            docker.sh("rmi", docker.tag(rows[t], "ref"), docker.tag(rows[t], "stub"), check=False)
-        docker.sh("rmi", image, check=False)
 
 
 def ensure_prepared(row):
