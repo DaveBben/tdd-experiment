@@ -298,10 +298,10 @@ Tasks are chosen in this order:
 5. Run the pilot, then set the task count from [sample size](#sample-size) and commit it here.
 6. Shuffle the rest with a second fixed seed, and take experiment tasks in that order until there are that many, skipping any task that would put more than k tasks from 1 repository in the set, pilot tasks included.
    k is the smallest number, at least 5, for which this yields the task count plus 5 replacements.
-   The filter kept 83 tasks spread so unevenly that k = 5 allows only 41 experiment tasks, fewer than the planned 47, and the [task cap](#settled-decisions) was set so that it never binds below the planned count.
+   The filter kept 86 tasks spread so unevenly that k = 5 allows only 44 experiment tasks, fewer than the planned 47, and the [task cap](#settled-decisions) was set so that it never binds below the planned count.
    The [repository clustering](#analysis) bootstrap reports how much the larger k matters.
    The tasks after them, in the same order, are the replacements used by the [exclusion rules](#exclusions-and-missing-data).
-   The `fast` split's tasks are spread unevenly, from 21 tasks in 1 repository to 1 task in each of 8 others, so this limit allows at most 52 tasks in total, and about 49 after the pilot.
+   The `fast` split's tasks are spread unevenly, from 21 tasks in 1 repository to 1 task in each of 8 others, so a limit of 5 allowed at most 52 tasks before filtering.
 
 Each seed is recorded and committed in `draws/` before the draw that uses it, so the commit history shows that no draw was chosen after the fact.
 Pilot tasks never appear in the experiment results.
