@@ -1,0 +1,26 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_genai_eval_utils.2d5441f2.lv1",
+ "image": "libercoders/featurebench-specs_mlflow-instance_efffa87e@sha256:5a63b594bc99a6dcd876289974979606b276edd49e966020111db3590c40add4",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=20",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 20 passed in 0.25s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 71 passed in 11.74s =============================="
+ },
+ "mutant_pool": 68,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 71 passed in 12.12s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

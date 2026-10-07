@@ -1,0 +1,910 @@
+=== sphinx/builders/linkcheck.py
+"""The CheckExternalLinksBuilder class."""
+
+from __future__ import annotations
+
+import contextlib
+import json
+import re
+import socket
+import time
+from enum import StrEnum
+from html.parser import HTMLParser
+from queue import PriorityQueue, Queue
+from threading import Thread
+from typing import TYPE_CHECKING, NamedTuple, cast
+from urllib.parse import quote, unquote, urlparse, urlsplit, urlunparse
+
+from docutils import nodes
+from requests.exceptions import (
+    ConnectionError,  # NoQA: A004
+    HTTPError,
+    SSLError,
+    TooManyRedirects,
+)
+from requests.exceptions import Timeout as RequestTimeout
+
+from sphinx._cli.util.colour import darkgray, darkgreen, purple, red, turquoise
+from sphinx.builders.dummy import DummyBuilder
+from sphinx.errors import ConfigError
+from sphinx.locale import __
+from sphinx.transforms.post_transforms import SphinxPostTransform
+from sphinx.util import logging, requests
+from sphinx.util._uri import encode_uri
+
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+    from typing import Any, Literal, TypeAlias
+
+    from requests import Response
+
+    from sphinx.application import Sphinx
+    from sphinx.config import Config
+    from sphinx.util._pathlib import _StrPath
+    from sphinx.util.typing import ExtensionMetadata
+
+    _URIProperties: TypeAlias = tuple['_Status', str, int]
+
+
+class _Status(StrEnum):
+    BROKEN = 'broken'
+    IGNORED = 'ignored'
+    RATE_LIMITED = 'rate-limited'
+    REDIRECTED = 'redirected'
+    TIMEOUT = 'timeout'
+    UNCHECKED = 'unchecked'
+    UNKNOWN = 'unknown'
+    WORKING = 'working'
+
+
+logger = logging.getLogger(__name__)
+
+# matches to foo:// and // (a protocol relative URL)
+uri_re = re.compile('([a-z]+:)?//')
+
+DEFAULT_REQUEST_HEADERS = {
+    'Accept': 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8',
+}
+CHECK_IMMEDIATELY = 0
+QUEUE_POLL_SECS = 1
+DEFAULT_DELAY = 60.0
+
+
+@object.__new__
+class _SENTINEL_LAR:
+    def __repr__(self) -> str:
+        return '_SENTINEL_LAR'
+
+    def __reduce__(self) -> str:
+        return self.__class__.__name__
+
+
+class CheckExternalLinksBuilder(DummyBuilder):
+    """Checks for broken external links."""
+
+    name = 'linkcheck'
+    epilog = __('Look for any errors in the above output or in %(outdir)s/output.txt')
+
+    def init(self) -> None:
+        self.broken_hyperlinks = 0
+        self.timed_out_hyperlinks = 0
+        self.hyperlinks: dict[str, Hyperlink] = {}
+        # set a timeout for non-responding servers
+        socket.setdefaulttimeout(5.0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class HyperlinkCollector(SphinxPostTransform):
+    builders = ('linkcheck',)
+    default_priority = 800
+
+    def run(self, **kwargs: Any) -> None:
+        for node in self.document.findall():
+            if uri := self.find_uri(node):
+                self._add_uri(uri, node)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Hyperlink(NamedTuple):
+    uri: str
+    docname: str
+    docpath: _StrPath
+    lineno: int
+
+
+class HyperlinkAvailabilityChecker:
+    def __init__(self, config: Config) -> None:
+        self.config = config
+        self.rate_limits: dict[str, RateLimit] = {}
+        self.rqueue: Queue[CheckResult] = Queue()
+        self.workers: list[Thread] = []
+        self.wqueue: PriorityQueue[CheckRequest] = PriorityQueue()
+        self.num_workers: int = config.linkcheck_workers
+
+        self.to_ignore: list[re.Pattern[str]] = list(
+            map(re.compile, self.config.linkcheck_ignore)
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CheckRequest(NamedTuple):
+    next_check: float
+    hyperlink: Hyperlink | None
+
+
+class CheckResult(NamedTuple):
+    uri: str
+    docname: str
+    lineno: int
+    status: _Status
+    message: str
+    code: int
+
+
+class HyperlinkAvailabilityCheckWorker(Thread):
+    """A worker class for checking the availability of hyperlinks."""
+
+    def __init__(
+        self,
+        config: Config,
+        rqueue: Queue[CheckResult],
+        wqueue: Queue[CheckRequest],
+        rate_limits: dict[str, RateLimit],
+    ) -> None:
+        self.rate_limits = rate_limits
+        self.rqueue = rqueue
+        self.wqueue = wqueue
+
+        self.anchors_ignore: list[re.Pattern[str]] = list(
+            map(re.compile, config.linkcheck_anchors_ignore)
+        )
+        self.anchors_ignore_for_url: list[re.Pattern[str]] = list(
+            map(re.compile, config.linkcheck_anchors_ignore_for_url)
+        )
+        self.documents_exclude: list[re.Pattern[str]] = list(
+            map(re.compile, config.linkcheck_exclude_documents)
+        )
+        self.auth = [
+            (re.compile(pattern), auth_info)
+            for pattern, auth_info in config.linkcheck_auth
+        ]
+
+        self.timeout: int | float | None = config.linkcheck_timeout
+        self.request_headers: dict[str, dict[str, str]] = (
+            config.linkcheck_request_headers
+        )
+        self.check_anchors: bool = config.linkcheck_anchors
+        self.allowed_redirects: dict[re.Pattern[str], re.Pattern[str]]
+        self.allowed_redirects = config.linkcheck_allowed_redirects
+        self.retries: int = config.linkcheck_retries
+        self.rate_limit_timeout = config.linkcheck_rate_limit_timeout
+        self._allow_unauthorized = config.linkcheck_allow_unauthorized
+        self._timeout_status: Literal[_Status.BROKEN, _Status.TIMEOUT]
+        if config.linkcheck_report_timeouts_as_broken:
+            self._timeout_status = _Status.BROKEN
+        else:
+            self._timeout_status = _Status.TIMEOUT
+
+        self.user_agent = config.user_agent
+        self.tls_verify = config.tls_verify
+        self.tls_cacerts = config.tls_cacerts
+
+        self._session = requests._Session(
+            _ignored_redirects=tuple(map(re.compile, config.linkcheck_ignore))
+        )
+
+        super().__init__(daemon=True)
+
+    def limit_rate(self, response_url: str, retry_after: str | None) -> float | None:
+        """
+        Implements rate limiting for HTTP requests to prevent overwhelming servers.
+
+        This method handles HTTP 429 (Too Many Requests) responses by implementing
+        exponential backoff with configurable timeout limits. It parses the server's
+        Retry-After header to determine appropriate delay times and manages rate
+        limiting state per network location.
+
+        Parameters
+        ----------
+        response_url : str
+            The URL of the HTTP response that triggered rate limiting. Used to
+            extract the network location (netloc) for rate limit tracking.
+        retry_after : str | None
+            The value of the Retry-After header from the HTTP response. Can be:
+            - A number of seconds to wait (as string)
+            - An HTTP-date indicating when to retry
+            - None if no Retry-After header was present
+
+        Returns
+        -------
+        float | None
+            The timestamp (in seconds since epoch) when the next check should be
+            attempted. Returns None if the maximum rate limit timeout has been
+            exceeded, indicating the URL should be marked as broken rather than
+            retried.
+
+        Notes
+        -----
+        - Uses exponential backoff strategy, doubling the delay time on each
+          subsequent rate limit encounter for the same network location
+        - Respects the server's Retry-After header when provided
+        - Falls back to DEFAULT_DELAY (60.0 seconds) for new rate limits
+        - Rate limits are tracked per network location (netloc) to avoid
+          affecting other domains
+        - For history-based backoff, if delay exceeds `rate_limit_timeout`, returns
+          None to indicate the link should be considered broken
+        - Updates the internal rate_limits dictionary with new RateLimit objects
+          containing delay and next_check timestamp information
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class AnchorCheckParser(HTMLParser):
+    """Specialised HTML parser that looks for a specific anchor."""
+
+    def __init__(self, search_anchor: str) -> None:
+        """
+        Initialize an AnchorCheckParser instance for searching a specific anchor in HTML content.
+
+        This parser extends HTMLParser to look for a matching 'id' or 'name' attribute
+        on any HTML start tag; the tag itself need not be an `<a>` element.
+
+        Parameters
+        ----------
+        search_anchor : str
+            The anchor name/ID to search for in the HTML content. This should be the
+            fragment part of a URL (the part after '#') that identifies a specific
+            location within an HTML document.
+
+        Attributes
+        ----------
+        search_anchor : str
+            Stores the anchor name being searched for
+        found : bool
+            Boolean flag indicating whether the target anchor has been found during
+            parsing. Initially set to False and becomes True when a matching anchor
+            is discovered.
+
+        Notes
+        -----
+        - The parser will search for both 'id' and 'name' attributes in HTML tags
+        - Once the target anchor is found, the 'found' attribute is set to True
+        - This parser is typically used in conjunction with HTTP response content
+          to verify that anchor links point to valid locations within documents
+        - The search is case-sensitive and looks for exact matches
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class RateLimit(NamedTuple):
+    delay: float
+    next_check: float
+
+
+def rewrite_github_anchor(app: Sphinx, uri: str) -> str | None:
+    """Rewrite anchor name of the hyperlink to github.com
+
+    The hyperlink anchors in github.com are dynamically generated.  This rewrites
+    them before checking and makes them comparable.
+    """
+    parsed = urlparse(uri)
+    if parsed.hostname == 'github.com' and parsed.fragment:
+        prefixed = parsed.fragment.startswith('user-content-')
+        if not prefixed:
+            fragment = f'user-content-{parsed.fragment}'
+            return urlunparse(parsed._replace(fragment=fragment))
+    return None
+
+
+def compile_linkcheck_allowed_redirects(app: Sphinx, config: Config) -> None:
+    """Compile patterns to the regexp objects."""
+    if config.linkcheck_allowed_redirects is _SENTINEL_LAR:
+        return
+    if not isinstance(config.linkcheck_allowed_redirects, dict):
+        msg = __(
+            f'Invalid value `{config.linkcheck_allowed_redirects!r}` in '
+            'linkcheck_allowed_redirects. Expected a dictionary.'
+        )
+        raise ConfigError(msg)
+    allowed_redirects = {}
+    for url, pattern in config.linkcheck_allowed_redirects.items():
+        try:
+            allowed_redirects[re.compile(url)] = re.compile(pattern)
+        except re.error as exc:
+            logger.warning(
+                __('Failed to compile regex in linkcheck_allowed_redirects: %r %s'),
+                exc.pattern,
+                exc.msg,
+            )
+    config.linkcheck_allowed_redirects = allowed_redirects
+
+
+def setup(app: Sphinx) -> ExtensionMetadata:
+    app.add_builder(CheckExternalLinksBuilder)
+    app.add_post_transform(HyperlinkCollector)
+
+    app.add_config_value('linkcheck_ignore', [], '', types=frozenset({list, tuple}))
+    app.add_config_value(
+        'linkcheck_exclude_documents', [], '', types=frozenset({list, tuple})
+    )
+    app.add_config_value(
+        'linkcheck_allowed_redirects', _SENTINEL_LAR, '', types=frozenset({dict})
+    )
+    app.add_config_value('linkcheck_auth', [], '', types=frozenset({list, tuple}))
+    app.add_config_value('linkcheck_request_headers', {}, '', types=frozenset({dict}))
+    app.add_config_value('linkcheck_retries', 1, '', types=frozenset({int}))
+    app.add_config_value('linkcheck_timeout', 30, '', types=frozenset({float, int}))
+    app.add_config_value('linkcheck_workers', 5, '', types=frozenset({int}))
+    app.add_config_value('linkcheck_anchors', True, '', types=frozenset({bool}))
+    # Anchors starting with ! are ignored since they are
+    # commonly used for dynamic pages
+    app.add_config_value(
+        'linkcheck_anchors_ignore', ['^!'], '', types=frozenset({list, tuple})
+    )
+    app.add_config_value(
+        'linkcheck_anchors_ignore_for_url', (), '', types=frozenset({list, tuple})
+    )
+    app.add_config_value(
+        'linkcheck_rate_limit_timeout', 300.0, '', types=frozenset({float, int})
+    )
+    app.add_config_value(
+        'linkcheck_allow_unauthorized', False, '', types=frozenset({bool})
+    )
+    app.add_config_value(
+        'linkcheck_report_timeouts_as_broken', False, '', types=frozenset({bool})
+    )
+
+    app.add_event('linkcheck-process-uri')
+
+    # priority 900 to happen after ``check_confval_types()``
+    app.connect('config-inited', compile_linkcheck_allowed_redirects, priority=900)
+
+    # FIXME: Disable URL rewrite handler for github.com temporarily.
+    # See: https://github.com/sphinx-doc/sphinx/issues/9435
+    # app.connect('linkcheck-process-uri', rewrite_github_anchor)
+
+    return {
+        'version': 'builtin',
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }

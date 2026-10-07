@@ -1,0 +1,1999 @@
+=== mesonbuild/cargo/cfg.py
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2022-2023 Intel Corporation
+
+"""Rust CFG parser.
+
+Rust uses its `cfg()` format in cargo.
+https://doc.rust-lang.org/reference/conditional-compilation.html
+
+This may have the following functions:
+ - all()
+ - any()
+ - not()
+
+And additionally is made up of `identifier [ = str]`. Where the str is optional,
+so you could have examples like:
+```
+[target.`cfg(unix)`.dependencies]
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+[target.'cfg(all(target_arch = "x86_64", target_arch = "x86"))'.dependencies]
+```
+"""
+
+from __future__ import annotations
+import dataclasses
+import enum
+import typing as T
+
+
+from ..mesonlib import MesonBugException
+
+if T.TYPE_CHECKING:
+    _T = T.TypeVar('_T')
+    _LEX_TOKEN = T.Tuple['TokenType', T.Optional[str]]
+    _LEX_STREAM = T.Iterator[_LEX_TOKEN]
+    _LEX_STREAM_AH = T.Iterator[T.Tuple[_LEX_TOKEN, T.Optional[_LEX_TOKEN]]]
+
+
+class TokenType(enum.Enum):
+
+    LPAREN = enum.auto()
+    RPAREN = enum.auto()
+    STRING = enum.auto()
+    IDENTIFIER = enum.auto()
+    ALL = enum.auto()
+    ANY = enum.auto()
+    NOT = enum.auto()
+    COMMA = enum.auto()
+    EQUAL = enum.auto()
+    CFG = enum.auto()
+
+
+def lexer(raw: str) -> _LEX_STREAM:
+    """Lex a cfg() expression.
+
+    :param raw: The raw cfg() expression
+    :return: An iterable of tokens
+    """
+    start: int = 0
+    is_string: bool = False
+    for i, s in enumerate(raw):
+        if s.isspace() or s in {')', '(', ',', '=', '"'}:
+            val = raw[start:i]
+            start = i + 1
+            if s == '"' and is_string:
+                yield (TokenType.STRING, val)
+                is_string = False
+                continue
+            elif val == 'any':
+                yield (TokenType.ANY, None)
+            elif val == 'all':
+                yield (TokenType.ALL, None)
+            elif val == 'not':
+                yield (TokenType.NOT, None)
+            elif val == 'cfg':
+                yield (TokenType.CFG, None)
+            elif val:
+                yield (TokenType.IDENTIFIER, val)
+
+            if s == '(':
+                yield (TokenType.LPAREN, None)
+            elif s == ')':
+                yield (TokenType.RPAREN, None)
+            elif s == ',':
+                yield (TokenType.COMMA, None)
+            elif s == '=':
+                yield (TokenType.EQUAL, None)
+            elif s == '"':
+                is_string = True
+    val = raw[start:]
+    if val:
+        # This should always be an identifier
+        yield (TokenType.IDENTIFIER, val)
+
+
+def lookahead(iter: T.Iterator[_T]) -> T.Iterator[T.Tuple[_T, T.Optional[_T]]]:
+    """Get the current value of the iterable, and the next if possible.
+
+    :param iter: The iterable to look into
+    :yield: A tuple of the current value, and, if possible, the next
+    :return: nothing
+    """
+    current: _T
+    next_: T.Optional[_T]
+    try:
+        next_ = next(iter)
+    except StopIteration:
+        # This is an empty iterator, there's nothing to look ahead to
+        return
+
+    while True:
+        current = next_
+        try:
+            next_ = next(iter)
+        except StopIteration:
+            next_ = None
+
+        yield current, next_
+
+        if next_ is None:
+            break
+
+
+@dataclasses.dataclass
+class IR:
+
+    """Base IR node for Cargo CFG."""
+
+
+@dataclasses.dataclass
+class String(IR):
+
+    value: str
+
+
+@dataclasses.dataclass
+class Identifier(IR):
+
+    value: str
+
+
+@dataclasses.dataclass
+class Equal(IR):
+
+    lhs: Identifier
+    rhs: String
+
+
+@dataclasses.dataclass
+class Any(IR):
+
+    args: T.List[IR]
+
+
+@dataclasses.dataclass
+class All(IR):
+
+    args: T.List[IR]
+
+
+@dataclasses.dataclass
+class Not(IR):
+
+    value: IR
+
+
+def _parse(ast: _LEX_STREAM_AH) -> IR:
+    (token, value), n_stream = next(ast)
+    if n_stream is not None:
+        ntoken, _ = n_stream
+    else:
+        ntoken, _ = (None, None)
+
+    if token is TokenType.IDENTIFIER:
+        assert value
+        id_ = Identifier(value)
+        if ntoken is TokenType.EQUAL:
+            next(ast)
+            (token, value), _ = next(ast)
+            assert token is TokenType.STRING
+            assert value is not None
+            return Equal(id_, String(value))
+        return id_
+    elif token in {TokenType.ANY, TokenType.ALL}:
+        type_ = All if token is TokenType.ALL else Any
+        args: T.List[IR] = []
+        (token, value), n_stream = next(ast)
+        assert token is TokenType.LPAREN
+        if n_stream and n_stream[0] == TokenType.RPAREN:
+            return type_(args)
+        while True:
+            args.append(_parse(ast))
+            (token, value), _ = next(ast)
+            if token is TokenType.RPAREN:
+                break
+            assert token is TokenType.COMMA
+        return type_(args)
+    elif token in {TokenType.NOT, TokenType.CFG}:
+        is_not = token is TokenType.NOT
+        (token, value), _ = next(ast)
+        assert token is TokenType.LPAREN
+        arg = _parse(ast)
+        (token, value), _ = next(ast)
+        assert token is TokenType.RPAREN
+        return Not(arg) if is_not else arg
+    else:
+        raise MesonBugException(f'Unhandled Cargo token:{token} {value}')
+
+
+
+
+
+
+
+
+
+
+
+
+def _eval_cfg(ir: IR, cfgs: T.Dict[str, str]) -> bool:
+    if isinstance(ir, Identifier):
+        return ir.value in cfgs
+    elif isinstance(ir, Equal):
+        return cfgs.get(ir.lhs.value) == ir.rhs.value
+    elif isinstance(ir, Not):
+        return not _eval_cfg(ir.value, cfgs)
+    elif isinstance(ir, Any):
+        return any(_eval_cfg(i, cfgs) for i in ir.args)
+    elif isinstance(ir, All):
+        return all(_eval_cfg(i, cfgs) for i in ir.args)
+    else:
+        raise MesonBugException(f'Unhandled Cargo cfg IR: {ir}')
+
+
+def eval_cfg(raw: str, cfgs: T.Dict[str, str]) -> bool:
+    """
+    Evaluate a Rust cfg() expression against a set of configuration values.
+
+    This function parses and evaluates Rust conditional compilation expressions
+    used in Cargo.toml files. It supports the implemented subset: identifiers,
+    quoted-string equality, the `cfg()` wrapper, and nested `all`, `any`, and
+    `not` operators.
+
+    Args:
+        raw (str): The raw cfg() expression string to evaluate. Examples:
+            - "unix" - checks if 'unix' key exists in cfgs
+            - 'target_arch = "x86_64"' - checks if target_arch equals "x86_64"
+            - 'all(unix, target_arch = "x86_64")' - checks both conditions
+            - 'any(windows, unix)' - checks if either condition is true
+            - 'not(windows)' - negates the condition
+        cfgs (Dict[str, str]): A dictionary mapping configuration keys to their
+            values. Used to resolve identifiers and equality comparisons in the
+            cfg expression.
+
+    Returns:
+        bool: True if the cfg expression evaluates to true given the provided
+            configuration values, False otherwise.
+
+    Raises:
+        MesonBugException: If the cfg expression contains unhandled or invalid
+            tokens that cannot be parsed or evaluated.
+
+    """
+    raise NotImplementedError
+
+
+def parse(ast: _LEX_STREAM) -> IR:
+    """
+    Parse the tokenized list into an intermediate representation (IR) tree.
+
+    This function converts lexical tokens for Rust ``cfg()`` expressions into
+    the corresponding intermediate representation. Supported expressions include
+    identifiers, string equality, and nested ``all``, ``any``, and ``not`` forms.
+
+    Args:
+        ast: An iterator of lexical tokens, where each token is a tuple of
+             (TokenType, Optional[str]).
+
+    Returns:
+        IR: The root node representing the parsed cfg expression.
+
+    Raises:
+        MesonBugException: If an unhandled or unexpected token type is encountered
+                          during parsing, indicating a bug in the parser logic.
+        AssertionError: If the token stream doesn't match expected grammar rules
+                       (e.g., missing parentheses, wrong token sequence).
+        StopIteration: If the token stream ends unexpectedly while parsing.
+
+    Malformed token streams may result in the documented assertion or parsing errors.
+    """
+    raise NotImplementedError
+
+=== mesonbuild/cargo/interpreter.py
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2022-2024 Intel Corporation
+
+"""Interpreter for converting Cargo Toml definitions to Meson AST
+
+There are some notable limits here. We don't even try to convert something with
+a build.rs: there's so few limits on what Cargo allows a build.rs (basically
+none), and no good way for us to convert them. In that case, an actual meson
+port will be required.
+"""
+
+from __future__ import annotations
+import dataclasses
+import functools
+import os
+import pathlib
+import collections
+import urllib.parse
+import typing as T
+
+from . import builder, version
+
+
+from .manifest import Manifest, CargoLock, CargoLockPackage, Workspace, fixup_meson_varname
+from ..mesonlib import is_parent_path, MesonException, MachineChoice, version_compare
+from .. import coredata, mlog
+from ..wrap.wrap import PackageDefinition
+
+if T.TYPE_CHECKING:
+    from . import raw
+    from .. import mparser
+    from .manifest import Dependency, SystemDependency
+    from ..environment import Environment
+    from ..interpreterbase import SubProject
+    from ..compilers.rust import RustCompiler
+
+    from typing_extensions import Literal
+
+
+
+
+
+
+def _dependency_varname(dep: Dependency) -> str:
+    return f'{fixup_meson_varname(dep.package)}_{(dep.api.replace(".", "_"))}_dep'
+
+
+def _library_name(name: str, api: str, lib_type: Literal['rust', 'c', 'proc-macro'] = 'rust') -> str:
+    # Add the API version to the library name to avoid conflicts when multiple
+    # versions of the same crate are used. The Ninja backend removed everything
+    # after the + to form the crate name.
+    if lib_type == 'c':
+        return name
+    return f'{name}+{api.replace(".", "_")}'
+
+
+def _extra_args_varname() -> str:
+    return 'extra_args'
+
+
+def _extra_deps_varname() -> str:
+    return 'extra_deps'
+
+
+@dataclasses.dataclass
+class PackageConfiguration:
+    """Configuration for a package during dependency resolution."""
+    features: T.Set[str] = dataclasses.field(default_factory=set)
+    required_deps: T.Set[str] = dataclasses.field(default_factory=set)
+    optional_deps_features: T.Dict[str, T.Set[str]] = dataclasses.field(default_factory=lambda: collections.defaultdict(set))
+    # Cache of resolved dependency packages
+    dep_packages: T.Dict[PackageKey, PackageState] = dataclasses.field(default_factory=dict)
+
+    def get_features_args(self) -> T.List[str]:
+        """Get feature configuration arguments."""
+        args: T.List[str] = []
+        for feature in self.features:
+            args.extend(['--cfg', f'feature="{feature}"'])
+        return args
+
+    def get_dependency_map(self, manifest: Manifest) -> T.Dict[str, str]:
+        """Get the rust dependency mapping for this package configuration."""
+        dependency_map: T.Dict[str, str] = {}
+        for name in self.required_deps:
+            dep = manifest.dependencies[name]
+            dep_key = PackageKey(dep.package, dep.api)
+            dep_pkg = self.dep_packages[dep_key]
+            dep_lib_name = _library_name(dep_pkg.manifest.lib.name, dep_pkg.manifest.package.api)
+            dep_crate_name = name if name != dep.package else dep_pkg.manifest.lib.name
+            dependency_map[dep_lib_name] = dep_crate_name
+        return dependency_map
+
+
+@dataclasses.dataclass
+class PackageState:
+    manifest: Manifest
+    downloaded: bool = False
+    # If this package is member of a workspace.
+    ws_subdir: T.Optional[str] = None
+    ws_member: T.Optional[str] = None
+    # Package configuration state
+    cfg: T.Optional[PackageConfiguration] = None
+
+    def get_env_dict(self, environment: Environment, subdir: str) -> T.Dict[str, str]:
+        """Get environment variables for this package."""
+        # Common variables for build.rs and crates
+        # https://doc.rust-lang.org/cargo/reference/environment-variables.html
+        # OUT_DIR is the directory where build.rs generate files. In our case,
+        # it's the directory where meson/meson.build places generated files.
+        out_dir = os.path.join(environment.build_dir, subdir, 'meson')
+        os.makedirs(out_dir, exist_ok=True)
+        version_arr = self.manifest.package.version.split('.')
+        version_arr += [''] * (4 - len(version_arr))
+
+        return {
+            'OUT_DIR': out_dir,
+            'CARGO_MANIFEST_DIR': os.path.join(environment.source_dir, subdir),
+            'CARGO_MANIFEST_PATH': os.path.join(environment.source_dir, subdir, 'Cargo.toml'),
+            'CARGO_PKG_VERSION': self.manifest.package.version,
+            'CARGO_PKG_VERSION_MAJOR': version_arr[0],
+            'CARGO_PKG_VERSION_MINOR': version_arr[1],
+            'CARGO_PKG_VERSION_PATCH': version_arr[2],
+            'CARGO_PKG_VERSION_PRE': version_arr[3],
+            'CARGO_PKG_AUTHORS': ','.join(self.manifest.package.authors),
+            'CARGO_PKG_NAME': self.manifest.package.name,
+            # FIXME: description can contain newlines which breaks ninja.
+            #'CARGO_PKG_DESCRIPTION': self.manifest.package.description or '',
+            'CARGO_PKG_HOMEPAGE': self.manifest.package.homepage or '',
+            'CARGO_PKG_REPOSITORY': self.manifest.package.repository or '',
+            'CARGO_PKG_LICENSE': self.manifest.package.license or '',
+            'CARGO_PKG_LICENSE_FILE': self.manifest.package.license_file or '',
+            'CARGO_PKG_RUST_VERSION': self.manifest.package.rust_version or '',
+            'CARGO_PKG_README': self.manifest.package.readme or '',
+            'CARGO_CRATE_NAME': fixup_meson_varname(self.manifest.package.name),
+        }
+
+    def get_lint_args(self, rustc: RustCompiler) -> T.List[str]:
+        """Get lint arguments for this package."""
+        args: T.List[str] = []
+        has_check_cfg = rustc.has_check_cfg
+
+        for lint in self.manifest.lints:
+            args.extend(lint.to_arguments(has_check_cfg))
+
+        if has_check_cfg:
+            for feature in self.manifest.features:
+                if feature != 'default':
+                    args.append('--check-cfg')
+                    args.append(f'cfg(feature,values("{feature}"))')
+            for name in self.manifest.system_dependencies:
+                args.append('--check-cfg')
+                args.append(f'cfg(system_deps_have_{fixup_meson_varname(name)})')
+
+        return args
+
+    def get_env_args(self, rustc: RustCompiler, environment: Environment, subdir: str) -> T.List[str]:
+        """Get environment variable arguments for rustc."""
+        enable_env_set_args = rustc.enable_env_set_args()
+        if enable_env_set_args is None:
+            return []
+
+        env_dict = self.get_env_dict(environment, subdir)
+        env_args = list(enable_env_set_args)
+        for k, v in env_dict.items():
+            env_args.extend(['--env-set', f'{k}={v}'])
+        return env_args
+
+    def get_rustc_args(self, environment: Environment, subdir: str, machine: MachineChoice) -> T.List[str]:
+        """Get rustc arguments for this package."""
+        if not environment.is_cross_build():
+            machine = MachineChoice.HOST
+
+        rustc = T.cast('RustCompiler', environment.coredata.compilers[machine]['rust'])
+
+        cfg = self.cfg
+
+        args: T.List[str] = []
+        args.extend(self.get_lint_args(rustc))
+        args.extend(cfg.get_features_args())
+        args.extend(self.get_env_args(rustc, environment, subdir))
+        return args
+
+
+@dataclasses.dataclass(frozen=True)
+class PackageKey:
+    package_name: str
+    api: str
+
+
+@dataclasses.dataclass
+class WorkspaceState:
+    workspace: Workspace
+    subdir: str
+    downloaded: bool = False
+    # member path -> PackageState, for all members of this workspace
+    packages: T.Dict[str, PackageState] = dataclasses.field(default_factory=dict)
+    # package name to member path, for all members of this workspace
+    packages_to_member: T.Dict[str, str] = dataclasses.field(default_factory=dict)
+    # member paths that are required to be built
+    required_members: T.List[str] = dataclasses.field(default_factory=list)
+
+
+class Interpreter:
+    def __init__(self, env: Environment, subdir: str, subprojects_dir: str) -> None:
+        self.environment = env
+        self.subprojects_dir = subprojects_dir
+        # Map Cargo.toml's subdir to loaded manifest.
+        self.manifests: T.Dict[str, T.Union[Manifest, Workspace]] = {}
+        # Map of cargo package (name + api) to its state
+        self.packages: T.Dict[PackageKey, PackageState] = {}
+        # Map subdir to workspace
+        self.workspaces: T.Dict[str, WorkspaceState] = {}
+        # Files that should trigger a reconfigure if modified
+        self.build_def_files: T.List[str] = []
+        # Cargo packages
+        filename = os.path.join(self.environment.get_source_dir(), subdir, 'Cargo.lock')
+        subprojects_dir = os.path.join(self.environment.get_source_dir(), subprojects_dir)
+        self.cargolock = load_cargo_lock(filename, subprojects_dir)
+        if self.cargolock:
+            self.environment.wrap_resolver.merge_wraps(self.cargolock.wraps)
+            self.build_def_files.append(filename)
+
+    def get_build_def_files(self) -> T.List[str]:
+        return self.build_def_files
+
+    def _prepare_entry_point(self, ws: WorkspaceState) -> None:
+        pkgs = [self._require_workspace_member(ws, m) for m in ws.workspace.default_members]
+        for pkg in pkgs:
+            self._prepare_package(pkg)
+            self._enable_feature(pkg, 'default')
+
+    def interpret(self, subdir: str, project_root: T.Optional[str] = None) -> mparser.CodeBlockNode:
+        manifest, cached = self._load_manifest(subdir)
+        filename = os.path.join(self.environment.source_dir, subdir, 'Cargo.toml')
+        build = builder.Builder(filename)
+        if project_root:
+            # this is a subdir()
+            assert isinstance(manifest, Manifest)
+            return self.interpret_package(manifest, build, subdir, project_root)
+
+        ws = self._get_workspace(manifest, subdir, downloaded=False)
+        if not cached:
+            self._prepare_entry_point(ws)
+        return self.interpret_workspace(ws, build, subdir)
+
+    def interpret_package(self, manifest: Manifest, build: builder.Builder, subdir: str, project_root: str) -> mparser.CodeBlockNode:
+        # Build an AST for this package
+        ws = self.workspaces[project_root]
+        member = ws.packages_to_member[manifest.package.name]
+        pkg = ws.packages[member]
+        ast = self._create_package(pkg, build, subdir)
+        return build.block(ast)
+
+    def _create_package(self, pkg: PackageState, build: builder.Builder, subdir: str) -> T.List[mparser.BaseNode]:
+        cfg = pkg.cfg
+        ast: T.List[mparser.BaseNode] = [
+            build.assign(build.array([build.string(f) for f in cfg.features]), 'features'),
+            build.function('message', [
+                build.string('Enabled features:'),
+                build.identifier('features'),
+            ]),
+        ]
+        ast += self._create_dependencies(pkg, build)
+        ast += self._create_meson_subdir(build)
+
+        if pkg.manifest.lib:
+            crate_type = pkg.manifest.lib.crate_type
+            if 'dylib' in crate_type and 'cdylib' in crate_type:
+                raise MesonException('Cannot build both dylib and cdylib due to file name conflict')
+            if 'proc-macro' in crate_type:
+                ast.extend(self._create_lib(pkg, build, subdir, 'proc-macro', shared=True))
+            if any(x in crate_type for x in ['lib', 'rlib', 'dylib']):
+                ast.extend(self._create_lib(pkg, build, subdir, 'rust',
+                                            static=('lib' in crate_type or 'rlib' in crate_type),
+                                            shared='dylib' in crate_type))
+            if any(x in crate_type for x in ['staticlib', 'cdylib']):
+                ast.extend(self._create_lib(pkg, build, subdir, 'c',
+                                            static='staticlib' in crate_type,
+                                            shared='cdylib' in crate_type))
+
+        return ast
+
+    def interpret_workspace(self, ws: WorkspaceState, build: builder.Builder, subdir: str) -> mparser.CodeBlockNode:
+        name = os.path.dirname(subdir)
+        subprojects_dir = os.path.join(subdir, 'subprojects')
+        self.environment.wrap_resolver.load_and_merge(subprojects_dir, T.cast('SubProject', name))
+        ast: T.List[mparser.BaseNode] = []
+
+        # Call subdir() for each required member of the workspace. The order is
+        # important, if a member depends on another member, that member must be
+        # processed first.
+        processed_members: T.Dict[str, PackageState] = {}
+
+        def _process_member(member: str) -> None:
+            if member in processed_members:
+                return
+            pkg = ws.packages[member]
+            cfg = pkg.cfg
+            for depname in cfg.required_deps:
+                dep = pkg.manifest.dependencies[depname]
+                if dep.path:
+                    dep_member = os.path.normpath(os.path.join(pkg.ws_member, dep.path))
+                    _process_member(dep_member)
+            if member == '.':
+                ast.extend(self._create_package(pkg, build, subdir))
+            elif is_parent_path(self.subprojects_dir, member):
+                depname = _dependency_name(pkg.manifest.package.name, pkg.manifest.package.api)
+                ast.append(build.function('subproject', [build.string(depname)]))
+            else:
+                ast.append(build.function('subdir', [build.string(member)]))
+            processed_members[member] = pkg
+
+        ast.append(build.assign(build.function('import', [build.string('rust')]), 'rust'))
+        for member in ws.required_members:
+            _process_member(member)
+        ast = self._create_project(name, processed_members.get('.'), build) + ast
+        return build.block(ast)
+
+    def _load_workspace_member(self, ws: WorkspaceState, m: str) -> None:
+        m = os.path.normpath(m)
+        if m in ws.packages:
+            return
+        # Load member's manifest
+        m_subdir = os.path.join(ws.subdir, m)
+        manifest_, _ = self._load_manifest(m_subdir, ws.workspace, m)
+        assert isinstance(manifest_, Manifest)
+        self._add_workspace_member(manifest_, ws, m)
+
+    def _add_workspace_member(self, manifest_: Manifest, ws: WorkspaceState, m: str) -> None:
+        key = PackageKey(manifest_.package.name, manifest_.package.api)
+        ws.packages_to_member[manifest_.package.name] = m
+        if key in self.packages:
+            ws.packages[m] = self.packages[key]
+            self._require_workspace_member(ws, m)
+        else:
+            ws.packages[m] = PackageState(manifest_, ws_subdir=ws.subdir, ws_member=m, downloaded=ws.downloaded)
+
+    def _get_workspace(self, manifest: T.Union[Workspace, Manifest], subdir: str, downloaded: bool) -> WorkspaceState:
+        ws = self.workspaces.get(subdir)
+        if ws:
+            return ws
+        workspace = manifest if isinstance(manifest, Workspace) else \
+            Workspace(root_package=manifest, members=['.'], default_members=['.'])
+        ws = WorkspaceState(workspace, subdir, downloaded=downloaded)
+        if workspace.root_package:
+            self._add_workspace_member(workspace.root_package, ws, '.')
+        for m in workspace.members:
+            self._load_workspace_member(ws, m)
+        self.workspaces[subdir] = ws
+        return ws
+
+    def _record_package(self, pkg: PackageState) -> None:
+        key = PackageKey(pkg.manifest.package.name, pkg.manifest.package.api)
+        if key not in self.packages:
+            self.packages[key] = pkg
+
+    def _require_workspace_member(self, ws: WorkspaceState, member: str) -> PackageState:
+        member = os.path.normpath(member)
+        pkg = ws.packages[member]
+        if member not in ws.required_members:
+            self._record_package(pkg)
+            ws.required_members.append(member)
+        return pkg
+
+    def _fetch_package(self, package_name: str, api: str) -> PackageState:
+        key = PackageKey(package_name, api)
+        pkg = self.packages.get(key)
+        if pkg:
+            return pkg
+        meson_depname = _dependency_name(package_name, api)
+        return self._fetch_package_from_subproject(package_name, meson_depname)
+
+    def _resolve_package(self, package_name: str, version_constraints: T.List[str]) -> T.Optional[CargoLockPackage]:
+        """From all available versions from Cargo.lock, pick the most recent
+           satisfying the constraints and return it."""
+        if self.cargolock:
+            cargo_lock_pkgs = self.cargolock.named(package_name)
+        else:
+            cargo_lock_pkgs = []
+        for cargo_pkg in cargo_lock_pkgs:
+            if all(version_compare(cargo_pkg.version, v) for v in version_constraints):
+                return cargo_pkg
+
+        if not version_constraints:
+            raise MesonException(f'Cannot determine version of cargo package {package_name}')
+        return None
+
+    def _fetch_package_from_subproject(self, package_name: str, meson_depname: str) -> PackageState:
+        subp_name, _ = self.environment.wrap_resolver.find_dep_provider(meson_depname)
+        if subp_name is None:
+            if self.cargolock is None:
+                raise MesonException(f'Dependency {meson_depname!r} not found in any wrap files.')
+            # If Cargo.lock has a different version, this could be a resolution
+            # bug, but maybe also a version mismatch?  I am not sure yet...
+            similar_deps = [pkg.subproject
+                            for pkg in self.cargolock.named(package_name)]
+            if similar_deps:
+                similar_msg = f'Cargo.lock provides: {", ".join(similar_deps)}.'
+            else:
+                similar_msg = 'Cargo.lock does not contain this crate name.'
+            raise MesonException(f'Dependency {meson_depname!r} not found in any wrap files or Cargo.lock; {similar_msg} This could be a Meson bug, please report it.')
+
+        subdir, _ = self.environment.wrap_resolver.resolve(subp_name)
+        subprojects_dir = os.path.join(subdir, 'subprojects')
+        self.environment.wrap_resolver.load_and_merge(subprojects_dir, T.cast('SubProject', meson_depname))
+        manifest, _ = self._load_manifest(subdir)
+        downloaded = \
+            subp_name in self.environment.wrap_resolver.wraps and \
+            self.environment.wrap_resolver.wraps[subp_name].type is not None
+
+        ws = self._get_workspace(manifest, subdir, downloaded=downloaded)
+        member = ws.packages_to_member[package_name]
+        pkg = self._require_workspace_member(ws, member)
+        return pkg
+
+    def _prepare_package(self, pkg: PackageState) -> None:
+        key = PackageKey(pkg.manifest.package.name, pkg.manifest.package.api)
+        assert key in self.packages
+        if pkg.cfg:
+            return
+
+        pkg.cfg = PackageConfiguration()
+        # Merge target specific dependencies that are enabled
+        cfgs = self._get_cfgs(MachineChoice.HOST)
+        for condition, dependencies in pkg.manifest.target.items():
+            if eval_cfg(condition, cfgs):
+                pkg.manifest.dependencies.update(dependencies)
+        # Fetch required dependencies recursively.
+        for depname, dep in pkg.manifest.dependencies.items():
+            if not dep.optional:
+                self._add_dependency(pkg, depname)
+
+    def _dep_package(self, pkg: PackageState, dep: Dependency) -> PackageState:
+        if dep.path:
+            ws = self.workspaces[pkg.ws_subdir]
+            dep_member = os.path.normpath(os.path.join(pkg.ws_member, dep.path))
+            if is_parent_path(self.subprojects_dir, dep_member):
+                if len(pathlib.PurePath(dep_member).parts) != 2:
+                    raise MesonException('found "{self.subprojects_dir}" in path but it is not a valid subproject path')
+            self._load_workspace_member(ws, dep_member)
+            dep_pkg = self._require_workspace_member(ws, dep_member)
+        elif dep.git:
+            _, _, directory = _parse_git_url(dep.git, dep.branch)
+            dep_pkg = self._fetch_package_from_subproject(dep.package, directory)
+        else:
+            cargo_pkg = self._resolve_package(dep.package, dep.meson_version)
+            if cargo_pkg:
+                dep.update_version(f'={cargo_pkg.version}')
+            dep_pkg = self._fetch_package(dep.package, dep.api)
+
+        if not dep.version:
+            dep.update_version(f'={dep_pkg.manifest.package.version}')
+
+        dep_key = PackageKey(dep.package, dep.api)
+        pkg.cfg.dep_packages.setdefault(dep_key, dep_pkg)
+        assert pkg.cfg.dep_packages[dep_key] == dep_pkg
+        return dep_pkg
+
+    def _load_manifest(self, subdir: str, workspace: T.Optional[Workspace] = None, member_path: str = '') -> T.Tuple[T.Union[Manifest, Workspace], bool]:
+        manifest_ = self.manifests.get(subdir)
+        if manifest_:
+            return manifest_, True
+        path = os.path.join(self.environment.source_dir, subdir)
+        filename = os.path.join(path, 'Cargo.toml')
+        self.build_def_files.append(filename)
+        raw_manifest = T.cast('raw.Manifest', load_toml(filename))
+        if 'workspace' in raw_manifest:
+            manifest_ = Workspace.from_raw(raw_manifest, path)
+        elif 'package' in raw_manifest:
+            manifest_ = Manifest.from_raw(raw_manifest, path, workspace, member_path)
+        else:
+            raise MesonException(f'{subdir}/Cargo.toml does not have [package] or [workspace] section')
+        self.manifests[subdir] = manifest_
+        return manifest_, False
+
+    def _add_dependency(self, pkg: PackageState, depname: str) -> None:
+        cfg = pkg.cfg
+        if depname in cfg.required_deps:
+            return
+        dep = pkg.manifest.dependencies.get(depname)
+        if not dep:
+            # It could be build/dev/target dependency. Just ignore it.
+            return
+        cfg.required_deps.add(depname)
+        dep_pkg = self._dep_package(pkg, dep)
+        self._prepare_package(dep_pkg)
+        if dep.default_features:
+            self._enable_feature(dep_pkg, 'default')
+        for f in dep.features:
+            self._enable_feature(dep_pkg, f)
+        for f in cfg.optional_deps_features[depname]:
+            self._enable_feature(dep_pkg, f)
+
+    def _enable_feature(self, pkg: PackageState, feature: str) -> None:
+        cfg = pkg.cfg
+        if feature in cfg.features:
+            return
+        cfg.features.add(feature)
+        # A feature can also be a dependency.
+        if feature in pkg.manifest.dependencies:
+            self._add_dependency(pkg, feature)
+        # Recurse on extra features and dependencies this feature pulls.
+        # https://doc.rust-lang.org/cargo/reference/features.html#the-features-section
+        for f in pkg.manifest.features.get(feature, []):
+            if '/' in f:
+                depname, dep_f = f.split('/', 1)
+                if depname[-1] == '?':
+                    depname = depname[:-1]
+                else:
+                    self._add_dependency(pkg, depname)
+                if depname in cfg.required_deps:
+                    dep = pkg.manifest.dependencies[depname]
+                    dep_pkg = self._dep_package(pkg, dep)
+                    self._enable_feature(dep_pkg, dep_f)
+                else:
+                    # This feature will be enabled only if that dependency
+                    # is later added.
+                    cfg.optional_deps_features[depname].add(dep_f)
+            elif f.startswith('dep:'):
+                self._add_dependency(pkg, f[4:])
+            else:
+                self._enable_feature(pkg, f)
+
+    def has_check_cfg(self, machine: MachineChoice) -> bool:
+        if not self.environment.is_cross_build():
+            machine = MachineChoice.HOST
+        rustc = T.cast('RustCompiler', self.environment.coredata.compilers[machine]['rust'])
+        return rustc.has_check_cfg
+
+    @functools.lru_cache(maxsize=None)
+    def _get_cfgs(self, machine: MachineChoice) -> T.Dict[str, str]:
+        if not self.environment.is_cross_build():
+            machine = MachineChoice.HOST
+        rustc = T.cast('RustCompiler', self.environment.coredata.compilers[machine]['rust'])
+        cfgs = rustc.get_cfgs().copy()
+        rustflags = self.environment.coredata.get_external_args(machine, 'rust')
+        rustflags_i = iter(rustflags)
+        for i in rustflags_i:
+            if i == '--cfg':
+                cfgs.append(next(rustflags_i))
+        return dict(self._split_cfg(i) for i in cfgs)
+
+    @staticmethod
+    def _split_cfg(cfg: str) -> T.Tuple[str, str]:
+        pair = cfg.split('=', maxsplit=1)
+        value = pair[1] if len(pair) > 1 else ''
+        if value and value[0] == '"':
+            value = value[1:-1]
+        return pair[0], value
+
+    def _create_project(self, name: str, pkg: T.Optional[PackageState], build: builder.Builder) -> T.List[mparser.BaseNode]:
+        """Create the project() function call
+
+        :param pkg: The package to generate from
+        :param build: The AST builder
+        :return: a list nodes
+        """
+        args: T.List[mparser.BaseNode] = [
+            build.string(name),
+            build.string('rust'),
+        ]
+        kwargs: T.Dict[str, mparser.BaseNode] = {
+            # Always assume that the generated meson is using the latest features
+            # This will warn when when we generate deprecated code, which is helpful
+            # for the upkeep of the module
+            'meson_version': build.string(f'>= {coredata.stable_version}'),
+        }
+        if not pkg:
+            return [
+                build.function('project', args, kwargs),
+            ]
+
+        default_options: T.Dict[str, mparser.BaseNode] = {}
+        if pkg.downloaded:
+            default_options['warning_level'] = build.string('0')
+
+        kwargs.update({
+            'version': build.string(pkg.manifest.package.version),
+            'default_options': build.dict({build.string(k): v for k, v in default_options.items()}),
+        })
+        if pkg.manifest.package.license:
+            kwargs['license'] = build.string(pkg.manifest.package.license)
+        elif pkg.manifest.package.license_file:
+            kwargs['license_files'] = build.string(pkg.manifest.package.license_file)
+
+        return [build.function('project', args, kwargs)]
+
+    def _create_dependencies(self, pkg: PackageState, build: builder.Builder) -> T.List[mparser.BaseNode]:
+        cfg = pkg.cfg
+        ast: T.List[mparser.BaseNode] = []
+        for depname in cfg.required_deps:
+            dep = pkg.manifest.dependencies[depname]
+            dep_pkg = self._dep_package(pkg, dep)
+            if dep_pkg.manifest.lib:
+                ast += self._create_dependency(dep_pkg, dep, build)
+        ast.append(build.assign(build.array([]), 'system_deps_args'))
+        for name, sys_dep in pkg.manifest.system_dependencies.items():
+            if sys_dep.enabled(cfg.features):
+                ast += self._create_system_dependency(name, sys_dep, build)
+        return ast
+
+    def _create_system_dependency(self, name: str, dep: SystemDependency, build: builder.Builder) -> T.List[mparser.BaseNode]:
+        # TODO: handle feature_overrides
+        kw = {
+            'version': build.array([build.string(s) for s in dep.meson_version]),
+            'required': build.bool(not dep.optional),
+        }
+        varname = f'{fixup_meson_varname(name)}_system_dep'
+        cfg = f'system_deps_have_{fixup_meson_varname(name)}'
+        return [
+            build.assign(
+                build.function(
+                    'dependency',
+                    [build.string(dep.name)],
+                    kw,
+                ),
+                varname,
+            ),
+            build.if_(
+                build.method('found', build.identifier(varname)), build.block([
+                    build.plusassign(
+                        build.array([build.string('--cfg'), build.string(cfg)]),
+                        'system_deps_args'
+                    ),
+                ])
+            ),
+        ]
+
+    def _create_dependency(self, pkg: PackageState, dep: Dependency, build: builder.Builder) -> T.List[mparser.BaseNode]:
+        cfg = pkg.cfg
+        version_ = dep.meson_version or [pkg.manifest.package.version]
+        kw = {
+            'version': build.array([build.string(s) for s in version_]),
+        }
+        # Lookup for this dependency with the features we want in default_options kwarg.
+        #
+        # However, this subproject could have been previously configured with a
+        # different set of features. Cargo collects the set of features globally
+        # but Meson can only use features enabled by the first call that triggered
+        # the configuration of that subproject.
+        #
+        # Verify all features that we need are actually enabled for that dependency,
+        # otherwise abort with an error message. The user has to set the corresponding
+        # option manually with -Dxxx-rs:feature-yyy=true, or the main project can do
+        # that in its project(..., default_options: ['xxx-rs:feature-yyy=true']).
+        return [
+            # xxx_dep = dependency('xxx', version : ...)
+            build.assign(
+                build.function(
+                    'dependency',
+                    [build.string(_dependency_name(dep.package, dep.api))],
+                    kw,
+                ),
+                _dependency_varname(dep),
+            ),
+            # actual_features = xxx_dep.get_variable('features', default_value : '').split(',')
+            build.assign(
+                build.method(
+                    'split',
+                    build.method(
+                        'get_variable',
+                        build.identifier(_dependency_varname(dep)),
+                        [build.string('features')],
+                        {'default_value': build.string('')}
+                    ),
+                    [build.string(',')],
+                ),
+                'actual_features'
+            ),
+            # needed_features = [f1, f2, ...]
+            # foreach f : needed_features
+            #   if f not in actual_features
+            #     error()
+            #   endif
+            # endforeach
+            build.assign(build.array([build.string(f) for f in cfg.features]), 'needed_features'),
+            build.foreach(['f'], build.identifier('needed_features'), build.block([
+                build.if_(build.not_in(build.identifier('f'), build.identifier('actual_features')), build.block([
+                    build.function('error', [
+                        build.string('Dependency'),
+                        build.string(_dependency_name(dep.package, dep.api)),
+                        build.string('previously configured with features'),
+                        build.identifier('actual_features'),
+                        build.string('but need'),
+                        build.identifier('needed_features'),
+                    ])
+                ]))
+            ])),
+        ]
+
+    def _create_meson_subdir(self, build: builder.Builder) -> T.List[mparser.BaseNode]:
+        # Allow Cargo subprojects to add extra Rust args in meson/meson.build file.
+        # This is used to replace build.rs logic.
+
+        # extra_args = []
+        # extra_deps = []
+        # fs = import('fs')
+        # if fs.is_dir('meson')
+        #  subdir('meson')
+        # endif
+        return [
+            build.assign(build.array([]), _extra_args_varname()),
+            build.assign(build.array([]), _extra_deps_varname()),
+            build.assign(build.function('import', [build.string('fs')]), 'fs'),
+            build.if_(build.method('is_dir', build.identifier('fs'), [build.string('meson')]),
+                      build.block([build.function('subdir', [build.string('meson')])]))
+        ]
+
+    def _create_lib(self, pkg: PackageState, build: builder.Builder, subdir: str,
+                    lib_type: Literal['rust', 'c', 'proc-macro'],
+                    static: bool = False, shared: bool = False) -> T.List[mparser.BaseNode]:
+        cfg = pkg.cfg
+        dependencies: T.List[mparser.BaseNode] = []
+        for name in cfg.required_deps:
+            dep = pkg.manifest.dependencies[name]
+            dependencies.append(build.identifier(_dependency_varname(dep)))
+
+        dependency_map: T.Dict[mparser.BaseNode, mparser.BaseNode] = {
+            build.string(k): build.string(v) for k, v in cfg.get_dependency_map(pkg.manifest).items()}
+
+        for name, sys_dep in pkg.manifest.system_dependencies.items():
+            if sys_dep.enabled(cfg.features):
+                dependencies.append(build.identifier(f'{fixup_meson_varname(name)}_system_dep'))
+
+        rustc_args_list = pkg.get_rustc_args(self.environment, subdir, MachineChoice.HOST)
+        extra_args_ref = build.identifier(_extra_args_varname())
+        system_deps_args_ref = build.identifier('system_deps_args')
+        rust_args: T.List[mparser.BaseNode] = [build.string(a) for a in rustc_args_list]
+        rust_args.append(extra_args_ref)
+        rust_args.append(system_deps_args_ref)
+
+        dependencies.append(build.identifier(_extra_deps_varname()))
+
+        override_options: T.Dict[mparser.BaseNode, mparser.BaseNode] = {
+            build.string('rust_std'): build.string(pkg.manifest.package.edition),
+        }
+
+        posargs: T.List[mparser.BaseNode] = [
+            build.string(_library_name(pkg.manifest.lib.name, pkg.manifest.package.api, lib_type)),
+            build.string(pkg.manifest.lib.path),
+        ]
+
+        kwargs: T.Dict[str, mparser.BaseNode] = {
+            'dependencies': build.array(dependencies),
+            'rust_dependency_map': build.dict(dependency_map),
+            'rust_args': build.array(rust_args),
+            'override_options': build.dict(override_options),
+        }
+
+        depname_suffix = '' if lib_type == 'c' else '-rs'
+        depname = _dependency_name(pkg.manifest.package.name, pkg.manifest.package.api, depname_suffix)
+
+        lib: mparser.BaseNode
+        if lib_type == 'proc-macro':
+            lib = build.method('proc_macro', build.identifier('rust'), posargs, kwargs)
+        else:
+            if static and shared:
+                target_type = 'both_libraries'
+            else:
+                target_type = 'shared_library' if shared else 'static_library'
+
+            kwargs['rust_abi'] = build.string(lib_type)
+            lib = build.function(target_type, posargs, kwargs)
+
+        # lib = xxx_library()
+        # dep = declare_dependency()
+        # meson.override_dependency()
+        return [
+            build.assign(lib, 'lib'),
+            build.assign(
+                build.function(
+                    'declare_dependency',
+                    kw={
+                        'link_with': build.identifier('lib'),
+                        'variables': build.dict({
+                            build.string('features'): build.string(','.join(cfg.features)),
+                        }),
+                        'version': build.string(pkg.manifest.package.version),
+                    },
+                ),
+                'dep'
+            ),
+            build.method(
+                'override_dependency',
+                build.identifier('meson'),
+                [
+                    build.string(depname),
+                    build.identifier('dep'),
+                ],
+            ),
+        ]
+
+
+def load_cargo_lock(filename: str, subproject_dir: str) -> T.Optional[CargoLock]:
+    """
+    Load and parse a Cargo.lock file to extract dependency information.
+
+    This function reads a Cargo.lock file and converts it into a CargoLock object containing
+    package definitions and wrap files for use with Meson's subproject system. It processes
+    different types of package sources including crates.io registry packages and git repositories.
+
+    Args:
+        filename (str): Path to the Cargo.lock file to be loaded and parsed.
+        subproject_dir (str): Directory path where subprojects should be placed, used for
+            generating PackageDefinition objects with correct subproject locations.
+
+    Returns:
+        Optional[CargoLock]: A CargoLock object containing parsed package information and
+            associated wrap definitions if the file exists and is successfully parsed.
+            Returns None if the Cargo.lock file does not exist.
+
+    Notes:
+        - Creates crates.io registry wraps with the package checksum as `source_hash`
+        - Handles git repositories with URL parsing and revision extraction
+        - Creates PackageDefinition objects for integration with Meson's wrap system
+        - Warns about unsupported source URL formats but continues processing
+        - Multiple packages with the same source URL are consolidated into single wraps
+        - Project's own packages (source=None) are recognized but not wrapped
+        - Checksums are extracted from package metadata when not directly available
+
+    Raises:
+        May raise exceptions related to file I/O operations or TOML parsing errors
+        if the Cargo.lock file exists but is malformed or unreadable.
+    """
+    raise NotImplementedError
+
+=== mesonbuild/cargo/manifest.py
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2022-2024 Intel Corporation
+
+"""Type definitions for cargo manifest files."""
+
+from __future__ import annotations
+
+import collections
+import dataclasses
+import os
+import typing as T
+
+
+from . import version
+from ..mesonlib import MesonException, lazy_property, Version
+from .. import mlog
+
+if T.TYPE_CHECKING:
+    from typing_extensions import Protocol, Self
+
+    from . import raw
+    from .raw import EDITION, CRATE_TYPE, LINT_LEVEL
+    from ..wrap.wrap import PackageDefinition
+
+    # Copied from typeshed. Blarg that they don't expose this
+    class DataclassInstance(Protocol):
+        __dataclass_fields__: T.ClassVar[dict[str, dataclasses.Field[T.Any]]]
+
+_DI = T.TypeVar('_DI', bound='DataclassInstance')
+
+_EXTRA_KEYS_WARNING = (
+    "This may (unlikely) be an error in the cargo manifest, or may be a missing "
+    "implementation in Meson. If this issue can be reproduced with the latest "
+    "version of Meson, please help us by opening an issue at "
+    "https://github.com/mesonbuild/meson/issues. Please include the crate and "
+    "version that is generating this warning if possible."
+)
+
+
+def fixup_meson_varname(name: str) -> str:
+    """Fixup a meson variable name
+
+    :param name: The name to fix
+    :return: the fixed name
+    """
+    return name.replace('-', '_')
+
+
+class DefaultValue:
+    """Base class to converts a raw value from cargo manifest to a meson value
+
+    It returns the value from current manifest, or fallback to the
+    workspace value. If both are None, its default value is used. Subclasses can
+    override the convert() method to implement custom conversion logic.
+    """
+
+    def __init__(self, default: object = None) -> None:
+        self.default = default
+
+    def convert(self, v: T.Any, ws_v: T.Any) -> object:
+        return v if v is not None else ws_v
+
+
+class MergeValue(DefaultValue):
+    def __init__(self, func: T.Callable[[T.Any, T.Any], object], default: object = None) -> None:
+        super().__init__(default)
+        self.func = func
+
+    def convert(self, v: T.Any, ws_v: T.Any) -> object:
+        return self.func(v, ws_v)
+
+
+class ConvertValue(DefaultValue):
+    def __init__(self, func: T.Callable[[T.Any], object], default: object = None) -> None:
+        super().__init__(default)
+        self.func = func
+
+    def convert(self, v: T.Any, ws_v: T.Any) -> object:
+        return self.func(v if v is not None else ws_v)
+
+
+def _raw_to_dataclass(raw: T.Mapping[str, object], cls: T.Type[_DI], msg: str,
+                      raw_from_workspace: T.Optional[T.Mapping[str, object]] = None,
+                      ignored_fields: T.Optional[T.List[str]] = None,
+                      **kwargs: DefaultValue) -> _DI:
+    """Fixup raw cargo mappings to a dataclass.
+
+    * Inherit values from the workspace.
+    * Replaces any `-` with `_` in the keys.
+    * Optionally pass values through the functions in kwargs, in order to do
+      recursive conversions.
+    * Remove and warn on keys that are coming from cargo, but are unknown to
+      our representations.
+
+    This is intended to give users the possibility of things proceeding when a
+    new key is added to Cargo.toml that we don't yet handle, but to still warn
+    them that things might not work.
+
+    :param raw: The raw data to look at
+    :param cls: The Dataclass derived type that will be created
+    :param msg: the header for the error message. Usually something like "In N structure".
+    :param raw_from_workspace: If inheriting from a workspace, the raw data from the workspace.
+    :param kwargs: DefaultValue instances to convert values.
+    :return: A @cls instance.
+    """
+    new_dict = {}
+    unexpected = set()
+    fields = {x.name for x in dataclasses.fields(cls)}
+    raw_from_workspace = raw_from_workspace or {}
+    ignored_fields = ignored_fields or []
+    inherit = raw.get('workspace', False)
+
+    for orig_k, v in raw.items():
+        if orig_k == 'workspace':
+            continue
+        ws_v = None
+        if isinstance(v, dict) and v.get('workspace', False):
+            # foo.workspace = true, take value from workspace.
+            ws_v = raw_from_workspace[orig_k]
+            v = None
+        elif inherit:
+            # foo = {}, give the workspace value, if any, to the converter
+            # function in the case it wants to merge values.
+            ws_v = raw_from_workspace.get(orig_k)
+        k = fixup_meson_varname(orig_k)
+        if k not in fields:
+            if orig_k not in ignored_fields:
+                unexpected.add(orig_k)
+            continue
+        if k in kwargs:
+            new_dict[k] = kwargs[k].convert(v, ws_v)
+        else:
+            new_dict[k] = v if v is not None else ws_v
+
+    if inherit:
+        # Inherit any keys from the workspace that we don't have yet.
+        for orig_k, ws_v in raw_from_workspace.items():
+            k = fixup_meson_varname(orig_k)
+            if k not in fields:
+                if orig_k not in ignored_fields:
+                    unexpected.add(orig_k)
+                continue
+            if k in new_dict:
+                continue
+            if k in kwargs:
+                new_dict[k] = kwargs[k].convert(None, ws_v)
+            else:
+                new_dict[k] = ws_v
+
+    # Finally, set default values.
+    for k, convertor in kwargs.items():
+        if k not in new_dict and convertor.default is not None:
+            new_dict[k] = convertor.default
+
+    if unexpected:
+        mlog.warning(msg, 'has unexpected keys', '"{}".'.format(', '.join(sorted(unexpected))),
+                     _EXTRA_KEYS_WARNING)
+
+    return cls(**new_dict)
+
+
+@dataclasses.dataclass
+class Package:
+
+    """Representation of a Cargo Package entry, with defaults filled in."""
+
+    name: str
+    version: str = "0"
+    description: T.Optional[str] = None
+    resolver: T.Optional[str] = None
+    authors: T.List[str] = dataclasses.field(default_factory=list)
+    edition: EDITION = '2015'
+    rust_version: T.Optional[str] = None
+    documentation: T.Optional[str] = None
+    readme: T.Optional[str] = None
+    homepage: T.Optional[str] = None
+    repository: T.Optional[str] = None
+    license: T.Optional[str] = None
+    license_file: T.Optional[str] = None
+    keywords: T.List[str] = dataclasses.field(default_factory=list)
+    categories: T.List[str] = dataclasses.field(default_factory=list)
+    workspace: T.Optional[str] = None
+    build: T.Optional[str] = None
+    links: T.Optional[str] = None
+    exclude: T.List[str] = dataclasses.field(default_factory=list)
+    include: T.List[str] = dataclasses.field(default_factory=list)
+    publish: bool = True
+    metadata: T.Dict[str, T.Any] = dataclasses.field(default_factory=dict)
+    default_run: T.Optional[str] = None
+    autolib: bool = True
+    autobins: bool = True
+    autoexamples: bool = True
+    autotests: bool = True
+    autobenches: bool = True
+
+    @lazy_property
+    def api(self) -> str:
+        return version.api(self.version)
+
+    @classmethod
+    def from_raw(cls, raw_pkg: raw.Package, workspace: T.Optional[Workspace] = None) -> Self:
+        raw_ws_pkg = workspace.package if workspace else None
+        return _raw_to_dataclass(raw_pkg, cls, f'Package entry {raw_pkg["name"]}', raw_ws_pkg)
+
+
+@dataclasses.dataclass
+class SystemDependency:
+
+    """ Representation of a Cargo system-deps entry
+        https://docs.rs/system-deps/latest/system_deps
+    """
+
+    name: str
+    version: str = ''
+    optional: bool = False
+    feature: T.Optional[str] = None
+    # TODO: convert values to dataclass
+    feature_overrides: T.Dict[str, T.Dict[str, str]] = dataclasses.field(default_factory=dict)
+
+    @lazy_property
+    def meson_version(self) -> T.List[str]:
+        vers = self.version.split(',') if self.version else []
+        result: T.List[str] = []
+        for v in vers:
+            v = v.strip()
+            if v[0] not in '><=':
+                v = f'>={v}'
+            result.append(v)
+        return result
+
+    def enabled(self, features: T.Set[str]) -> bool:
+        return self.feature is None or self.feature in features
+
+    @classmethod
+    def from_raw(cls, name: str, raw: T.Union[T.Dict[str, T.Any], str]) -> Self:
+        if isinstance(raw, str):
+            raw = {'version': raw}
+        name = raw.get('name', name)
+        version = raw.get('version', '')
+        optional = raw.get('optional', False)
+        feature = raw.get('feature')
+        # Everything else are overrides when certain features are enabled.
+        feature_overrides = {k: v for k, v in raw.items() if k not in {'name', 'version', 'optional', 'feature'}}
+        return cls(name, version, optional, feature, feature_overrides)
+
+
+@dataclasses.dataclass
+class Dependency:
+
+    """Representation of a Cargo Dependency Entry."""
+
+    package: str
+    version: str = ''
+    registry: T.Optional[str] = None
+    git: T.Optional[str] = None
+    branch: T.Optional[str] = None
+    rev: T.Optional[str] = None
+    path: T.Optional[str] = None
+    optional: bool = False
+    default_features: bool = True
+    features: T.List[str] = dataclasses.field(default_factory=list)
+
+
+
+
+
+    @lazy_property
+    def api(self) -> str:
+        # Extract wanted API version from version constraints.
+        api = set()
+        for v in self.meson_version:
+            if v.startswith(('>=', '==')):
+                api.add(version.api(v[2:].strip()))
+            elif v.startswith('='):
+                api.add(version.api(v[1:].strip()))
+        if not api:
+            return ''
+        elif len(api) == 1:
+            return api.pop()
+        else:
+            raise MesonException(f'Cannot determine minimum API version from {self.version}.')
+
+    def update_version(self, v: str) -> None:
+        self.version = v
+        try:
+            delattr(self, 'api')
+        except AttributeError:
+            pass
+        try:
+            delattr(self, 'meson_version')
+        except AttributeError:
+            pass
+
+    @T.overload
+    @staticmethod
+    def _depv_to_dep(depv: raw.FromWorkspace) -> raw.FromWorkspace: ...
+
+    @T.overload
+    @staticmethod
+    def _depv_to_dep(depv: raw.DependencyV) -> raw.Dependency: ...
+
+    @staticmethod
+    def _depv_to_dep(depv: T.Union[raw.FromWorkspace, raw.DependencyV]) -> T.Union[raw.FromWorkspace, raw.Dependency]:
+        return {'version': depv} if isinstance(depv, str) else depv
+
+    @classmethod
+    def from_raw(cls, name: str, raw_depv: T.Union[raw.FromWorkspace, raw.DependencyV], member_path: str = '', workspace: T.Optional[Workspace] = None) -> Self:
+        """Create a dependency from a raw cargo dictionary or string"""
+        raw_ws_dep = workspace.dependencies.get(name) if workspace else None
+        raw_ws_dep = cls._depv_to_dep(raw_ws_dep or {})
+        raw_dep = cls._depv_to_dep(raw_depv)
+
+        def path_convertor(path: T.Optional[str], ws_path: T.Optional[str]) -> T.Optional[str]:
+            if path:
+                return path
+            if ws_path:
+                return os.path.relpath(ws_path, member_path)
+            return None
+
+        return _raw_to_dataclass(raw_dep, cls, f'Dependency entry {name}', raw_ws_dep,
+                                 package=DefaultValue(name),
+                                 path=MergeValue(path_convertor),
+                                 features=MergeValue(lambda features, ws_features: (features or []) + (ws_features or [])))
+
+    @lazy_property
+    def meson_version(self) -> T.List[str]:
+        """
+        Convert the Cargo dependency version specification to Meson-compatible version constraints.
+
+        This property processes the version string from a Cargo dependency and converts it into
+        a list of version constraint strings that are compatible with Meson's dependency system.
+        The conversion is handled by the version.convert() function which translates Cargo's
+        version syntax to Meson's format.
+
+        Returns:
+            List[str]: A list of version constraint strings in Meson format. Returns
+                an empty list if no version constraints are specified.
+        """
+        raise NotImplementedError
+
+
+@dataclasses.dataclass
+class BuildTarget:
+
+    # https://doc.rust-lang.org/cargo/reference/cargo-targets.html
+    # Some default values are overridden in subclasses
+    name: str
+    path: str
+    edition: EDITION
+    test: bool = True
+    doctest: bool = True
+    bench: bool = True
+    doc: bool = True
+    harness: bool = True
+    crate_type: T.List[CRATE_TYPE] = dataclasses.field(default_factory=lambda: ['bin'])
+    required_features: T.List[str] = dataclasses.field(default_factory=list)
+    plugin: bool = False
+
+
+@dataclasses.dataclass
+class Library(BuildTarget):
+
+    """Representation of a Cargo Library Entry."""
+
+    @classmethod
+    def from_raw(cls, raw: raw.LibTarget, pkg: Package) -> Self:
+        name = raw.get('name', fixup_meson_varname(pkg.name))
+        # If proc_macro is True, it takes precedence and sets crate_type to proc-macro
+        proc_macro = raw.get('proc-macro', False)
+        return _raw_to_dataclass(raw, cls, f'Library entry {name}',
+                                 ignored_fields=['proc-macro'],
+                                 name=DefaultValue(name),
+                                 path=DefaultValue('src/lib.rs'),
+                                 edition=DefaultValue(pkg.edition),
+                                 crate_type=ConvertValue(lambda x: ['proc-macro'] if proc_macro else x,
+                                                         ['proc-macro'] if proc_macro else ['lib']))
+
+
+@dataclasses.dataclass
+class Binary(BuildTarget):
+
+    """Representation of a Cargo Bin Entry."""
+
+    @classmethod
+    def from_raw(cls, raw: raw.BuildTarget, pkg: Package) -> Self:
+        name = raw["name"]
+        return _raw_to_dataclass(raw, cls, f'Binary entry {name}',
+                                 path=DefaultValue('src/main.rs'),
+                                 edition=DefaultValue(pkg.edition))
+
+
+@dataclasses.dataclass
+class Test(BuildTarget):
+
+    """Representation of a Cargo Test Entry."""
+
+    @classmethod
+    def from_raw(cls, raw: raw.BuildTarget, pkg: Package) -> Self:
+        name = raw["name"]
+        return _raw_to_dataclass(raw, cls, f'Test entry {name}',
+                                 path=DefaultValue(f'tests/{name}.rs'),
+                                 edition=DefaultValue(pkg.edition),
+                                 bench=DefaultValue(False),
+                                 doc=DefaultValue(False))
+
+
+@dataclasses.dataclass
+class Benchmark(BuildTarget):
+
+    """Representation of a Cargo Benchmark Entry."""
+
+    @classmethod
+    def from_raw(cls, raw: raw.BuildTarget, pkg: Package) -> Self:
+        name = raw["name"]
+        return _raw_to_dataclass(raw, cls, f'Benchmark entry {name}',
+                                 path=DefaultValue(f'benches/{name}.rs'),
+                                 edition=DefaultValue(pkg.edition),
+                                 test=DefaultValue(False),
+                                 doc=DefaultValue(False))
+
+
+@dataclasses.dataclass
+class Example(BuildTarget):
+
+    """Representation of a Cargo Example Entry."""
+
+    @classmethod
+    def from_raw(cls, raw: raw.BuildTarget, pkg: Package) -> Self:
+        name = raw["name"]
+        return _raw_to_dataclass(raw, cls, f'Example entry {name}',
+                                 path=DefaultValue(f'examples/{name}.rs'),
+                                 edition=DefaultValue(pkg.edition),
+                                 test=DefaultValue(False),
+                                 bench=DefaultValue(False),
+                                 doc=DefaultValue(False))
+
+
+@dataclasses.dataclass
+class Lint:
+
+    """Cargo Lint definition.
+    """
+
+    name: str
+    level: LINT_LEVEL
+    priority: int
+    check_cfg: T.Optional[T.List[str]]
+
+    @classmethod
+    def from_raw(cls, r: T.Union[raw.FromWorkspace, T.Dict[str, T.Dict[str, raw.LintV]]]) -> T.List[Lint]:
+        r = T.cast('T.Dict[str, T.Dict[str, raw.LintV]]', r)
+        lints: T.Dict[str, Lint] = {}
+        for tool, raw_lints in r.items():
+            prefix = '' if tool == 'rust' else f'{tool}::'
+            for name, settings in raw_lints.items():
+                name = prefix + name
+                if isinstance(settings, str):
+                    settings = T.cast('raw.Lint', {'level': settings})
+                check_cfg = None
+                if name == 'unexpected_cfgs':
+                    # 'cfg(test)' is added automatically by cargo
+                    check_cfg = ['cfg(test)'] + settings.get('check-cfg', [])
+                lints[name] = Lint(name=name,
+                                   level=settings['level'],
+                                   priority=settings.get('priority', 0),
+                                   check_cfg=check_cfg)
+
+        lints_final = list(lints.values())
+        lints_final.sort(key=lambda x: x.priority)
+        return lints_final
+
+    def to_arguments(self, check_cfg: bool) -> T.List[str]:
+        """
+        Convert a lint configuration to rustc command-line arguments.
+
+        This method transforms the lint's level setting into appropriate rustc flags
+        and optionally includes check-cfg arguments for configuration validation.
+
+        Parameters:
+            check_cfg (bool): Whether to include --check-cfg arguments in the output.
+                             When True, any check_cfg values defined for this lint
+                             will be added as --check-cfg arguments.
+
+        Returns:
+            List[str]: A list of command-line arguments for rustc. The first two elements
+                      are always the lint flag and lint name. Additional --check-cfg
+                      arguments may follow if check_cfg is True and the lint has
+                      check_cfg values defined.
+
+        Raises:
+            MesonException: If the lint level is not one of the valid values:
+                           "deny", "allow", "warn", or "forbid".
+
+        Notes:
+            - Lint levels are mapped to rustc flags as follows:
+              * "deny" -> "-D"
+              * "allow" -> "-A" 
+              * "warn" -> "-W"
+              * "forbid" -> "-F"
+            - For the special "unexpected_cfgs" lint, 'cfg(test)' is automatically
+              included in check_cfg as it's added by cargo by default.
+            - The check_cfg arguments are only included when both the check_cfg
+              parameter is True and the lint has check_cfg values defined.
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@dataclasses.dataclass
+class Manifest:
+
+    """Cargo Manifest definition.
+
+    Most of these values map up to the Cargo Manifest, but with default values
+    if not provided.
+
+    Cargo subprojects can contain what Meson wants to treat as multiple,
+    interdependent, subprojects.
+
+    :param path: the path within the cargo subproject.
+    """
+
+    package: Package
+    dependencies: T.Dict[str, Dependency] = dataclasses.field(default_factory=dict)
+    dev_dependencies: T.Dict[str, Dependency] = dataclasses.field(default_factory=dict)
+    build_dependencies: T.Dict[str, Dependency] = dataclasses.field(default_factory=dict)
+    lib: T.Optional[Library] = None
+    bin: T.List[Binary] = dataclasses.field(default_factory=list)
+    test: T.List[Test] = dataclasses.field(default_factory=list)
+    bench: T.List[Benchmark] = dataclasses.field(default_factory=list)
+    example: T.List[Example] = dataclasses.field(default_factory=list)
+    features: T.Dict[str, T.List[str]] = dataclasses.field(default_factory=dict)
+    target: T.Dict[str, T.Dict[str, Dependency]] = dataclasses.field(default_factory=dict)
+    lints: T.List[Lint] = dataclasses.field(default_factory=list)
+
+    # missing: profile
+
+    def __post_init__(self) -> None:
+        self.features.setdefault('default', [])
+
+
+
+
+
+    @classmethod
+    def from_raw(cls, raw: raw.Manifest, path: str, workspace: T.Optional[Workspace] = None, member_path: str = '') -> Self:
+        pkg = Package.from_raw(raw['package'], workspace)
+
+        autolib = None
+        if pkg.autolib and os.path.exists(os.path.join(path, 'src/lib.rs')):
+            autolib = Library.from_raw({}, pkg)
+
+        def dependencies_from_raw(x: T.Dict[str, T.Any]) -> T.Dict[str, Dependency]:
+            return {k: Dependency.from_raw(k, v, member_path, workspace) for k, v in x.items()}
+
+        return _raw_to_dataclass(raw, cls, f'Cargo.toml package {pkg.name}',
+                                 raw_from_workspace=workspace.inheritable if workspace else None,
+                                 ignored_fields=['badges', 'workspace'],
+                                 package=ConvertValue(lambda _: pkg),
+                                 dependencies=ConvertValue(dependencies_from_raw),
+                                 dev_dependencies=ConvertValue(dependencies_from_raw),
+                                 build_dependencies=ConvertValue(dependencies_from_raw),
+                                 lints=ConvertValue(Lint.from_raw),
+                                 lib=ConvertValue(lambda x: Library.from_raw(x, pkg), default=autolib),
+                                 bin=ConvertValue(lambda x: [Binary.from_raw(b, pkg) for b in x]),
+                                 test=ConvertValue(lambda x: [Test.from_raw(b, pkg) for b in x]),
+                                 bench=ConvertValue(lambda x: [Benchmark.from_raw(b, pkg) for b in x]),
+                                 example=ConvertValue(lambda x: [Example.from_raw(b, pkg) for b in x]),
+                                 target=ConvertValue(lambda x: {k: dependencies_from_raw(v.get('dependencies', {})) for k, v in x.items()}))
+
+    @lazy_property
+    def system_dependencies(self) -> T.Dict[str, SystemDependency]:
+        """
+        Get system dependencies defined in the package metadata.
+
+        This property extracts and converts system dependencies from the package's metadata
+        section, specifically from the 'system-deps' key. System dependencies are external
+        libraries or packages that the Rust crate depends on at the system level, typically
+        managed by system package managers like pkg-config.
+
+        Returns:
+            Dict[str, SystemDependency]: A dictionary mapping dependency names to their
+                corresponding SystemDependency objects. Each SystemDependency contains
+                information about version requirements, optional status, feature conditions,
+                and feature overrides for the system dependency.
+
+        Notes:
+            - System dependencies are defined in the [package.metadata.system-deps] section
+              of Cargo.toml files
+            - Returns an empty dictionary if no system dependencies are defined in the
+              package metadata
+            - The system-deps format follows the specification from the system-deps crate:
+              https://docs.rs/system-deps/latest/system_deps
+        """
+        raise NotImplementedError
+
+
+@dataclasses.dataclass
+class Workspace:
+
+    """Cargo Workspace definition.
+    """
+
+    resolver: str = dataclasses.field(default_factory=lambda: '2')
+    members: T.List[str] = dataclasses.field(default_factory=list)
+    exclude: T.List[str] = dataclasses.field(default_factory=list)
+    default_members: T.List[str] = dataclasses.field(default_factory=list)
+
+    # inheritable settings are kept in raw format, for use with _raw_to_dataclass
+    package: T.Optional[raw.Package] = None
+    dependencies: T.Dict[str, raw.Dependency] = dataclasses.field(default_factory=dict)
+    lints: T.Dict[str, T.Dict[str, raw.LintV]] = dataclasses.field(default_factory=dict)
+    metadata: T.Dict[str, T.Any] = dataclasses.field(default_factory=dict)
+
+    # A workspace can also have a root package.
+    root_package: T.Optional[Manifest] = None
+
+
+
+
+
+
+
+
+
+    @classmethod
+    def from_raw(cls, raw: raw.Manifest, path: str) -> Self:
+        ws = _raw_to_dataclass(raw['workspace'], cls, 'Workspace')
+        if 'package' in raw:
+            ws.root_package = Manifest.from_raw(raw, path, ws, '.')
+        if not ws.default_members:
+            ws.default_members = ['.'] if ws.root_package else ws.members
+        return ws
+
+    @lazy_property
+    def inheritable(self) -> T.Dict[str, object]:
+        """
+        Get the inheritable properties from this workspace.
+
+        This property provides access to workspace-level configuration that can be inherited
+        by member packages within the workspace. Currently, this includes the lints table
+        which defines code quality rules and checks that can be applied across all workspace
+        members.
+
+        Returns:
+            Dict[str, object]: A dictionary containing inheritable workspace properties.
+                Currently includes:
+                - 'lints': The workspace-level lints configuration table that defines
+                  code quality rules, warnings, and checks that member packages can inherit.
+
+        Notes:
+            The inheritable properties are intentionally limited - while workspaces may
+            contain package and dependencies sections, these can only be inherited on a
+            field-by-field basis by member packages, not as complete tables, so they are
+            not included in this inheritable collection.
+        """
+        raise NotImplementedError
+
+
+@dataclasses.dataclass
+class CargoLockPackage:
+
+    """A description of a package in the Cargo.lock file format."""
+
+    name: str
+    version: str
+    source: T.Optional[str] = None
+    checksum: T.Optional[str] = None
+    dependencies: T.List[str] = dataclasses.field(default_factory=list)
+
+
+
+
+
+    @lazy_property
+    def subproject(self) -> str:
+        return f'{self.name}-{self.api}-rs'
+
+    @classmethod
+    def from_raw(cls, raw: raw.CargoLockPackage) -> Self:
+        return _raw_to_dataclass(raw, cls, 'Cargo.lock package')
+
+    @lazy_property
+    def api(self) -> str:
+        """
+        Get the API version string for this Cargo package.
+
+        The API version is derived from the package's semantic version by extracting
+        the major and minor version components, following Rust's semantic versioning
+        conventions for API compatibility.
+
+        Returns:
+            str: The Cargo API compatibility component: the major version for stable releases,
+                 `"0.minor"` for `0.x.y` with nonzero minor, or `"0"` for `0.0.x`.
+
+        The returned component is used for Cargo API compatibility and subproject naming.
+        """
+        raise NotImplementedError
+
+
+@dataclasses.dataclass
+class CargoLock:
+
+    """A description of the Cargo.lock file format."""
+
+    version: int = 1
+    package: T.List[CargoLockPackage] = dataclasses.field(default_factory=list)
+    metadata: T.Dict[str, str] = dataclasses.field(default_factory=dict)
+    wraps: T.Dict[str, PackageDefinition] = dataclasses.field(default_factory=dict)
+
+    def named(self, name: str) -> T.Sequence[CargoLockPackage]:
+        return self._versions[name]
+
+    @lazy_property
+    def _versions(self) -> T.Dict[str, T.List[CargoLockPackage]]:
+        versions = collections.defaultdict(list)
+        for pkg in self.package:
+            versions[pkg.name].append(pkg)
+        for pkg_versions in versions.values():
+            pkg_versions.sort(reverse=True, key=lambda pkg: Version(pkg.version))
+        return versions
+
+    @classmethod
+    def from_raw(cls, raw: raw.CargoLock) -> Self:
+        return _raw_to_dataclass(raw, cls, 'Cargo.lock',
+                                 package=ConvertValue(lambda x: [CargoLockPackage.from_raw(p) for p in x]))
+
+=== mesonbuild/cargo/toml.py
+from __future__ import annotations
+
+import importlib
+import shutil
+import json
+import typing as T
+
+from ..mesonlib import MesonException, Popen_safe
+if T.TYPE_CHECKING:
+    from types import ModuleType
+
+
+# tomllib is present in python 3.11, before that it is a pypi module called tomli,
+# we try to import tomllib, then tomli,
+tomllib: T.Optional[ModuleType] = None
+toml2json: T.Optional[str] = None
+for t in ['tomllib', 'tomli']:
+    try:
+        tomllib = importlib.import_module(t)
+        break
+    except ImportError:
+        pass
+else:
+    # TODO: it would be better to use an Executable here, which could be looked
+    # up in the cross file or provided by a wrap. However, that will have to be
+    # passed in externally, since we don't have (and I don't think we should),
+    # have access to the `Environment` for that in this module.
+    toml2json = shutil.which('toml2json')
+
+class TomlImplementationMissing(MesonException):
+    pass
+
+
+def load_toml(filename: str) -> T.Dict[str, object]:
+    """
+    Load and parse a TOML file into a Python dictionary.
+
+    This function loads a TOML file using an available parser implementation.
+
+    Parameters:
+        filename (str): Path to the TOML file to be loaded and parsed.
+
+    Returns:
+        Dict[str, object]: A dictionary containing the parsed TOML data, where keys are strings
+        and values can be any valid TOML data type (strings, numbers, booleans, arrays, tables, etc.).
+
+    Raises:
+        TomlImplementationMissing: If no TOML parsing implementation is available.
+        MesonException: If a fallback parser cannot decode the TOML file.
+        FileNotFoundError: If the specified TOML file does not exist.
+        PermissionError: If there are insufficient permissions to read the TOML file.
+
+    The returned mapping is consistent across supported parser backends.
+    """
+    raise NotImplementedError
+
+=== mesonbuild/cargo/version.py
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2022-2023 Intel Corporation
+
+"""Convert Cargo versions into Meson compatible ones."""
+
+from __future__ import annotations
+import typing as T
+
+
+def api(version: str) -> str:
+    """
+    Extract the API version from a semantic version string following Cargo/Rust conventions.
+
+    This function converts a full semantic version (x.y.z) into an API version string
+    that represents the compatibility level according to Rust/Cargo versioning semantics:
+    - For versions 1.0.0 and above: API version is the major version number
+    - For versions 0.x.y where x > 0: API version is "0.x" (minor version matters)
+    - For versions 0.0.x: API version is "0" (only patch versions, no API stability)
+
+    Args:
+        version (str): A semantic version string in the format "x.y.z" where x, y, z 
+                      are non-negative integers separated by dots.
+
+    Returns:
+        str: The API version string. Returns the major version for stable releases 
+             (>=1.0.0), "0.minor" for pre-1.0 releases with non-zero minor version,
+             or "0" for 0.0.x releases.
+
+    Examples:
+        - "1.2.3" -> "1"
+        - "2.0.0" -> "2" 
+        - "0.5.1" -> "0.5"
+        - "0.0.7" -> "0"
+
+    Note:
+        This function assumes the input version string has well-formed numeric
+        components; a single major component is also accepted. It follows Rust's
+        semantic versioning conventions where breaking changes are allowed in minor
+        versions for 0.x.y releases, but only in major versions for 1.x.y+ releases.
+    """
+    raise NotImplementedError
+
+
+def convert(cargo_ver: str) -> T.List[str]:
+    """
+    Convert a Cargo compatible version into a Meson compatible one.
+
+    This function takes a Cargo version specification string and converts it into
+    a list of Meson-compatible version constraints. It handles various Cargo version
+    specification formats including comparison operators, tilde requirements,
+    wildcard requirements, and caret requirements.
+
+    Parameters:
+        cargo_ver (str): The version specification string as used by Cargo. Can contain
+                        multiple comma-separated version constraints. Supports formats like:
+                        - Comparison requirements: '>=1.0', '<2.0', '=1.5'
+                        - Tilde requirements: '~1.2.3' (compatible within patch level)
+                        - Wildcard requirements: '1.2.*' (any patch version)
+                        - Caret requirements: '^1.2.3' (compatible within same major version)
+                        - Bare versions: '1.2.3' (treated as caret requirements)
+
+    Returns:
+        List[str]: A list of version constraint strings that Meson can understand.
+                  Each constraint is in the format of comparison operator followed
+                  by version number (e.g., '>= 1.2.3', '< 2.0.0'). Returns an
+                  empty list if the input is empty or whitespace-only.
+
+    Notes:
+        - The function automatically strips whitespace from the input and individual constraints
+        - Cargo's tilde requirements (~1.2.3) are converted to a range: >= 1.2.3 and < 1.3.0
+        - Wildcard requirements (1.2.*) are converted similarly to tilde requirements
+        - Caret requirements (^1.2.3) follow Cargo's compatibility rules based on the
+          leftmost non-zero digit
+        - Bare version numbers are treated as caret requirements
+        - Special handling for versions starting with 0, following semantic versioning rules
+    """
+    raise NotImplementedError

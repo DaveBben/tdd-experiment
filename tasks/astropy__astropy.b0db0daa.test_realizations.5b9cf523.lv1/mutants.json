@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_realizations.5b9cf523.lv1",
+ "pool": 801,
+ "mutants": [
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 428,
+   "op": "comparison",
+   "start": 15980,
+   "end": 16025,
+   "old": "self._parameters_all == other._parameters_all",
+   "new": "(self._parameters_all != other._parameters_all)",
+   "id": 0
+  },
+  {
+   "path": "astropy/cosmology/_src/default.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1480,
+   "end": 1506,
+   "old": "value = cls._default_value",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "astropy/cosmology/_src/default.py",
+   "line": 106,
+   "op": "boolean",
+   "start": 2851,
+   "end": 2883,
+   "old": "not isinstance(value, Cosmology)",
+   "new": "(isinstance(value, Cosmology))",
+   "id": 2
+  },
+  {
+   "path": "astropy/cosmology/_src/io/builtin/mapping.py",
+   "line": 152,
+   "op": "return",
+   "start": 7066,
+   "end": 7119,
+   "old": "return {renames.get(k, k): v for k, v in map.items()}",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 244,
+   "op": "return",
+   "start": 8983,
+   "end": 9029,
+   "old": "return self._fvalidate(cosmology, self, value)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1184,
+   "op": "statement",
+   "start": 41225,
+   "end": 41510,
+   "old": "default_converters = [\n        # Use `np.int64` to ensure large integers can be read as ints\n        # on platforms such as Windows\n        # https://github.com/astropy/astropy/issues/5744\n        convert_numpy(np.int64),\n        convert_numpy(float),\n        convert_numpy(str),\n    ]",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1309,
+   "op": "statement",
+   "start": 45729,
+   "end": 45760,
+   "old": "names_set = set(table.colnames)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1782,
+   "op": "return",
+   "start": 63325,
+   "end": 63338,
+   "old": "return reader",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 365,
+   "op": "return",
+   "start": 11039,
+   "end": 11071,
+   "old": "return self.process_lines(lines)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 560,
+   "op": "return",
+   "start": 17749,
+   "end": 17775,
+   "old": "return line_or_func(lines)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1213,
+   "op": "return",
+   "start": 42274,
+   "end": 42284,
+   "old": "return out",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1303,
+   "op": "statement",
+   "start": 45527,
+   "end": 45555,
+   "old": "rename_columns(table, names)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1311,
+   "op": "comparison",
+   "start": 45769,
+   "end": 45794,
+   "old": "include_names is not None",
+   "new": "(include_names is None)",
+   "id": 12
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1439,
+   "op": "statement",
+   "start": 50494,
+   "end": 50570,
+   "old": "self.header.check_column_names(self.names, self.strict_names, self.guessing)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1630,
+   "op": "return",
+   "start": 57192,
+   "end": 57207,
+   "old": "return outlines",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1687,
+   "op": "comparison",
+   "start": 58886,
+   "end": 58909,
+   "old": "\"fast_reader\" in kwargs",
+   "new": "('fast_reader' not in kwargs)",
+   "id": 15
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1710,
+   "op": "statement",
+   "start": 59768,
+   "end": 59841,
+   "old": "default_header_length = reader.data.start_line - reader.header.start_line",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1721,
+   "op": "statement",
+   "start": 60357,
+   "end": 60409,
+   "old": "reader.data.splitter.delimiter = kwargs[\"delimiter\"]",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 842,
+   "op": "statement",
+   "start": 27827,
+   "end": 27855,
+   "old": "self.data_lines = data_lines",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 858,
+   "op": "statement",
+   "start": 28458,
+   "end": 28485,
+   "old": "self._set_fill_values(cols)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 859,
+   "op": "statement",
+   "start": 28498,
+   "end": 28519,
+   "old": "self._set_masks(cols)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1306,
+   "op": "comparison",
+   "start": 45636,
+   "end": 45673,
+   "old": "colnames_uniq != list(table.colnames)",
+   "new": "(colnames_uniq == list(table.colnames))",
+   "id": 21
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1420,
+   "op": "statement",
+   "start": 49835,
+   "end": 49849,
+   "old": "newline = \"\\r\"",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1760,
+   "op": "comparison",
+   "start": 62286,
+   "end": 62329,
+   "old": "len(set(reader.names)) != len(reader.names)",
+   "new": "(len(set(reader.names)) == len(reader.names))",
+   "id": 23
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1774,
+   "op": "constant",
+   "start": 62981,
+   "end": 63001,
+   "old": "\"fill_include_names\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1776,
+   "op": "constant",
+   "start": 63090,
+   "end": 63110,
+   "old": "\"fill_exclude_names\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1778,
+   "op": "constant",
+   "start": 63199,
+   "end": 63209,
+   "old": "\"encoding\"",
+   "new": "('XX')",
+   "id": 26
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 774,
+   "op": "comparison",
+   "start": 25284,
+   "end": 25301,
+   "old": "names is not None",
+   "new": "(names is None)",
+   "id": 27
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 839,
+   "op": "comparison",
+   "start": 27660,
+   "end": 27680,
+   "old": "end_line is not None",
+   "new": "(end_line is None)",
+   "id": 28
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 879,
+   "op": "statement",
+   "start": 29291,
+   "end": 29328,
+   "old": "self.fill_values = [self.fill_values]",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1167,
+   "op": "constant",
+   "start": 40860,
+   "end": 40863,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1211,
+   "op": "statement",
+   "start": 42235,
+   "end": 42264,
+   "old": "out_col.meta.update(col.meta)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1446,
+   "op": "comparison",
+   "start": 50762,
+   "end": 50785,
+   "old": "len(str_vals) != n_cols",
+   "new": "(len(str_vals) == n_cols)",
+   "id": 32
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1624,
+   "op": "statement",
+   "start": 56985,
+   "end": 57054,
+   "old": "parts.append(line.replace(self.continuation_char, self.replace_char))",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1688,
+   "op": "constant",
+   "start": 58957,
+   "end": 58964,
+   "old": "\"force\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1739,
+   "op": "boolean",
+   "start": 61269,
+   "end": 61461,
+   "old": "(\"data_start\" not in kwargs)\n                and (default_header_length is not None)\n                and reader._format_name\n                not in [\"fixed_width_two_line\", \"commented_header\"]",
+   "new": "('data_start' not in kwargs or default_header_length is not None or reader._format_name not in ['fixed_width_two_line', 'commented_header'])",
+   "id": 35
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1744,
+   "op": "statement",
+   "start": 61493,
+   "end": 61606,
+   "old": "reader.data.start_line = (\n                    reader.header.start_line + default_header_length\n                )",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1749,
+   "op": "statement",
+   "start": 61751,
+   "end": 61818,
+   "old": "raise ValueError(\"header_start cannot be modified for this Reader\")",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 337,
+   "op": "boolean",
+   "start": 9987,
+   "end": 10036,
+   "old": "\"\\n\" not in table + \"\" and \"\\r\" not in table + \"\"",
+   "new": "('\\n' not in table + '' or '\\r' not in table + '')",
+   "id": 38
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 349,
+   "op": "statement",
+   "start": 10476,
+   "end": 10486,
+   "old": "table[0:1]",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 751,
+   "op": "constant",
+   "start": 24407,
+   "end": 24410,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 751,
+   "op": "constant",
+   "start": 24428,
+   "end": 24431,
+   "old": "\"'\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 766,
+   "op": "constant",
+   "start": 25042,
+   "end": 25043,
+   "old": "1",
+   "new": "(2)",
+   "id": 42
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1209,
+   "op": "statement",
+   "start": 42139,
+   "end": 42181,
+   "old": "setattr(out_col, attr, getattr(col, attr))",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1300,
+   "op": "arithmetic",
+   "start": 45470,
+   "end": 45484,
+   "old": "xxxs + str(ii)",
+   "new": "(xxxs - str(ii))",
+   "id": 44
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1421,
+   "op": "constant",
+   "start": 49897,
+   "end": 49901,
+   "old": "\"\\r\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1696,
+   "op": "constant",
+   "start": 59234,
+   "end": 59247,
+   "old": "\"fast_reader\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1717,
+   "op": "constant",
+   "start": 60163,
+   "end": 60167,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1734,
+   "op": "constant",
+   "start": 60982,
+   "end": 60996,
+   "old": "\"header_start\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 1745,
+   "op": "arithmetic",
+   "start": 61540,
+   "end": 61588,
+   "old": "reader.header.start_line + default_header_length",
+   "new": "(reader.header.start_line - default_header_length)",
+   "id": 49
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 351,
+   "op": "comparison",
+   "start": 10534,
+   "end": 10548,
+   "old": "len(table) > 1",
+   "new": "(len(table) >= 1)",
+   "id": 50
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 351,
+   "op": "constant",
+   "start": 10547,
+   "end": 10548,
+   "old": "1",
+   "new": "(2)",
+   "id": 51
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 878,
+   "op": "constant",
+   "start": 29267,
+   "end": 29268,
+   "old": "0",
+   "new": "(1)",
+   "id": 52
+  },
+  {
+   "path": "astropy/io/ascii/core.py",
+   "line": 356,
+   "op": "constant",
+   "start": 10763,
+   "end": 10764,
+   "old": "0",
+   "new": "(1)",
+   "id": 53
+  },
+  {
+   "path": "astropy/io/ascii/ecsv.py",
+   "line": 274,
+   "op": "constant",
+   "start": 9892,
+   "end": 9897,
+   "old": "\"str\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 298,
+   "op": "statement",
+   "start": 9408,
+   "end": 9485,
+   "old": "kwarg_types = READ_KWARG_TYPES if read_write == \"read\" else WRITE_KWARG_TYPES",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 745,
+   "op": "statement",
+   "start": 27778,
+   "end": 27795,
+   "old": "lines.extend(msg)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 118,
+   "op": "boolean",
+   "start": 3186,
+   "end": 3212,
+   "old": "not isinstance(table, str)",
+   "new": "(isinstance(table, str))",
+   "id": 57
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 328,
+   "op": "statement",
+   "start": 10713,
+   "end": 10817,
+   "old": "is_str_data = isinstance(argument, str) and (\n            \"\\n\" in argument or \"\\r\" in argument\n        )",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 548,
+   "op": "statement",
+   "start": 19451,
+   "end": 19514,
+   "old": "fast_kwargs[\"reader_cls\"] = core.FAST_CLASSES[f\"fast_{format}\"]",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 242,
+   "op": "comparison",
+   "start": 7511,
+   "end": 7543,
+   "old": "fast_reader[\"enable\"] == \"force\"",
+   "new": "(fast_reader['enable'] != 'force')",
+   "id": 60
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 284,
+   "op": "comparison",
+   "start": 8948,
+   "end": 8966,
+   "old": "cls == \"list-like\"",
+   "new": "(cls != 'list-like')",
+   "id": 61
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 285,
+   "op": "statement",
+   "start": 8980,
+   "end": 9055,
+   "old": "ok = not isinstance(val, str) and isinstance(val, collections.abc.Iterable)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 319,
+   "op": "statement",
+   "start": 10298,
+   "end": 10322,
+   "old": "raise TypeError(err_msg)",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 648,
+   "op": "statement",
+   "start": 23670,
+   "end": 23678,
+   "old": "pos = -1",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 671,
+   "op": "statement",
+   "start": 24611,
+   "end": 24633,
+   "old": "reader.guessing = True",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 679,
+   "op": "statement",
+   "start": 24966,
+   "end": 24990,
+   "old": "dat = reader.read(table)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 739,
+   "op": "constant",
+   "start": 27356,
+   "end": 27430,
+   "old": "\"** To figure out why the table did not read, use guess=False and      **\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 163,
+   "op": "constant",
+   "start": 4754,
+   "end": 4758,
+   "old": "True",
+   "new": "(False)",
+   "id": 68
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 242,
+   "op": "constant",
+   "start": 7536,
+   "end": 7543,
+   "old": "\"force\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 267,
+   "op": "constant",
+   "start": 8325,
+   "end": 8333,
+   "old": "\"enable\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 667,
+   "op": "statement",
+   "start": 24513,
+   "end": 24548,
+   "old": "guess_kwargs[\"strict_names\"] = True",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 677,
+   "op": "statement",
+   "start": 24921,
+   "end": 24952,
+   "old": "reader.read(table_guess_subset)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 729,
+   "op": "statement",
+   "start": 26797,
+   "end": 26872,
+   "old": "keys_vals = [\"reader_cls:\" + re.search(r\"\\.(\\w+)'>\", reader_repr).group(1)]",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 730,
+   "op": "statement",
+   "start": 26885,
+   "end": 26944,
+   "old": "kwargs_sorted = ((key, kwargs[key]) for key in sorted_keys)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 285,
+   "op": "boolean",
+   "start": 8985,
+   "end": 9009,
+   "old": "not isinstance(val, str)",
+   "new": "(isinstance(val, str))",
+   "id": 75
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 648,
+   "op": "constant",
+   "start": 23677,
+   "end": 23678,
+   "old": "1",
+   "new": "(2)",
+   "id": 76
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 595,
+   "op": "comparison",
+   "start": 21407,
+   "end": 21431,
+   "old": "val != guess_kwargs[key]",
+   "new": "(val == guess_kwargs[key])",
+   "id": 77
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 293,
+   "op": "constant",
+   "start": 9317,
+   "end": 9322,
+   "old": "False",
+   "new": "(True)",
+   "id": 78
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 728,
+   "op": "constant",
+   "start": 26757,
+   "end": 26769,
+   "old": "\"reader_cls\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 826,
+   "op": "constant",
+   "start": 30471,
+   "end": 30482,
+   "old": "\"quotechar\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 729,
+   "op": "constant",
+   "start": 26869,
+   "end": 26870,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "astropy/io/ascii/ui.py",
+   "line": 129,
+   "op": "constant",
+   "start": 3647,
+   "end": 3648,
+   "old": "1",
+   "new": "(2)",
+   "id": 82
+  },
+  {
+   "path": "astropy/io/registry/core.py",
+   "line": 17,
+   "op": "constant",
+   "start": 498,
+   "end": 499,
+   "old": "0",
+   "new": "(1)",
+   "id": 83
+  },
+  {
+   "path": "astropy/table/meta.py",
+   "line": 79,
+   "op": "constant",
+   "start": 2150,
+   "end": 2185,
+   "old": "\"while constructing an ordered map\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 141,
+   "op": "return",
+   "start": 4630,
+   "end": 4689,
+   "old": "return self[key] if key in self._table.columns else default",
+   "new": "return None",
+   "id": 85
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 361,
+   "op": "statement",
+   "start": 15602,
+   "end": 15634,
+   "old": "module = import_module(mod_name)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 451,
+   "op": "statement",
+   "start": 19160,
+   "end": 19223,
+   "old": "col = _construct_mixin_from_obj_attrs_and_info(obj_attrs, info)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 452,
+   "op": "statement",
+   "start": 19228,
+   "end": 19258,
+   "old": "out.add_column(col, index=idx)",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 471,
+   "op": "statement",
+   "start": 19847,
+   "end": 19929,
+   "old": "has_quantities = any(isinstance(col.info, QuantityInfo) for col in out.itercols())",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 472,
+   "op": "statement",
+   "start": 19934,
+   "end": 19979,
+   "old": "out_cls = QTable if has_quantities else Table",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 465,
+   "op": "statement",
+   "start": 19545,
+   "end": 19600,
+   "old": "_construct_mixin_from_columns(new_name, obj_attrs, out)",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 342,
+   "op": "constant",
+   "start": 14796,
+   "end": 14807,
+   "old": "\"__class__\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 460,
+   "op": "constant",
+   "start": 19424,
+   "end": 19448,
+   "old": "\"__serialized_columns__\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 412,
+   "op": "statement",
+   "start": 17537,
+   "end": 17586,
+   "old": "_construct_mixin_from_columns(out_name, val, out)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 413,
+   "op": "statement",
+   "start": 17603,
+   "end": 17634,
+   "old": "data_attrs_map[out_name] = name",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 408,
+   "op": "comparison",
+   "start": 17356,
+   "end": 17369,
+   "old": "\"name\" in val",
+   "new": "('name' not in val)",
+   "id": 96
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 408,
+   "op": "constant",
+   "start": 17356,
+   "end": 17362,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "astropy/table/serialize.py",
+   "line": 443,
+   "op": "comparison",
+   "start": 18943,
+   "end": 18956,
+   "old": "x is not None",
+   "new": "(x is None)",
+   "id": 98
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1480,
+   "op": "statement",
+   "start": 55410,
+   "end": 55437,
+   "old": "col_cls = self.MaskedColumn",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

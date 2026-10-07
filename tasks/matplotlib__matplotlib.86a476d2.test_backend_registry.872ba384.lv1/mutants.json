@@ -1,0 +1,1006 @@
+{
+ "task": "matplotlib__matplotlib.86a476d2.test_backend_registry.872ba384.lv1",
+ "pool": 101,
+ "mutants": [
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 414,
+   "op": "statement",
+   "start": 15443,
+   "end": 15479,
+   "old": "backend_registry = BackendRegistry()",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 124,
+   "op": "statement",
+   "start": 4373,
+   "end": 4415,
+   "old": "module = self.load_backend_module(backend)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 125,
+   "op": "statement",
+   "start": 4424,
+   "end": 4458,
+   "old": "canvas_class = module.FigureCanvas",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 126,
+   "op": "return",
+   "start": 4467,
+   "end": 4531,
+   "old": "return canvas_class.required_interactive_framework or \"headless\"",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4917,
+   "end": 4975,
+   "old": "entry_points = im.entry_points(group=\"matplotlib.backend\")",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 137,
+   "op": "statement",
+   "start": 4984,
+   "end": 5047,
+   "old": "entries = [(entry.name, entry.value) for entry in entry_points]",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 153,
+   "op": "statement",
+   "start": 5790,
+   "end": 5829,
+   "old": "names = [entry[0] for entry in entries]",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 163,
+   "op": "return",
+   "start": 6228,
+   "end": 6242,
+   "old": "return entries",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 200,
+   "op": "return",
+   "start": 7926,
+   "end": 7986,
+   "old": "return self._GUI_FRAMEWORK_TO_BACKEND.get(framework.lower())",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 264,
+   "op": "statement",
+   "start": 10075,
+   "end": 10109,
+   "old": "self._ensure_entry_points_loaded()",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 265,
+   "op": "return",
+   "start": 10118,
+   "end": 10180,
+   "old": "return [*self.list_builtin(), *self._backend_to_gui_framework]",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 289,
+   "op": "return",
+   "start": 10985,
+   "end": 11033,
+   "old": "return [*self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK]",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 300,
+   "op": "return",
+   "start": 11255,
+   "end": 11324,
+   "old": "return [k for k in self._GUI_FRAMEWORK_TO_BACKEND if k != \"headless\"]",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 351,
+   "op": "statement",
+   "start": 13002,
+   "end": 13123,
+   "old": "gui = (self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK.get(backend) or\n               self._backend_to_gui_framework.get(backend))",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 371,
+   "op": "return",
+   "start": 13813,
+   "end": 13863,
+   "old": "return backend, gui if gui != \"headless\" else None",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 401,
+   "op": "statement",
+   "start": 14983,
+   "end": 15039,
+   "old": "backend = self.backend_for_gui_framework(gui_or_backend)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 115,
+   "op": "boolean",
+   "start": 3917,
+   "end": 3946,
+   "old": "not self._loaded_entry_points",
+   "new": "(self._loaded_entry_points)",
+   "id": 16
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 116,
+   "op": "statement",
+   "start": 3960,
+   "end": 3995,
+   "old": "entries = self._read_entry_points()",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 117,
+   "op": "statement",
+   "start": 4008,
+   "end": 4054,
+   "old": "self._validate_and_store_entry_points(entries)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 118,
+   "op": "statement",
+   "start": 4067,
+   "end": 4099,
+   "old": "self._loaded_entry_points = True",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 126,
+   "op": "boolean",
+   "start": 4474,
+   "end": 4531,
+   "old": "canvas_class.required_interactive_framework or \"headless\"",
+   "new": "(canvas_class.required_interactive_framework and 'headless')",
+   "id": 20
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 154,
+   "op": "comparison",
+   "start": 5841,
+   "end": 5862,
+   "old": "\"inline\" not in names",
+   "new": "('inline' in names)",
+   "id": 21
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 155,
+   "op": "statement",
+   "start": 5876,
+   "end": 6030,
+   "old": "backward_compatible_entry_points(\n                entries, \"matplotlib_inline\", (0, 1, 7), [\"inline\"],\n                \"matplotlib_inline.backend_inline\")",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 158,
+   "op": "comparison",
+   "start": 6042,
+   "end": 6063,
+   "old": "\"ipympl\" not in names",
+   "new": "('ipympl' in names)",
+   "id": 23
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 159,
+   "op": "statement",
+   "start": 6077,
+   "end": 6218,
+   "old": "backward_compatible_entry_points(\n                entries, \"ipympl\", (0, 9, 4), [\"ipympl\", \"widget\"],\n                \"ipympl.backend_nbagg\")",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 173,
+   "op": "statement",
+   "start": 6861,
+   "end": 6880,
+   "old": "name = name.lower()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 182,
+   "op": "statement",
+   "start": 7336,
+   "end": 7385,
+   "old": "self._name_to_module[name] = \"module://\" + module",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 184,
+   "op": "statement",
+   "start": 7485,
+   "end": 7533,
+   "old": "self._backend_to_gui_framework[name] = \"unknown\"",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 282,
+   "op": "comparison",
+   "start": 10641,
+   "end": 10677,
+   "old": "filter_ == BackendFilter.INTERACTIVE",
+   "new": "(filter_ != BackendFilter.INTERACTIVE)",
+   "id": 28
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 283,
+   "op": "return",
+   "start": 10691,
+   "end": 10799,
+   "old": "return [k for k, v in self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK.items()\n                    if v != \"headless\"]",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 348,
+   "op": "statement",
+   "start": 12900,
+   "end": 12923,
+   "old": "backend = get_backend()",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 351,
+   "op": "boolean",
+   "start": 13009,
+   "end": 13122,
+   "old": "self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK.get(backend) or\n               self._backend_to_gui_framework.get(backend)",
+   "new": "(self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK.get(backend) and self._backend_to_gui_framework.get(backend))",
+   "id": 31
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 355,
+   "op": "boolean",
+   "start": 13179,
+   "end": 13255,
+   "old": "gui is None and isinstance(backend, str) and backend.startswith(\"module://\")",
+   "new": "(gui is None or isinstance(backend, str) or backend.startswith('module://'))",
+   "id": 32
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 356,
+   "op": "statement",
+   "start": 13269,
+   "end": 13284,
+   "old": "gui = \"unknown\"",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 359,
+   "op": "boolean",
+   "start": 13342,
+   "end": 13387,
+   "old": "gui is None and not self._loaded_entry_points",
+   "new": "(gui is None or not self._loaded_entry_points)",
+   "id": 34
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 360,
+   "op": "statement",
+   "start": 13401,
+   "end": 13435,
+   "old": "self._ensure_entry_points_loaded()",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 361,
+   "op": "statement",
+   "start": 13448,
+   "end": 13497,
+   "old": "gui = self._backend_to_gui_framework.get(backend)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 364,
+   "op": "comparison",
+   "start": 13561,
+   "end": 13577,
+   "old": "gui == \"unknown\"",
+   "new": "(gui != 'unknown')",
+   "id": 37
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 365,
+   "op": "statement",
+   "start": 13591,
+   "end": 13640,
+   "old": "gui = self._get_gui_framework_by_loading(backend)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 366,
+   "op": "statement",
+   "start": 13653,
+   "end": 13698,
+   "old": "self._backend_to_gui_framework[backend] = gui",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 368,
+   "op": "comparison",
+   "start": 13711,
+   "end": 13722,
+   "old": "gui is None",
+   "new": "(gui is not None)",
+   "id": 40
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 369,
+   "op": "statement",
+   "start": 13736,
+   "end": 13803,
+   "old": "raise RuntimeError(f\"'{backend}' is not a recognised backend name\")",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 397,
+   "op": "boolean",
+   "start": 14830,
+   "end": 14872,
+   "old": "not gui_or_backend.startswith(\"module://\")",
+   "new": "(gui_or_backend.startswith('module://'))",
+   "id": 42
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 398,
+   "op": "statement",
+   "start": 14886,
+   "end": 14925,
+   "old": "gui_or_backend = gui_or_backend.lower()",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 402,
+   "op": "comparison",
+   "start": 15051,
+   "end": 15070,
+   "old": "backend is not None",
+   "new": "(backend is None)",
+   "id": 44
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 403,
+   "op": "return",
+   "start": 15084,
+   "end": 15156,
+   "old": "return backend, gui_or_backend if gui_or_backend != \"headless\" else None",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 407,
+   "op": "return",
+   "start": 15229,
+   "end": 15272,
+   "old": "return self.resolve_backend(gui_or_backend)",
+   "new": "return None",
+   "id": 46
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 118,
+   "op": "constant",
+   "start": 4095,
+   "end": 4099,
+   "old": "True",
+   "new": "(False)",
+   "id": 47
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 126,
+   "op": "constant",
+   "start": 4521,
+   "end": 4531,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5502,
+   "end": 5542,
+   "old": "module_version = im.version(module_name)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 154,
+   "op": "constant",
+   "start": 5841,
+   "end": 5849,
+   "old": "\"inline\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 158,
+   "op": "constant",
+   "start": 6042,
+   "end": 6050,
+   "old": "\"ipympl\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 175,
+   "op": "statement",
+   "start": 6942,
+   "end": 7041,
+   "old": "raise RuntimeError(\n                    f\"Entry point name '{name}' cannot start with 'module://'\")",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 177,
+   "op": "comparison",
+   "start": 7057,
+   "end": 7103,
+   "old": "name in self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK",
+   "new": "(name not in self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK)",
+   "id": 53
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 178,
+   "op": "statement",
+   "start": 7121,
+   "end": 7191,
+   "old": "raise RuntimeError(f\"Entry point name '{name}' is a built-in backend\")",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 179,
+   "op": "comparison",
+   "start": 7207,
+   "end": 7245,
+   "old": "name in self._backend_to_gui_framework",
+   "new": "(name not in self._backend_to_gui_framework)",
+   "id": 55
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 180,
+   "op": "statement",
+   "start": 7263,
+   "end": 7322,
+   "old": "raise RuntimeError(f\"Entry point name '{name}' duplicated\")",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 182,
+   "op": "arithmetic",
+   "start": 7365,
+   "end": 7385,
+   "old": "\"module://\" + module",
+   "new": "('module://' - module)",
+   "id": 57
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 184,
+   "op": "constant",
+   "start": 7524,
+   "end": 7533,
+   "old": "\"unknown\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 285,
+   "op": "comparison",
+   "start": 10813,
+   "end": 10853,
+   "old": "filter_ == BackendFilter.NON_INTERACTIVE",
+   "new": "(filter_ != BackendFilter.NON_INTERACTIVE)",
+   "id": 59
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 286,
+   "op": "return",
+   "start": 10867,
+   "end": 10975,
+   "old": "return [k for k, v in self._BUILTIN_BACKEND_TO_GUI_FRAMEWORK.items()\n                    if v == \"headless\"]",
+   "new": "return None",
+   "id": 60
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 343,
+   "op": "boolean",
+   "start": 12656,
+   "end": 12691,
+   "old": "not backend.startswith(\"module://\")",
+   "new": "(backend.startswith('module://'))",
+   "id": 61
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 344,
+   "op": "statement",
+   "start": 12709,
+   "end": 12734,
+   "old": "backend = backend.lower()",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 355,
+   "op": "comparison",
+   "start": 13179,
+   "end": 13190,
+   "old": "gui is None",
+   "new": "(gui is not None)",
+   "id": 63
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 356,
+   "op": "constant",
+   "start": 13275,
+   "end": 13284,
+   "old": "\"unknown\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 359,
+   "op": "comparison",
+   "start": 13342,
+   "end": 13353,
+   "old": "gui is None",
+   "new": "(gui is not None)",
+   "id": 65
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 359,
+   "op": "boolean",
+   "start": 13358,
+   "end": 13387,
+   "old": "not self._loaded_entry_points",
+   "new": "(self._loaded_entry_points)",
+   "id": 66
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 364,
+   "op": "constant",
+   "start": 13568,
+   "end": 13577,
+   "old": "\"unknown\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 409,
+   "op": "statement",
+   "start": 15325,
+   "end": 15428,
+   "old": "raise RuntimeError(\n                f\"'{gui_or_backend}' is not a recognised GUI loop or backend name\")",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 136,
+   "op": "constant",
+   "start": 4954,
+   "end": 4974,
+   "old": "\"matplotlib.backend\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 147,
+   "op": "comparison",
+   "start": 5562,
+   "end": 5620,
+   "old": "_parse_to_version_info(module_version) < threshold_version",
+   "new": "(_parse_to_version_info(module_version) <= threshold_version)",
+   "id": 70
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5935,
+   "end": 5954,
+   "old": "\"matplotlib_inline\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 157,
+   "op": "constant",
+   "start": 5995,
+   "end": 6029,
+   "old": "\"matplotlib_inline.backend_inline\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6136,
+   "end": 6144,
+   "old": "\"ipympl\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 161,
+   "op": "constant",
+   "start": 6195,
+   "end": 6217,
+   "old": "\"ipympl.backend_nbagg\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 174,
+   "op": "constant",
+   "start": 6912,
+   "end": 6923,
+   "old": "\"module://\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 182,
+   "op": "constant",
+   "start": 7365,
+   "end": 7376,
+   "old": "\"module://\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 300,
+   "op": "comparison",
+   "start": 11308,
+   "end": 11323,
+   "old": "k != \"headless\"",
+   "new": "(k == 'headless')",
+   "id": 77
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 355,
+   "op": "constant",
+   "start": 13243,
+   "end": 13254,
+   "old": "\"module://\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 371,
+   "op": "comparison",
+   "start": 13836,
+   "end": 13853,
+   "old": "gui != \"headless\"",
+   "new": "(gui == 'headless')",
+   "id": 79
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 397,
+   "op": "constant",
+   "start": 14860,
+   "end": 14871,
+   "old": "\"module://\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 149,
+   "op": "statement",
+   "start": 5685,
+   "end": 5715,
+   "old": "entries.append((name, target))",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5957,
+   "end": 5958,
+   "old": "0",
+   "new": "(1)",
+   "id": 82
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5960,
+   "end": 5961,
+   "old": "1",
+   "new": "(2)",
+   "id": 83
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5963,
+   "end": 5964,
+   "old": "7",
+   "new": "(8)",
+   "id": 84
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5968,
+   "end": 5976,
+   "old": "\"inline\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6147,
+   "end": 6148,
+   "old": "0",
+   "new": "(1)",
+   "id": 86
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6150,
+   "end": 6151,
+   "old": "9",
+   "new": "(10)",
+   "id": 87
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6153,
+   "end": 6154,
+   "old": "4",
+   "new": "(5)",
+   "id": 88
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6158,
+   "end": 6166,
+   "old": "\"ipympl\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 160,
+   "op": "constant",
+   "start": 6168,
+   "end": 6176,
+   "old": "\"widget\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 284,
+   "op": "comparison",
+   "start": 10783,
+   "end": 10798,
+   "old": "v != \"headless\"",
+   "new": "(v == 'headless')",
+   "id": 91
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 300,
+   "op": "constant",
+   "start": 11313,
+   "end": 11323,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 343,
+   "op": "constant",
+   "start": 12679,
+   "end": 12690,
+   "old": "\"module://\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 371,
+   "op": "constant",
+   "start": 13843,
+   "end": 13853,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 403,
+   "op": "comparison",
+   "start": 15118,
+   "end": 15146,
+   "old": "gui_or_backend != \"headless\"",
+   "new": "(gui_or_backend == 'headless')",
+   "id": 95
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 284,
+   "op": "constant",
+   "start": 10788,
+   "end": 10798,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 287,
+   "op": "comparison",
+   "start": 10959,
+   "end": 10974,
+   "old": "v == \"headless\"",
+   "new": "(v != 'headless')",
+   "id": 97
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 403,
+   "op": "constant",
+   "start": 15136,
+   "end": 15146,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "lib/matplotlib/backends/registry.py",
+   "line": 287,
+   "op": "constant",
+   "start": 10964,
+   "end": 10974,
+   "old": "\"headless\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_build_gettext.2721e644.lv1",
+ "image": "libercoders/featurebench-specs_sphinx-instance_6191afb1@sha256:15b434473e16386e33c864d8b7f4a3bddb9c5585961758c0ed0f06b51b3f0268",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 12 passed, 1 skipped in 2.85s ========================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 137 passed in 2.00s =============================="
+ },
+ "mutant_pool": 509,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 137 passed in 2.42s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/sphinx/builders/__init__.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/sphinx/writers/latex.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

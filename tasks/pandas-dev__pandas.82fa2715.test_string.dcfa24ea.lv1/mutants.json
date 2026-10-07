@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_string.dcfa24ea.lv1",
+ "pool": 164,
+ "mutants": [
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 49,
+   "op": "return",
+   "start": 1118,
+   "end": 1161,
+   "old": "return self._cmp_method(other, operator.lt)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 53,
+   "op": "return",
+   "start": 1240,
+   "end": 1283,
+   "old": "return self._cmp_method(other, operator.le)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 57,
+   "op": "return",
+   "start": 1362,
+   "end": 1405,
+   "old": "return self._cmp_method(other, operator.gt)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 71,
+   "op": "return",
+   "start": 1772,
+   "end": 1821,
+   "old": "return self._logical_method(other, operator.and_)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 79,
+   "op": "return",
+   "start": 2034,
+   "end": 2082,
+   "old": "return self._logical_method(other, operator.or_)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 83,
+   "op": "return",
+   "start": 2163,
+   "end": 2213,
+   "old": "return self._logical_method(other, roperator.ror_)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 87,
+   "op": "return",
+   "start": 2294,
+   "end": 2342,
+   "old": "return self._logical_method(other, operator.xor)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 91,
+   "op": "return",
+   "start": 2425,
+   "end": 2475,
+   "old": "return self._logical_method(other, roperator.rxor)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 193,
+   "op": "return",
+   "start": 5725,
+   "end": 5773,
+   "old": "return self._arith_method(other, roperator.radd)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 205,
+   "op": "return",
+   "start": 6112,
+   "end": 6158,
+   "old": "return self._arith_method(other, operator.mul)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 209,
+   "op": "return",
+   "start": 6241,
+   "end": 6289,
+   "old": "return self._arith_method(other, roperator.rmul)",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 217,
+   "op": "return",
+   "start": 6519,
+   "end": 6571,
+   "old": "return self._arith_method(other, roperator.rtruediv)",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 47,
+   "op": "constant",
+   "start": 1071,
+   "end": 1079,
+   "old": "\"__lt__\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 51,
+   "op": "constant",
+   "start": 1193,
+   "end": 1201,
+   "old": "\"__le__\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 59,
+   "op": "constant",
+   "start": 1437,
+   "end": 1445,
+   "old": "\"__ge__\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 69,
+   "op": "constant",
+   "start": 1723,
+   "end": 1732,
+   "old": "\"__and__\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 77,
+   "op": "constant",
+   "start": 1987,
+   "end": 1995,
+   "old": "\"__or__\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2374,
+   "end": 2384,
+   "old": "\"__rxor__\"",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 99,
+   "op": "constant",
+   "start": 2672,
+   "end": 2681,
+   "old": "\"__add__\"",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 191,
+   "op": "constant",
+   "start": 5674,
+   "end": 5684,
+   "old": "\"__radd__\"",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 207,
+   "op": "constant",
+   "start": 6190,
+   "end": 6200,
+   "old": "\"__rmul__\"",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 211,
+   "op": "constant",
+   "start": 6321,
+   "end": 6334,
+   "old": "\"__truediv__\"",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/arraylike.py",
+   "line": 215,
+   "op": "constant",
+   "start": 6460,
+   "end": 6474,
+   "old": "\"__rtruediv__\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 616,
+   "op": "return",
+   "start": 18994,
+   "end": 19013,
+   "old": "return (len(self),)",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2578,
+   "op": "return",
+   "start": 84550,
+   "end": 84626,
+   "old": "return arraylike.default_array_ufunc(self, ufunc, method, *inputs, **kwargs)",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2906,
+   "op": "return",
+   "start": 96873,
+   "end": 96944,
+   "old": "return cls._create_method(op, coerce_to_dtype=False, result_dtype=bool)",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2558,
+   "op": "return",
+   "start": 83943,
+   "end": 83964,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2563,
+   "op": "comparison",
+   "start": 84100,
+   "end": 84128,
+   "old": "result is not NotImplemented",
+   "new": "(result is NotImplemented)",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2564,
+   "op": "return",
+   "start": 84142,
+   "end": 84155,
+   "old": "return result",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2566,
+   "op": "comparison",
+   "start": 84168,
+   "end": 84183,
+   "old": "\"out\" in kwargs",
+   "new": "('out' not in kwargs)",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2567,
+   "op": "return",
+   "start": 84197,
+   "end": 84307,
+   "old": "return arraylike.dispatch_ufunc_with_out(\n                self, ufunc, method, *inputs, **kwargs\n            )",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2571,
+   "op": "comparison",
+   "start": 84320,
+   "end": 84338,
+   "old": "method == \"reduce\"",
+   "new": "(method != 'reduce')",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2566,
+   "op": "constant",
+   "start": 84168,
+   "end": 84173,
+   "old": "\"out\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2571,
+   "op": "constant",
+   "start": 84330,
+   "end": 84338,
+   "old": "\"reduce\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 145,
+   "op": "statement",
+   "start": 3517,
+   "end": 3533,
+   "old": "xrav = x.ravel()",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 284,
+   "op": "return",
+   "start": 8315,
+   "end": 8332,
+   "old": "return res_values",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 479,
+   "op": "statement",
+   "start": 14891,
+   "end": 14935,
+   "old": "op_name = op.__name__.strip(\"_\").lstrip(\"r\")",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 578,
+   "op": "return",
+   "start": 18273,
+   "end": 18283,
+   "old": "return obj",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 92,
+   "op": "comparison",
+   "start": 1953,
+   "end": 1975,
+   "old": "fill_value is not None",
+   "new": "(fill_value is None)",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 94,
+   "op": "statement",
+   "start": 2016,
+   "end": 2040,
+   "old": "right_mask = isna(right)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 148,
+   "op": "statement",
+   "start": 3577,
+   "end": 3621,
+   "old": "dtype = find_common_type([x.dtype, y.dtype])",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 149,
+   "op": "statement",
+   "start": 3630,
+   "end": 3668,
+   "old": "result = np.empty(x.size, dtype=dtype)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 153,
+   "op": "statement",
+   "start": 3754,
+   "end": 3770,
+   "old": "ymask = notna(y)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 157,
+   "op": "statement",
+   "start": 3906,
+   "end": 3922,
+   "old": "yrav = y.ravel()",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 172,
+   "op": "statement",
+   "start": 4369,
+   "end": 4387,
+   "old": "mask = notna(xrav)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 272,
+   "op": "statement",
+   "start": 7657,
+   "end": 7685,
+   "old": "res_values = op(left, right)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 278,
+   "op": "statement",
+   "start": 8010,
+   "end": 8044,
+   "old": "_bool_arith_check(op, left, right)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 282,
+   "op": "statement",
+   "start": 8236,
+   "end": 8283,
+   "old": "res_values = _na_arithmetic_op(left, right, op)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 485,
+   "op": "comparison",
+   "start": 15109,
+   "end": 15156,
+   "old": "op_name in {\"eq\", \"ne\", \"lt\", \"le\", \"gt\", \"ge\"}",
+   "new": "(op_name not in {'eq', 'ne', 'lt', 'le', 'gt', 'ge'})",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 527,
+   "op": "return",
+   "start": 16215,
+   "end": 16236,
+   "old": "return Timedelta(obj)",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 598,
+   "op": "comparison",
+   "start": 18649,
+   "end": 18675,
+   "old": "op in _BOOL_OP_NOT_ALLOWED",
+   "new": "(op not in _BOOL_OP_NOT_ALLOWED)",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 107,
+   "op": "statement",
+   "start": 2378,
+   "end": 2415,
+   "old": "right[right_mask & mask] = fill_value",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 3681,
+   "end": 3697,
+   "old": "len(x) != len(y)",
+   "new": "(len(x) == len(y))",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 162,
+   "op": "statement",
+   "start": 4068,
+   "end": 4109,
+   "old": "result[mask] = op(xrav[mask], yrav[mask])",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 165,
+   "op": "boolean",
+   "start": 4132,
+   "end": 4148,
+   "old": "not is_scalar(y)",
+   "new": "(is_scalar(y))",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 166,
+   "op": "statement",
+   "start": 4162,
+   "end": 4270,
+   "old": "raise TypeError(\n                f\"Cannot broadcast np.ndarray with operand of type {type(y)}\"\n            )",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 175,
+   "op": "comparison",
+   "start": 4456,
+   "end": 4465,
+   "old": "op is pow",
+   "new": "(op is not pow)",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 181,
+   "op": "statement",
+   "start": 4636,
+   "end": 4668,
+   "old": "result[mask] = op(xrav[mask], y)",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 268,
+   "op": "comparison",
+   "start": 7492,
+   "end": 7504,
+   "old": "right is NaT",
+   "new": "(right is not NaT)",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 479,
+   "op": "constant",
+   "start": 14931,
+   "end": 14934,
+   "old": "\"r\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 480,
+   "op": "constant",
+   "start": 14954,
+   "end": 14964,
+   "old": "\"arith_op\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 487,
+   "op": "comparison",
+   "start": 15212,
+   "end": 15266,
+   "old": "op_name in {\"and\", \"or\", \"xor\", \"rand\", \"ror\", \"rxor\"}",
+   "new": "(op_name not in {'and', 'or', 'xor', 'rand', 'ror', 'rxor'})",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 488,
+   "op": "return",
+   "start": 15276,
+   "end": 15309,
+   "old": "return partial(logical_op, op=op)",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 528,
+   "op": "comparison",
+   "start": 16246,
+   "end": 16276,
+   "old": "type(obj) is datetime.datetime",
+   "new": "(type(obj) is not datetime.datetime)",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 530,
+   "op": "return",
+   "start": 16374,
+   "end": 16395,
+   "old": "return Timestamp(obj)",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 600,
+   "op": "statement",
+   "start": 18762,
+   "end": 18806,
+   "old": "op_name = op.__name__.strip(\"_\").lstrip(\"r\")",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 485,
+   "op": "constant",
+   "start": 15133,
+   "end": 15137,
+   "old": "\"lt\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 489,
+   "op": "comparison",
+   "start": 15319,
+   "end": 15469,
+   "old": "op_name in {\n        \"add\",\n        \"sub\",\n        \"mul\",\n        \"truediv\",\n        \"floordiv\",\n        \"mod\",\n        \"divmod\",\n        \"pow\",\n    }",
+   "new": "(op_name not in {'add', 'sub', 'mul', 'truediv', 'floordiv', 'mod', 'divmod', 'pow'})",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 499,
+   "op": "return",
+   "start": 15479,
+   "end": 15515,
+   "old": "return partial(arithmetic_op, op=op)",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 547,
+   "op": "return",
+   "start": 17094,
+   "end": 17115,
+   "old": "return Timestamp(obj)",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 599,
+   "op": "comparison",
+   "start": 18688,
+   "end": 18707,
+   "old": "a.dtype.kind == \"b\"",
+   "new": "(a.dtype.kind != 'b')",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 176,
+   "op": "comparison",
+   "start": 4495,
+   "end": 4501,
+   "old": "x == 1",
+   "new": "(x != 1)",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 479,
+   "op": "constant",
+   "start": 14919,
+   "end": 14922,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 487,
+   "op": "constant",
+   "start": 15224,
+   "end": 15229,
+   "old": "\"and\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 487,
+   "op": "constant",
+   "start": 15237,
+   "end": 15242,
+   "old": "\"xor\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 487,
+   "op": "constant",
+   "start": 15252,
+   "end": 15257,
+   "old": "\"ror\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 487,
+   "op": "constant",
+   "start": 15259,
+   "end": 15265,
+   "old": "\"rxor\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 544,
+   "op": "statement",
+   "start": 16978,
+   "end": 17013,
+   "old": "right = np.broadcast_to(obj, shape)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 545,
+   "op": "return",
+   "start": 17026,
+   "end": 17084,
+   "old": "return DatetimeArray._simple_new(right, dtype=right.dtype)",
+   "new": "return None",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 568,
+   "op": "return",
+   "start": 18033,
+   "end": 18054,
+   "old": "return Timedelta(obj)",
+   "new": "return None",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 600,
+   "op": "constant",
+   "start": 18802,
+   "end": 18805,
+   "old": "\"r\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 176,
+   "op": "constant",
+   "start": 4500,
+   "end": 4501,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 493,
+   "op": "constant",
+   "start": 15385,
+   "end": 15394,
+   "old": "\"truediv\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 494,
+   "op": "constant",
+   "start": 15404,
+   "end": 15414,
+   "old": "\"floordiv\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 495,
+   "op": "constant",
+   "start": 15424,
+   "end": 15429,
+   "old": "\"mod\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 496,
+   "op": "constant",
+   "start": 15439,
+   "end": 15447,
+   "old": "\"divmod\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 573,
+   "op": "return",
+   "start": 18186,
+   "end": 18201,
+   "old": "return int(obj)",
+   "new": "return None",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 178,
+   "op": "constant",
+   "start": 4584,
+   "end": 4585,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 542,
+   "op": "statement",
+   "start": 16879,
+   "end": 16921,
+   "old": "new_dtype = get_supported_dtype(obj.dtype)",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 558,
+   "op": "statement",
+   "start": 17515,
+   "end": 17550,
+   "old": "obj = obj.astype(\"timedelta64[ns]\")",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 576,
+   "op": "return",
+   "start": 18250,
+   "end": 18267,
+   "old": "return float(obj)",
+   "new": "return None",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 600,
+   "op": "constant",
+   "start": 18790,
+   "end": 18793,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 540,
+   "op": "constant",
+   "start": 16793,
+   "end": 16809,
+   "old": "\"datetime64[ns]\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 559,
+   "op": "boolean",
+   "start": 17568,
+   "end": 17601,
+   "old": "not is_supported_dtype(obj.dtype)",
+   "new": "(is_supported_dtype(obj.dtype))",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/ops/array_ops.py",
+   "line": 561,
+   "op": "statement",
+   "start": 17678,
+   "end": 17705,
+   "old": "obj = obj.astype(new_dtype)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/ops/invalid.py",
+   "line": 77,
+   "op": "return",
+   "start": 1680,
+   "end": 1697,
+   "old": "return invalid_op",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/ops/invalid.py",
+   "line": 49,
+   "op": "comparison",
+   "start": 925,
+   "end": 942,
+   "old": "op is operator.eq",
+   "new": "(op is not operator.eq)",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/ops/invalid.py",
+   "line": 50,
+   "op": "statement",
+   "start": 952,
+   "end": 997,
+   "old": "res_values = np.zeros(left.shape, dtype=bool)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/ops/invalid.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1097,
+   "end": 1123,
+   "old": "typ = type(right).__name__",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/ops/invalid.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1132,
+   "end": 1207,
+   "old": "raise TypeError(f\"Invalid comparison between dtype={left.dtype} and {typ}\")",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

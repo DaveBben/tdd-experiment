@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_spec_conformance.3aff206b.lv1",
+ "pool": 383,
+ "mutants": [
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 376,
+   "op": "return",
+   "start": 11719,
+   "end": 11755,
+   "old": "return validation_func(args, kwargs)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 316,
+   "op": "comparison",
+   "start": 7863,
+   "end": 7880,
+   "old": "obj.start is None",
+   "new": "(obj.start is not None)",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 317,
+   "op": "comparison",
+   "start": 7893,
+   "end": 7909,
+   "old": "obj.stop is None",
+   "new": "(obj.stop is not None)",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 318,
+   "op": "comparison",
+   "start": 7922,
+   "end": 7938,
+   "old": "obj.step is None",
+   "new": "(obj.step is not None)",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 535,
+   "op": "comparison",
+   "start": 13971,
+   "end": 13982,
+   "old": "x in mapper",
+   "new": "(x not in mapper)",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 654,
+   "op": "comparison",
+   "start": 16942,
+   "end": 16954,
+   "old": "name is None",
+   "new": "(name is not None)",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 594,
+   "op": "statement",
+   "start": 17621,
+   "end": 17643,
+   "old": "_registry = Registry()",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 443,
+   "op": "constant",
+   "start": 13428,
+   "end": 13433,
+   "old": "False",
+   "new": "(True)",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/indexing.py",
+   "line": 2774,
+   "op": "boolean",
+   "start": 95736,
+   "end": 95836,
+   "old": "not isinstance(key, slice)\n        and not is_list_like_indexer(key)\n        and key is not Ellipsis",
+   "new": "(not isinstance(key, slice) or not is_list_like_indexer(key) or key is not Ellipsis)",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/interchange/buffer.py",
+   "line": 95,
+   "op": "statement",
+   "start": 2424,
+   "end": 2445,
+   "old": "self._buffer = buffer",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/interchange/buffer.py",
+   "line": 103,
+   "op": "return",
+   "start": 2583,
+   "end": 2607,
+   "old": "return self._buffer.size",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/interchange/buffer.py",
+   "line": 110,
+   "op": "return",
+   "start": 2735,
+   "end": 2762,
+   "old": "return self._buffer.address",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 120,
+   "op": "statement",
+   "start": 3807,
+   "end": 3830,
+   "old": "dtype = self._col.dtype",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 235,
+   "op": "return",
+   "start": 8424,
+   "end": 8460,
+   "old": "return self._col.isna().sum().item()",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 248,
+   "op": "return",
+   "start": 8769,
+   "end": 8777,
+   "old": "return 1",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 302,
+   "op": "return",
+   "start": 10951,
+   "end": 10965,
+   "old": "return buffers",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 377,
+   "op": "return",
+   "start": 14025,
+   "end": 14045,
+   "old": "return buffer, dtype",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 385,
+   "op": "statement",
+   "start": 14345,
+   "end": 14379,
+   "old": "null, invalid = self.describe_null",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 386,
+   "op": "statement",
+   "start": 14388,
+   "end": 14402,
+   "old": "buffer: Buffer",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 434,
+   "op": "statement",
+   "start": 16350,
+   "end": 16376,
+   "old": "raise NoBufferPresent(msg)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 90,
+   "op": "statement",
+   "start": 2741,
+   "end": 3134,
+   "old": "raise TypeError(\n                \"Expected a Series, got a DataFrame. This likely happened \"\n                \"because you called __dataframe__ on a DataFrame which, \"\n                \"after converting column names to string, resulted in duplicated \"\n                f\"names: {column.columns}. Please rename these columns before \"\n                \"using the interchange protocol.\"\n            )",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 97,
+   "op": "boolean",
+   "start": 3146,
+   "end": 3179,
+   "old": "not isinstance(column, pd.Series)",
+   "new": "(isinstance(column, pd.Series))",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 124,
+   "op": "statement",
+   "start": 3938,
+   "end": 4098,
+   "old": "(\n                _,\n                bitwidth,\n                c_arrow_dtype_f_str,\n                _,\n            ) = self._dtype_from_pandasdtype(codes.dtype)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 159,
+   "op": "statement",
+   "start": 5255,
+   "end": 5331,
+   "old": "raise ValueError(f\"Data type {dtype} not supported by interchange protocol\")",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5386,
+   "end": 5425,
+   "old": "byteorder = dtype.numpy_dtype.byteorder",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 172,
+   "op": "return",
+   "start": 5864,
+   "end": 6048,
+   "old": "return (\n                kind,\n                dtype.itemsize,  # pyright: ignore[reportAttributeAccessIssue]\n                ArrowCTypes.BOOL,\n                byteorder,\n            )",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 214,
+   "op": "statement",
+   "start": 7568,
+   "end": 7582,
+   "old": "null_value = 1",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 265,
+   "op": "statement",
+   "start": 9354,
+   "end": 9364,
+   "old": "yield self",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 318,
+   "op": "statement",
+   "start": 11542,
+   "end": 11600,
+   "old": "buffer = PandasBuffer(np_arr, allow_copy=self._allow_copy)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 390,
+   "op": "statement",
+   "start": 14617,
+   "end": 14658,
+   "old": "arr = self._col.array._pa_array.chunks[0]",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 394,
+   "op": "statement",
+   "start": 14847,
+   "end": 14957,
+   "old": "buffer = PandasBufferPyarrow(\n                arr.buffers()[0],\n                length=len(arr),\n            )",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 402,
+   "op": "statement",
+   "start": 15132,
+   "end": 15159,
+   "old": "buffer = PandasBuffer(mask)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 415,
+   "op": "statement",
+   "start": 15602,
+   "end": 15652,
+   "old": "mask = np.zeros(shape=(len(buf),), dtype=np.bool_)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 462,
+   "op": "statement",
+   "start": 17522,
+   "end": 17666,
+   "old": "dtype = (\n                DtypeKind.INT,\n                64,\n                ArrowCTypes.INT64,\n                Endianness.NATIVE,\n            )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 469,
+   "op": "statement",
+   "start": 17743,
+   "end": 17891,
+   "old": "raise NoBufferPresent(\n                \"This column has a fixed-length dtype so \"\n                \"it does not have an offsets buffer\"\n            )",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 146,
+   "op": "return",
+   "start": 4676,
+   "end": 4718,
+   "old": "return self._dtype_from_pandasdtype(dtype)",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 163,
+   "op": "statement",
+   "start": 5487,
+   "end": 5519,
+   "old": "byteorder = dtype.base.byteorder",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 179,
+   "op": "arithmetic",
+   "start": 6071,
+   "end": 6089,
+   "old": "dtype.itemsize * 8",
+   "new": "(dtype.itemsize / 8)",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 199,
+   "op": "comparison",
+   "start": 7037,
+   "end": 7075,
+   "old": "self.dtype[0] == DtypeKind.CATEGORICAL",
+   "new": "(self.dtype[0] != DtypeKind.CATEGORICAL)",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 205,
+   "op": "constant",
+   "start": 7236,
+   "end": 7248,
+   "old": "\"is_ordered\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 206,
+   "op": "constant",
+   "start": 7302,
+   "end": 7306,
+   "old": "True",
+   "new": "(False)",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 222,
+   "op": "constant",
+   "start": 8069,
+   "end": 8070,
+   "old": "0",
+   "new": "(1)",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 226,
+   "op": "statement",
+   "start": 8179,
+   "end": 8252,
+   "old": "raise NotImplementedError(f\"Data type {kind} not yet supported\") from err",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 255,
+   "op": "comparison",
+   "start": 8994,
+   "end": 9006,
+   "old": "n_chunks > 1",
+   "new": "(n_chunks >= 1)",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 259,
+   "op": "statement",
+   "start": 9131,
+   "end": 9140,
+   "old": "step += 1",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 413,
+   "op": "boolean",
+   "start": 15579,
+   "end": 15588,
+   "old": "not valid",
+   "new": "(valid)",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 455,
+   "op": "statement",
+   "start": 17287,
+   "end": 17307,
+   "old": "offsets[i + 1] = ptr",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5609,
+   "end": 5648,
+   "old": "byteorder = dtype.numpy_dtype.byteorder",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 179,
+   "op": "constant",
+   "start": 6088,
+   "end": 6089,
+   "old": "8",
+   "new": "(9)",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 255,
+   "op": "constant",
+   "start": 9005,
+   "end": 9006,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 258,
+   "op": "arithmetic",
+   "start": 9093,
+   "end": 9108,
+   "old": "size % n_chunks",
+   "new": "(size * n_chunks)",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 337,
+   "op": "statement",
+   "start": 12284,
+   "end": 12406,
+   "old": "buffer = PandasBufferPyarrow(\n                    arr.buffers()[1],\n                    length=len(arr),\n                )",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 348,
+   "op": "statement",
+   "start": 12792,
+   "end": 12823,
+   "old": "codes = self._col.values._codes",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 349,
+   "op": "statement",
+   "start": 12836,
+   "end": 12893,
+   "old": "buffer = PandasBuffer(codes, allow_copy=self._allow_copy)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 443,
+   "op": "constant",
+   "start": 16749,
+   "end": 16750,
+   "old": "0",
+   "new": "(1)",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 452,
+   "op": "statement",
+   "start": 17205,
+   "end": 17235,
+   "old": "b = v.encode(encoding=\"utf-8\")",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 453,
+   "op": "statement",
+   "start": 17256,
+   "end": 17269,
+   "old": "ptr += len(b)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 470,
+   "op": "constant",
+   "start": 17782,
+   "end": 17877,
+   "old": "\"This column has a fixed-length dtype so \"\n                \"it does not have an offsets buffer\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 347,
+   "op": "constant",
+   "start": 12751,
+   "end": 12752,
+   "old": "0",
+   "new": "(1)",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 219,
+   "op": "constant",
+   "start": 7882,
+   "end": 7883,
+   "old": "0",
+   "new": "(1)",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/interchange/column.py",
+   "line": 359,
+   "op": "constant",
+   "start": 13352,
+   "end": 13359,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1030,
+   "end": 1059,
+   "old": "self._allow_copy = allow_copy",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 69,
+   "op": "return",
+   "start": 2125,
+   "end": 2194,
+   "old": "return PandasColumn(self._df.iloc[:, i], allow_copy=self._allow_copy)",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 83,
+   "op": "boolean",
+   "start": 2717,
+   "end": 2746,
+   "old": "not isinstance(indices, list)",
+   "new": "(isinstance(indices, list))",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 92,
+   "op": "statement",
+   "start": 3064,
+   "end": 3109,
+   "old": "raise ValueError(\"`names` is not a sequence\")",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3162,
+   "end": 3181,
+   "old": "names = list(names)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 40,
+   "op": "comparison",
+   "start": 1209,
+   "end": 1230,
+   "old": "rechunked is not None",
+   "new": "(rechunked is None)",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 104,
+   "op": "arithmetic",
+   "start": 3522,
+   "end": 3538,
+   "old": "size // n_chunks",
+   "new": "(size / n_chunks)",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3081,
+   "end": 3108,
+   "old": "\"`names` is not a sequence\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/interchange/dataframe.py",
+   "line": 105,
+   "op": "arithmetic",
+   "start": 3554,
+   "end": 3569,
+   "old": "size % n_chunks",
+   "new": "(size * n_chunks)",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/interchange/utils.py",
+   "line": 183,
+   "op": "return",
+   "start": 4971,
+   "end": 5050,
+   "old": "return pd.Series(arr, dtype=series.dtype, name=series.name, index=series.index)",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/interchange/utils.py",
+   "line": 143,
+   "op": "constant",
+   "start": 3374,
+   "end": 3377,
+   "old": "\"M\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/interchange/utils.py",
+   "line": 131,
+   "op": "comparison",
+   "start": 2953,
+   "end": 2975,
+   "old": "format_str is not None",
+   "new": "(format_str is None)",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/interchange/utils.py",
+   "line": 128,
+   "op": "comparison",
+   "start": 2803,
+   "end": 2825,
+   "old": "pa_type.tz is not None",
+   "new": "(pa_type.tz is None)",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 296,
+   "op": "statement",
+   "start": 8955,
+   "end": 8999,
+   "old": "mask = _maybe_get_mask(values, skipna, mask)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 298,
+   "op": "statement",
+   "start": 9005,
+   "end": 9025,
+   "old": "dtype = values.dtype",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 328,
+   "op": "statement",
+   "start": 10013,
+   "end": 10030,
+   "old": "dtype_max = dtype",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 630,
+   "op": "statement",
+   "start": 18656,
+   "end": 18676,
+   "old": "dtype = values.dtype",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 631,
+   "op": "statement",
+   "start": 18681,
+   "end": 18748,
+   "old": "values, mask = _get_values(values, skipna, fill_value=0, mask=mask)",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 639,
+   "op": "statement",
+   "start": 18961,
+   "end": 19042,
+   "old": "the_sum = _maybe_null_out(the_sum, axis, mask, values.shape, min_count=min_count)",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 641,
+   "op": "return",
+   "start": 19048,
+   "end": 19062,
+   "old": "return the_sum",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 300,
+   "op": "constant",
+   "start": 9046,
+   "end": 9051,
+   "old": "False",
+   "new": "(True)",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 304,
+   "op": "statement",
+   "start": 9199,
+   "end": 9237,
+   "old": "values = np.asarray(values.view(\"i8\"))",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1544,
+   "op": "return",
+   "start": 45992,
+   "end": 46005,
+   "old": "return result",
+   "new": "return None",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 250,
+   "op": "statement",
+   "start": 7577,
+   "end": 7596,
+   "old": "mask = isna(values)",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 305,
+   "op": "constant",
+   "start": 9261,
+   "end": 9265,
+   "old": "True",
+   "new": "(False)",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 331,
+   "op": "comparison",
+   "start": 10106,
+   "end": 10123,
+   "old": "dtype.kind == \"u\"",
+   "new": "(dtype.kind != 'u')",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1542,
+   "op": "comparison",
+   "start": 45926,
+   "end": 45940,
+   "old": "min_count == 0",
+   "new": "(min_count != 0)",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 631,
+   "op": "constant",
+   "start": 18735,
+   "end": 18736,
+   "old": "0",
+   "new": "(1)",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1548,
+   "op": "comparison",
+   "start": 46120,
+   "end": 46171,
+   "old": "(mask.shape[axis] - mask.sum(axis) - min_count) < 0",
+   "new": "(mask.shape[axis] - mask.sum(axis) - min_count <= 0)",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1552,
+   "op": "arithmetic",
+   "start": 46330,
+   "end": 46362,
+   "old": "shape[:axis] + shape[axis + 1 :]",
+   "new": "(shape[:axis] - shape[axis + 1:])",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 304,
+   "op": "constant",
+   "start": 9231,
+   "end": 9235,
+   "old": "\"i8\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 317,
+   "op": "statement",
+   "start": 9660,
+   "end": 9682,
+   "old": "values = values.copy()",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 321,
+   "op": "statement",
+   "start": 9836,
+   "end": 9880,
+   "old": "values = np.where(~mask, values, fill_value)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1567,
+   "op": "statement",
+   "start": 46976,
+   "end": 47000,
+   "old": "result[null_mask] = None",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1548,
+   "op": "arithmetic",
+   "start": 46121,
+   "end": 46154,
+   "old": "mask.shape[axis] - mask.sum(axis)",
+   "new": "(mask.shape[axis] + mask.sum(axis))",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1561,
+   "op": "statement",
+   "start": 46705,
+   "end": 46734,
+   "old": "result = result.astype(\"c16\")",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1552,
+   "op": "arithmetic",
+   "start": 46351,
+   "end": 46359,
+   "old": "axis + 1",
+   "new": "(axis - 1)",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1552,
+   "op": "constant",
+   "start": 46358,
+   "end": 46359,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1563,
+   "op": "constant",
+   "start": 46838,
+   "end": 46843,
+   "old": "False",
+   "new": "(True)",
+   "id": 99
+  }
+ ]
+}

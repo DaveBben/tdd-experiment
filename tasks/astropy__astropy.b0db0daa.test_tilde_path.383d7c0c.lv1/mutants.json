@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_tilde_path.383d7c0c.lv1",
+ "pool": 924,
+ "mutants": [
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2318,
+   "op": "statement",
+   "start": 85101,
+   "end": 85131,
+   "old": "format = match.group(\"format\")",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2771,
+   "op": "return",
+   "start": 99762,
+   "end": 99800,
+   "old": "return ftype + width + sep + precision",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2307,
+   "op": "constant",
+   "start": 84739,
+   "end": 84744,
+   "old": "False",
+   "new": "(True)",
+   "id": 2
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2321,
+   "op": "statement",
+   "start": 85195,
+   "end": 85234,
+   "old": "format = match.group(\"formatf\").upper()",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2367,
+   "op": "comparison",
+   "start": 86776,
+   "end": 86786,
+   "old": "width <= 0",
+   "new": "(width < 0)",
+   "id": 4
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2543,
+   "op": "constant",
+   "start": 92141,
+   "end": 92146,
+   "old": "False",
+   "new": "(True)",
+   "id": 5
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 530,
+   "op": "return",
+   "start": 17526,
+   "end": 17557,
+   "old": "return getattr(obj, self._attr)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2330,
+   "op": "constant",
+   "start": 85561,
+   "end": 85562,
+   "old": "0",
+   "new": "(1)",
+   "id": 7
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2560,
+   "op": "constant",
+   "start": 92948,
+   "end": 92949,
+   "old": "1",
+   "new": "(2)",
+   "id": 8
+  },
+  {
+   "path": "astropy/io/fits/column.py",
+   "line": 2569,
+   "op": "statement",
+   "start": 93322,
+   "end": 93334,
+   "old": "format = \"E\"",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1063,
+   "op": "statement",
+   "start": 38429,
+   "end": 38576,
+   "old": "err_msg = \"Redundant/conflicting extension arguments(s): {}\".format(\n        {\"args\": args, \"ext\": ext, \"extname\": extname, \"extver\": extver}\n    )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1105,
+   "op": "statement",
+   "start": 40050,
+   "end": 40202,
+   "old": "raise ValueError(\n            \"The ext keyword must be either an extension number \"\n            \"(zero-indexed) or a (extname, extver) tuple.\"\n        )",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1115,
+   "op": "statement",
+   "start": 40518,
+   "end": 40525,
+   "old": "ext = 0",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1096,
+   "op": "boolean",
+   "start": 39848,
+   "end": 40040,
+   "old": "not (\n        _is_int(ext)\n        or (\n            isinstance(ext, tuple)\n            and len(ext) == 2\n            and isinstance(ext[0], str)\n            and _is_int(ext[1])\n        )\n    )",
+   "new": "(_is_int(ext) or (isinstance(ext, tuple) and len(ext) == 2 and isinstance(ext[0], str) and _is_int(ext[1])))",
+   "id": 13
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1111,
+   "op": "boolean",
+   "start": 40361,
+   "end": 40380,
+   "old": "not _is_int(extver)",
+   "new": "(_is_int(extver))",
+   "id": 14
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1064,
+   "op": "constant",
+   "start": 38553,
+   "end": 38561,
+   "old": "\"extver\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1074,
+   "op": "boolean",
+   "start": 38968,
+   "end": 39028,
+   "old": "ext is not None or extname is not None or extver is not None",
+   "new": "(ext is not None and extname is not None and (extver is not None))",
+   "id": 16
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1087,
+   "op": "constant",
+   "start": 39534,
+   "end": 39535,
+   "old": "2",
+   "new": "(3)",
+   "id": 17
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1090,
+   "op": "statement",
+   "start": 39662,
+   "end": 39686,
+   "old": "raise TypeError(err_msg)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1094,
+   "op": "statement",
+   "start": 39770,
+   "end": 39819,
+   "old": "raise TypeError(\"Too many positional arguments.\")",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1093,
+   "op": "constant",
+   "start": 39759,
+   "end": 39760,
+   "old": "2",
+   "new": "(3)",
+   "id": 20
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1099,
+   "op": "boolean",
+   "start": 39900,
+   "end": 40024,
+   "old": "isinstance(ext, tuple)\n            and len(ext) == 2\n            and isinstance(ext[0], str)\n            and _is_int(ext[1])",
+   "new": "(isinstance(ext, tuple) or len(ext) == 2 or isinstance(ext[0], str) or _is_int(ext[1]))",
+   "id": 21
+  },
+  {
+   "path": "astropy/io/fits/convenience.py",
+   "line": 1123,
+   "op": "comparison",
+   "start": 40771,
+   "end": 40786,
+   "old": "extname is None",
+   "new": "(extname is not None)",
+   "id": 22
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 478,
+   "op": "statement",
+   "start": 16506,
+   "end": 16537,
+   "old": "self._file.seek(offset, whence)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 778,
+   "op": "statement",
+   "start": 28354,
+   "end": 28372,
+   "old": "self._file.seek(0)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 129,
+   "op": "constant",
+   "start": 3432,
+   "end": 3437,
+   "old": "False",
+   "new": "(True)",
+   "id": 25
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 185,
+   "op": "statement",
+   "start": 4887,
+   "end": 4912,
+   "old": "self.simulateonly = False",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 200,
+   "op": "statement",
+   "start": 5522,
+   "end": 5539,
+   "old": "mode = \"readonly\"",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 216,
+   "op": "boolean",
+   "start": 6137,
+   "end": 6263,
+   "old": "isinstance(fileobj, (str, bytes))\n            and mode not in (\"ostream\", \"append\", \"update\")\n            and _is_url(fileobj)",
+   "new": "(isinstance(fileobj, (str, bytes)) or mode not in ('ostream', 'append', 'update') or _is_url(fileobj))",
+   "id": 28
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 315,
+   "op": "boolean",
+   "start": 9898,
+   "end": 9929,
+   "old": "not hasattr(self._file, \"read\")",
+   "new": "(hasattr(self._file, 'read'))",
+   "id": 29
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 327,
+   "op": "constant",
+   "start": 10345,
+   "end": 10346,
+   "old": "0",
+   "new": "(1)",
+   "id": 30
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 337,
+   "op": "statement",
+   "start": 10746,
+   "end": 10760,
+   "old": "raise EOFError",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 342,
+   "op": "boolean",
+   "start": 10854,
+   "end": 10889,
+   "old": "size and size % dtype.itemsize != 0",
+   "new": "(size or size % dtype.itemsize != 0)",
+   "id": 32
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 343,
+   "op": "statement",
+   "start": 10903,
+   "end": 10961,
+   "old": "raise ValueError(f\"size {size} not a multiple of {dtype}\")",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 348,
+   "op": "boolean",
+   "start": 11039,
+   "end": 11058,
+   "old": "not (size or shape)",
+   "new": "(size or shape)",
+   "id": 34
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 444,
+   "op": "statement",
+   "start": 15548,
+   "end": 15572,
+   "old": "self._file.seek(filepos)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 481,
+   "op": "statement",
+   "start": 16624,
+   "end": 16832,
+   "old": "warnings.warn(\n                \"File may have been truncated: actual file length \"\n                f\"({self.size}) is smaller than the expected size ({pos})\",\n                AstropyUserWarning,\n            )",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 225,
+   "op": "statement",
+   "start": 6618,
+   "end": 6654,
+   "old": "fileobj = io.BytesIO(fileobj.read())",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 259,
+   "op": "comparison",
+   "start": 7814,
+   "end": 7842,
+   "old": "self.compression is not None",
+   "new": "(self.compression is None)",
+   "id": 38
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 261,
+   "op": "comparison",
+   "start": 7896,
+   "end": 7944,
+   "old": "mode in (\"readonly\", \"copyonwrite\", \"denywrite\")",
+   "new": "(mode not in ('readonly', 'copyonwrite', 'denywrite'))",
+   "id": 39
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 434,
+   "op": "statement",
+   "start": 15026,
+   "end": 15049,
+   "old": "self._file.seek(offset)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 228,
+   "op": "statement",
+   "start": 6732,
+   "end": 6769,
+   "old": "fileobj = os.path.expanduser(fileobj)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 293,
+   "op": "constant",
+   "start": 9277,
+   "end": 9282,
+   "old": "False",
+   "new": "(True)",
+   "id": 42
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 707,
+   "op": "boolean",
+   "start": 25791,
+   "end": 25844,
+   "old": "_is_bz2file(self._file) or (_is_lzmafile(self._file))",
+   "new": "(_is_bz2file(self._file) and _is_lzmafile(self._file))",
+   "id": 43
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 276,
+   "op": "constant",
+   "start": 8571,
+   "end": 8580,
+   "old": "\"ostream\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 294,
+   "op": "boolean",
+   "start": 9300,
+   "end": 9317,
+   "old": "not self.readonly",
+   "new": "(self.readonly)",
+   "id": 45
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 223,
+   "op": "constant",
+   "start": 6515,
+   "end": 6523,
+   "old": "\"update\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 276,
+   "op": "constant",
+   "start": 8614,
+   "end": 8622,
+   "old": "\"append\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 420,
+   "op": "statement",
+   "start": 14493,
+   "end": 14742,
+   "old": "self._mmap = mmap.mmap(\n                                self._file.fileno(),\n                                0,\n                                access=MEMMAP_MODES[\"denywrite\"],\n                                offset=0,\n                            )",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 414,
+   "op": "constant",
+   "start": 14147,
+   "end": 14381,
+   "old": "\"Could not memory map array with \"\n                                \"mode='readonly', falling back to \"\n                                \"mode='denywrite', which means that \"\n                                \"the array will be read-only\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "astropy/io/fits/file.py",
+   "line": 409,
+   "op": "comparison",
+   "start": 13889,
+   "end": 13914,
+   "old": "exc.errno == errno.EINVAL",
+   "new": "(exc.errno != errno.EINVAL)",
+   "id": 50
+  },
+  {
+   "path": "astropy/io/fits/fitsrec.py",
+   "line": 1364,
+   "op": "boolean",
+   "start": 55104,
+   "end": 55146,
+   "old": "not isinstance(field, chararray.chararray)",
+   "new": "(isinstance(field, chararray.chararray))",
+   "id": 51
+  },
+  {
+   "path": "astropy/io/fits/fitsrec.py",
+   "line": 1416,
+   "op": "constant",
+   "start": 56978,
+   "end": 56981,
+   "old": "\"U\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 429,
+   "op": "statement",
+   "start": 14704,
+   "end": 14721,
+   "old": "header_offset = 0",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 515,
+   "op": "statement",
+   "start": 18696,
+   "end": 18720,
+   "old": "hdu._buffer = hdu_buffer",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 517,
+   "op": "statement",
+   "start": 18730,
+   "end": 18764,
+   "old": "hdu._header_offset = header_offset",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 521,
+   "op": "statement",
+   "start": 18919,
+   "end": 18934,
+   "old": "size = hdu.size",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 275,
+   "op": "boolean",
+   "start": 8599,
+   "end": 8651,
+   "old": "\"data\" in self.__dict__ and self.data is not DELAYED",
+   "new": "('data' in self.__dict__ or self.data is not DELAYED)",
+   "id": 57
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 550,
+   "op": "return",
+   "start": 20007,
+   "end": 20079,
+   "old": "return np.ndarray(shape, dtype=code, buffer=self._buffer, offset=offset)",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 453,
+   "op": "statement",
+   "start": 15918,
+   "end": 15960,
+   "old": "np.ndarray((), dtype=\"ubyte\", buffer=data)",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 536,
+   "op": "comparison",
+   "start": 19612,
+   "end": 19632,
+   "old": "checksum != \"remove\"",
+   "new": "(checksum == 'remove')",
+   "id": 60
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 1599,
+   "op": "constant",
+   "start": 57992,
+   "end": 57999,
+   "old": "\"ubyte\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 476,
+   "op": "statement",
+   "start": 16893,
+   "end": 16910,
+   "old": "hdu_buffer = data",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 507,
+   "op": "statement",
+   "start": 18356,
+   "end": 18394,
+   "old": "header = Header.fromstring(header_str)",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 467,
+   "op": "comparison",
+   "start": 16566,
+   "end": 16581,
+   "old": "idx < len(data)",
+   "new": "(idx <= len(data))",
+   "id": 64
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 469,
+   "op": "statement",
+   "start": 16662,
+   "end": 16675,
+   "old": "idx += nbytes",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "astropy/io/fits/hdu/base.py",
+   "line": 472,
+   "op": "constant",
+   "start": 16801,
+   "end": 16805,
+   "old": "True",
+   "new": "(False)",
+   "id": 66
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1157,
+   "op": "statement",
+   "start": 39994,
+   "end": 40040,
+   "old": "keyword = Card.normalize_keyword(card.keyword)",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1426,
+   "op": "statement",
+   "start": 50375,
+   "end": 50399,
+   "old": "self._updateindices(idx)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 750,
+   "op": "statement",
+   "start": 26124,
+   "end": 26189,
+   "old": "blocks = self.tostring(sep=sep, endcard=endcard, padding=padding)",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 760,
+   "op": "statement",
+   "start": 26600,
+   "end": 26615,
+   "old": "fileobj.flush()",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1159,
+   "op": "comparison",
+   "start": 40103,
+   "end": 40135,
+   "old": "card.field_specifier is not None",
+   "new": "(card.field_specifier is None)",
+   "id": 71
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1160,
+   "op": "statement",
+   "start": 40149,
+   "end": 40196,
+   "old": "self._rvkc_indices[card.rawkeyword].append(idx)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1345,
+   "op": "constant",
+   "start": 47333,
+   "end": 47338,
+   "old": "False",
+   "new": "(True)",
+   "id": 73
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1450,
+   "op": "constant",
+   "start": 51292,
+   "end": 51296,
+   "old": "True",
+   "new": "(False)",
+   "id": 74
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1805,
+   "op": "constant",
+   "start": 63598,
+   "end": 63602,
+   "old": "True",
+   "new": "(False)",
+   "id": 75
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 753,
+   "op": "statement",
+   "start": 26320,
+   "end": 26508,
+   "old": "raise OSError(\n                    f\"Header size ({len(blocks) - actual_block_size + BLOCK_SIZE}) \"\n                    f\"is not a multiple of block size ({BLOCK_SIZE}).\"\n                )",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1128,
+   "op": "statement",
+   "start": 39035,
+   "end": 39053,
+   "old": "card = Card(*card)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1139,
+   "op": "constant",
+   "start": 39463,
+   "end": 39467,
+   "old": "True",
+   "new": "(False)",
+   "id": 78
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1766,
+   "op": "statement",
+   "start": 62284,
+   "end": 62302,
+   "old": "idx = insertionkey",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1769,
+   "op": "arithmetic",
+   "start": 62351,
+   "end": 62359,
+   "old": "idx += 1",
+   "new": "idx -= 1",
+   "id": 80
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1825,
+   "op": "boolean",
+   "start": 64323,
+   "end": 64353,
+   "old": "not self._cards[-idx].is_blank",
+   "new": "(self._cards[-idx].is_blank)",
+   "id": 81
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1826,
+   "op": "return",
+   "start": 64371,
+   "end": 64385,
+   "old": "return idx - 1",
+   "new": "return None",
+   "id": 82
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1862,
+   "op": "statement",
+   "start": 65667,
+   "end": 65709,
+   "old": "indices = range(*key.indices(len(target)))",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1149,
+   "op": "comparison",
+   "start": 39728,
+   "end": 39768,
+   "old": "card.keyword not in _commentary_keywords",
+   "new": "(card.keyword in _commentary_keywords)",
+   "id": 84
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1423,
+   "op": "constant",
+   "start": 50287,
+   "end": 50288,
+   "old": "0",
+   "new": "(1)",
+   "id": 85
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1448,
+   "op": "arithmetic",
+   "start": 51235,
+   "end": 51264,
+   "old": "len(str(card)) // Card.length",
+   "new": "(len(str(card)) / Card.length)",
+   "id": 86
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1657,
+   "op": "constant",
+   "start": 58098,
+   "end": 58102,
+   "old": "True",
+   "new": "(False)",
+   "id": 87
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1660,
+   "op": "comparison",
+   "start": 58222,
+   "end": 58254,
+   "old": "keyword in self._keyword_indices",
+   "new": "(keyword not in self._keyword_indices)",
+   "id": 88
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1798,
+   "op": "constant",
+   "start": 63358,
+   "end": 63359,
+   "old": "0",
+   "new": "(1)",
+   "id": 89
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1151,
+   "op": "constant",
+   "start": 39882,
+   "end": 39883,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1789,
+   "op": "comparison",
+   "start": 63118,
+   "end": 63142,
+   "old": "old_idx == insertion_idx",
+   "new": "(old_idx != insertion_idx)",
+   "id": 91
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1820,
+   "op": "arithmetic",
+   "start": 64132,
+   "end": 64157,
+   "old": "indices[jdx] += increment",
+   "new": "indices[jdx] -= increment",
+   "id": 92
+  },
+  {
+   "path": "astropy/io/fits/header.py",
+   "line": 1826,
+   "op": "constant",
+   "start": 64384,
+   "end": 64385,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "astropy/io/fits/util.py",
+   "line": 386,
+   "op": "return",
+   "start": 12599,
+   "end": 12614,
+   "old": "return f.closed",
+   "new": "return None",
+   "id": 94
+  },
+  {
+   "path": "astropy/io/fits/util.py",
+   "line": 654,
+   "op": "boolean",
+   "start": 21403,
+   "end": 21433,
+   "old": "binmode and isinstance(s, str)",
+   "new": "(binmode or isinstance(s, str))",
+   "id": 95
+  },
+  {
+   "path": "astropy/io/fits/util.py",
+   "line": 363,
+   "op": "return",
+   "start": 11964,
+   "end": 11994,
+   "old": "return fileobj_name(f.fileobj)",
+   "new": "return None",
+   "id": 96
+  },
+  {
+   "path": "astropy/io/fits/util.py",
+   "line": 392,
+   "op": "constant",
+   "start": 12819,
+   "end": 12824,
+   "old": "False",
+   "new": "(True)",
+   "id": 97
+  },
+  {
+   "path": "astropy/io/fits/util.py",
+   "line": 695,
+   "op": "constant",
+   "start": 22645,
+   "end": 22648,
+   "old": "\"i\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "astropy/utils/data.py",
+   "line": 186,
+   "op": "constant",
+   "start": 5244,
+   "end": 5251,
+   "old": "\"s3://\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

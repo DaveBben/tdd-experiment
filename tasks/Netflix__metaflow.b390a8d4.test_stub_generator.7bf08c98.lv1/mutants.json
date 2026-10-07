@@ -1,0 +1,1006 @@
+{
+ "task": "Netflix__metaflow.b390a8d4.test_stub_generator.7bf08c98.lv1",
+ "pool": 453,
+ "mutants": [
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 347,
+   "op": "statement",
+   "start": 12472,
+   "end": 12488,
+   "old": "self._stubs = []",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 638,
+   "op": "statement",
+   "start": 25564,
+   "end": 25621,
+   "old": "debug.stubgen_exec(\"Generating class stub for %s\" % name)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 675,
+   "op": "statement",
+   "start": 27304,
+   "end": 27356,
+   "old": "buff.write(\"metaclass=\" + name_with_module + \"):\\n\")",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 990,
+   "op": "statement",
+   "start": 41762,
+   "end": 41797,
+   "old": "raw_doc = inspect.cleandoc(raw_doc)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1006,
+   "op": "statement",
+   "start": 42291,
+   "end": 42360,
+   "old": "parameters, no_arg_version = parse_params_from_doc(docs[\"param_doc\"])",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 629,
+   "op": "constant",
+   "start": 25224,
+   "end": 25228,
+   "old": "\": \"",
+   "new": "('XX')",
+   "id": 5
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 651,
+   "op": "statement",
+   "start": 26280,
+   "end": 26333,
+   "old": "self._sub_module_imports.add((\"typing\", \"TypedDict\"))",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 655,
+   "op": "statement",
+   "start": 26489,
+   "end": 26550,
+   "old": "buff.write(f\"class {name}(TypedDict, total={total_flag}):\\n\")",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 680,
+   "op": "statement",
+   "start": 27466,
+   "end": 27506,
+   "old": "my_doc = inspect.cleandoc(clazz.__doc__)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 687,
+   "op": "statement",
+   "start": 27775,
+   "end": 27802,
+   "old": "buff.write('%s\"\"\"\\n' % TAB)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 925,
+   "op": "statement",
+   "start": 38960,
+   "end": 39015,
+   "old": "resulting_dict = (\n                dict()\n            )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 986,
+   "op": "boolean",
+   "start": 41598,
+   "end": 41637,
+   "old": "not \"FlowSpecDerived\" in self._typevars",
+   "new": "('FlowSpecDerived' in self._typevars)",
+   "id": 11
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1095,
+   "op": "statement",
+   "start": 46036,
+   "end": 47377,
+   "old": "result = result + [\n                (\n                    inspect.Signature(\n                        parameters=(\n                            [\n                                inspect.Parameter(\n                                    name=\"f\",\n                                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,\n                                    annotation=Optional[typing.Type[FlowSpecDerived]],\n                                    default=(\n                                        None\n                                        if no_arg_version\n                                        else inspect.Parameter.empty\n                                    ),\n                                )\n                            ]\n                            + parameters\n                            if no_arg_version\n                            else [] + parameters\n                        ),\n                        return_annotation=(\n                            inspect.Signature.empty\n                            if no_arg_version\n                            else Callable[\n                                [typing.Type[FlowSpecDerived]],\n                                typing.Type[FlowSpecDerived],\n                            ]\n                        ),\n                    ),\n                    \"\",\n                ),\n            ]",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1241,
+   "op": "statement",
+   "start": 52087,
+   "end": 52234,
+   "old": "raise RuntimeError(\n                \"Cannot generate stub for function %s with either a function or signature\"\n                % name\n            )",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1263,
+   "op": "boolean",
+   "start": 53060,
+   "end": 53082,
+   "old": "sign and len(sign) > 1",
+   "new": "(sign or len(sign) > 1)",
+   "id": 14
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1278,
+   "op": "statement",
+   "start": 53745,
+   "end": 53765,
+   "old": "has_var_args = False",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 650,
+   "op": "comparison",
+   "start": 26200,
+   "end": 26227,
+   "old": "typed_dict_meta is not None",
+   "new": "(typed_dict_meta is None)",
+   "id": 16
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 659,
+   "op": "statement",
+   "start": 26765,
+   "end": 26806,
+   "old": "buff.write(f\"{TAB}{field_name}: {ann}\\n\")",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 681,
+   "op": "constant",
+   "start": 27532,
+   "end": 27536,
+   "old": "True",
+   "new": "(False)",
+   "id": 18
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 686,
+   "op": "statement",
+   "start": 27719,
+   "end": 27762,
+   "old": "buff.write(\"%s%s\\n\" % (TAB, line.rstrip()))",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 945,
+   "op": "boolean",
+   "start": 39871,
+   "end": 39884,
+   "old": "not skip_init",
+   "new": "(skip_init)",
+   "id": 20
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 986,
+   "op": "comparison",
+   "start": 41602,
+   "end": 41637,
+   "old": "\"FlowSpecDerived\" in self._typevars",
+   "new": "('FlowSpecDerived' not in self._typevars)",
+   "id": 21
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1027,
+   "op": "statement",
+   "start": 43125,
+   "end": 43738,
+   "old": "result.append(\n                    (\n                        inspect.Signature(\n                            parameters=[\n                                inspect.Parameter(\n                                    name=\"f\",\n                                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,\n                                    annotation=typing.Type[FlowSpecDerived],\n                                )\n                            ],\n                            return_annotation=typing.Type[FlowSpecDerived],\n                        ),\n                        \"\",\n                    ),\n                )",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1253,
+   "op": "constant",
+   "start": 52612,
+   "end": 52628,
+   "old": "\"STUBGEN_IGNORE\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1266,
+   "op": "comparison",
+   "start": 53177,
+   "end": 53186,
+   "old": "count > 0",
+   "new": "(count >= 0)",
+   "id": 24
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1321,
+   "op": "statement",
+   "start": 55579,
+   "end": 55596,
+   "old": "init_blank = True",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 638,
+   "op": "constant",
+   "start": 25583,
+   "end": 25613,
+   "old": "\"Generating class stub for %s\"",
+   "new": "('XX')",
+   "id": 26
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 664,
+   "op": "arithmetic",
+   "start": 26914,
+   "end": 26944,
+   "old": "\"class \" + name.split(\".\")[-1]",
+   "new": "('class ' - name.split('.')[-1])",
+   "id": 27
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 675,
+   "op": "constant",
+   "start": 27349,
+   "end": 27355,
+   "old": "\"):\\n\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 683,
+   "op": "boolean",
+   "start": 27600,
+   "end": 27637,
+   "old": "init_blank and len(line.strip()) == 0",
+   "new": "(init_blank or len(line.strip()) == 0)",
+   "id": 29
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 684,
+   "op": "statement",
+   "start": 27659,
+   "end": 27667,
+   "old": "continue",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 931,
+   "op": "statement",
+   "start": 39302,
+   "end": 39332,
+   "old": "r[2].append(\"@%s\" % deco_name)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 971,
+   "op": "constant",
+   "start": 40970,
+   "end": 40979,
+   "old": "\"%s...\\n\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 986,
+   "op": "constant",
+   "start": 41602,
+   "end": 41619,
+   "old": "\"FlowSpecDerived\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 995,
+   "op": "boolean",
+   "start": 41930,
+   "end": 42022,
+   "old": "param_section_header.search(raw_doc)\n                or StartEnd(len(raw_doc), len(raw_doc))",
+   "new": "(param_section_header.search(raw_doc) and StartEnd(len(raw_doc), len(raw_doc)))",
+   "id": 34
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1194,
+   "op": "return",
+   "start": 50045,
+   "end": 50279,
+   "old": "return (\n                        \"[\"\n                        + \", \".join(\n                            [cast(str, exploit_default(v)) for v in default_value]\n                        )\n                        + \"]\"\n                    )",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1263,
+   "op": "constant",
+   "start": 53081,
+   "end": 53082,
+   "old": "1",
+   "new": "(2)",
+   "id": 36
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1269,
+   "op": "comparison",
+   "start": 53253,
+   "end": 53274,
+   "old": "count < len(sign) - 1",
+   "new": "(count <= len(sign) - 1)",
+   "id": 37
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1288,
+   "op": "statement",
+   "start": 54195,
+   "end": 54380,
+   "old": "raise RuntimeError(\n                        \"In function '%s': cannot have a positional parameter after a \"\n                        \"keyword only parameter\" % name\n                    )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1299,
+   "op": "statement",
+   "start": 54635,
+   "end": 54652,
+   "old": "buff.write(\"*, \")",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1301,
+   "op": "statement",
+   "start": 54741,
+   "end": 54769,
+   "old": "par_name = \"**%s\" % par_name",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1307,
+   "op": "statement",
+   "start": 54980,
+   "end": 55031,
+   "old": "buff.write(par_name + annotation + \" = \" + default)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1311,
+   "op": "comparison",
+   "start": 55128,
+   "end": 55159,
+   "old": "i < len(my_sign.parameters) - 1",
+   "new": "(i <= len(my_sign.parameters) - 1)",
+   "id": 42
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 651,
+   "op": "constant",
+   "start": 26310,
+   "end": 26318,
+   "old": "\"typing\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 651,
+   "op": "constant",
+   "start": 26320,
+   "end": 26331,
+   "old": "\"TypedDict\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 675,
+   "op": "constant",
+   "start": 27315,
+   "end": 27327,
+   "old": "\"metaclass=\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 686,
+   "op": "arithmetic",
+   "start": 27730,
+   "end": 27761,
+   "old": "\"%s%s\\n\" % (TAB, line.rstrip())",
+   "new": "('%s%s\\n' * (TAB, line.rstrip()))",
+   "id": 46
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 700,
+   "op": "constant",
+   "start": 28354,
+   "end": 28368,
+   "old": "\"@classmethod\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 741,
+   "op": "statement",
+   "start": 30233,
+   "end": 31174,
+   "old": "buff.write(\n                            self._generate_function_stub(\n                                key,\n                                element,\n                                sign=[\n                                    inspect.Signature(\n                                        parameters=[\n                                            inspect.Parameter(\n                                                \"self\",\n                                                inspect.Parameter.POSITIONAL_OR_KEYWORD,\n                                            )\n                                        ]\n                                        + parameters,\n                                        return_annotation=return_type,\n                                    )\n                                ],\n                                indentation=TAB,\n                                deco=func_deco,\n                            )\n                        )",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 992,
+   "op": "constant",
+   "start": 41866,
+   "end": 41867,
+   "old": "0",
+   "new": "(1)",
+   "id": 49
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1014,
+   "op": "constant",
+   "start": 42592,
+   "end": 42603,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1043,
+   "op": "constant",
+   "start": 43781,
+   "end": 43792,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1195,
+   "op": "arithmetic",
+   "start": 50078,
+   "end": 50257,
+   "old": "\"[\"\n                        + \", \".join(\n                            [cast(str, exploit_default(v)) for v in default_value]\n                        )\n                        + \"]\"",
+   "new": "('[' + ', '.join([cast(str, exploit_default(v)) for v in default_value]) - ']')",
+   "id": 52
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1276,
+   "op": "constant",
+   "start": 53694,
+   "end": 53697,
+   "old": "\"(\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1286,
+   "op": "comparison",
+   "start": 54107,
+   "end": 54155,
+   "old": "parameter.kind != inspect.Parameter.KEYWORD_ONLY",
+   "new": "(parameter.kind == inspect.Parameter.KEYWORD_ONLY)",
+   "id": 54
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1316,
+   "op": "constant",
+   "start": 55372,
+   "end": 55377,
+   "old": "\":\\n\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1322,
+   "op": "constant",
+   "start": 55638,
+   "end": 55642,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1323,
+   "op": "boolean",
+   "start": 55668,
+   "end": 55705,
+   "old": "init_blank and len(line.strip()) == 0",
+   "new": "(init_blank or len(line.strip()) == 0)",
+   "id": 57
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1325,
+   "op": "constant",
+   "start": 55773,
+   "end": 55778,
+   "old": "False",
+   "new": "(True)",
+   "id": 58
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 686,
+   "op": "constant",
+   "start": 27730,
+   "end": 27738,
+   "old": "\"%s%s\\n\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 713,
+   "op": "comparison",
+   "start": 28851,
+   "end": 28868,
+   "old": "clazz == Deployer",
+   "new": "(clazz != Deployer)",
+   "id": 60
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1203,
+   "op": "arithmetic",
+   "start": 50388,
+   "end": 50567,
+   "old": "\"(\"\n                        + \", \".join(\n                            [cast(str, exploit_default(v)) for v in default_value]\n                        )\n                        + \")\"",
+   "new": "('(' + ', '.join([cast(str, exploit_default(v)) for v in default_value]) - ')')",
+   "id": 61
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1289,
+   "op": "arithmetic",
+   "start": 54239,
+   "end": 54358,
+   "old": "\"In function '%s': cannot have a positional parameter after a \"\n                        \"keyword only parameter\" % name",
+   "new": "(\"In function '%s': cannot have a positional parameter after a keyword only parameter\" * name)",
+   "id": 62
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1323,
+   "op": "comparison",
+   "start": 55683,
+   "end": 55705,
+   "old": "len(line.strip()) == 0",
+   "new": "(len(line.strip()) != 0)",
+   "id": 63
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 664,
+   "op": "constant",
+   "start": 26936,
+   "end": 26939,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 762,
+   "op": "comparison",
+   "start": 31252,
+   "end": 31289,
+   "old": "element.__name__ == \"from_deployment\"",
+   "new": "(element.__name__ != 'from_deployment')",
+   "id": 65
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 797,
+   "op": "statement",
+   "start": 32860,
+   "end": 32914,
+   "old": "return_type = all_types[0] if len(all_types) else None",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 831,
+   "op": "statement",
+   "start": 34601,
+   "end": 34855,
+   "old": "func_doc = inspect.cleandoc(\n                            self._deployer_injected_methods[element.__name__[5:]][\n                                \"from_deployment\"\n                            ][1]\n                            or \"\"\n                        )",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 938,
+   "op": "arithmetic",
+   "start": 39615,
+   "end": 39775,
+   "old": "\"(only in the presence of the %s decorator%s)\\n\\n\"\n                        % (\", or \".join(decos), \"\" if len(decos) == 1 else \"s\")\n                        + doc",
+   "new": "('(only in the presence of the %s decorator%s)\\n\\n' % (', or '.join(decos), '' if len(decos) == 1 else 's') - doc)",
+   "id": 68
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1276,
+   "op": "constant",
+   "start": 53678,
+   "end": 53684,
+   "old": "\"def \"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1289,
+   "op": "constant",
+   "start": 54239,
+   "end": 54351,
+   "old": "\"In function '%s': cannot have a positional parameter after a \"\n                        \"keyword only parameter\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 736,
+   "op": "constant",
+   "start": 30040,
+   "end": 30051,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1203,
+   "op": "constant",
+   "start": 50388,
+   "end": 50391,
+   "old": "\"(\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1307,
+   "op": "arithmetic",
+   "start": 54991,
+   "end": 55012,
+   "old": "par_name + annotation",
+   "new": "(par_name - annotation)",
+   "id": 73
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1307,
+   "op": "constant",
+   "start": 55015,
+   "end": 55020,
+   "old": "\" = \"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 784,
+   "op": "constant",
+   "start": 32368,
+   "end": 32379,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 887,
+   "op": "comparison",
+   "start": 37276,
+   "end": 37298,
+   "old": "clazz.TYPE is not None",
+   "new": "(clazz.TYPE is None)",
+   "id": 76
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 888,
+   "op": "comparison",
+   "start": 37331,
+   "end": 37355,
+   "old": "key == \"from_deployment\"",
+   "new": "(key != 'from_deployment')",
+   "id": 77
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 917,
+   "op": "arithmetic",
+   "start": 38651,
+   "end": 38669,
+   "old": "\"@%s.setter\" % key",
+   "new": "('@%s.setter' * key)",
+   "id": 78
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1132,
+   "op": "arithmetic",
+   "start": 47546,
+   "end": 48167,
+   "old": "[\n                                inspect.Parameter(\n                                    name=\"f\",\n                                    kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,\n                                    annotation=Optional[MetaflowStepFunction],\n                                    default=(\n                                        None\n                                        if no_arg_version\n                                        else inspect.Parameter.empty\n                                    ),\n                                )\n                            ]\n                            + parameters",
+   "new": "([inspect.Parameter(name='f', kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=Optional[MetaflowStepFunction], default=None if no_arg_version else inspect.Parameter.empty)] - parameters)",
+   "id": 79
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1211,
+   "op": "constant",
+   "start": 50697,
+   "end": 50700,
+   "old": "\"{\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 770,
+   "op": "constant",
+   "start": 31670,
+   "end": 31680,
+   "old": "\"func_doc\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 772,
+   "op": "constant",
+   "start": 31769,
+   "end": 31780,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 773,
+   "op": "boolean",
+   "start": 31818,
+   "end": 31933,
+   "old": "param_section_header.search(func_doc)\n                                    or StartEnd(len(func_doc), len(func_doc))",
+   "new": "(param_section_header.search(func_doc) and StartEnd(len(func_doc), len(func_doc)))",
+   "id": 83
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 790,
+   "op": "constant",
+   "start": 32555,
+   "end": 32572,
+   "old": "\"from_deployment\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 797,
+   "op": "constant",
+   "start": 32884,
+   "end": 32885,
+   "old": "0",
+   "new": "(1)",
+   "id": 85
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 854,
+   "op": "constant",
+   "start": 35698,
+   "end": 35709,
+   "old": "\"param_doc\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 890,
+   "op": "constant",
+   "start": 37448,
+   "end": 37451,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 770,
+   "op": "constant",
+   "start": 31694,
+   "end": 31695,
+   "old": "0",
+   "new": "(1)",
+   "id": 88
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 816,
+   "op": "arithmetic",
+   "start": 33813,
+   "end": 34005,
+   "old": "docs[\"func_doc\"]\n                                + \"\\n\\nParameters\\n----------\\n\"\n                                + docs[\"param_doc\"]\n                                + \"\\n\\nReturns\\n-------\\n\"",
+   "new": "(docs['func_doc'] + '\\n\\nParameters\\n----------\\n' + docs['param_doc'] - '\\n\\nReturns\\n-------\\n')",
+   "id": 89
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 827,
+   "op": "constant",
+   "start": 34377,
+   "end": 34378,
+   "old": "5",
+   "new": "(6)",
+   "id": 90
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1032,
+   "op": "constant",
+   "start": 43338,
+   "end": 43341,
+   "old": "\"f\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 820,
+   "op": "constant",
+   "start": 34040,
+   "end": 34069,
+   "old": "\"%s\\nA `DeployedFlow` object\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 833,
+   "op": "constant",
+   "start": 34745,
+   "end": 34762,
+   "old": "\"from_deployment\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 876,
+   "op": "arithmetic",
+   "start": 36778,
+   "end": 36970,
+   "old": "docs[\"func_doc\"]\n                                + \"\\n\\nParameters\\n----------\\n\"\n                                + docs[\"param_doc\"]\n                                + \"\\n\\nReturns\\n-------\\n\"",
+   "new": "(docs['func_doc'] + '\\n\\nParameters\\n----------\\n' + docs['param_doc'] - '\\n\\nReturns\\n-------\\n')",
+   "id": 94
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1078,
+   "op": "constant",
+   "start": 45342,
+   "end": 45345,
+   "old": "\"f\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 1214,
+   "op": "arithmetic",
+   "start": 50800,
+   "end": 50868,
+   "old": "cast(str, exploit_default(k))\n                                + \": \"",
+   "new": "(cast(str, exploit_default(k)) - ': ')",
+   "id": 96
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 816,
+   "op": "arithmetic",
+   "start": 33813,
+   "end": 33894,
+   "old": "docs[\"func_doc\"]\n                                + \"\\n\\nParameters\\n----------\\n\"",
+   "new": "(docs['func_doc'] - '\\n\\nParameters\\n----------\\n')",
+   "id": 97
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 749,
+   "op": "constant",
+   "start": 30639,
+   "end": 30645,
+   "old": "\"self\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "metaflow/cmd/develop/stub_generator.py",
+   "line": 876,
+   "op": "constant",
+   "start": 36783,
+   "end": 36793,
+   "old": "\"func_doc\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

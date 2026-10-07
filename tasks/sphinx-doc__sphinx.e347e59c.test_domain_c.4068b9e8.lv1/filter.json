@@ -1,0 +1,35 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_domain_c.4068b9e8.lv1",
+ "image": "libercoders/featurebench-specs_sphinx-instance_6191afb1@sha256:15b434473e16386e33c864d8b7f4a3bddb9c5585961758c0ed0f06b51b3f0268",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 35 passed in 2.08s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 81 passed in 1.13s =============================="
+ },
+ "mutant_pool": 408,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 81 passed in 1.47s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/sphinx/domains/cpp/_parser.py": {
+   "lines": 2,
+   "tracked": true
+  },
+  "/testbed/sphinx/domains/cpp/_symbol.py": {
+   "lines": 10,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

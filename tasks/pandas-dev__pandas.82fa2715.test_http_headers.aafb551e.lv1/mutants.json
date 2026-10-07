@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_http_headers.aafb551e.lv1",
+ "pool": 969,
+ "mutants": [
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 315,
+   "op": "comparison",
+   "start": 7402,
+   "end": 7418,
+   "old": "\"dtype\" not in d",
+   "new": "('dtype' in d)",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 307,
+   "op": "constant",
+   "start": 7104,
+   "end": 7111,
+   "old": "\"codes\"",
+   "new": "('XX')",
+   "id": 1
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 292,
+   "op": "return",
+   "start": 7401,
+   "end": 7549,
+   "old": "return (\n        isinstance(url, str)\n        and bool(_FSSPEC_URL_PATTERN.match(url))\n        and not url.startswith((\"http://\", \"https://\"))\n    )",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 479,
+   "op": "return",
+   "start": 14234,
+   "end": 14408,
+   "old": "return IOArgs(\n        filepath_or_buffer=filepath_or_buffer,\n        encoding=encoding,\n        compression=compression,\n        should_close=False,\n        mode=mode,\n    )",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 605,
+   "op": "statement",
+   "start": 17869,
+   "end": 17926,
+   "old": "valid = [\"infer\", None] + sorted(_supported_compressions)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 719,
+   "op": "statement",
+   "start": 21277,
+   "end": 21307,
+   "old": "encoding = encoding or \"utf-8\"",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 203,
+   "op": "comparison",
+   "start": 4602,
+   "end": 4616,
+   "old": "header is None",
+   "new": "(header is not None)",
+   "id": 6
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 266,
+   "op": "boolean",
+   "start": 6474,
+   "end": 6532,
+   "old": "not convert_file_like and is_file_like(filepath_or_buffer)",
+   "new": "(not convert_file_like or is_file_like(filepath_or_buffer))",
+   "id": 7
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 354,
+   "op": "statement",
+   "start": 9370,
+   "end": 9545,
+   "old": "warnings.warn(\n            f\"{compression} will not write the byte order mark for {encoding}\",\n            UnicodeWarning,\n            stacklevel=find_stack_level(),\n        )",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 473,
+   "op": "boolean",
+   "start": 14017,
+   "end": 14112,
+   "old": "not (\n        hasattr(filepath_or_buffer, \"read\") or hasattr(filepath_or_buffer, \"write\")\n    )",
+   "new": "(hasattr(filepath_or_buffer, 'read') or hasattr(filepath_or_buffer, 'write'))",
+   "id": 9
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 513,
+   "op": "constant",
+   "start": 14921,
+   "end": 14927,
+   "old": "\".zip\"",
+   "new": "('XX')",
+   "id": 10
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 514,
+   "op": "constant",
+   "start": 14940,
+   "end": 14945,
+   "old": "\".xz\"",
+   "new": "('XX')",
+   "id": 11
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 508,
+   "op": "constant",
+   "start": 14827,
+   "end": 14832,
+   "old": "\"tar\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 510,
+   "op": "constant",
+   "start": 14872,
+   "end": 14877,
+   "old": "\"tar\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 585,
+   "op": "comparison",
+   "start": 16968,
+   "end": 16990,
+   "old": "compression == \"infer\"",
+   "new": "(compression != 'infer')",
+   "id": 14
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 754,
+   "op": "statement",
+   "start": 22267,
+   "end": 22302,
+   "old": "check_parent_directory(str(handle))",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 901,
+   "op": "boolean",
+   "start": 28031,
+   "end": 28101,
+   "old": "not is_text and ioargs.mode == \"rb\" and isinstance(handle, TextIOBase)",
+   "new": "(not is_text or ioargs.mode == 'rb' or isinstance(handle, TextIOBase))",
+   "id": 16
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 207,
+   "op": "comparison",
+   "start": 4706,
+   "end": 4716,
+   "old": "header < 0",
+   "new": "(header <= 0)",
+   "id": 17
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 209,
+   "op": "statement",
+   "start": 4753,
+   "end": 4907,
+   "old": "raise ValueError(\n                \"Passing negative integer to header is invalid. \"\n                \"For no header, use header=None instead\"\n            )",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 228,
+   "op": "constant",
+   "start": 5563,
+   "end": 5607,
+   "old": "\"header must be integer or list of integers\"",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 295,
+   "op": "boolean",
+   "start": 7500,
+   "end": 7543,
+   "old": "not url.startswith((\"http://\", \"https://\"))",
+   "new": "(url.startswith(('http://', 'https://')))",
+   "id": 20
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 351,
+   "op": "comparison",
+   "start": 9274,
+   "end": 9309,
+   "old": "compression_method in [\"bz2\", \"xz\"]",
+   "new": "(compression_method not in ['bz2', 'xz'])",
+   "id": 21
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 374,
+   "op": "comparison",
+   "start": 10167,
+   "end": 10189,
+   "old": "\"b\" not in fsspec_mode",
+   "new": "('b' in fsspec_mode)",
+   "id": 22
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 474,
+   "op": "boolean",
+   "start": 14031,
+   "end": 14106,
+   "old": "hasattr(filepath_or_buffer, \"read\") or hasattr(filepath_or_buffer, \"write\")",
+   "new": "(hasattr(filepath_or_buffer, 'read') and hasattr(filepath_or_buffer, 'write'))",
+   "id": 23
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 350,
+   "op": "constant",
+   "start": 9250,
+   "end": 9253,
+   "old": "\"w\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 360,
+   "op": "constant",
+   "start": 9554,
+   "end": 9557,
+   "old": "\"a\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 391,
+   "op": "comparison",
+   "start": 10988,
+   "end": 11014,
+   "old": "content_encoding == \"gzip\"",
+   "new": "(content_encoding != 'gzip')",
+   "id": 26
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 412,
+   "op": "constant",
+   "start": 11881,
+   "end": 11889,
+   "old": "\"s3n://\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 724,
+   "op": "constant",
+   "start": 21466,
+   "end": 21469,
+   "old": "\"b\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 217,
+   "op": "constant",
+   "start": 5084,
+   "end": 5128,
+   "old": "\"header must be integer or list of integers\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 360,
+   "op": "constant",
+   "start": 9593,
+   "end": 9598,
+   "old": "\"zip\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 546,
+   "op": "constant",
+   "start": 15861,
+   "end": 15869,
+   "old": "\"method\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 760,
+   "op": "comparison",
+   "start": 22522,
+   "end": 22544,
+   "old": "\"b\" not in ioargs.mode",
+   "new": "('b' in ioargs.mode)",
+   "id": 32
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 548,
+   "op": "constant",
+   "start": 15932,
+   "end": 15980,
+   "old": "\"If mapping, compression must have key 'method'\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 809,
+   "op": "comparison",
+   "start": 24510,
+   "end": 24529,
+   "old": "len(zip_names) == 1",
+   "new": "(len(zip_names) != 1)",
+   "id": 34
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 828,
+   "op": "statement",
+   "start": 25384,
+   "end": 25527,
+   "old": "handle = _BytesTarFile(\n                    fileobj=handle,  # type: ignore[arg-type]\n                    **compression_args,\n                )",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 862,
+   "op": "comparison",
+   "start": 26727,
+   "end": 26748,
+   "old": "compression == \"zstd\"",
+   "new": "(compression != 'zstd')",
+   "id": 36
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 877,
+   "op": "statement",
+   "start": 27281,
+   "end": 27302,
+   "old": "raise ValueError(msg)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 843,
+   "op": "statement",
+   "start": 26049,
+   "end": 26218,
+   "old": "raise ValueError(\n                        \"Multiple files found in TAR archive. \"\n                        f\"Only one file per TAR archive: {files}\"\n                    )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 862,
+   "op": "constant",
+   "start": 26742,
+   "end": 26748,
+   "old": "\"zstd\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "pandas/io/common.py",
+   "line": 864,
+   "op": "constant",
+   "start": 26824,
+   "end": 26827,
+   "old": "\"r\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1006,
+   "op": "statement",
+   "start": 33188,
+   "end": 33212,
+   "old": "path_or_buf = StringIO()",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1892,
+   "op": "constant",
+   "start": 61878,
+   "end": 61883,
+   "old": "False",
+   "new": "(True)",
+   "id": 42
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1008,
+   "op": "constant",
+   "start": 33256,
+   "end": 33261,
+   "old": "False",
+   "new": "(True)",
+   "id": 43
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1072,
+   "op": "constant",
+   "start": 35103,
+   "end": 35154,
+   "old": "\"buf is not a file name and encoding is specified.\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "pandas/io/formats/html.py",
+   "line": 654,
+   "op": "constant",
+   "start": 24439,
+   "end": 24447,
+   "old": "\"</div>\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 860,
+   "op": "statement",
+   "start": 25354,
+   "end": 25391,
+   "old": "head, body, foot = kwargs.pop(\"data\")",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 970,
+   "op": "statement",
+   "start": 28338,
+   "end": 28371,
+   "old": "flavor = _validate_flavor(flavor)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 1027,
+   "op": "return",
+   "start": 30398,
+   "end": 30408,
+   "old": "return ret",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 880,
+   "op": "return",
+   "start": 26010,
+   "end": 26026,
+   "old": "return tp.read()",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 975,
+   "op": "statement",
+   "start": 28502,
+   "end": 28533,
+   "old": "parser = _parser_dispatch(flav)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 1042,
+   "op": "constant",
+   "start": 30895,
+   "end": 30898,
+   "old": "\",\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 1048,
+   "op": "constant",
+   "start": 31101,
+   "end": 31105,
+   "old": "True",
+   "new": "(False)",
+   "id": 52
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 1216,
+   "op": "comparison",
+   "start": 38524,
+   "end": 38536,
+   "old": "skiprows < 0",
+   "new": "(skiprows <= 0)",
+   "id": 53
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 933,
+   "op": "constant",
+   "start": 27381,
+   "end": 27386,
+   "old": "\"bs4\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 945,
+   "op": "statement",
+   "start": 27835,
+   "end": 27856,
+   "old": "raise ValueError(msg)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 869,
+   "op": "constant",
+   "start": 25678,
+   "end": 25679,
+   "old": "0",
+   "new": "(1)",
+   "id": 56
+  },
+  {
+   "path": "pandas/io/html.py",
+   "line": 937,
+   "op": "boolean",
+   "start": 27502,
+   "end": 27551,
+   "old": "not all(isinstance(flav, str) for flav in flavor)",
+   "new": "(all((isinstance(flav, str) for flav in flavor)))",
+   "id": 57
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 153,
+   "op": "constant",
+   "start": 3599,
+   "end": 3602,
+   "old": "\"w\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 156,
+   "op": "statement",
+   "start": 3687,
+   "end": 3828,
+   "old": "raise ValueError(\n            \"'index=True' is only valid when 'orient' is 'split', 'table', \"\n            \"'index', or 'columns'.\"\n        )",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 180,
+   "op": "statement",
+   "start": 4527,
+   "end": 4652,
+   "old": "msg = (\n            \"mode='a' (append) is only supported when \"\n            \"lines is True and orient is 'records'\"\n        )",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 187,
+   "op": "statement",
+   "start": 4746,
+   "end": 4791,
+   "old": "obj = obj.to_frame(name=obj.name or \"values\")",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 160,
+   "op": "constant",
+   "start": 3882,
+   "end": 3887,
+   "old": "False",
+   "new": "(True)",
+   "id": 62
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 162,
+   "op": "constant",
+   "start": 3927,
+   "end": 4030,
+   "old": "\"'index=False' is only valid when 'orient' is 'split', 'table', \"\n            \"'records', or 'values'.\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 1142,
+   "op": "constant",
+   "start": 36887,
+   "end": 36890,
+   "old": "\"s\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "pandas/io/json/_json.py",
+   "line": 187,
+   "op": "constant",
+   "start": 4782,
+   "end": 4790,
+   "old": "\"values\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "pandas/io/parquet.py",
+   "line": 370,
+   "op": "statement",
+   "start": 11880,
+   "end": 12021,
+   "old": "raise ValueError(\n                \"The 'dtype_backend' argument is not supported for the \"\n                \"fastparquet engine\"\n            )",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pandas/io/parquet.py",
+   "line": 398,
+   "op": "statement",
+   "start": 13075,
+   "end": 13134,
+   "old": "parquet_file = self.api.ParquetFile(path, **parquet_kwargs)",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/io/parquet.py",
+   "line": 315,
+   "op": "comparison",
+   "start": 9939,
+   "end": 9965,
+   "old": "partition_cols is not None",
+   "new": "(partition_cols is None)",
+   "id": 68
+  },
+  {
+   "path": "pandas/io/parquet.py",
+   "line": 392,
+   "op": "statement",
+   "start": 12904,
+   "end": 13014,
+   "old": "handles = get_handle(\n                path, \"rb\", is_text=False, storage_options=storage_options\n            )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2293,
+   "op": "statement",
+   "start": 90024,
+   "end": 90058,
+   "old": "check_dtype_backend(dtype_backend)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 302,
+   "op": "boolean",
+   "start": 7956,
+   "end": 7977,
+   "old": "chunksize or iterator",
+   "new": "(chunksize and iterator)",
+   "id": 71
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2249,
+   "op": "boolean",
+   "start": 88469,
+   "end": 88510,
+   "old": "delimiter and (sep is not lib.no_default)",
+   "new": "(delimiter or sep is not lib.no_default)",
+   "id": 72
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2267,
+   "op": "statement",
+   "start": 89115,
+   "end": 89148,
+   "old": "kwds[\"delimiter\"] = delim_default",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 265,
+   "op": "comparison",
+   "start": 6806,
+   "end": 6843,
+   "old": "kwds.get(\"date_format\", None) is None",
+   "new": "(kwds.get('date_format', None) is not None)",
+   "id": 74
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 287,
+   "op": "comparison",
+   "start": 7521,
+   "end": 7542,
+   "old": "chunksize is not None",
+   "new": "(chunksize is None)",
+   "id": 75
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 294,
+   "op": "constant",
+   "start": 7768,
+   "end": 7775,
+   "old": "\"nrows\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2258,
+   "op": "constant",
+   "start": 88765,
+   "end": 88769,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2279,
+   "op": "comparison",
+   "start": 89455,
+   "end": 89477,
+   "old": "on_bad_lines == \"warn\"",
+   "new": "(on_bad_lines != 'warn')",
+   "id": 78
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2245,
+   "op": "constant",
+   "start": 88351,
+   "end": 88365,
+   "old": "\"sep_override\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2272,
+   "op": "constant",
+   "start": 89238,
+   "end": 89256,
+   "old": "\"engine_specified\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2282,
+   "op": "constant",
+   "start": 89592,
+   "end": 89606,
+   "old": "\"on_bad_lines\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2285,
+   "op": "statement",
+   "start": 89739,
+   "end": 89883,
+   "old": "raise ValueError(\n                \"on_bad_line can only be a callable function \"\n                \"if engine='python' or 'pyarrow'\"\n            )",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "pandas/io/parsers/readers.py",
+   "line": 2284,
+   "op": "constant",
+   "start": 89705,
+   "end": 89713,
+   "old": "\"python\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3639,
+   "op": "statement",
+   "start": 132603,
+   "end": 132640,
+   "old": "self._update_map(\"value_label_names\")",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3712,
+   "op": "statement",
+   "start": 135569,
+   "end": 135605,
+   "old": "self._update_map(\"stata_data_close\")",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2907,
+   "op": "statement",
+   "start": 106398,
+   "end": 106415,
+   "old": "self._write_map()",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2912,
+   "op": "statement",
+   "start": 106593,
+   "end": 106624,
+   "old": "self._write_value_label_names()",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2916,
+   "op": "statement",
+   "start": 106780,
+   "end": 106810,
+   "old": "records = self._prepare_data()",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2920,
+   "op": "statement",
+   "start": 106948,
+   "end": 106976,
+   "old": "self._write_file_close_tag()",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3618,
+   "op": "constant",
+   "start": 131736,
+   "end": 131739,
+   "old": "128",
+   "new": "(129)",
+   "id": 90
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3642,
+   "op": "comparison",
+   "start": 132760,
+   "end": 132784,
+   "old": "self._dta_version == 117",
+   "new": "(self._dta_version != 117)",
+   "id": 91
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2937,
+   "op": "statement",
+   "start": 107698,
+   "end": 107707,
+   "old": "raise exc",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3618,
+   "op": "constant",
+   "start": 131727,
+   "end": 131730,
+   "old": "117",
+   "new": "(118)",
+   "id": 93
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3687,
+   "op": "constant",
+   "start": 134724,
+   "end": 134741,
+   "old": "\"characteristics\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 3697,
+   "op": "constant",
+   "start": 135083,
+   "end": 135090,
+   "old": "\"strls\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2894,
+   "op": "constant",
+   "start": 105753,
+   "end": 105758,
+   "old": "False",
+   "new": "(True)",
+   "id": 96
+  },
+  {
+   "path": "pandas/io/stata.py",
+   "line": 2931,
+   "op": "statement",
+   "start": 107381,
+   "end": 107681,
+   "old": "warnings.warn(\n                            f\"This save was not successful but {self._fname} could not \"\n                            \"be deleted. This file is not valid.\",\n                            ResourceWarning,\n                            stacklevel=find_stack_level(),\n                        )",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 478,
+   "op": "comparison",
+   "start": 14691,
+   "end": 14741,
+   "old": "dtype_backend not in [\"numpy_nullable\", \"pyarrow\"]",
+   "new": "(dtype_backend in ['numpy_nullable', 'pyarrow'])",
+   "id": 98
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 479,
+   "op": "statement",
+   "start": 14755,
+   "end": 14917,
+   "old": "raise ValueError(\n                f\"dtype_backend {dtype_backend} is invalid, only 'numpy_nullable' and \"\n                f\"'pyarrow' are allowed.\",\n            )",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

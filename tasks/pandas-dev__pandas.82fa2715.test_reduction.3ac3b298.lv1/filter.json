@@ -1,0 +1,31 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_reduction.3ac3b298.lv1",
+ "image": "libercoders/featurebench-specs_pandas-instance_15f634a6@sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 47 passed in 0.14s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 156 passed in 0.42s =============================="
+ },
+ "mutant_pool": 691,
+ "stub_compiles": true,
+ "stub_imports": false,
+ "stub_p2p": {
+  "exit": 4,
+  "failing": [],
+  "summary": "+ /opt/miniconda3/envs/testbed/bin/ninja"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/pandas/core/groupby/groupby.py": {
+   "lines": 2,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

@@ -1,0 +1,1519 @@
+=== mlflow/entities/assessment_source.py
+import warnings
+from dataclasses import asdict, dataclass
+from typing import Any
+
+from mlflow.entities._mlflow_object import _MlflowObject
+from mlflow.exceptions import MlflowException
+from mlflow.protos.assessments_pb2 import AssessmentSource as ProtoAssessmentSource
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+
+
+@dataclass
+class AssessmentSource(_MlflowObject):
+    """
+    Source of an assessment (human, LLM as a judge with GPT-4, etc).
+
+    When recording an assessment, MLflow mandates providing a source information
+    to keep track of how the assessment is conducted.
+
+    Args:
+        source_type: The type of the assessment source. Must be one of the values in
+            the AssessmentSourceType enum or an instance of the enumerator value.
+        source_id: An identifier for the source, e.g. user ID or LLM judge ID. If not
+            provided, the default value "default" is used.
+
+    Note:
+
+    The legacy AssessmentSourceType "AI_JUDGE" is deprecated and will be resolved as
+    "LLM_JUDGE". You will receive a warning if using this deprecated value. This legacy
+    term will be removed in a future version of MLflow.
+
+    Example:
+
+    Human annotation can be represented with a source type of "HUMAN":
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.entities.assessment import AssessmentSource, AssessmentSourceType
+
+        source = AssessmentSource(
+            source_type=AssessmentSourceType.HUMAN,  # or "HUMAN"
+            source_id="bob@example.com",
+        )
+
+    LLM-as-a-judge can be represented with a source type of "LLM_JUDGE":
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.entities.assessment import AssessmentSource, AssessmentSourceType
+
+        source = AssessmentSource(
+            source_type=AssessmentSourceType.LLM_JUDGE,  # or "LLM_JUDGE"
+            source_id="gpt-4o-mini",
+        )
+
+    Heuristic evaluation can be represented with a source type of "CODE":
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.entities.assessment import AssessmentSource, AssessmentSourceType
+
+        source = AssessmentSource(
+            source_type=AssessmentSourceType.CODE,  # or "CODE"
+            source_id="repo/evaluation_script.py",
+        )
+
+    To record more context about the assessment, you can use the `metadata` field of
+    the assessment logging APIs as well.
+    """
+
+    source_type: str
+    source_id: str = "default"
+
+    def __post_init__(self):
+        # Perform the standardization on source_type after initialization
+        self.source_type = AssessmentSourceType._standardize(self.source_type)
+
+    def to_dictionary(self) -> dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dictionary(cls, source_dict: dict[str, Any]) -> "AssessmentSource":
+        return cls(**source_dict)
+
+    def to_proto(self):
+        source = ProtoAssessmentSource()
+        source.source_type = ProtoAssessmentSource.SourceType.Value(self.source_type)
+        if self.source_id is not None:
+            source.source_id = self.source_id
+        return source
+
+    @classmethod
+    def from_proto(cls, proto):
+        return AssessmentSource(
+            source_type=AssessmentSourceType.from_proto(proto.source_type),
+            source_id=proto.source_id if proto.source_id else None,
+        )
+
+
+class AssessmentSourceType:
+    """
+    Enumeration and validator for assessment source types.
+
+    This class provides constants for valid assessment source types and handles validation
+    and standardization of source type values. It supports both direct constant access and
+    instance creation with string validation.
+
+    The class automatically handles:
+    - Case-insensitive string inputs (converts to uppercase)
+    - Deprecation warnings for legacy values (AI_JUDGE → LLM_JUDGE)
+    - Validation of source type values
+
+    Available source types:
+        - HUMAN: Assessment performed by a human evaluator
+        - LLM_JUDGE: Assessment performed by an LLM-as-a-judge (e.g., GPT-4)
+        - CODE: Assessment performed by deterministic code/heuristics
+        - SOURCE_TYPE_UNSPECIFIED: Default when source type is not specified
+
+    Note:
+        The legacy "AI_JUDGE" type is deprecated and automatically converted to "LLM_JUDGE"
+        with a deprecation warning. This ensures backward compatibility while encouraging
+        migration to the new terminology.
+
+    Example:
+        Using class constants directly:
+
+        .. code-block:: python
+
+            from mlflow.entities.assessment import AssessmentSource, AssessmentSourceType
+
+            # Direct constant usage
+            source = AssessmentSource(source_type=AssessmentSourceType.LLM_JUDGE, source_id="gpt-4")
+
+        String validation through instance creation:
+
+        .. code-block:: python
+
+            # String input - case insensitive
+            source = AssessmentSource(
+                source_type="llm_judge",  # Will be standardized to "LLM_JUDGE"
+                source_id="gpt-4",
+            )
+
+            # Deprecated value - triggers warning
+            source = AssessmentSource(
+                source_type="AI_JUDGE",  # Warning: converts to "LLM_JUDGE"
+                source_id="gpt-4",
+            )
+    """
+
+    SOURCE_TYPE_UNSPECIFIED = "SOURCE_TYPE_UNSPECIFIED"
+    LLM_JUDGE = "LLM_JUDGE"
+    AI_JUDGE = "AI_JUDGE"  # Deprecated, use LLM_JUDGE instead
+    HUMAN = "HUMAN"
+    CODE = "CODE"
+    _SOURCE_TYPES = [SOURCE_TYPE_UNSPECIFIED, LLM_JUDGE, HUMAN, CODE]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @classmethod
+    def from_proto(cls, proto_source_type) -> str:
+        return ProtoAssessmentSource.SourceType.Name(proto_source_type)
+
+    @staticmethod
+    def _standardize(source_type: str) -> str:
+        """
+        Standardize and validate an assessment source type string.
+
+        This static method validates an assessment source type and returns its canonical
+        string representation. It handles case normalization, deprecation warnings, and
+        validation in a single operation.
+
+        Args:
+            source_type (str): The source type string to standardize. Can be any case
+                (e.g., "human", "HUMAN", "Human") and will be converted to uppercase.
+                Accepts both current values ("HUMAN", "LLM_JUDGE", "CODE", 
+                "SOURCE_TYPE_UNSPECIFIED") and deprecated values ("AI_JUDGE").
+
+        Returns:
+            str: The standardized source type string in uppercase format. For example:
+                - "human" becomes "HUMAN"
+                - "llm_judge" becomes "LLM_JUDGE" 
+                - "AI_JUDGE" becomes "LLM_JUDGE" (with deprecation warning)
+
+        Raises:
+            MlflowException: If the provided source_type is not a valid assessment source
+                type after case normalization and deprecation handling. The exception
+                includes the invalid value and lists all valid source types.
+
+        Notes:
+            - This method automatically handles the deprecated "AI_JUDGE" value by
+              converting it to "LLM_JUDGE" and issuing a FutureWarning
+            - Input is case-insensitive but output is always uppercase
+            - This is the recommended way to validate and normalize source type strings
+              before using them in AssessmentSource objects
+        """
+        raise NotImplementedError
+
+=== mlflow/entities/span.py
+import base64
+import json
+import logging
+from functools import lru_cache
+from typing import Any, Union
+
+from opentelemetry.proto.trace.v1.trace_pb2 import Span as OTelProtoSpan
+from opentelemetry.proto.trace.v1.trace_pb2 import Status as OTelProtoStatus
+from opentelemetry.sdk.resources import Resource as _OTelResource
+from opentelemetry.sdk.trace import Event as OTelEvent
+from opentelemetry.sdk.trace import ReadableSpan as OTelReadableSpan
+from opentelemetry.trace import NonRecordingSpan, SpanContext, TraceFlags
+from opentelemetry.trace import Span as OTelSpan
+from opentelemetry.trace import Status as OTelStatus
+from opentelemetry.trace import StatusCode as OTelStatusCode
+
+import mlflow
+from mlflow.entities.span_event import SpanEvent
+from mlflow.entities.span_status import SpanStatus, SpanStatusCode
+from mlflow.exceptions import MlflowException
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+from mlflow.tracing.constant import TRACE_REQUEST_ID_PREFIX, SpanAttributeKey
+from mlflow.tracing.utils import (
+    build_otel_context,
+    decode_id,
+    dump_span_attribute_value,
+    encode_span_id,
+    encode_trace_id,
+    generate_mlflow_trace_id_from_otel_trace_id,
+    generate_trace_id_v4_from_otel_trace_id,
+    parse_trace_id_v4,
+)
+from mlflow.tracing.utils.otlp import (
+    _decode_otel_proto_anyvalue,
+    _otel_proto_bytes_to_id,
+    _set_otel_proto_anyvalue,
+)
+from mlflow.tracing.utils.processor import apply_span_processors
+
+_logger = logging.getLogger(__name__)
+
+
+# Not using enum as we want to allow custom span type string.
+class SpanType:
+    """
+    Predefined set of span types.
+    """
+
+    LLM = "LLM"
+    CHAIN = "CHAIN"
+    AGENT = "AGENT"
+    TOOL = "TOOL"
+    CHAT_MODEL = "CHAT_MODEL"
+    RETRIEVER = "RETRIEVER"
+    PARSER = "PARSER"
+    EMBEDDING = "EMBEDDING"
+    RERANKER = "RERANKER"
+    MEMORY = "MEMORY"
+    UNKNOWN = "UNKNOWN"
+    WORKFLOW = "WORKFLOW"
+    TASK = "TASK"
+    GUARDRAIL = "GUARDRAIL"
+    EVALUATOR = "EVALUATOR"
+
+
+def create_mlflow_span(
+    otel_span: Any, trace_id: str, span_type: str | None = None
+) -> Union["Span", "LiveSpan", "NoOpSpan"]:
+    """
+    Factory function to create a span object.
+
+    When creating a MLflow span object from the OpenTelemetry span, the factory function
+    should always be used to ensure the correct span object is created.
+    """
+    if not otel_span or isinstance(otel_span, NonRecordingSpan):
+        return NoOpSpan()
+
+    if isinstance(otel_span, OTelSpan):
+        return LiveSpan(otel_span, trace_id, span_type)
+
+    if isinstance(otel_span, OTelReadableSpan):
+        return Span(otel_span)
+
+    raise MlflowException(
+        "The `otel_span` argument must be an instance of one of valid "
+        f"OpenTelemetry span classes, but got {type(otel_span)}.",
+        INVALID_PARAMETER_VALUE,
+    )
+
+
+class Span:
+    """
+    A span object. A span represents a unit of work or operation and is the building
+    block of Traces.
+
+    This Span class represents immutable span data that is already finished and persisted.
+    The "live" span that is being created and updated during the application runtime is
+    represented by the :py:class:`LiveSpan <mlflow.entities.LiveSpan>` subclass.
+    """
+
+    def __init__(self, otel_span: OTelReadableSpan):
+        if not isinstance(otel_span, OTelReadableSpan):
+            raise MlflowException(
+                "The `otel_span` argument for the Span class must be an instance of ReadableSpan, "
+                f"but got {type(otel_span)}.",
+                INVALID_PARAMETER_VALUE,
+            )
+
+        self._span = otel_span
+        # Since the span is immutable, we can cache the attributes to avoid the redundant
+        # deserialization of the attribute values.
+        self._attributes = _CachedSpanAttributesRegistry(otel_span)
+
+    @property
+    @lru_cache(maxsize=1)
+    def trace_id(self) -> str:
+        """The trace ID of the span, a unique identifier for the trace it belongs to."""
+        return self.get_attribute(SpanAttributeKey.REQUEST_ID)
+
+    @property
+    def request_id(self) -> str:
+        """Deprecated. Use `trace_id` instead."""
+        return self.trace_id
+
+    @property
+    def span_id(self) -> str:
+        """The ID of the span. This is only unique within a trace."""
+        return encode_span_id(self._span.context.span_id)
+
+    @property
+    def name(self) -> str:
+        """The name of the span."""
+        return self._span.name
+
+    @property
+    def start_time_ns(self) -> int:
+        """The start time of the span in nanosecond."""
+        return self._span._start_time
+
+    @property
+    def end_time_ns(self) -> int | None:
+        """The end time of the span in nanosecond."""
+        return self._span._end_time
+
+    @property
+    def parent_id(self) -> str | None:
+        """The span ID of the parent span."""
+        if self._span.parent is None:
+            return None
+        return encode_span_id(self._span.parent.span_id)
+
+    @property
+    def status(self) -> SpanStatus:
+        """The status of the span."""
+        return SpanStatus.from_otel_status(self._span.status)
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def span_type(self) -> str:
+        """The type of the span."""
+        return self.get_attribute(SpanAttributeKey.SPAN_TYPE)
+
+    @property
+    def _trace_id(self) -> str:
+        """
+        The OpenTelemetry trace ID of the span. Note that this should not be exposed to
+        the user, instead, use trace_id property as an unique identifier for a trace.
+        """
+        return encode_trace_id(self._span.context.trace_id)
+
+    @property
+    def attributes(self) -> dict[str, Any]:
+        """
+        Get all attributes of the span.
+
+        Returns:
+            A dictionary of all attributes of the span.
+        """
+        return self._attributes.get_all()
+
+    @property
+    def events(self) -> list[SpanEvent]:
+        """
+        Get all events of the span.
+
+        Returns:
+            A list of all events of the span.
+        """
+        return [
+            SpanEvent(
+                name=event.name,
+                timestamp=event.timestamp,
+                # Convert from OpenTelemetry's BoundedAttributes class to a simple dict
+                # to avoid the serialization issue due to having a lock object.
+                attributes=dict(event.attributes),
+            )
+            for event in self._span.events
+        ]
+
+    def __repr__(self):
+        return (
+            f"{type(self).__name__}(name={self.name!r}, trace_id={self.trace_id!r}, "
+            f"span_id={self.span_id!r}, parent_id={self.parent_id!r})"
+        )
+
+    def get_attribute(self, key: str) -> Any | None:
+        """
+        Get a single attribute value from the span.
+
+        Args:
+            key: The key of the attribute to get.
+
+        Returns:
+            The value of the attribute if it exists, otherwise None.
+        """
+        return self._attributes.get(key)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "trace_id": _encode_bytes_to_base64(
+                _encode_trace_id_to_byte(self._span.context.trace_id)
+            ),
+            "span_id": _encode_bytes_to_base64(_encode_span_id_to_byte(self._span.context.span_id)),
+            "parent_span_id": _encode_bytes_to_base64(
+                _encode_span_id_to_byte(self._span.parent.span_id)
+            )
+            if self._span.parent
+            else None,
+            "name": self.name,
+            "start_time_unix_nano": self.start_time_ns,
+            "end_time_unix_nano": self.end_time_ns,
+            "events": [
+                {
+                    "name": event.name,
+                    "time_unix_nano": event.timestamp,
+                    "attributes": event.attributes,
+                }
+                for event in self.events
+            ],
+            "status": {
+                "code": self.status.status_code.to_otel_proto_status_code_name(),
+                "message": self.status.description,
+            },
+            # save the dumped attributes so they can be loaded correctly when deserializing
+            "attributes": {k: self._span.attributes.get(k) for k in self.attributes.keys()},
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Span":
+        """Create a Span object from the given dictionary."""
+        try:
+            # Try to deserialize the span using the v3 schema
+            request_id = data.get("attributes", {}).get(SpanAttributeKey.REQUEST_ID)
+            if not request_id:
+                raise MlflowException(
+                    f"The {SpanAttributeKey.REQUEST_ID} attribute is empty or missing.",
+                    INVALID_PARAMETER_VALUE,
+                )
+
+            if Span._is_span_v2_schema(data):
+                return cls.from_dict_v2(data)
+
+            if _is_base64_encoded(data["trace_id"]):
+                otel_trace_id = _decode_id_from_byte(data["trace_id"])
+                span_id = _decode_id_from_byte(data["span_id"])
+                # Parent ID always exists in proto (empty string) even if the span is a root span.
+                parent_id = (
+                    _decode_id_from_byte(data["parent_span_id"]) if data["parent_span_id"] else None
+                )
+            else:
+                # In 3.5.0, Span.to_dict keeps trace_id and span_id as the object's properties
+                # format, so we need special handling for it.
+                otel_trace_id = decode_id(
+                    parse_trace_id_v4(data["trace_id"])[1].removeprefix(TRACE_REQUEST_ID_PREFIX)
+                )
+                span_id = decode_id(data["span_id"])
+                parent_id = decode_id(data["parent_span_id"]) if data["parent_span_id"] else None
+
+            status_code_str = data["status"]["code"]
+            try:
+                status_code = SpanStatusCode.from_otel_proto_status_code_name(status_code_str)
+            except MlflowException:
+                # In 3.5.0 Span.to_dict keeps status code as the SpanStatusCode enum value
+                # Fall back to value format (e.g., "OK", "ERROR")
+                status_code = SpanStatusCode(status_code_str)
+            status = SpanStatus(
+                status_code=status_code,
+                description=data["status"].get("message", ""),
+            )
+
+            end_time_ns = data.get("end_time_unix_nano")
+            end_time_ns = int(end_time_ns) if end_time_ns else None
+
+            otel_span = OTelReadableSpan(
+                name=data["name"],
+                context=build_otel_context(otel_trace_id, span_id),
+                parent=build_otel_context(otel_trace_id, parent_id) if parent_id else None,
+                start_time=int(data["start_time_unix_nano"]),
+                end_time=end_time_ns,
+                attributes=data["attributes"],
+                status=status.to_otel_status(),
+                # Setting an empty resource explicitly. Otherwise OTel create a new Resource by
+                # Resource.create(), which introduces a significant overhead in some environments.
+                # https://github.com/mlflow/mlflow/issues/15625
+                resource=_OTelResource.get_empty(),
+                events=[
+                    OTelEvent(
+                        name=event["name"],
+                        timestamp=int(event["time_unix_nano"]),
+                        attributes=event.get("attributes", {}),
+                    )
+                    for event in data.get("events", [])
+                ],
+            )
+            return cls(otel_span)
+        except Exception as e:
+            raise MlflowException(
+                "Failed to create a Span object from the given dictionary",
+                INVALID_PARAMETER_VALUE,
+            ) from e
+
+    @staticmethod
+    def _is_span_v2_schema(data: dict[str, Any]) -> bool:
+        return "context" in data
+
+    @classmethod
+    def from_dict_v2(cls, data: dict[str, Any]) -> "Span":
+        """Create a Span object from the given dictionary in v2 schema."""
+        trace_id = decode_id(data["context"]["trace_id"])
+        span_id = decode_id(data["context"]["span_id"])
+        parent_id = decode_id(data["parent_id"]) if data["parent_id"] else None
+
+        otel_span = OTelReadableSpan(
+            name=data["name"],
+            context=build_otel_context(trace_id, span_id),
+            parent=build_otel_context(trace_id, parent_id) if parent_id else None,
+            start_time=data["start_time"],
+            end_time=data["end_time"],
+            attributes=data["attributes"],
+            status=SpanStatus(data["status_code"], data["status_message"]).to_otel_status(),
+            # Setting an empty resource explicitly. Otherwise OTel create a new Resource by
+            # Resource.create(), which introduces a significant overhead in some environments.
+            # https://github.com/mlflow/mlflow/issues/15625
+            resource=_OTelResource.get_empty(),
+            events=[
+                OTelEvent(
+                    name=event["name"],
+                    timestamp=event["timestamp"],
+                    attributes=event["attributes"],
+                )
+                for event in data["events"]
+            ],
+        )
+        return cls(otel_span)
+
+    @classmethod
+    def from_otel_proto(cls, otel_proto_span, location_id: str | None = None) -> "Span":
+        """
+        Create a Span from an OpenTelemetry protobuf span.
+        This is an internal method used for receiving spans via OTel protocol.
+        """
+        trace_id = _otel_proto_bytes_to_id(otel_proto_span.trace_id)
+        span_id = _otel_proto_bytes_to_id(otel_proto_span.span_id)
+        parent_id = None
+        if otel_proto_span.parent_span_id:
+            parent_id = _otel_proto_bytes_to_id(otel_proto_span.parent_span_id)
+
+        # Convert OTel proto status code directly to OTel SDK status
+        if otel_proto_span.status.code == OTelProtoStatus.STATUS_CODE_OK:
+            status_code = OTelStatusCode.OK
+        elif otel_proto_span.status.code == OTelProtoStatus.STATUS_CODE_ERROR:
+            status_code = OTelStatusCode.ERROR
+        else:
+            status_code = OTelStatusCode.UNSET
+
+        mlflow_trace_id = (
+            generate_trace_id_v4_from_otel_trace_id(trace_id, location_id)
+            if location_id
+            else generate_mlflow_trace_id_from_otel_trace_id(trace_id)
+        )
+        otel_span = OTelReadableSpan(
+            name=otel_proto_span.name,
+            context=build_otel_context(trace_id, span_id),
+            parent=build_otel_context(trace_id, parent_id) if parent_id else None,
+            start_time=otel_proto_span.start_time_unix_nano,
+            end_time=otel_proto_span.end_time_unix_nano,
+            # we need to dump the attribute value to be consistent with span.set_attribute behavior
+            attributes={
+                # Include the MLflow trace request ID only if it's not already present in attributes
+                SpanAttributeKey.REQUEST_ID: dump_span_attribute_value(mlflow_trace_id),
+                **{
+                    attr.key: dump_span_attribute_value(_decode_otel_proto_anyvalue(attr.value))
+                    for attr in otel_proto_span.attributes
+                },
+            },
+            status=OTelStatus(status_code, otel_proto_span.status.message or None),
+            events=[
+                OTelEvent(
+                    name=event.name,
+                    timestamp=event.time_unix_nano,
+                    attributes={
+                        attr.key: _decode_otel_proto_anyvalue(attr.value)
+                        for attr in event.attributes
+                    },
+                )
+                for event in otel_proto_span.events
+            ],
+            resource=_OTelResource.get_empty(),
+        )
+
+        return cls(otel_span)
+
+    def to_otel_proto(self) -> OTelProtoSpan:
+        """
+        Convert to OpenTelemetry protobuf span format for OTLP export.
+        This is an internal method used by the REST store for logging spans.
+
+        Returns:
+            An OpenTelemetry protobuf Span message.
+        """
+        otel_span = OTelProtoSpan()
+        otel_span.trace_id = bytes.fromhex(self._trace_id)
+        otel_span.span_id = bytes.fromhex(self.span_id)
+
+        otel_span.name = self.name
+        otel_span.start_time_unix_nano = self.start_time_ns
+        if self.end_time_ns:
+            otel_span.end_time_unix_nano = self.end_time_ns
+
+        if self.parent_id:
+            otel_span.parent_span_id = bytes.fromhex(self.parent_id)
+
+        otel_span.status.CopyFrom(self.status.to_otel_proto_status())
+
+        for key, value in self.attributes.items():
+            attr = otel_span.attributes.add()
+            attr.key = key
+            _set_otel_proto_anyvalue(attr.value, value)
+
+        for event in self.events:
+            otel_event = event.to_otel_proto()
+            otel_span.events.append(otel_event)
+
+        return otel_span
+
+    @property
+    def inputs(self) -> Any:
+        """
+        The input values of the span.
+
+        This property retrieves the input data that was passed to the operation represented by this span.
+        The inputs are stored as a span attribute and can contain any serializable data structure
+        such as dictionaries, lists, strings, numbers, or other JSON-serializable objects.
+
+        Returns:
+            Any: The input values associated with this span. Returns None if no inputs were set.
+                 The return type depends on what was originally stored as inputs - it could be
+                 a dictionary of parameters, a list of values, a single value, or any other
+                 JSON-serializable data structure.
+
+        Note:
+            The inputs are automatically serialized to JSON when stored and deserialized when
+            retrieved. If the original input data is not JSON-serializable, it may not be
+            stored or retrieved correctly.
+
+        """
+        raise NotImplementedError
+
+    @property
+    def outputs(self) -> Any:
+        """
+        The output values of the span.
+
+        This property retrieves the output values that were produced by the operation
+        represented by this span. The outputs are stored as span attributes and can
+        contain any serializable data structure such as dictionaries, lists, strings,
+        numbers, or complex objects that were returned by the traced function or operation.
+
+        Returns:
+            Any: The output values of the span. Returns None if no outputs were set.
+                The return type depends on what was originally stored as outputs - it
+                could be a dictionary, list, string, number, or any other serializable
+                data structure.
+
+        Note:
+            This is a read-only property for immutable Span objects. To set outputs
+            on a span, use the set_outputs() method on a LiveSpan object during
+            span creation or before the span is ended.
+        """
+        raise NotImplementedError
+
+
+def _encode_span_id_to_byte(span_id: int | None) -> bytes:
+    # https://github.com/open-telemetry/opentelemetry-python/blob/e01fa0c77a7be0af77d008a888c2b6a707b05c3d/exporter/opentelemetry-exporter-otlp-proto-common/src/opentelemetry/exporter/otlp/proto/common/_internal/__init__.py#L131
+    return span_id.to_bytes(length=8, byteorder="big", signed=False)
+
+
+def _encode_trace_id_to_byte(trace_id: int) -> bytes:
+    # https://github.com/open-telemetry/opentelemetry-python/blob/e01fa0c77a7be0af77d008a888c2b6a707b05c3d/exporter/opentelemetry-exporter-otlp-proto-common/src/opentelemetry/exporter/otlp/proto/common/_internal/__init__.py#L135
+    return trace_id.to_bytes(length=16, byteorder="big", signed=False)
+
+
+def _encode_bytes_to_base64(bytes: bytes) -> str:
+    return base64.b64encode(bytes).decode("utf-8")
+
+
+def _decode_id_from_byte(trace_or_span_id_b64: str) -> int:
+    # Decoding the base64 encoded trace or span ID to bytes and then converting it to int.
+    bytes = base64.b64decode(trace_or_span_id_b64)
+    return int.from_bytes(bytes, byteorder="big", signed=False)
+
+
+def _is_base64_encoded(trace_or_span_id: str) -> bool:
+    try:
+        base64.b64decode(trace_or_span_id, validate=True)
+        return True
+    except Exception:
+        return False
+
+
+class LiveSpan(Span):
+    """
+    A "live" version of the :py:class:`Span <mlflow.entities.Span>` class.
+
+    The live spans are those being created and updated during the application runtime.
+    When users start a new span using the tracing APIs within their code, this live span
+    object is returned to get and set the span attributes, status, events, and etc.
+    """
+
+    def __init__(
+        self,
+        otel_span: OTelSpan,
+        trace_id: str,
+        span_type: str = SpanType.UNKNOWN,
+    ):
+        """
+        The `otel_span` argument takes an instance of OpenTelemetry Span class, which is
+        indeed a subclass of ReadableSpan. Thanks to this, the getter methods of the Span
+        class can be reused without any modification.
+
+        Note that the constructor doesn't call the super().__init__ method, because the Span
+        initialization logic is a bit different from the immutable span.
+        """
+        if not isinstance(otel_span, OTelReadableSpan):
+            raise MlflowException(
+                "The `otel_span` argument for the LiveSpan class must be an instance of "
+                f"trace.Span, but got {type(otel_span)}.",
+                INVALID_PARAMETER_VALUE,
+            )
+
+        self._span = otel_span
+        self._attributes = _SpanAttributesRegistry(otel_span)
+        self._attributes.set(SpanAttributeKey.REQUEST_ID, trace_id)
+        self._attributes.set(SpanAttributeKey.SPAN_TYPE, span_type)
+        # Track the original span name for deduplication purposes during span logging.
+        # Why: When traces contain multiple spans with identical names (e.g., multiple "LLM"
+        # or "query" spans), it's difficult for users to distinguish between them in the UI
+        # and logs. As spans are logged, we incrementally add numeric suffixes (_1, _2, etc.) to
+        # make each span uniquely identifiable within its trace
+        self._original_name = otel_span.name
+
+    def set_span_type(self, span_type: str):
+        """Set the type of the span."""
+        self.set_attribute(SpanAttributeKey.SPAN_TYPE, span_type)
+
+    def set_inputs(self, inputs: Any):
+        """Set the input values to the span."""
+        self.set_attribute(SpanAttributeKey.INPUTS, inputs)
+
+    def set_outputs(self, outputs: Any):
+        """Set the output values to the span."""
+        self.set_attribute(SpanAttributeKey.OUTPUTS, outputs)
+
+    def set_attributes(self, attributes: dict[str, Any]):
+        """
+        Set the attributes to the span. The attributes must be a dictionary of key-value pairs.
+        This method is additive, i.e. it will add new attributes to the existing ones. If an
+        attribute with the same key already exists, it will be overwritten.
+        """
+        if not isinstance(attributes, dict):
+            _logger.warning(
+                f"Attributes must be a dictionary, but got {type(attributes)}. Skipping."
+            )
+            return
+
+        for key, value in attributes.items():
+            self.set_attribute(key, value)
+
+    def set_attribute(self, key: str, value: Any):
+        """Set a single attribute to the span."""
+        self._attributes.set(key, value)
+
+    def set_status(self, status: SpanStatusCode | str):
+        """
+        Set the status of the span.
+
+        Args:
+            status: The status of the span. This can be a
+                :py:class:`SpanStatus <mlflow.entities.SpanStatus>` object or a string representing
+                of the status code defined in
+                :py:class:`SpanStatusCode <mlflow.entities.SpanStatusCode>`
+                e.g. ``"OK"``, ``"ERROR"``.
+        """
+        if isinstance(status, str):
+            status = SpanStatus(status)
+
+        # NB: We need to set the OpenTelemetry native StatusCode, because span's set_status
+        #     method only accepts a StatusCode enum in their definition.
+        #     https://github.com/open-telemetry/opentelemetry-python/blob/8ed71b15fb8fc9534529da8ce4a21e686248a8f3/opentelemetry-sdk/src/opentelemetry/sdk/trace/__init__.py#L949
+        #     Working around this is possible, but requires some hack to handle automatic status
+        #     propagation mechanism, so here we just use the native object that meets our
+        #     current requirements at least. Nevertheless, declaring the new class extending
+        #     the OpenTelemetry Status class so users code doesn't have to import the OTel's
+        #     StatusCode object, which makes future migration easier.
+        self._span.set_status(status.to_otel_status())
+
+    def add_event(self, event: SpanEvent):
+        """
+        Add an event to the span.
+
+        Args:
+            event: The event to add to the span. This should be a
+                :py:class:`SpanEvent <mlflow.entities.SpanEvent>` object.
+        """
+        self._span.add_event(event.name, event.attributes, event.timestamp)
+
+    def record_exception(self, exception: str | Exception):
+        """
+        Record an exception on the span, adding an exception event and setting span status to ERROR.
+
+        Args:
+            exception: The exception to record. Can be an Exception instance or a string
+                describing the exception.
+        """
+        if isinstance(exception, Exception):
+            self.add_event(SpanEvent.from_exception(exception))
+        elif isinstance(exception, str):
+            self.add_event(SpanEvent.from_exception(Exception(exception)))
+        else:
+            raise MlflowException(
+                "The `exception` parameter must be an Exception instance or a string.",
+                INVALID_PARAMETER_VALUE,
+            )
+
+        self.set_status(
+            SpanStatus(
+                status_code=SpanStatusCode.ERROR,
+                description=f"{type(exception).__name__}: {exception}",
+            )
+        )
+
+    def end(
+        self,
+        outputs: Any | None = None,
+        attributes: dict[str, Any] | None = None,
+        status: SpanStatus | str | None = None,
+        end_time_ns: int | None = None,
+    ):
+        """
+        End the span.
+
+        outputs: Outputs to set on the span.
+        attributes: A dictionary of attributes to set on the span. If the span already has
+            attributes, the new attributes will be merged with the existing ones. If the same
+            key already exists, the new value will overwrite the old one.
+        status: The status of the span. This can be a
+            :py:class:`SpanStatus <mlflow.entities.SpanStatus>` object or a string
+            representing the status code defined in
+            :py:class:`SpanStatusCode <mlflow.entities.SpanStatusCode>`
+            e.g. ``"OK"``, ``"ERROR"``. The default status is OK.
+        end_time_ns: The end time of the span in nano seconds since the UNIX epoch.
+            If not provided, the current time will be used.
+
+        :meta private:
+        """
+        try:
+            self.set_attributes(attributes or {})
+            if outputs is not None:
+                self.set_outputs(outputs)
+            if status is not None:
+                self.set_status(status)
+
+            # NB: In OpenTelemetry, status code remains UNSET if not explicitly set
+            # by the user. However, there is not way to set the status when using
+            # @mlflow.trace decorator. Therefore, we just automatically set the status
+            # to OK if it is not ERROR.
+            if self.status.status_code != SpanStatusCode.ERROR:
+                self.set_status(SpanStatus(SpanStatusCode.OK))
+
+            # Apply span processors
+            apply_span_processors(self)
+
+            self._span.end(end_time=end_time_ns)
+
+        except Exception as e:
+            _logger.warning(
+                f"Failed to end span {self.span_id}: {e}. "
+                "For full traceback, set logging level to debug.",
+                exc_info=_logger.isEnabledFor(logging.DEBUG),
+            )
+
+    def from_dict(cls, data: dict[str, Any]) -> "Span":
+        raise NotImplementedError("The `from_dict` method is not supported for the LiveSpan class.")
+
+    def to_immutable_span(self) -> "Span":
+        """
+        Downcast the live span object to the immutable span.
+
+        :meta private:
+        """
+        # All state of the live span is already persisted in the OpenTelemetry span object.
+        return Span(self._span)
+
+    @classmethod
+    def from_immutable_span(
+        cls,
+        span: Span,
+        parent_span_id: str | None = None,
+        trace_id: str | None = None,
+        experiment_id: str | None = None,
+        otel_trace_id: str | None = None,
+    ) -> "LiveSpan":
+        """
+        Create a new LiveSpan object from the given immutable span by
+        cloning the underlying OpenTelemetry span within current context.
+
+        This is particularly useful when we merging a remote trace into the current trace.
+        We cannot merge the remote trace directly, because it is already stored as an immutable
+        span, meaning that we cannot update metadata like trace ID, parent span ID,
+        which are necessary for merging the trace.
+
+        Args:
+            span: The immutable span object to clone.
+            parent_span_id: The parent span ID of the new span.
+                If it is None, the span will be created as a root span.
+            trace_id: The trace ID to be set on the new span. Specify this if you want to
+                create the new span with a particular trace ID.
+            experiment_id: The experiment ID to be set on the new span. If not specified, the
+                experiment ID will be set to the current experiment ID.
+            otel_trace_id: The OpenTelemetry trace ID of the new span in hex encoded format.
+                If not specified, the newly generated trace ID will be used.
+
+        Returns:
+            The new LiveSpan object with the same state as the original span.
+
+        :meta private:
+        """
+        from mlflow.tracing.trace_manager import InMemoryTraceManager
+
+        trace_manager = InMemoryTraceManager.get_instance()
+        parent_span = trace_manager.get_span_from_id(trace_id, parent_span_id)
+
+        # Create a new span with the same name, parent, and start time
+        otel_span = mlflow.tracing.provider.start_detached_span(
+            name=span.name,
+            parent=parent_span._span if parent_span else None,
+            start_time_ns=span.start_time_ns,
+            experiment_id=experiment_id,
+        )
+
+        # The latter one from attributes is the newly generated trace ID by the span processor.
+        trace_id = trace_id or json.loads(otel_span.attributes.get(SpanAttributeKey.REQUEST_ID))
+        # Span processor registers a new span in the in-memory trace manager, but we want to pop it
+        clone_span = trace_manager._traces[trace_id].span_dict.pop(
+            encode_span_id(otel_span.context.span_id)
+        )
+
+        # Copy all the attributes, inputs, outputs, and events from the original span
+        clone_span.set_status(span.status)
+        clone_span.set_attributes(
+            {k: v for k, v in span.attributes.items() if k != SpanAttributeKey.REQUEST_ID}
+        )
+        if span.inputs:
+            clone_span.set_inputs(span.inputs)
+        if span.outputs:
+            clone_span.set_outputs(span.outputs)
+        for event in span.events:
+            clone_span.add_event(event)
+
+        # Update trace ID and span ID
+        context = span._span.get_span_context()
+        clone_span._span._context = SpanContext(
+            # Override otel_trace_id if provided, otherwise use the new trace ID
+            trace_id=decode_id(otel_trace_id) if otel_trace_id else otel_span.context.trace_id,
+            # Re-use same span ID as their ID space is local to the trace
+            span_id=context.span_id,
+            is_remote=context.is_remote,
+            # Override trace flag as if it is sampled within current context.
+            trace_flags=TraceFlags(TraceFlags.SAMPLED),
+        )
+
+        return clone_span
+
+
+NO_OP_SPAN_TRACE_ID = "MLFLOW_NO_OP_SPAN_TRACE_ID"
+
+
+class NoOpSpan(Span):
+    """
+    No-op implementation of the Span interface.
+
+    This instance should be returned from the mlflow.start_span context manager when span
+    creation fails. This class should have exactly the same interface as the Span so that
+    user's setter calls do not raise runtime errors.
+
+    E.g.
+
+    .. code-block:: python
+
+        with mlflow.start_span("span_name") as span:
+            # Even if the span creation fails, the following calls should pass.
+            span.set_inputs({"x": 1})
+            # Do something
+
+    """
+
+    def __init__(self):
+        self._span = NonRecordingSpan(context=None)
+        self._attributes = {}
+
+    @property
+    def trace_id(self):
+        """
+        No-op span returns a special trace ID to distinguish it from the real spans.
+        """
+        return NO_OP_SPAN_TRACE_ID
+
+    @property
+    def span_id(self):
+        return None
+
+    @property
+    def name(self):
+        return None
+
+    @property
+    def start_time_ns(self):
+        return None
+
+    @property
+    def end_time_ns(self):
+        return None
+
+    @property
+    def context(self):
+        return None
+
+    @property
+    def parent_id(self):
+        return None
+
+    @property
+    def status(self):
+        return None
+
+    @property
+    def _trace_id(self):
+        return None
+
+    def set_inputs(self, inputs: dict[str, Any]):
+        pass
+
+    def set_outputs(self, outputs: dict[str, Any]):
+        pass
+
+    def set_attributes(self, attributes: dict[str, Any]):
+        pass
+
+    def set_attribute(self, key: str, value: Any):
+        pass
+
+    def set_status(self, status: SpanStatus):
+        pass
+
+    def add_event(self, event: SpanEvent):
+        pass
+
+    def record_exception(self, exception: str | Exception):
+        pass
+
+    def end(
+        self,
+        outputs: Any | None = None,
+        attributes: dict[str, Any] | None = None,
+        status: SpanStatus | str | None = None,
+        end_time_ns: int | None = None,
+    ):
+        pass
+
+
+class _SpanAttributesRegistry:
+    """
+    A utility class to manage the span attributes.
+
+    In MLflow users can add arbitrary key-value pairs to the span attributes, however,
+    OpenTelemetry only allows a limited set of types to be stored in the attribute values.
+    Therefore, we serialize all values into JSON string before storing them in the span.
+    This class provides simple getter and setter methods to interact with the span attributes
+    without worrying about the serde process.
+    """
+
+    def __init__(self, otel_span: OTelSpan):
+        self._span = otel_span
+
+    def get_all(self) -> dict[str, Any]:
+        return {key: self.get(key) for key in self._span.attributes.keys()}
+
+    def get(self, key: str):
+        serialized_value = self._span.attributes.get(key)
+        if serialized_value:
+            try:
+                return json.loads(serialized_value)
+            except Exception:
+                # If failed to deserialize (e.g., string value is directly set to OTel span),
+                # return the original value as is.
+                return serialized_value
+
+    def set(self, key: str, value: Any):
+        if not isinstance(key, str):
+            _logger.warning(f"Attribute key must be a string, but got {type(key)}. Skipping.")
+            return
+
+        # NB: OpenTelemetry attribute can store not only string but also a few primitives like
+        #   int, float, bool, and list of them. However, we serialize all into JSON string here
+        #   for the simplicity in deserialization process.
+        self._span.set_attribute(key, dump_span_attribute_value(value))
+
+
+class _CachedSpanAttributesRegistry(_SpanAttributesRegistry):
+    """
+    A cache-enabled version of the SpanAttributesRegistry.
+
+    The caching helps to avoid the redundant deserialization of the attribute, however, it does
+    not handle the value change well. Therefore, this class should only be used for the persisted
+    spans that are immutable, and thus implemented as a subclass of _SpanAttributesRegistry.
+    """
+
+    @lru_cache(maxsize=128)
+    def get(self, key: str):
+        return super().get(key)
+
+    def set(self, key: str, value: Any):
+        raise MlflowException(
+            "The attributes of the immutable span must not be updated.", INVALID_PARAMETER_VALUE
+        )
+
+=== mlflow/utils/databricks_tracing_utils.py
+import logging
+
+from google.protobuf.duration_pb2 import Duration
+from google.protobuf.timestamp_pb2 import Timestamp
+
+from mlflow.entities import Assessment, Span, Trace, TraceData, TraceInfo
+from mlflow.entities.trace_info_v2 import _truncate_request_metadata, _truncate_tags
+from mlflow.entities.trace_location import (
+    InferenceTableLocation,
+    MlflowExperimentLocation,
+    TraceLocation,
+    TraceLocationType,
+    UCSchemaLocation,
+)
+from mlflow.protos import assessments_pb2
+from mlflow.protos import databricks_tracing_pb2 as pb
+from mlflow.tracing.utils import (
+    construct_trace_id_v4,
+    parse_trace_id_v4,
+)
+
+_logger = logging.getLogger(__name__)
+
+
+def assessment_to_proto(assessment: Assessment) -> pb.Assessment:
+    """
+    Convert an Assessment entity to its corresponding protobuf representation.
+
+    This function transforms an MLflow Assessment object into a protobuf Assessment message,
+    handling the conversion of all assessment fields including metadata, timestamps, and
+    nested objects like source, expectation, and feedback.
+
+    Args:
+        assessment (Assessment): The MLflow Assessment entity to convert. Must contain
+            required fields like name, trace_id, source, create_time_ms, and 
+            last_update_time_ms. Optional fields include span_id, rationale, 
+            assessment_id, expectation, feedback, metadata, overrides, and valid.
+
+    Returns:
+        pb.Assessment: A protobuf Assessment message containing all the converted
+            assessment data. The returned proto includes:
+            - Basic assessment information (name, trace_id, source)
+            - Timestamps converted from milliseconds to protobuf Timestamp format
+            - Trace location information extracted from trace_id if applicable
+            - Optional fields when present in the source assessment
+            - Metadata converted to string key-value pairs
+
+    Notes:
+        - The function automatically parses the trace_id to extract location information
+          and constructs the appropriate trace_location proto field for UC Schema locations
+        - Millisecond timestamps are preserved in protobuf Timestamp fields
+        - Metadata values are converted to strings regardless of their original type
+        - Either expectation or feedback will be set in the proto, but not both
+        - The function handles None values gracefully by only setting proto fields
+          when the corresponding assessment fields are not None
+    """
+    raise NotImplementedError
+
+
+def get_trace_id_from_assessment_proto(proto: pb.Assessment | assessments_pb2.Assessment) -> str:
+    """
+    Extract the trace ID from an assessment protocol buffer object.
+
+    This function handles the extraction of trace IDs from assessment protobuf objects, accounting
+    for different trace location types. For assessments with UC (Unity Catalog) schema locations,
+    it constructs a v4 trace ID by combining the catalog/schema information with the trace ID.
+    For other location types, it returns the trace ID directly.
+
+    Args:
+        proto (pb.Assessment | assessments_pb2.Assessment): The assessment protocol buffer object
+            from which to extract the trace ID. Can be either a databricks_tracing_pb2.Assessment
+            or assessments_pb2.Assessment object.
+
+    Returns:
+        str: The extracted trace ID. For UC schema locations, returns a v4 trace ID constructed
+            from the catalog name, schema name, and trace ID. For other locations, returns the
+            raw trace ID from the proto object.
+
+    Notes:
+        - The function checks if the proto has a 'trace_location' field and if it contains
+          UC schema information before deciding how to construct the trace ID
+        - For UC schema locations, the v4 trace ID combines the catalog/schema
+          location with the actual trace ID
+        - This function is designed to work with different versions of assessment protobuf
+          definitions that may or may not include trace location information
+    """
+    raise NotImplementedError
+
+
+def inference_table_location_to_proto(inference_table_location: InferenceTableLocation) -> pb.InferenceTableLocation:
+    """
+    Convert an InferenceTableLocation object to its corresponding protobuf representation.
+
+    This function transforms an MLflow InferenceTableLocation entity into a protobuf
+    InferenceTableLocation message that can be serialized and transmitted over the wire
+    or stored persistently.
+
+    Args:
+        inference_table_location (InferenceTableLocation): The MLflow InferenceTableLocation
+            entity to be converted. This object contains the full table name that identifies
+            the inference table location.
+
+    Returns:
+        pb.InferenceTableLocation: A protobuf InferenceTableLocation message containing
+            the full_table_name field populated from the input entity.
+
+    Note:
+        This function performs a straightforward mapping from the MLflow entity to the
+        protobuf message format, extracting the full_table_name attribute and setting
+        it in the corresponding protobuf field.
+    """
+    raise NotImplementedError
+
+
+def mlflow_experiment_location_to_proto(mlflow_experiment_location: MlflowExperimentLocation) -> pb.MlflowExperimentLocation:
+    """
+    Convert an MlflowExperimentLocation object to its corresponding protobuf representation.
+
+    This function transforms an MlflowExperimentLocation entity into a pb.MlflowExperimentLocation
+    protobuf message, which is used for serialization and communication with MLflow's backend services.
+
+    Args:
+        mlflow_experiment_location (MlflowExperimentLocation): The MLflow experiment location 
+            object to be converted. This object contains the experiment ID that identifies 
+            where traces are stored within an MLflow experiment.
+
+    Returns:
+        pb.MlflowExperimentLocation: A protobuf message containing the experiment ID from 
+            the input location object. This protobuf can be used for network transmission 
+            or storage.
+
+    Note:
+        This function performs a straightforward conversion by extracting the experiment_id 
+        from the input object and creating a corresponding protobuf message. It is part of 
+        the MLflow tracing system's serialization layer.
+    """
+    raise NotImplementedError
+
+
+def trace_from_proto(proto: pb.Trace, location_id: str) -> Trace:
+    """
+    Convert a protobuf Trace message to an MLflow Trace entity.
+
+    This function deserializes a protobuf representation of a trace back into MLflow's
+    internal Trace object, which contains both trace metadata (TraceInfo) and trace
+    data (spans).
+
+    Args:
+        proto (pb.Trace): The protobuf Trace message to convert. Must contain a
+            trace_info field and a spans field with OpenTelemetry span data.
+        location_id (str): A string identifier for the trace location, used when
+            converting individual spans from their protobuf representation.
+
+    Returns:
+        Trace: An MLflow Trace entity containing:
+            - info: TraceInfo object with metadata like trace ID, timestamps, and state
+            - data: TraceData object containing a list of Span objects converted from
+              the protobuf spans
+
+    Notes:
+        - Trace metadata and every OpenTelemetry span are converted to their entity
+          forms; ``location_id`` is applied when reconstructing spans
+        - This is the inverse operation of trace_to_proto()
+    """
+    raise NotImplementedError
+
+
+def trace_info_to_v4_proto(trace_info: TraceInfo) -> pb.TraceInfo:
+    """
+    Convert a TraceInfo object to its v4 protocol buffer representation.
+
+    This function transforms a TraceInfo entity into a protobuf TraceInfo message compatible
+    with the v4 tracing protocol. It handles timestamp conversions, duration formatting,
+    trace ID parsing for UC schema locations, and includes all trace metadata, tags, and
+    assessments.
+
+    Args:
+        trace_info (TraceInfo): The TraceInfo entity to convert to protobuf format.
+            Must contain valid trace information including trace_id, request_time,
+            and trace_location.
+
+    Returns:
+        pb.TraceInfo: A protobuf TraceInfo message containing all the converted trace
+            information including:
+            - Parsed trace ID (extracted from v4 format if UC schema location)
+            - Client request ID
+            - Trace location as protobuf
+            - Request and response previews
+            - Converted timestamps and durations
+            - Trace state, metadata, and tags (truncated if necessary)
+            - Associated assessments converted to protobuf format
+
+    Notes:
+        - For UC schema trace locations, only the actual trace ID portion of the v4
+          identifier is stored in the proto
+        - For other trace locations, the trace ID is used as-is
+        - Request metadata and tags are truncated to the protobuf size limits
+        - Execution duration is only set in the protobuf if it's not None in the input
+        - All timestamps are converted from milliseconds to protobuf Timestamp format
+    """
+    raise NotImplementedError
+
+
+def trace_location_from_proto(proto: pb.TraceLocation) -> TraceLocation:
+    """
+    Convert a protobuf TraceLocation message to a TraceLocation entity object.
+
+    This function deserializes a protobuf TraceLocation message and creates the corresponding
+    MLflow TraceLocation entity with the appropriate location type and identifier.
+
+    Args:
+        proto (pb.TraceLocation): The protobuf TraceLocation message to convert. Must contain
+            a valid trace location type and corresponding identifier field (uc_schema,
+            mlflow_experiment, or inference_table).
+
+    Returns:
+        TraceLocation: A TraceLocation entity object with the type and location details
+            extracted from the protobuf message. If no valid identifier is found in the
+            proto message, returns a TraceLocation with type TRACE_LOCATION_TYPE_UNSPECIFIED.
+
+    Notes:
+        - The function handles three types of trace locations: UC_SCHEMA, MLFLOW_EXPERIMENT,
+          and INFERENCE_TABLE
+        - The populated location identifier determines which entity type is returned
+        - Falls back to TRACE_LOCATION_TYPE_UNSPECIFIED if no recognized identifier is found
+    """
+    raise NotImplementedError
+
+
+def trace_location_to_proto(trace_location: TraceLocation) -> pb.TraceLocation:
+    """
+    Convert a TraceLocation object to its corresponding protobuf representation.
+
+    This function takes a TraceLocation entity and converts it to a protobuf TraceLocation
+    message based on the location type. It handles three types of trace locations:
+    UC_SCHEMA, MLFLOW_EXPERIMENT, and INFERENCE_TABLE.
+
+    Args:
+        trace_location (TraceLocation): The TraceLocation object to convert. Must have
+            a valid type attribute that corresponds to one of the supported TraceLocationType
+            values, and the appropriate location-specific attribute (uc_schema, 
+            mlflow_experiment, or inference_table).
+
+    Returns:
+        pb.TraceLocation: A protobuf TraceLocation message with the type field set
+            and the appropriate location-specific field populated based on the input
+            trace_location type.
+
+    Raises:
+        ValueError: If the trace_location.type is not one of the supported types
+            (UC_SCHEMA, MLFLOW_EXPERIMENT, or INFERENCE_TABLE).
+
+    Note:
+        The matching location-specific protobuf field is populated for each supported type.
+    """
+    raise NotImplementedError
+
+
+def trace_to_proto(trace: Trace) -> pb.Trace:
+    """
+    Convert a Trace object to its corresponding protobuf representation.
+
+    This function transforms an MLflow Trace entity into a protobuf Trace message,
+    which includes both the trace information and associated span data. The conversion
+    facilitates serialization for storage, transmission, or API communication.
+
+    Args:
+        trace (Trace): The MLflow Trace object to convert. Must contain valid trace
+            information (TraceInfo) and trace data (TraceData with spans).
+
+    Returns:
+        pb.Trace: A protobuf Trace message containing:
+            - trace_info: Converted TraceInfo as protobuf TraceInfo
+            - spans: List of spans converted to OpenTelemetry protobuf format
+
+    Notes:
+        - Trace info and all spans are converted to their corresponding protobuf formats
+        - This function assumes the input trace object has valid info and data attributes
+        - The resulting protobuf can be used for serialization or API transmission
+    """
+    raise NotImplementedError
+
+
+def uc_schema_location_from_proto(proto: pb.UCSchemaLocation) -> UCSchemaLocation:
+    """
+    Convert a protobuf UCSchemaLocation message to a UCSchemaLocation entity object.
+
+    This function deserializes a protocol buffer representation of a Unity Catalog schema location
+    into the corresponding MLflow UCSchemaLocation entity. It extracts the catalog name and schema name
+    from the protobuf message and optionally sets the OpenTelemetry table names if they are present
+    in the protobuf message.
+
+    Args:
+        proto (pb.UCSchemaLocation): The protobuf UCSchemaLocation message to convert. Must contain
+            catalog_name and schema_name fields. May optionally contain otel_spans_table_name and
+            otel_logs_table_name fields.
+
+    Returns:
+        UCSchemaLocation: A UCSchemaLocation entity object with the catalog_name and schema_name
+            populated from the protobuf message. If the protobuf message contains otel_spans_table_name
+            or otel_logs_table_name fields, these values are retained on the returned object.
+
+    Notes:
+        - Optional OpenTelemetry table names are retained only when present
+        - This function is the inverse of uc_schema_location_to_proto()
+    """
+    raise NotImplementedError
+
+
+def uc_schema_location_to_proto(uc_schema_location: UCSchemaLocation) -> pb.UCSchemaLocation:
+    """
+    Convert a UCSchemaLocation entity to its corresponding protobuf representation.
+
+    This function transforms a UCSchemaLocation object into a pb.UCSchemaLocation protobuf
+    message, mapping all the relevant fields including catalog name, schema name, and the
+    optional OpenTelemetry table names for spans and logs.
+
+    Args:
+        uc_schema_location (UCSchemaLocation): The UCSchemaLocation entity object to convert.
+            This object contains the Unity Catalog schema information including catalog name,
+            schema name, and optional OpenTelemetry table names.
+
+    Returns:
+        pb.UCSchemaLocation: A protobuf message representation of the UCSchemaLocation entity.
+            The returned protobuf contains the catalog_name, schema_name, otel_spans_table_name,
+            and otel_logs_table_name fields populated from the input entity.
+
+    Note:
+        Optional OpenTelemetry span and log table names are preserved in the proto.
+    """
+    raise NotImplementedError

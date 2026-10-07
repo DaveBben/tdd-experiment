@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_ext_napoleon_docstring.50dabe1f.lv1",
+ "pool": 1063,
+ "mutants": [
+  {
+   "path": "sphinx/builders/text.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2126,
+   "end": 2181,
+   "old": "out_file_name.parent.mkdir(parents=True, exist_ok=True)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sphinx/builders/text.py",
+   "line": 71,
+   "op": "constant",
+   "start": 2319,
+   "end": 2346,
+   "old": "'error writing file %s: %s'",
+   "new": "('XX')",
+   "id": 1
+  },
+  {
+   "path": "sphinx/config.py",
+   "line": 375,
+   "op": "boolean",
+   "start": 14335,
+   "end": 14383,
+   "old": "True in valid_types._candidates and value == '1'",
+   "new": "(True in valid_types._candidates or value == '1')",
+   "id": 2
+  },
+  {
+   "path": "sphinx/config.py",
+   "line": 373,
+   "op": "comparison",
+   "start": 14277,
+   "end": 14289,
+   "old": "value == '0'",
+   "new": "(value != '0')",
+   "id": 3
+  },
+  {
+   "path": "sphinx/config.py",
+   "line": 374,
+   "op": "constant",
+   "start": 14314,
+   "end": 14319,
+   "old": "False",
+   "new": "(True)",
+   "id": 4
+  },
+  {
+   "path": "sphinx/config.py",
+   "line": 384,
+   "op": "return",
+   "start": 14667,
+   "end": 14679,
+   "old": "return value",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "sphinx/config.py",
+   "line": 383,
+   "op": "constant",
+   "start": 14648,
+   "end": 14649,
+   "old": "1",
+   "new": "(2)",
+   "id": 6
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 206,
+   "op": "statement",
+   "start": 6316,
+   "end": 6357,
+   "old": "_toctree_add_classes(newnode, 1, docname)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 143,
+   "op": "boolean",
+   "start": 4336,
+   "end": 4386,
+   "old": "toctree.get('hidden', False) and not includehidden",
+   "new": "(toctree.get('hidden', False) or not includehidden)",
+   "id": 8
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 207,
+   "op": "constant",
+   "start": 6395,
+   "end": 6396,
+   "old": "1",
+   "new": "(2)",
+   "id": 9
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 574,
+   "op": "comparison",
+   "start": 18919,
+   "end": 18937,
+   "old": "d not in ancestors",
+   "new": "(d in ancestors)",
+   "id": 10
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 255,
+   "op": "statement",
+   "start": 7781,
+   "end": 7789,
+   "old": "continue",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 328,
+   "op": "comparison",
+   "start": 10069,
+   "end": 10082,
+   "old": "ref == 'self'",
+   "new": "(ref != 'self')",
+   "id": 12
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 451,
+   "op": "statement",
+   "start": 14212,
+   "end": 14253,
+   "old": "refnode.children[:] = [nodes.Text(title)]",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 450,
+   "op": "boolean",
+   "start": 14169,
+   "end": 14194,
+   "old": "not refnode['anchorname']",
+   "new": "(refnode['anchorname'])",
+   "id": 14
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 219,
+   "op": "constant",
+   "start": 6893,
+   "end": 6905,
+   "old": "'anchorname'",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 274,
+   "op": "statement",
+   "start": 8566,
+   "end": 8582,
+   "old": "top_level.pop(1)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 375,
+   "op": "constant",
+   "start": 11788,
+   "end": 11844,
+   "old": "'toctree contains reference to non-included document %r'",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 450,
+   "op": "constant",
+   "start": 14181,
+   "end": 14193,
+   "old": "'anchorname'",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 339,
+   "op": "constant",
+   "start": 10561,
+   "end": 10566,
+   "old": "'toc'",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 122,
+   "op": "statement",
+   "start": 4122,
+   "end": 4164,
+   "old": "arguments: dict[str, dict[str, bool]] = {}",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 189,
+   "op": "statement",
+   "start": 6412,
+   "end": 6442,
+   "old": "field_name = field[0].astext()",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 146,
+   "op": "comparison",
+   "start": 5038,
+   "end": 5054,
+   "old": "name == 'return'",
+   "new": "(name != 'return')",
+   "id": 22
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 149,
+   "op": "comparison",
+   "start": 5089,
+   "end": 5112,
+   "old": "'*' + name in arguments",
+   "new": "('*' + name not in arguments)",
+   "id": 23
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 160,
+   "op": "arithmetic",
+   "start": 5413,
+   "end": 5458,
+   "old": "field += nodes.field_name('', 'type ' + name)",
+   "new": "field -= nodes.field_name('', 'type ' + name)",
+   "id": 24
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 162,
+   "op": "arithmetic",
+   "start": 5546,
+   "end": 5559,
+   "old": "node += field",
+   "new": "node -= field",
+   "id": 25
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 221,
+   "op": "arithmetic",
+   "start": 7576,
+   "end": 7638,
+   "old": "field += nodes.field_body('', nodes.paragraph('', annotation))",
+   "new": "field -= nodes.field_body('', nodes.paragraph('', annotation))",
+   "id": 26
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4826,
+   "end": 4862,
+   "old": "arg = arguments.setdefault(name, {})",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4875,
+   "end": 4893,
+   "old": "arg['type'] = True",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 150,
+   "op": "arithmetic",
+   "start": 5133,
+   "end": 5143,
+   "old": "'*' + name",
+   "new": "('*' - name)",
+   "id": 29
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 194,
+   "op": "statement",
+   "start": 6596,
+   "end": 6625,
+   "old": "has_description.add(parts[1])",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 202,
+   "op": "statement",
+   "start": 6897,
+   "end": 6915,
+   "old": "has_type.add(name)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 226,
+   "op": "constant",
+   "start": 7786,
+   "end": 7794,
+   "old": "'return'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 231,
+   "op": "constant",
+   "start": 8002,
+   "end": 8009,
+   "old": "'rtype'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 141,
+   "op": "constant",
+   "start": 4879,
+   "end": 4885,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 142,
+   "op": "constant",
+   "start": 4919,
+   "end": 4926,
+   "old": "'rtype'",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 195,
+   "op": "constant",
+   "start": 6656,
+   "end": 6657,
+   "old": "2",
+   "new": "(3)",
+   "id": 36
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 130,
+   "op": "constant",
+   "start": 4464,
+   "end": 4465,
+   "old": "1",
+   "new": "(2)",
+   "id": 37
+  },
+  {
+   "path": "sphinx/ext/autodoc/typehints.py",
+   "line": 134,
+   "op": "constant",
+   "start": 4613,
+   "end": 4614,
+   "old": "2",
+   "new": "(3)",
+   "id": 38
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 190,
+   "op": "statement",
+   "start": 6993,
+   "end": 7065,
+   "old": "updated = [f.result() for f in concurrent.futures.as_completed(futures)]",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 205,
+   "op": "statement",
+   "start": 7683,
+   "end": 7726,
+   "old": "inventories.named_inventory[name] = invdata",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 165,
+   "op": "constant",
+   "start": 5915,
+   "end": 5916,
+   "old": "0",
+   "new": "(1)",
+   "id": 41
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1448,
+   "end": 1466,
+   "old": "uri = inv_item.uri",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 316,
+   "op": "statement",
+   "start": 11041,
+   "end": 11091,
+   "old": "resolve_self = env.config.intersphinx_resolve_self",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 45,
+   "op": "boolean",
+   "start": 1474,
+   "end": 1513,
+   "old": "'://' not in uri and node.get('refdoc')",
+   "new": "('://' not in uri or node.get('refdoc'))",
+   "id": 44
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1576,
+   "end": 1652,
+   "old": "uri = (_relative_path(Path(), Path(node['refdoc']).parent) / uri).as_posix()",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 171,
+   "op": "statement",
+   "start": 6540,
+   "end": 6677,
+   "old": "obj_types = {\n            obj_type: None\n            for obj_type in obj_types\n            if obj_type not in disabled_reftypes\n        }",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 183,
+   "op": "comparison",
+   "start": 6892,
+   "end": 6907,
+   "old": "res is not None",
+   "new": "(res is None)",
+   "id": 47
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 205,
+   "op": "boolean",
+   "start": 7602,
+   "end": 7642,
+   "old": "honor_disabled_refs and inv_name is None",
+   "new": "(honor_disabled_refs or inv_name is None)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2810,
+   "end": 2890,
+   "old": "newnode.append(contnode.__class__(inv_item.display_name, inv_item.display_name))",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 95,
+   "op": "comparison",
+   "start": 3337,
+   "end": 3365,
+   "old": "target in inventory[objtype]",
+   "new": "(target not in inventory[objtype])",
+   "id": 50
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 237,
+   "op": "statement",
+   "start": 8633,
+   "end": 8662,
+   "old": "domain = domains[domain_name]",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 340,
+   "op": "constant",
+   "start": 11873,
+   "end": 11884,
+   "old": "'reftarget'",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 630,
+   "op": "statement",
+   "start": 22731,
+   "end": 22758,
+   "old": "node.replace_self(contnode)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 132,
+   "op": "statement",
+   "start": 5032,
+   "end": 5081,
+   "old": "data = inventory[objtype][insensitive_matches[0]]",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 611,
+   "op": "constant",
+   "start": 21913,
+   "end": 21932,
+   "old": "'nodes.TextElement'",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3939,
+   "end": 3940,
+   "old": "1",
+   "new": "(2)",
+   "id": 56
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 111,
+   "op": "constant",
+   "start": 4170,
+   "end": 4171,
+   "old": "1",
+   "new": "(2)",
+   "id": 57
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 611,
+   "op": "constant",
+   "start": 21939,
+   "end": 21940,
+   "old": "0",
+   "new": "(1)",
+   "id": 58
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 117,
+   "op": "constant",
+   "start": 4468,
+   "end": 4481,
+   "old": "'intersphinx'",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_shared.py",
+   "line": 140,
+   "op": "return",
+   "start": 5070,
+   "end": 5107,
+   "old": "return self.env.intersphinx_inventory",
+   "new": "return None",
+   "id": 60
+  },
+  {
+   "path": "sphinx/ext/napoleon/docstring.py",
+   "line": 161,
+   "op": "return",
+   "start": 4481,
+   "end": 4493,
+   "old": "return False",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "sphinx/ext/napoleon/docstring.py",
+   "line": 165,
+   "op": "constant",
+   "start": 4557,
+   "end": 4560,
+   "old": "' '",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 470,
+   "op": "statement",
+   "start": 16017,
+   "end": 16034,
+   "old": "self.new_state(0)",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 639,
+   "op": "statement",
+   "start": 21114,
+   "end": 21143,
+   "old": "self.add_text(sig_open_paren)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 655,
+   "op": "statement",
+   "start": 21920,
+   "end": 21956,
+   "old": "self.context.append(sig_close_paren)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 688,
+   "op": "statement",
+   "start": 23237,
+   "end": 23265,
+   "old": "self.add_text(node.astext())",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 1229,
+   "op": "statement",
+   "start": 40430,
+   "end": 40449,
+   "old": "self.add_text('**')",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 1286,
+   "op": "statement",
+   "start": 42132,
+   "end": 42160,
+   "old": "self.add_text(node.astext())",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 282,
+   "op": "statement",
+   "start": 9956,
+   "end": 10019,
+   "old": "raise ValueError('invalid width %r (must be > 0)' % self.width)",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 486,
+   "op": "constant",
+   "start": 16540,
+   "end": 16541,
+   "old": "1",
+   "new": "(2)",
+   "id": 70
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 525,
+   "op": "statement",
+   "start": 17586,
+   "end": 17626,
+   "old": "anchorname = '#' + node.parent['ids'][0]",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 535,
+   "op": "statement",
+   "start": 18023,
+   "end": 18046,
+   "old": "char = self._title_char",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 546,
+   "op": "statement",
+   "start": 18556,
+   "end": 18568,
+   "old": "title.pop(0)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 642,
+   "op": "constant",
+   "start": 21253,
+   "end": 21254,
+   "old": "0",
+   "new": "(1)",
+   "id": 74
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 975,
+   "op": "comparison",
+   "start": 32727,
+   "end": 32754,
+   "old": "self.list_counter[-1] == -1",
+   "new": "(self.list_counter[-1] != -1)",
+   "id": 75
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 310,
+   "op": "boolean",
+   "start": 10676,
+   "end": 10719,
+   "old": "chunks and column_width(chunks[-1]) > width",
+   "new": "(chunks or column_width(chunks[-1]) > width)",
+   "id": 76
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 313,
+   "op": "boolean",
+   "start": 10810,
+   "end": 10872,
+   "old": "self.drop_whitespace and cur_line and not cur_line[-1].strip()",
+   "new": "(self.drop_whitespace or cur_line or (not cur_line[-1].strip()))",
+   "id": 77
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 445,
+   "op": "statement",
+   "start": 15095,
+   "end": 15131,
+   "old": "res = ''.join(toformat).splitlines()",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 455,
+   "op": "statement",
+   "start": 15421,
+   "end": 15463,
+   "old": "result.append((indent + itemindent, item))",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 464,
+   "op": "statement",
+   "start": 15826,
+   "end": 15860,
+   "old": "text = first + result[0][1].pop(0)",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 521,
+   "op": "constant",
+   "start": 17456,
+   "end": 17457,
+   "old": "0",
+   "new": "(1)",
+   "id": 81
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 662,
+   "op": "constant",
+   "start": 22246,
+   "end": 22249,
+   "old": "')'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 684,
+   "op": "constant",
+   "start": 23169,
+   "end": 23170,
+   "old": "1",
+   "new": "(2)",
+   "id": 83
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 693,
+   "op": "comparison",
+   "start": 23454,
+   "end": 23492,
+   "old": "self.param_group_index + 1 == len_lirp",
+   "new": "(self.param_group_index + 1 != len_lirp)",
+   "id": 84
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 984,
+   "op": "statement",
+   "start": 32996,
+   "end": 33047,
+   "old": "self.new_state(len(str(self.list_counter[-1])) + 2)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 305,
+   "op": "arithmetic",
+   "start": 10598,
+   "end": 10610,
+   "old": "cur_len += l",
+   "new": "cur_len -= l",
+   "id": 86
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 464,
+   "op": "arithmetic",
+   "start": 15833,
+   "end": 15860,
+   "old": "first + result[0][1].pop(0)",
+   "new": "(first - result[0][1].pop(0))",
+   "id": 87
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 693,
+   "op": "arithmetic",
+   "start": 23454,
+   "end": 23480,
+   "old": "self.param_group_index + 1",
+   "new": "(self.param_group_index - 1)",
+   "id": 88
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 282,
+   "op": "constant",
+   "start": 9973,
+   "end": 10005,
+   "old": "'invalid width %r (must be > 0)'",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 303,
+   "op": "arithmetic",
+   "start": 10506,
+   "end": 10517,
+   "old": "cur_len + l",
+   "new": "(cur_len - l)",
+   "id": 90
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 317,
+   "op": "arithmetic",
+   "start": 10962,
+   "end": 10988,
+   "old": "indent + ''.join(cur_line)",
+   "new": "(indent - ''.join(cur_line))",
+   "id": 91
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 475,
+   "op": "arithmetic",
+   "start": 16171,
+   "end": 16190,
+   "old": "' ' * indent + line",
+   "new": "(' ' * indent - line)",
+   "id": 92
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 702,
+   "op": "boolean",
+   "start": 23827,
+   "end": 23860,
+   "old": "is_last_group or next_is_required",
+   "new": "(is_last_group and next_is_required)",
+   "id": 93
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 464,
+   "op": "constant",
+   "start": 15858,
+   "end": 15859,
+   "old": "0",
+   "new": "(1)",
+   "id": 94
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 992,
+   "op": "arithmetic",
+   "start": 33289,
+   "end": 33319,
+   "old": "'%s. ' % self.list_counter[-1]",
+   "new": "('%s. ' * self.list_counter[-1])",
+   "id": 95
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 475,
+   "op": "constant",
+   "start": 16171,
+   "end": 16174,
+   "old": "' '",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 310,
+   "op": "constant",
+   "start": 10708,
+   "end": 10709,
+   "old": "1",
+   "new": "(2)",
+   "id": 97
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 313,
+   "op": "constant",
+   "start": 10862,
+   "end": 10863,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "sphinx/writers/text.py",
+   "line": 992,
+   "op": "constant",
+   "start": 33317,
+   "end": 33318,
+   "old": "1",
+   "new": "(2)",
+   "id": 99
+  }
+ ]
+}

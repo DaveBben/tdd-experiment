@@ -1,0 +1,904 @@
+=== astropy/uncertainty/core.py
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Distribution class and associated machinery.
+"""
+
+import builtins
+
+import numpy as np
+
+from astropy import stats
+from astropy import units as u
+from astropy.utils.compat.numpycompat import NUMPY_LT_2_0
+
+if NUMPY_LT_2_0:
+    from numpy.core.multiarray import normalize_axis_index
+    from numpy.lib.function_base import _parse_gufunc_signature
+    from numpy.lib.stride_tricks import DummyArray
+else:
+    from numpy.lib._function_base_impl import _parse_gufunc_signature
+    from numpy.lib._stride_tricks_impl import DummyArray
+    from numpy.lib.array_utils import normalize_axis_index
+
+
+from .function_helpers import FUNCTION_HELPERS
+
+__all__ = ["Distribution"]
+
+
+# we set this by hand because the symbolic expression (below) requires scipy
+# SMAD_SCALE_FACTOR = 1 / scipy.stats.norm.ppf(0.75)
+SMAD_SCALE_FACTOR = 1.48260221850560203193936104071326553821563720703125
+
+
+class Distribution:
+    """A scalar value or array values with associated uncertainty distribution.
+
+    This object will take its exact type from whatever the ``samples``
+    argument is. In general this is expected to be ``NdarrayDistribution`` for
+    |ndarray| input, and, e.g., ``QuantityDistribution`` for a subclass such
+    as |Quantity|. But anything compatible with `numpy.asanyarray` is possible
+    (generally producing ``NdarrayDistribution``).
+
+    See also: https://docs.astropy.org/en/stable/uncertainty/
+
+    Parameters
+    ----------
+    samples : array-like
+        The distribution, with sampling along the *trailing* axis. If 1D, the sole
+        dimension is used as the sampling axis (i.e., it is a scalar distribution).
+        If an |ndarray| or subclass, the data will not be copied unless it is not
+        possible to take a view (generally, only when the strides of the last axis
+        are negative).
+
+    """
+
+    _generated_subclasses = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def distribution(self):
+        return self["samples"]["sample"]
+
+    @property
+    def dtype(self):
+        return super().dtype["samples"].base["sample"]
+
+    @dtype.setter
+    def dtype(self, dtype):
+        dtype = self._get_distribution_dtype(
+            dtype, self.n_samples, itemsize=super().dtype["samples"].base.itemsize
+        )
+        super(Distribution, self.__class__).dtype.__set__(self, dtype)
+
+    def astype(self, dtype, *args, **kwargs):
+        dtype = self._get_distribution_dtype(dtype, self.n_samples)
+        return super().astype(dtype, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _not_implemented_or_raise(self, function, types):
+        # Our function helper or dispatcher found that the function does not
+        # work with Distribution.  In principle, there may be another class that
+        # knows what to do with us, for which we should return NotImplemented.
+        # But if there is ndarray (or a non-Distribution subclass of it) around,
+        # it quite likely coerces, so we should just break.
+        if any(
+            issubclass(t, np.ndarray) and not issubclass(t, Distribution) for t in types
+        ):
+            raise TypeError(
+                f"the Distribution implementation cannot handle {function} "
+                "with the given arguments."
+            ) from None
+        else:
+            return NotImplemented
+
+    # Override __eq__ and __ne__ to pass on directly to the ufunc since
+    # otherwise comparisons with non-distributions do not work (but
+    # deferring if other defines __array_ufunc__ = None -- see
+    # numpy/core/src/common/binop_override.h for the logic; we assume we
+    # will never deal with __array_priority__ any more).  Note: there is no
+    # problem for other comparisons, since for those, structured arrays are
+    # not treated differently in numpy/core/src/multiarray/arrayobject.c.
+    def __eq__(self, other):
+        if getattr(other, "__array_ufunc__", False) is None:
+            return NotImplemented
+        return np.equal(self, other)
+
+    def __ne__(self, other):
+        if getattr(other, "__array_ufunc__", False) is None:
+            return NotImplemented
+        return np.not_equal(self, other)
+
+
+
+
+
+
+
+
+    def pdf_mean(self, dtype=None, out=None):
+        """
+        The mean of this distribution.
+
+        Arguments are as for `numpy.mean`.
+        """
+        return self.distribution.mean(axis=-1, dtype=dtype, out=out)
+
+
+
+
+
+
+
+
+
+    def pdf_var(self, dtype=None, out=None, ddof=0):
+        """
+        The variance of this distribution.
+
+        Arguments are as for `numpy.var`.
+        """
+        return self.distribution.var(axis=-1, dtype=dtype, out=out, ddof=ddof)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def pdf_mad(self, out=None):
+        """
+        The median absolute deviation of this distribution.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+        """
+        median = self.pdf_median(out=out)
+        absdiff = np.abs(self - median)
+        return np.median(
+            absdiff.distribution, axis=-1, out=median, overwrite_input=True
+        )
+
+    def pdf_smad(self, out=None):
+        """
+        The median absolute deviation of this distribution rescaled to match the
+        standard deviation for a normal distribution.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+        """
+        result = self.pdf_mad(out=out)
+        result *= SMAD_SCALE_FACTOR
+        return result
+
+    def pdf_percentiles(self, percentile, **kwargs):
+        """
+        Compute percentiles of this Distribution.
+
+        Parameters
+        ----------
+        percentile : float or array of float or `~astropy.units.Quantity`
+            The desired percentiles of the distribution (i.e., on [0,100]).
+            `~astropy.units.Quantity` will be converted to percent, meaning
+            that a ``dimensionless_unscaled`` `~astropy.units.Quantity` will
+            be interpreted as a quantile.
+
+        Additional keywords are passed into `numpy.percentile`.
+
+        Returns
+        -------
+        percentiles : `~astropy.units.Quantity` ['dimensionless']
+            The ``fracs`` percentiles of this distribution.
+        """
+        percentile = u.Quantity(percentile, u.percent).value
+        percs = np.percentile(self.distribution, percentile, axis=-1, **kwargs)
+        # numpy.percentile strips units for unclear reasons, so we have to make
+        # a new object with units
+        if hasattr(self.distribution, "_new_view"):
+            return self.distribution._new_view(percs)
+        else:
+            return percs
+
+    def pdf_histogram(self, **kwargs):
+        """
+        Compute histogram over the samples in the distribution.
+
+        Parameters
+        ----------
+        All keyword arguments are passed into `astropy.stats.histogram`. Note
+        That some of these options may not be valid for some multidimensional
+        distributions.
+
+        Returns
+        -------
+        hist : array
+            The values of the histogram. Trailing dimension is the histogram
+            dimension.
+        bin_edges : array of dtype float
+            Return the bin edges ``(length(hist)+1)``. Trailing dimension is the
+            bin histogram dimension.
+        """
+        distr = self.distribution
+        raveled_distr = distr.reshape(distr.size // distr.shape[-1], distr.shape[-1])
+
+        nhists = []
+        bin_edges = []
+        for d in raveled_distr:
+            nhist, bin_edge = stats.histogram(d, **kwargs)
+            nhists.append(nhist)
+            bin_edges.append(bin_edge)
+
+        nhists = np.array(nhists)
+        nh_shape = self.shape + (nhists.size // self.size,)
+        bin_edges = np.array(bin_edges)
+        be_shape = self.shape + (bin_edges.size // self.size,)
+        return nhists.reshape(nh_shape), bin_edges.reshape(be_shape)
+
+    def __array_function__(self, function, types, args, kwargs):
+        """
+        Implement the `__array_function__` protocol for Distribution objects.
+
+        This method enables numpy functions to work with Distribution objects by
+        delegating to appropriate function helpers or falling back to the parent
+        class implementation. It handles the conversion of Distribution inputs to
+        their underlying distribution arrays and wraps results back into Distribution
+        objects when appropriate.
+
+        Parameters
+        ----------
+        function : callable
+            The numpy function that was called (e.g., np.mean, np.sum, etc.).
+        types : tuple of type
+            A tuple of the unique argument types from the original numpy function call.
+        args : tuple
+            Positional arguments passed to the numpy function.
+        kwargs : dict
+            Keyword arguments passed to the numpy function.
+
+        Returns
+        -------
+        result : Distribution, array-like, or NotImplemented
+            The result of applying the numpy function to the Distribution. If the
+            function is supported and produces array output, returns a new Distribution
+            object. For unsupported functions or when other types should handle the
+            operation, returns NotImplemented. Scalar results are returned as-is
+            without Distribution wrapping.
+
+        Notes
+        -----
+        Supported functions operate on the sample arrays and wrap shaped array results
+        back into Distributions while preserving tuple/list result structure. An explicit
+        Distribution output is returned by identity. Functions without special Distribution
+        handling defer to the parent protocol. If a supported conversion cannot handle the
+        arguments, a non-Distribution ndarray subclass makes the failure a TypeError;
+        otherwise NotImplemented allows another type to handle it.
+        """
+        raise NotImplementedError
+
+    def __new__(cls, samples):
+        """
+        Create a new Distribution instance from array-like samples.
+
+        This method creates a Distribution subclass compatible with the input sample
+        type, exposing those samples along a trailing sample axis while preserving
+        supported array-subclass metadata.
+
+        Parameters
+        ----------
+        cls : type
+            The Distribution class or subclass being instantiated.
+        samples : array-like
+            The distribution samples, with sampling along the *trailing* axis. If 1D, 
+            the sole dimension is used as the sampling axis (i.e., it represents a 
+            scalar distribution). The input can be any array-like object compatible 
+            with numpy.asanyarray, including numpy arrays, lists, or other array-like 
+            structures. If the input is already a Distribution instance, its underlying 
+            distribution data will be extracted and used.
+
+        Returns
+        -------
+        Distribution
+            A new Distribution instance of the appropriate subclass. The exact type 
+            depends on the input samples type:
+            - For numpy.ndarray input: NdarrayDistribution
+            - For Quantity input: QuantityDistribution  
+            - For other array-like inputs: typically NdarrayDistribution
+
+        Raises
+        ------
+        TypeError
+            If samples is a scalar (has empty shape). Distribution requires at least
+            one dimension to represent the sampling axis.
+
+        Notes
+        -----
+        - The sample-array class determines the Distribution subclass, and repeated use
+          of the same sample class yields a stable compatible Distribution type.
+        - Existing Distribution input is reconstructed from its exposed samples.
+        - Array storage is shared when the trailing sample layout permits a safe view;
+          positive-strided non-contiguous samples are supported, while inputs without a
+          safe trailing layout are copied. A one-sample zero stride remains valid.
+        """
+        raise NotImplementedError
+
+    def pdf_median(self, out = None):
+        """
+        Compute the median of the distribution.
+
+        This method calculates the median value across all samples in the distribution
+        by taking the median along the sampling axis (the last axis). The median is
+        the middle value when all samples are sorted in ascending order, or the
+        average of the two middle values for an even number of samples.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+
+        Returns
+        -------
+        median : array or scalar
+            The median of the distribution. If the Distribution is scalar (0-dimensional),
+            returns a scalar value. Otherwise, returns an array with the same shape as
+            the Distribution but with the sampling dimension removed.
+
+        Notes
+        -----
+        This method operates on the underlying sample data by calling `numpy.median`
+        with `axis=-1` to compute the median across the sampling axis. For distributions
+        with an even number of samples, the median is computed as the average of the
+        two middle values.
+
+        The output will have the same units and type as the original distribution
+        samples, but with one fewer dimension (the sampling dimension is reduced).
+        """
+        raise NotImplementedError
+
+    def pdf_std(self, dtype = None, out = None, ddof = 0):
+        """
+        Compute the standard deviation of the distribution.
+
+        This method calculates the standard deviation of the samples in the distribution
+        along the sampling axis (the last axis). The standard deviation is a measure of
+        the spread or dispersion of the distribution values around the mean.
+
+        Parameters
+        ----------
+        dtype : data-type, optional
+            Type to use in computing the standard deviation. For arrays of integer type
+            the default is float64, for arrays of float types it is the same as the
+            array type.
+        out : ndarray, optional
+            Alternative output array in which to place the result. It must have the same
+            shape and buffer length as the expected output, but the type (of the output)
+            will be cast if necessary.
+        ddof : int, optional
+            "Delta Degrees of Freedom": the divisor used in the calculation is N - ddof,
+            where N represents the number of elements. By default ddof is zero.
+
+        Returns
+        -------
+        standard_deviation : ndarray or scalar
+            The standard deviation of the distribution. If the distribution is scalar,
+            returns a scalar value. If the distribution is an array, returns an array
+            with the same shape as the distribution (excluding the sampling axis).
+
+        Notes
+        -----
+        The standard deviation is calculated using numpy.std along the sampling axis
+        (axis=-1). The calculation uses the formula:
+
+            std = sqrt(mean(abs(x - x.mean())**2))
+
+        where the mean is taken over the sampling axis.
+        """
+        raise NotImplementedError
+
+
+class ScalarDistribution(Distribution, np.void):
+    """Scalar distribution.
+
+    This class mostly exists to make `~numpy.array2print` possible for
+    all subclasses.  It is a scalar element, still with n_samples samples.
+    """
+
+
+class ArrayDistribution(Distribution, np.ndarray):
+    # This includes the important override of view and __getitem__
+    # which are needed for all ndarray subclass Distributions, but not
+    # for the scalar one.
+    _samples_cls = np.ndarray
+
+    # Override view so that we stay a Distribution version of the new type.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def __getitem__(self, item):
+        if isinstance(item, str):
+            # "samples" should always get back to the samples class.
+            if item == "samples":
+                return self.distribution
+            else:
+                # Hard to get this right directly, so instead get item from the
+                # distribution, and create a new instance.  We move the sample axis to
+                # the end to ensure the order is right for possible subarrays.
+                return Distribution(np.moveaxis(self.distribution[item], self.ndim, -1))
+
+        if isinstance(item, Distribution):
+            # Required for in-place operations like dist[dist < 0] += 360.
+            return self.distribution[item.distribution]
+
+        result = super().__getitem__(item)
+        if isinstance(result, np.void):
+            return result.view((ScalarDistribution, result.dtype))
+        else:
+            return result
+
+    def __setitem__(self, item, value):
+        if isinstance(item, Distribution):
+            # Support operations like dist[dist < 0] = 0.
+            self.distribution[item.distribution] = value
+            return
+
+        if isinstance(item, str):
+            if item == "samples":
+                self.distribution[()] = value
+                return
+
+            # Get a view of this item (non-trivial; see above).
+            self = self[item]
+            item = ()
+
+        if not isinstance(value, Distribution):
+            # If value is not already a Distribution, first make it an array
+            # to help interpret possible structured dtype, and then turn it
+            # into a Distribution with n_samples=1 (which will broadcast).
+            value = np.asanyarray(value, dtype=self.dtype)
+            value = Distribution(value[..., np.newaxis])
+
+        super().__setitem__(item, value)
+
+    @property
+    def distribution(self):
+        """
+        Get the underlying distribution array from the ArrayDistribution.
+
+        This property provides access to the raw sample data that represents the
+        uncertainty distribution. The returned array has the sample axis as the
+        last dimension, where each sample along this axis represents one possible
+        value from the distribution.
+
+        Returns
+        -------
+        distribution : array-like
+            The distribution samples as an array of the same type as the original
+            samples class (e.g., ndarray, Quantity). The shape is the same as the
+            ArrayDistribution shape plus one additional trailing dimension for the
+            samples. The last axis contains the individual samples that make up
+            the uncertainty distribution.
+
+        Notes
+        -----
+        The returned data shares sample storage where a view is possible and preserves
+        sample-array subclass metadata such as Quantity units.
+        """
+        raise NotImplementedError
+
+    def view(self, dtype = None, type = None):
+        """
+        New view of array with the same data.
+
+        Like `~numpy.ndarray.view` except that the result will always be a new
+        `~astropy.uncertainty.Distribution` instance.  If the requested
+        ``type`` is a `~astropy.uncertainty.Distribution`, then no change in
+        ``dtype`` is allowed.
+
+        Parameters
+        ----------
+        dtype : data-type or ndarray sub-class, optional
+            Data-type descriptor of the returned view, e.g., float32 or int16.
+            The default, None, results in the view having the same data-type
+            as the original array. This argument can also be specified as an
+            ndarray sub-class, which then specifies the type of the returned
+            object (this is equivalent to setting the ``type`` parameter).
+        type : type, optional
+            Type of the returned view, either a subclass of ndarray or a
+            Distribution subclass. By default, the same type as the calling
+            array is returned.
+
+        Returns
+        -------
+        view : Distribution
+            A new Distribution instance that shares the same data as the original
+            array but with the specified dtype and/or type. The returned object
+            will always be a Distribution subclass appropriate for the requested
+            type.
+
+        Raises
+        ------
+        ValueError
+            If the requested dtype cannot represent a compatible view of the sample layout.
+
+        Notes
+        -----
+        Views remain Distribution instances of the requested compatible array type,
+        and the logical sample axis remains trailing after a dtype reinterpretation.
+        An already compatible Distribution storage dtype may be viewed directly;
+        incompatible reinterpretations raise ValueError.
+        """
+        raise NotImplementedError
+
+
+class _DistributionRepr:
+    def __repr__(self):
+        reprarr = repr(self.distribution)
+        if reprarr.endswith(">"):
+            firstspace = reprarr.find(" ")
+            reprarr = reprarr[firstspace + 1 : -1]  # :-1] removes the ending '>'
+            return (
+                f"<{self.__class__.__name__} {reprarr} with n_samples={self.n_samples}>"
+            )
+        else:  # numpy array-like
+            firstparen = reprarr.find("(")
+            reprarr = reprarr[firstparen:]
+            return f"{self.__class__.__name__}{reprarr} with n_samples={self.n_samples}"
+
+    def __str__(self):
+        distrstr = str(self.distribution)
+        toadd = f" with n_samples={self.n_samples}"
+        return distrstr + toadd
+
+    def _repr_latex_(self):
+        if hasattr(self.distribution, "_repr_latex_"):
+            superlatex = self.distribution._repr_latex_()
+            toadd = rf", \; n_{{\rm samp}}={self.n_samples}"
+            return superlatex[:-1] + toadd + superlatex[-1]
+        else:
+            return None
+
+
+class NdarrayDistribution(_DistributionRepr, ArrayDistribution):
+    pass
+
+
+# Ensure our base NdarrayDistribution is known.
+Distribution._generated_subclasses[np.ndarray] = NdarrayDistribution

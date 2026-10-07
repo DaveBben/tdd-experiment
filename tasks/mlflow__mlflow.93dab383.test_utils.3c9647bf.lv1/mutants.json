@@ -1,0 +1,976 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_utils.3c9647bf.lv1",
+ "pool": 97,
+ "mutants": [
+  {
+   "path": "mlflow/environment_variables.py",
+   "line": 1125,
+   "op": "statement",
+   "start": 50742,
+   "end": 50832,
+   "old": "MLFLOW_JUDGE_MAX_ITERATIONS = _EnvironmentVariable(\"MLFLOW_JUDGE_MAX_ITERATIONS\", int, 30)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/environment_variables.py",
+   "line": 60,
+   "op": "return",
+   "start": 1709,
+   "end": 1749,
+   "old": "return self.name.__format__(format_spec)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/environment_variables.py",
+   "line": 1125,
+   "op": "constant",
+   "start": 50793,
+   "end": 50822,
+   "old": "\"MLFLOW_JUDGE_MAX_ITERATIONS\"",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "mlflow/environment_variables.py",
+   "line": 1125,
+   "op": "constant",
+   "start": 50829,
+   "end": 50831,
+   "old": "30",
+   "new": "(31)",
+   "id": 3
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 29,
+   "op": "return",
+   "start": 812,
+   "end": 857,
+   "old": "return bool(re.fullmatch(r\"[\\w\\-\\.]+\", name))",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 33,
+   "op": "statement",
+   "start": 919,
+   "end": 960,
+   "old": "endpoints = config.get(\"endpoints\") or []",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 34,
+   "op": "statement",
+   "start": 965,
+   "end": 1000,
+   "old": "routes = config.get(\"routes\") or []",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 36,
+   "op": "statement",
+   "start": 1006,
+   "end": 1067,
+   "old": "endpoint_names = [endpoint[\"name\"] for endpoint in endpoints]",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1072,
+   "end": 1121,
+   "old": "route_names = [route[\"name\"] for route in routes]",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1127,
+   "end": 1170,
+   "old": "merged_names = endpoint_names + route_names",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1524,
+   "end": 1601,
+   "old": "endpoint_config_dict = {endpoint[\"name\"]: endpoint for endpoint in endpoints}",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 195,
+   "op": "statement",
+   "start": 6441,
+   "end": 6467,
+   "old": "_gateway_uri = gateway_uri",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 227,
+   "op": "statement",
+   "start": 7419,
+   "end": 7491,
+   "old": "stripped_paths = [path.strip(\"/\").lstrip(\"/\") for path in paths if path]",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 228,
+   "op": "return",
+   "start": 7496,
+   "end": 7567,
+   "old": "return \"/\" + posixpath.join(*stripped_paths) if stripped_paths else \"/\"",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 247,
+   "op": "return",
+   "start": 8324,
+   "end": 8401,
+   "old": "return route if _is_valid_uri(route) else append_to_uri_path(base_url, route)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 33,
+   "op": "boolean",
+   "start": 931,
+   "end": 960,
+   "old": "config.get(\"endpoints\") or []",
+   "new": "(config.get('endpoints') and [])",
+   "id": 15
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 34,
+   "op": "boolean",
+   "start": 974,
+   "end": 1000,
+   "old": "config.get(\"routes\") or []",
+   "new": "(config.get('routes') and [])",
+   "id": 16
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 39,
+   "op": "arithmetic",
+   "start": 1142,
+   "end": 1170,
+   "old": "endpoint_names + route_names",
+   "new": "(endpoint_names - route_names)",
+   "id": 17
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 40,
+   "op": "comparison",
+   "start": 1178,
+   "end": 1221,
+   "old": "len(merged_names) != len(set(merged_names))",
+   "new": "(len(merged_names) == len(set(merged_names)))",
+   "id": 18
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1231,
+   "end": 1518,
+   "old": "raise MlflowException.invalid_parameter_value(\n            \"Duplicate names found in endpoint / route configurations. \"\n            \"Please remove the duplicate endpoint / route name \"\n            \"from the configuration to ensure that endpoints / routes are created properly.\"\n        )",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1636,
+   "end": 1662,
+   "old": "route_name = route[\"name\"]",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1671,
+   "end": 1707,
+   "old": "route_task_type = route[\"task_type\"]",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1717,
+   "end": 1743,
+   "old": "traffic_percentage_sum = 0",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 116,
+   "op": "comparison",
+   "start": 4253,
+   "end": 4272,
+   "old": "uri == \"databricks\"",
+   "new": "(uri != 'databricks')",
+   "id": 23
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 117,
+   "op": "return",
+   "start": 4282,
+   "end": 4293,
+   "old": "return True",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 119,
+   "op": "statement",
+   "start": 4311,
+   "end": 4333,
+   "old": "parsed = urlparse(uri)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 120,
+   "op": "return",
+   "start": 4342,
+   "end": 4417,
+   "old": "return parsed.scheme == \"databricks\" or all([parsed.scheme, parsed.netloc])",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 188,
+   "op": "boolean",
+   "start": 6183,
+   "end": 6213,
+   "old": "not _is_valid_uri(gateway_uri)",
+   "new": "(_is_valid_uri(gateway_uri))",
+   "id": 27
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 189,
+   "op": "statement",
+   "start": 6223,
+   "end": 6411,
+   "old": "raise MlflowException.invalid_parameter_value(\n            \"The gateway uri provided is missing required elements. Ensure that the schema \"\n            \"and netloc are provided.\"\n        )",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 205,
+   "op": "comparison",
+   "start": 6719,
+   "end": 6743,
+   "old": "_gateway_uri is not None",
+   "new": "(_gateway_uri is None)",
+   "id": 29
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 206,
+   "op": "return",
+   "start": 6753,
+   "end": 6772,
+   "old": "return _gateway_uri",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 252,
+   "op": "statement",
+   "start": 8473,
+   "end": 8492,
+   "old": "self._index = index",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 256,
+   "op": "return",
+   "start": 8537,
+   "end": 8555,
+   "old": "return self._index",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 275,
+   "op": "return",
+   "start": 9268,
+   "end": 9291,
+   "old": "return cls(index=index)",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 278,
+   "op": "statement",
+   "start": 9330,
+   "end": 9429,
+   "old": "token_json = json.dumps(\n            {\n                \"index\": self.index,\n            }\n        )",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 283,
+   "op": "statement",
+   "start": 9438,
+   "end": 9504,
+   "old": "encoded_token_bytes = base64.b64encode(bytes(token_json, \"utf-8\"))",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 284,
+   "op": "return",
+   "start": 9513,
+   "end": 9555,
+   "old": "return encoded_token_bytes.decode(\"utf-8\")",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 340,
+   "op": "return",
+   "start": 11135,
+   "end": 11152,
+   "old": "return await resp",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 53,
+   "op": "constant",
+   "start": 1742,
+   "end": 1743,
+   "old": "0",
+   "new": "(1)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1810,
+   "end": 1845,
+   "old": "dest_name = destination.get(\"name\")",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 56,
+   "op": "statement",
+   "start": 1858,
+   "end": 1921,
+   "old": "dest_traffic_percentage = destination.get(\"traffic_percentage\")",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 57,
+   "op": "arithmetic",
+   "start": 1934,
+   "end": 1983,
+   "old": "traffic_percentage_sum += dest_traffic_percentage",
+   "new": "traffic_percentage_sum -= dest_traffic_percentage",
+   "id": 41
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 57,
+   "op": "statement",
+   "start": 1934,
+   "end": 1983,
+   "old": "traffic_percentage_sum += dest_traffic_percentage",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 64,
+   "op": "statement",
+   "start": 2301,
+   "end": 2374,
+   "old": "dest_endpoint_type = endpoint_config_dict[dest_name].get(\"endpoint_type\")",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 77,
+   "op": "comparison",
+   "start": 2975,
+   "end": 3004,
+   "old": "traffic_percentage_sum != 100",
+   "new": "(traffic_percentage_sum == 100)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 78,
+   "op": "statement",
+   "start": 3018,
+   "end": 3257,
+   "old": "raise MlflowException.invalid_parameter_value(\n                \"For each route configuration, the traffic percentage sum of destinations \"\n                f\"must be 100, but got invalid configuration of route '{route_name}'.\"\n            )",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 116,
+   "op": "constant",
+   "start": 4260,
+   "end": 4272,
+   "old": "\"databricks\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 117,
+   "op": "constant",
+   "start": 4289,
+   "end": 4293,
+   "old": "True",
+   "new": "(False)",
+   "id": 47
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 120,
+   "op": "boolean",
+   "start": 4349,
+   "end": 4417,
+   "old": "parsed.scheme == \"databricks\" or all([parsed.scheme, parsed.netloc])",
+   "new": "(parsed.scheme == 'databricks' and all([parsed.scheme, parsed.netloc]))",
+   "id": 48
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 122,
+   "op": "return",
+   "start": 4449,
+   "end": 4461,
+   "old": "return False",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 208,
+   "op": "return",
+   "start": 6823,
+   "end": 6833,
+   "old": "return uri",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 210,
+   "op": "statement",
+   "start": 6852,
+   "end": 7138,
+   "old": "raise MlflowException(\n            \"No Gateway server uri has been set. Please either set the MLflow Gateway URI via \"\n            \"`mlflow.gateway.set_gateway_uri()` or set the environment variable \"\n            f\"{MLFLOW_GATEWAY_URI} to the running Gateway API server's uri\"\n        )",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 228,
+   "op": "arithmetic",
+   "start": 7503,
+   "end": 7540,
+   "old": "\"/\" + posixpath.join(*stripped_paths)",
+   "new": "('/' - posixpath.join(*stripped_paths))",
+   "id": 52
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 228,
+   "op": "constant",
+   "start": 7564,
+   "end": 7567,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 261,
+   "op": "statement",
+   "start": 8640,
+   "end": 8687,
+   "old": "decoded_token = base64.b64decode(encoded_token)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 262,
+   "op": "statement",
+   "start": 8700,
+   "end": 8740,
+   "old": "parsed_token = json.loads(decoded_token)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 263,
+   "op": "statement",
+   "start": 8753,
+   "end": 8791,
+   "old": "index = int(parsed_token.get(\"index\"))",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 270,
+   "op": "comparison",
+   "start": 9081,
+   "end": 9090,
+   "old": "index < 0",
+   "new": "(index <= 0)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 271,
+   "op": "statement",
+   "start": 9104,
+   "end": 9258,
+   "old": "raise MlflowException.invalid_parameter_value(\n                f\"Invalid SearchRoutes token: {encoded_token}. The index cannot be negative.\"\n            )",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 29,
+   "op": "constant",
+   "start": 837,
+   "end": 849,
+   "old": "r\"[\\w\\-\\.]+\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 33,
+   "op": "constant",
+   "start": 942,
+   "end": 953,
+   "old": "\"endpoints\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 34,
+   "op": "constant",
+   "start": 985,
+   "end": 993,
+   "old": "\"routes\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 36,
+   "op": "constant",
+   "start": 1033,
+   "end": 1039,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1093,
+   "end": 1099,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1290,
+   "end": 1508,
+   "old": "\"Duplicate names found in endpoint / route configurations. \"\n            \"Please remove the duplicate endpoint / route name \"\n            \"from the configuration to ensure that endpoints / routes are created properly.\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 47,
+   "op": "constant",
+   "start": 1557,
+   "end": 1563,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1655,
+   "end": 1661,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 51,
+   "op": "constant",
+   "start": 1695,
+   "end": 1706,
+   "old": "\"task_type\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 54,
+   "op": "constant",
+   "start": 1781,
+   "end": 1795,
+   "old": "\"destinations\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 58,
+   "op": "comparison",
+   "start": 1999,
+   "end": 2030,
+   "old": "dest_name not in endpoint_names",
+   "new": "(dest_name in endpoint_names)",
+   "id": 69
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 59,
+   "op": "statement",
+   "start": 2048,
+   "end": 2287,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    f\"The route destination name must be a endpoint name, \"\n                    f\"but the route '{route_name}' has an invalid destination name '{dest_name}'.\"\n                )",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 65,
+   "op": "comparison",
+   "start": 2390,
+   "end": 2427,
+   "old": "route_task_type != dest_endpoint_type",
+   "new": "(route_task_type == dest_endpoint_type)",
+   "id": 71
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 66,
+   "op": "statement",
+   "start": 2445,
+   "end": 2735,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    f\"The route destination endpoint types in the route '{route_name}' must have \"\n                    f\"endpoint type '{route_task_type}' but got endpoint type \"\n                    f\"'{dest_endpoint_type}'.\"\n                )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 72,
+   "op": "boolean",
+   "start": 2752,
+   "end": 2793,
+   "old": "not (0 <= dest_traffic_percentage <= 100)",
+   "new": "(0 <= dest_traffic_percentage <= 100)",
+   "id": 73
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 73,
+   "op": "statement",
+   "start": 2811,
+   "end": 2962,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    \"The route destination traffic percentage must between 0 and 100.\"\n                )",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 77,
+   "op": "constant",
+   "start": 3001,
+   "end": 3004,
+   "old": "100",
+   "new": "(101)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 120,
+   "op": "comparison",
+   "start": 4349,
+   "end": 4378,
+   "old": "parsed.scheme == \"databricks\"",
+   "new": "(parsed.scheme != 'databricks')",
+   "id": 76
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 122,
+   "op": "constant",
+   "start": 4456,
+   "end": 4461,
+   "old": "False",
+   "new": "(True)",
+   "id": 77
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 190,
+   "op": "constant",
+   "start": 6282,
+   "end": 6401,
+   "old": "\"The gateway uri provided is missing required elements. Ensure that the schema \"\n            \"and netloc are provided.\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 227,
+   "op": "constant",
+   "start": 7460,
+   "end": 7463,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 228,
+   "op": "constant",
+   "start": 7503,
+   "end": 7506,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 265,
+   "op": "statement",
+   "start": 8835,
+   "end": 9068,
+   "old": "raise MlflowException.invalid_parameter_value(\n                f\"Invalid SearchRoutes token: {encoded_token}. The index is not defined as a \"\n                \"value that can be represented as a positive integer.\"\n            ) from e",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 270,
+   "op": "constant",
+   "start": 9089,
+   "end": 9090,
+   "old": "0",
+   "new": "(1)",
+   "id": 82
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 284,
+   "op": "constant",
+   "start": 9547,
+   "end": 9554,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 55,
+   "op": "constant",
+   "start": 1838,
+   "end": 1844,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 56,
+   "op": "constant",
+   "start": 1900,
+   "end": 1920,
+   "old": "\"traffic_percentage\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 64,
+   "op": "constant",
+   "start": 2358,
+   "end": 2373,
+   "old": "\"endpoint_type\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 72,
+   "op": "comparison",
+   "start": 2757,
+   "end": 2792,
+   "old": "0 <= dest_traffic_percentage <= 100",
+   "new": "(0 < dest_traffic_percentage <= 100)",
+   "id": 87
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 72,
+   "op": "comparison",
+   "start": 2757,
+   "end": 2792,
+   "old": "0 <= dest_traffic_percentage <= 100",
+   "new": "(0 <= dest_traffic_percentage < 100)",
+   "id": 88
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 120,
+   "op": "constant",
+   "start": 4366,
+   "end": 4378,
+   "old": "\"databricks\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 280,
+   "op": "constant",
+   "start": 9385,
+   "end": 9392,
+   "old": "\"index\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 283,
+   "op": "constant",
+   "start": 9495,
+   "end": 9502,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2757,
+   "end": 2758,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2789,
+   "end": 2792,
+   "old": "100",
+   "new": "(101)",
+   "id": 93
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 74,
+   "op": "constant",
+   "start": 2878,
+   "end": 2944,
+   "old": "\"The route destination traffic percentage must between 0 and 100.\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 227,
+   "op": "constant",
+   "start": 7448,
+   "end": 7451,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/gateway/utils.py",
+   "line": 263,
+   "op": "constant",
+   "start": 8782,
+   "end": 8789,
+   "old": "\"index\"",
+   "new": "('XX')",
+   "id": 96
+  }
+ ]
+}

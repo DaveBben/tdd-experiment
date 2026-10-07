@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_line.25304a8b.lv1",
+ "pool": 191,
+ "mutants": [
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 117,
+   "op": "return",
+   "start": 3225,
+   "end": 3277,
+   "old": "return s.groupby(grouper, sort=False, observed=True)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 123,
+   "op": "statement",
+   "start": 3523,
+   "end": 3547,
+   "old": "filled = w.fillna(empty)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 125,
+   "op": "statement",
+   "start": 3593,
+   "end": 3612,
+   "old": "norm = filled.sum()",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "return",
+   "start": 3760,
+   "end": 3816,
+   "old": "return w.shift(1).fillna(0).cumsum() + (w - w.sum()) / 2",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 127,
+   "op": "statement",
+   "start": 3666,
+   "end": 3676,
+   "old": "w = filled",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 128,
+   "op": "arithmetic",
+   "start": 3696,
+   "end": 3712,
+   "old": "w / norm * scale",
+   "new": "(w / norm / scale)",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "arithmetic",
+   "start": 3767,
+   "end": 3816,
+   "old": "w.shift(1).fillna(0).cumsum() + (w - w.sum()) / 2",
+   "new": "(w.shift(1).fillna(0).cumsum() - (w - w.sum()) / 2)",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 122,
+   "op": "comparison",
+   "start": 3476,
+   "end": 3496,
+   "old": "self.empty == \"fill\"",
+   "new": "(self.empty != 'fill')",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 126,
+   "op": "constant",
+   "start": 3642,
+   "end": 3648,
+   "old": "\"keep\"",
+   "new": "('XX')",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 128,
+   "op": "arithmetic",
+   "start": 3696,
+   "end": 3704,
+   "old": "w / norm",
+   "new": "(w * norm)",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "arithmetic",
+   "start": 3799,
+   "end": 3816,
+   "old": "(w - w.sum()) / 2",
+   "new": "((w - w.sum()) * 2)",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 117,
+   "op": "constant",
+   "start": 3256,
+   "end": 3261,
+   "old": "False",
+   "new": "(True)",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 117,
+   "op": "constant",
+   "start": 3272,
+   "end": 3276,
+   "old": "True",
+   "new": "(False)",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 122,
+   "op": "constant",
+   "start": 3490,
+   "end": 3496,
+   "old": "\"fill\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "arithmetic",
+   "start": 3800,
+   "end": 3811,
+   "old": "w - w.sum()",
+   "new": "(w + w.sum())",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "constant",
+   "start": 3815,
+   "end": 3816,
+   "old": "2",
+   "new": "(3)",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 116,
+   "op": "constant",
+   "start": 3185,
+   "end": 3190,
+   "old": "\"col\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_core/moves.py",
+   "line": 131,
+   "op": "constant",
+   "start": 3775,
+   "end": 3776,
+   "old": "1",
+   "new": "(2)",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1090,
+   "op": "return",
+   "start": 35296,
+   "end": 35304,
+   "old": "return 1",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 451,
+   "op": "return",
+   "start": 14230,
+   "end": 14248,
+   "old": "return (x - a) / b",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 162,
+   "op": "statement",
+   "start": 5119,
+   "end": 5133,
+   "old": "line_data = {}",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 195,
+   "op": "statement",
+   "start": 6405,
+   "end": 6474,
+   "old": "key = resolve_properties(self, {v: value for v in variables}, scales)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 198,
+   "op": "statement",
+   "start": 6528,
+   "end": 6565,
+   "old": "capstyle = artist_kws.pop(\"capstyle\")",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 199,
+   "op": "statement",
+   "start": 6574,
+   "end": 6613,
+   "old": "artist_kws[\"solid_capstyle\"] = capstyle",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 280,
+   "op": "statement",
+   "start": 8588,
+   "end": 8618,
+   "old": "ori = [\"x\", \"y\"].index(orient)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 281,
+   "op": "statement",
+   "start": 8627,
+   "end": 8674,
+   "old": "xys = data[[\"x\", \"y\"]].to_numpy().astype(float)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 282,
+   "op": "statement",
+   "start": 8683,
+   "end": 8722,
+   "old": "segments = np.stack([xys, xys], axis=1)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 283,
+   "op": "arithmetic",
+   "start": 8731,
+   "end": 8771,
+   "old": "segments[:, 0, ori] -= data[\"width\"] / 2",
+   "new": "segments[:, 0, ori] += data['width'] / 2",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 285,
+   "op": "return",
+   "start": 8829,
+   "end": 8844,
+   "old": "return segments",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 106,
+   "op": "comparison",
+   "start": 3493,
+   "end": 3521,
+   "old": "vals[\"linestyle\"][1] is None",
+   "new": "(vals['linestyle'][1] is not None)",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 107,
+   "op": "statement",
+   "start": 3535,
+   "end": 3609,
+   "old": "capstyle = kws.get(\"solid_capstyle\", mpl.rcParams[\"lines.solid_capstyle\"])",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 108,
+   "op": "statement",
+   "start": 3622,
+   "end": 3653,
+   "old": "kws[\"dash_capstyle\"] = capstyle",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 175,
+   "op": "statement",
+   "start": 5560,
+   "end": 5577,
+   "old": "n = len(segments)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 177,
+   "op": "statement",
+   "start": 5591,
+   "end": 5636,
+   "old": "vals = resolve_properties(self, keys, scales)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 178,
+   "op": "statement",
+   "start": 5649,
+   "end": 5705,
+   "old": "vals[\"color\"] = resolve_color(self, keys, scales=scales)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 283,
+   "op": "arithmetic",
+   "start": 8754,
+   "end": 8771,
+   "old": "data[\"width\"] / 2",
+   "new": "(data['width'] * 2)",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 283,
+   "op": "arithmetic",
+   "start": 8754,
+   "end": 8771,
+   "old": "data[\"width\"] / 2",
+   "new": "(data['width'] // 2)",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 284,
+   "op": "arithmetic",
+   "start": 8803,
+   "end": 8820,
+   "old": "data[\"width\"] / 2",
+   "new": "(data['width'] * 2)",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 190,
+   "op": "statement",
+   "start": 6260,
+   "end": 6300,
+   "old": "xy = np.concatenate(ax_data[\"segments\"])",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 191,
+   "op": "statement",
+   "start": 6317,
+   "end": 6338,
+   "old": "ax.update_datalim(xy)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 198,
+   "op": "constant",
+   "start": 6554,
+   "end": 6564,
+   "old": "\"capstyle\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 199,
+   "op": "constant",
+   "start": 6585,
+   "end": 6601,
+   "old": "\"solid_capstyle\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 283,
+   "op": "constant",
+   "start": 8770,
+   "end": 8771,
+   "old": "2",
+   "new": "(3)",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 284,
+   "op": "constant",
+   "start": 8819,
+   "end": 8820,
+   "old": "2",
+   "new": "(3)",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3511,
+   "end": 3512,
+   "old": "1",
+   "new": "(2)",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 108,
+   "op": "constant",
+   "start": 3626,
+   "end": 3641,
+   "old": "\"dash_capstyle\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 181,
+   "op": "arithmetic",
+   "start": 5818,
+   "end": 5841,
+   "old": "[vals[\"linewidth\"]] * n",
+   "new": "([vals['linewidth']] / n)",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 182,
+   "op": "arithmetic",
+   "start": 5890,
+   "end": 5913,
+   "old": "[vals[\"linestyle\"]] * n",
+   "new": "([vals['linestyle']] / n)",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 189,
+   "op": "constant",
+   "start": 6231,
+   "end": 6241,
+   "old": "\"segments\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 282,
+   "op": "constant",
+   "start": 8720,
+   "end": 8721,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 284,
+   "op": "constant",
+   "start": 8808,
+   "end": 8815,
+   "old": "\"width\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3498,
+   "end": 3509,
+   "old": "\"linestyle\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 167,
+   "op": "constant",
+   "start": 5290,
+   "end": 5300,
+   "old": "\"segments\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 168,
+   "op": "constant",
+   "start": 5326,
+   "end": 5334,
+   "old": "\"colors\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 205,
+   "op": "constant",
+   "start": 6773,
+   "end": 6784,
+   "old": "\"linewidth\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 280,
+   "op": "constant",
+   "start": 8595,
+   "end": 8598,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 180,
+   "op": "constant",
+   "start": 5733,
+   "end": 5741,
+   "old": "\"colors\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 181,
+   "op": "constant",
+   "start": 5797,
+   "end": 5809,
+   "old": "\"linewidths\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "seaborn/_marks/line.py",
+   "line": 181,
+   "op": "constant",
+   "start": 5824,
+   "end": 5835,
+   "old": "\"linewidth\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 461,
+   "op": "return",
+   "start": 13351,
+   "end": 13400,
+   "old": "return epoch, _release, _pre, _post, _dev, _local",
+   "new": "return None",
+   "id": 59
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 221,
+   "op": "statement",
+   "start": 5968,
+   "end": 6003,
+   "old": "match = self._regex.search(version)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 375,
+   "op": "return",
+   "start": 10393,
+   "end": 10419,
+   "old": "return letter, int(number)",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 376,
+   "op": "boolean",
+   "start": 10427,
+   "end": 10448,
+   "old": "not letter and number",
+   "new": "(not letter or number)",
+   "id": 62
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 381,
+   "op": "return",
+   "start": 10634,
+   "end": 10660,
+   "old": "return letter, int(number)",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 393,
+   "op": "comparison",
+   "start": 10893,
+   "end": 10910,
+   "old": "local is not None",
+   "new": "(local is None)",
+   "id": 64
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 423,
+   "op": "boolean",
+   "start": 12066,
+   "end": 12114,
+   "old": "pre is None and post is None and dev is not None",
+   "new": "(pre is None or post is None or dev is not None)",
+   "id": 65
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 433,
+   "op": "comparison",
+   "start": 12421,
+   "end": 12433,
+   "old": "post is None",
+   "new": "(post is not None)",
+   "id": 66
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 434,
+   "op": "statement",
+   "start": 12443,
+   "end": 12483,
+   "old": "_post: PrePostDevType = NegativeInfinity",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 437,
+   "op": "statement",
+   "start": 12503,
+   "end": 12515,
+   "old": "_post = post",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 440,
+   "op": "comparison",
+   "start": 12603,
+   "end": 12614,
+   "old": "dev is None",
+   "new": "(dev is not None)",
+   "id": 69
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 441,
+   "op": "statement",
+   "start": 12624,
+   "end": 12655,
+   "old": "_dev: PrePostDevType = Infinity",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 444,
+   "op": "statement",
+   "start": 12675,
+   "end": 12685,
+   "old": "_dev = dev",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 446,
+   "op": "comparison",
+   "start": 12694,
+   "end": 12707,
+   "old": "local is None",
+   "new": "(local is not None)",
+   "id": 72
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 448,
+   "op": "statement",
+   "start": 12795,
+   "end": 12831,
+   "old": "_local: LocalType = NegativeInfinity",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 147,
+   "op": "comparison",
+   "start": 3790,
+   "end": 3812,
+   "old": "self._key < other._key",
+   "new": "(self._key <= other._key)",
+   "id": 74
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 223,
+   "op": "statement",
+   "start": 6038,
+   "end": 6091,
+   "old": "raise InvalidVersion(f\"Invalid version: '{version}'\")",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 367,
+   "op": "statement",
+   "start": 10176,
+   "end": 10188,
+   "old": "letter = \"a\"",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 376,
+   "op": "boolean",
+   "start": 10427,
+   "end": 10437,
+   "old": "not letter",
+   "new": "(letter)",
+   "id": 77
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 379,
+   "op": "constant",
+   "start": 10618,
+   "end": 10624,
+   "old": "\"post\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 423,
+   "op": "comparison",
+   "start": 12066,
+   "end": 12077,
+   "old": "pre is None",
+   "new": "(pre is not None)",
+   "id": 79
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 423,
+   "op": "comparison",
+   "start": 12099,
+   "end": 12114,
+   "old": "dev is not None",
+   "new": "(dev is None)",
+   "id": 80
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 430,
+   "op": "statement",
+   "start": 12329,
+   "end": 12339,
+   "old": "_pre = pre",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 366,
+   "op": "constant",
+   "start": 10155,
+   "end": 10162,
+   "old": "\"alpha\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 369,
+   "op": "statement",
+   "start": 10232,
+   "end": 10244,
+   "old": "letter = \"b\"",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 368,
+   "op": "constant",
+   "start": 10212,
+   "end": 10218,
+   "old": "\"beta\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 369,
+   "op": "constant",
+   "start": 10241,
+   "end": 10244,
+   "old": "\"b\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 370,
+   "op": "comparison",
+   "start": 10258,
+   "end": 10291,
+   "old": "letter in [\"c\", \"pre\", \"preview\"]",
+   "new": "(letter not in ['c', 'pre', 'preview'])",
+   "id": 86
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 227,
+   "op": "constant",
+   "start": 6253,
+   "end": 6254,
+   "old": "0",
+   "new": "(1)",
+   "id": 87
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 231,
+   "op": "boolean",
+   "start": 6496,
+   "end": 6544,
+   "old": "match.group(\"post_n1\") or match.group(\"post_n2\")",
+   "new": "(match.group('post_n1') and match.group('post_n2'))",
+   "id": 88
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 373,
+   "op": "statement",
+   "start": 10368,
+   "end": 10383,
+   "old": "letter = \"post\"",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 395,
+   "op": "boolean",
+   "start": 10962,
+   "end": 10980,
+   "old": "not part.isdigit()",
+   "new": "(part.isdigit())",
+   "id": 90
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 227,
+   "op": "constant",
+   "start": 6239,
+   "end": 6246,
+   "old": "\"epoch\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 229,
+   "op": "constant",
+   "start": 6406,
+   "end": 6413,
+   "old": "\"pre_n\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 231,
+   "op": "constant",
+   "start": 6485,
+   "end": 6493,
+   "old": "\"post_l\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 233,
+   "op": "constant",
+   "start": 6632,
+   "end": 6639,
+   "old": "\"dev_n\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 234,
+   "op": "constant",
+   "start": 6694,
+   "end": 6701,
+   "old": "\"local\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 370,
+   "op": "constant",
+   "start": 10281,
+   "end": 10290,
+   "old": "\"preview\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 416,
+   "op": "constant",
+   "start": 11733,
+   "end": 11734,
+   "old": "0",
+   "new": "(1)",
+   "id": 97
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 856,
+   "op": "return",
+   "start": 27979,
+   "end": 28029,
+   "old": "return Version(lib.__version__) < Version(version)",
+   "new": "return None",
+   "id": 98
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 856,
+   "op": "comparison",
+   "start": 27986,
+   "end": 28029,
+   "old": "Version(lib.__version__) < Version(version)",
+   "new": "(Version(lib.__version__) <= Version(version))",
+   "id": 99
+  }
+ ]
+}

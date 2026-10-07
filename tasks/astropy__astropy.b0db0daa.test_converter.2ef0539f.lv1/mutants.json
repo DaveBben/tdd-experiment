@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_converter.2ef0539f.lv1",
+ "pool": 246,
+ "mutants": [
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 86,
+   "op": "return",
+   "start": 1692,
+   "end": 1723,
+   "old": "return ma.array(np.array(data))",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 499,
+   "op": "return",
+   "start": 14202,
+   "end": 14256,
+   "old": "return self._write_length(len(encoded) // 2) + encoded",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 504,
+   "op": "return",
+   "start": 14351,
+   "end": 14417,
+   "old": "return struct.pack(self._struct_format, value.encode(\"utf_16_be\"))",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 779,
+   "op": "return",
+   "start": 23063,
+   "end": 23074,
+   "old": "return True",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 1135,
+   "op": "return",
+   "start": 33143,
+   "end": 33182,
+   "old": "return list(re.sub(r\"\\s|,\", \"\", value))",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 491,
+   "op": "boolean",
+   "start": 13944,
+   "end": 13980,
+   "old": "mask or value is None or value == \"\"",
+   "new": "(mask and value is None and (value == ''))",
+   "id": 5
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 492,
+   "op": "return",
+   "start": 13994,
+   "end": 14010,
+   "old": "return _zero_int",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 499,
+   "op": "arithmetic",
+   "start": 14209,
+   "end": 14256,
+   "old": "self._write_length(len(encoded) // 2) + encoded",
+   "new": "(self._write_length(len(encoded) // 2) - encoded)",
+   "id": 7
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 779,
+   "op": "constant",
+   "start": 23070,
+   "end": 23074,
+   "old": "True",
+   "new": "(False)",
+   "id": 8
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 185,
+   "op": "constant",
+   "start": 4051,
+   "end": 4055,
+   "old": "\">I\"",
+   "new": "('XX')",
+   "id": 9
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 491,
+   "op": "comparison",
+   "start": 13969,
+   "end": 13980,
+   "old": "value == \"\"",
+   "new": "(value != '')",
+   "id": 10
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 494,
+   "op": "comparison",
+   "start": 14023,
+   "end": 14044,
+   "old": "self.arraysize != \"*\"",
+   "new": "(self.arraysize == '*')",
+   "id": 11
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 494,
+   "op": "comparison",
+   "start": 14049,
+   "end": 14076,
+   "old": "len(value) > self.arraysize",
+   "new": "(len(value) >= self.arraysize)",
+   "id": 12
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 1133,
+   "op": "constant",
+   "start": 33079,
+   "end": 33082,
+   "old": "\",\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 494,
+   "op": "constant",
+   "start": 14041,
+   "end": 14044,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 499,
+   "op": "constant",
+   "start": 14244,
+   "end": 14245,
+   "old": "2",
+   "new": "(3)",
+   "id": 15
+  },
+  {
+   "path": "astropy/io/votable/converters.py",
+   "line": 84,
+   "op": "constant",
+   "start": 1665,
+   "end": 1671,
+   "old": "\"bool\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 81,
+   "op": "statement",
+   "start": 1861,
+   "end": 1899,
+   "old": "filename = config.get(\"filename\", \"?\")",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2058,
+   "end": 2127,
+   "old": "config.setdefault(\"_warning_counts\", {}).setdefault(warning_class, 0)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 77,
+   "op": "comparison",
+   "start": 1776,
+   "end": 1790,
+   "old": "config is None",
+   "new": "(config is not None)",
+   "id": 19
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 78,
+   "op": "statement",
+   "start": 1800,
+   "end": 1811,
+   "old": "config = {}",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 80,
+   "op": "statement",
+   "start": 1840,
+   "end": 1856,
+   "old": "pos = (\"?\", \"?\")",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 90,
+   "op": "comparison",
+   "start": 2246,
+   "end": 2280,
+   "old": "message_count <= conf.max_warnings",
+   "new": "(message_count < conf.max_warnings)",
+   "id": 22
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 81,
+   "op": "constant",
+   "start": 1883,
+   "end": 1893,
+   "old": "\"filename\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 81,
+   "op": "constant",
+   "start": 1895,
+   "end": 1898,
+   "old": "\"?\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 87,
+   "op": "constant",
+   "start": 2125,
+   "end": 2126,
+   "old": "0",
+   "new": "(1)",
+   "id": 25
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 1612,
+   "op": "constant",
+   "start": 51255,
+   "end": 51256,
+   "old": "0",
+   "new": "(1)",
+   "id": 26
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 80,
+   "op": "constant",
+   "start": 1852,
+   "end": 1855,
+   "old": "\"?\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 88,
+   "op": "constant",
+   "start": 2139,
+   "end": 2156,
+   "old": "\"_warning_counts\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 95,
+   "op": "arithmetic",
+   "start": 2485,
+   "end": 2499,
+   "old": "stacklevel + 1",
+   "new": "(stacklevel - 1)",
+   "id": 29
+  },
+  {
+   "path": "astropy/io/votable/exceptions.py",
+   "line": 95,
+   "op": "constant",
+   "start": 2498,
+   "end": 2499,
+   "old": "1",
+   "new": "(2)",
+   "id": 30
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 339,
+   "op": "return",
+   "start": 8293,
+   "end": 8304,
+   "old": "return True",
+   "new": "return None",
+   "id": 31
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 261,
+   "op": "statement",
+   "start": 6061,
+   "end": 6102,
+   "old": "format = _get_default_unit_format(config)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 263,
+   "op": "statement",
+   "start": 6121,
+   "end": 6151,
+   "old": "format = config[\"unit_format\"]",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1192,
+   "op": "statement",
+   "start": 32623,
+   "end": 32635,
+   "old": "retval = val",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1218,
+   "op": "return",
+   "start": 33916,
+   "end": 33929,
+   "old": "return retval",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1227,
+   "op": "return",
+   "start": 34181,
+   "end": 34395,
+   "old": "return (\n            self.ref is None\n            and self.null is None\n            and self.ID is None\n            and self.max is None\n            and self.min is None\n            and self.options == []\n        )",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 2712,
+   "op": "return",
+   "start": 80520,
+   "end": 80538,
+   "old": "return self._empty",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3961,
+   "op": "return",
+   "start": 126925,
+   "end": 126943,
+   "old": "return self._links",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 251,
+   "op": "constant",
+   "start": 5871,
+   "end": 5879,
+   "old": "\"vounit\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 253,
+   "op": "constant",
+   "start": 5905,
+   "end": 5910,
+   "old": "\"cds\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 336,
+   "op": "comparison",
+   "start": 8160,
+   "end": 8178,
+   "old": "string is not None",
+   "new": "(string is None)",
+   "id": 41
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 338,
+   "op": "constant",
+   "start": 8283,
+   "end": 8288,
+   "old": "False",
+   "new": "(True)",
+   "id": 42
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1193,
+   "op": "boolean",
+   "start": 32647,
+   "end": 32700,
+   "old": "hasattr(self._field, \"converter\") and val is not None",
+   "new": "(hasattr(self._field, 'converter') or val is not None)",
+   "id": 43
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1217,
+   "op": "statement",
+   "start": 33888,
+   "end": 33907,
+   "old": "retval = parsed_val",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1725,
+   "op": "statement",
+   "start": 50353,
+   "end": 50383,
+   "old": "val = getattr(self, key, None)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1731,
+   "op": "statement",
+   "start": 50589,
+   "end": 50617,
+   "old": "link.to_table_column(column)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1732,
+   "op": "comparison",
+   "start": 50629,
+   "end": 50657,
+   "old": "self.description is not None",
+   "new": "(self.description is None)",
+   "id": 47
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3520,
+   "op": "statement",
+   "start": 112999,
+   "end": 113029,
+   "old": "val = getattr(self, key, None)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1193,
+   "op": "comparison",
+   "start": 32685,
+   "end": 32700,
+   "old": "val is not None",
+   "new": "(val is None)",
+   "id": 49
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1229,
+   "op": "comparison",
+   "start": 34235,
+   "end": 34252,
+   "old": "self.null is None",
+   "new": "(self.null is not None)",
+   "id": 50
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1230,
+   "op": "comparison",
+   "start": 34269,
+   "end": 34284,
+   "old": "self.ID is None",
+   "new": "(self.ID is not None)",
+   "id": 51
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1231,
+   "op": "comparison",
+   "start": 34301,
+   "end": 34317,
+   "old": "self.max is None",
+   "new": "(self.max is not None)",
+   "id": 52
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1232,
+   "op": "comparison",
+   "start": 34334,
+   "end": 34350,
+   "old": "self.min is None",
+   "new": "(self.min is not None)",
+   "id": 53
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1233,
+   "op": "comparison",
+   "start": 34367,
+   "end": 34385,
+   "old": "self.options == []",
+   "new": "(self.options != [])",
+   "id": 54
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1724,
+   "op": "constant",
+   "start": 50293,
+   "end": 50298,
+   "old": "\"ucd\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1724,
+   "op": "constant",
+   "start": 50300,
+   "end": 50307,
+   "old": "\"width\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1724,
+   "op": "constant",
+   "start": 50322,
+   "end": 50329,
+   "old": "\"utype\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3519,
+   "op": "constant",
+   "start": 112934,
+   "end": 112938,
+   "old": "\"ID\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3519,
+   "op": "constant",
+   "start": 112955,
+   "end": 112960,
+   "old": "\"ucd\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3519,
+   "op": "constant",
+   "start": 112962,
+   "end": 112969,
+   "old": "\"utype\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3521,
+   "op": "comparison",
+   "start": 113045,
+   "end": 113060,
+   "old": "val is not None",
+   "new": "(val is None)",
+   "id": 61
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 4506,
+   "op": "constant",
+   "start": 147314,
+   "end": 147347,
+   "old": "\"No table found in VOTABLE file.\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1193,
+   "op": "constant",
+   "start": 32668,
+   "end": 32679,
+   "old": "\"converter\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1744,
+   "op": "boolean",
+   "start": 51178,
+   "end": 51237,
+   "old": "self.arraysize is not None and self.arraysize.endswith(\"*\")",
+   "new": "(self.arraysize is not None or self.arraysize.endswith('*'))",
+   "id": 64
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1747,
+   "op": "statement",
+   "start": 51388,
+   "end": 51445,
+   "old": "column.info.meta[\"_votable_string_dtype\"] = \"unicodeChar\"",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3529,
+   "op": "constant",
+   "start": 113311,
+   "end": 113312,
+   "old": "2",
+   "new": "(3)",
+   "id": 66
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 3531,
+   "op": "statement",
+   "start": 113381,
+   "end": 113404,
+   "old": "new_name = f\"{name}{i}\"",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1749,
+   "op": "statement",
+   "start": 51538,
+   "end": 51593,
+   "old": "column.info.meta[\"_votable_arraysize\"] = self.arraysize",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1207,
+   "op": "constant",
+   "start": 33406,
+   "end": 33407,
+   "old": "0",
+   "new": "(1)",
+   "id": 69
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1215,
+   "op": "constant",
+   "start": 33872,
+   "end": 33873,
+   "old": "0",
+   "new": "(1)",
+   "id": 70
+  },
+  {
+   "path": "astropy/io/votable/tree.py",
+   "line": 1748,
+   "op": "constant",
+   "start": 51516,
+   "end": 51519,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 24,
+   "op": "statement",
+   "start": 465,
+   "end": 486,
+   "old": "self._primary = set()",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 26,
+   "op": "statement",
+   "start": 527,
+   "end": 550,
+   "old": "self._descriptions = {}",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 27,
+   "op": "statement",
+   "start": 559,
+   "end": 584,
+   "old": "self._capitalization = {}",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 47,
+   "op": "return",
+   "start": 1306,
+   "end": 1342,
+   "old": "return name.lower() in self._primary",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 53,
+   "op": "return",
+   "start": 1468,
+   "end": 1506,
+   "old": "return name.lower() in self._secondary",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 34,
+   "op": "statement",
+   "start": 801,
+   "end": 857,
+   "old": "type, name, descr = (x.strip() for x in line.split(\"|\"))",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 29,
+   "op": "constant",
+   "start": 625,
+   "end": 647,
+   "old": "\"data/ucd1p-words.txt\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 38,
+   "op": "comparison",
+   "start": 1005,
+   "end": 1020,
+   "old": "type in \"QSEVC\"",
+   "new": "(type not in 'QSEVC')",
+   "id": 79
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1042,
+   "end": 1073,
+   "old": "self._secondary.add(name_lower)",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 31,
+   "op": "constant",
+   "start": 749,
+   "end": 752,
+   "old": "\"#\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1013,
+   "end": 1020,
+   "old": "\"QSEVC\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "astropy/io/votable/ucd.py",
+   "line": 34,
+   "op": "constant",
+   "start": 852,
+   "end": 855,
+   "old": "\"|\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 34,
+   "op": "return",
+   "start": 953,
+   "end": 962,
+   "old": "return \"\"",
+   "new": "return None",
+   "id": 84
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 84,
+   "op": "return",
+   "start": 2177,
+   "end": 2188,
+   "old": "return True",
+   "new": "return None",
+   "id": 85
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 33,
+   "op": "return",
+   "start": 932,
+   "end": 948,
+   "old": "return corrected",
+   "new": "return None",
+   "id": 86
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 24,
+   "op": "constant",
+   "start": 582,
+   "end": 613,
+   "old": "r\"^[A-Za-z_][A-Za-z0-9_\\.\\-]*$\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 29,
+   "op": "statement",
+   "start": 762,
+   "end": 789,
+   "old": "corrected = \"_\" + corrected",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 46,
+   "op": "comparison",
+   "start": 1172,
+   "end": 1183,
+   "old": "token == \"\"",
+   "new": "(token != '')",
+   "id": 89
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 47,
+   "op": "comparison",
+   "start": 1195,
+   "end": 1283,
+   "old": "re.match(r\"[^\\r\\n\\t ]?([^\\r\\n\\t ]| [^\\r\\n\\t ])*[^\\r\\n\\t ]?$\", token)\n        is not None",
+   "new": "(re.match('[^\\\\r\\\\n\\\\t ]?([^\\\\r\\\\n\\\\t ]| [^\\\\r\\\\n\\\\t ])*[^\\\\r\\\\n\\\\t ]?$', token) is None)",
+   "id": 90
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 15,
+   "op": "constant",
+   "start": 298,
+   "end": 329,
+   "old": "r\"^[A-Za-z_][A-Za-z0-9_\\.\\-]*$\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 28,
+   "op": "boolean",
+   "start": 688,
+   "end": 706,
+   "old": "not len(corrected)",
+   "new": "(len(corrected))",
+   "id": 92
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 29,
+   "op": "arithmetic",
+   "start": 774,
+   "end": 789,
+   "old": "\"_\" + corrected",
+   "new": "('_' - corrected)",
+   "id": 93
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 30,
+   "op": "constant",
+   "start": 832,
+   "end": 835,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "astropy/utils/xml/check.py",
+   "line": 31,
+   "op": "constant",
+   "start": 873,
+   "end": 893,
+   "old": "r\"[^A-Za-z0-9_\\.\\-]\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "astropy/utils/xml/iterparser.py",
+   "line": 66,
+   "op": "statement",
+   "start": 1862,
+   "end": 1879,
+   "old": "yield new_fd.read",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "astropy/utils/xml/iterparser.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1842,
+   "end": 1847,
+   "old": "\"win\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "astropy/utils/xml/iterparser.py",
+   "line": 69,
+   "op": "statement",
+   "start": 1956,
+   "end": 1968,
+   "old": "yield new_fd",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "astropy/utils/xml/iterparser.py",
+   "line": 71,
+   "op": "statement",
+   "start": 2003,
+   "end": 2020,
+   "old": "yield new_fd.read",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

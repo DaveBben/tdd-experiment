@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_merge_antijoin.921feefe.lv1",
+ "pool": 1587,
+ "mutants": [
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 3220,
+   "op": "arithmetic",
+   "start": 117039,
+   "end": 117048,
+   "old": "i * ncols",
+   "new": "(i / ncols)",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2370,
+   "op": "statement",
+   "start": 78667,
+   "end": 78713,
+   "old": "indexer = np.delete(np.arange(len(self)), loc)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 289,
+   "op": "statement",
+   "start": 7240,
+   "end": 7288,
+   "old": "rlabels = asarray_tuplesafe(labels, dtype=dtype)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 291,
+   "op": "return",
+   "start": 7294,
+   "end": 7308,
+   "old": "return rlabels",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/dtypes/astype.py",
+   "line": 215,
+   "op": "statement",
+   "start": 6299,
+   "end": 6458,
+   "old": "invalid_arg = (\n            \"Expected value of kwarg 'errors' to be one of \"\n            f\"{list(errors_legal_values)}. Supplied value is '{errors}'\"\n        )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/dtypes/astype.py",
+   "line": 221,
+   "op": "boolean",
+   "start": 6505,
+   "end": 6565,
+   "old": "inspect.isclass(dtype) and issubclass(dtype, ExtensionDtype)",
+   "new": "(inspect.isclass(dtype) or issubclass(dtype, ExtensionDtype))",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 594,
+   "op": "statement",
+   "start": 17621,
+   "end": 17643,
+   "old": "_registry = Registry()",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1347,
+   "op": "statement",
+   "start": 41404,
+   "end": 41449,
+   "old": "has_bools = any(t.kind == \"b\" for t in types)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1182,
+   "op": "boolean",
+   "start": 36276,
+   "end": 36320,
+   "old": "lib.is_integer(right) or lib.is_float(right)",
+   "new": "(lib.is_integer(right) and lib.is_float(right))",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1200,
+   "op": "statement",
+   "start": 37217,
+   "end": 37256,
+   "old": "right_dtype = np.min_scalar_type(right)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1187,
+   "op": "comparison",
+   "start": 36568,
+   "end": 36590,
+   "old": "left_dtype.kind != \"f\"",
+   "new": "(left_dtype.kind == 'f')",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/internals/concat.py",
+   "line": 113,
+   "op": "return",
+   "start": 3021,
+   "end": 3031,
+   "old": "return out",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/internals/concat.py",
+   "line": 109,
+   "op": "constant",
+   "start": 2929,
+   "end": 2930,
+   "old": "1",
+   "new": "(2)",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/internals/concat.py",
+   "line": 151,
+   "op": "statement",
+   "start": 4525,
+   "end": 4570,
+   "old": "b = new_block_2d(values, placement=placement)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/internals/concat.py",
+   "line": 110,
+   "op": "constant",
+   "start": 2951,
+   "end": 2952,
+   "old": "0",
+   "new": "(1)",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/internals/concat.py",
+   "line": 119,
+   "op": "constant",
+   "start": 3157,
+   "end": 3158,
+   "old": "0",
+   "new": "(1)",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/internals/managers.py",
+   "line": 2454,
+   "op": "constant",
+   "start": 83265,
+   "end": 83270,
+   "old": "False",
+   "new": "(True)",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 649,
+   "op": "constant",
+   "start": 19088,
+   "end": 19089,
+   "old": "2",
+   "new": "(3)",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 476,
+   "op": "statement",
+   "start": 14832,
+   "end": 14899,
+   "old": "rby: groupby.DataFrameGroupBy | groupby.SeriesGroupBy | None = None",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2678,
+   "op": "statement",
+   "start": 98607,
+   "end": 98670,
+   "old": "lkey, rkey = _get_join_keys(lcodes, rcodes, tuple(shape), sort)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2941,
+   "op": "statement",
+   "start": 108151,
+   "end": 108169,
+   "old": "lany = lmask.any()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 3079,
+   "op": "statement",
+   "start": 112466,
+   "end": 112502,
+   "old": "to_rename = left.intersection(right)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 145,
+   "op": "constant",
+   "start": 3405,
+   "end": 3413,
+   "old": "\"pandas\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 991,
+   "op": "statement",
+   "start": 33279,
+   "end": 33309,
+   "old": "self.right_index = right_index",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1114,
+   "op": "statement",
+   "start": 37502,
+   "end": 37525,
+   "old": "left.index = join_index",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1146,
+   "op": "statement",
+   "start": 38440,
+   "end": 38514,
+   "old": "result = self._reindex_and_concat(join_index, left_indexer, right_indexer)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2110,
+   "op": "boolean",
+   "start": 78236,
+   "end": 78290,
+   "old": "lidx is not None and is_range_indexer(lidx, len(left))",
+   "new": "(lidx is not None or is_range_indexer(lidx, len(left)))",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2277,
+   "op": "statement",
+   "start": 83295,
+   "end": 83341,
+   "old": "left_join_indexer: npt.NDArray[np.intp] | None",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2295,
+   "op": "statement",
+   "start": 84001,
+   "end": 84107,
+   "old": "result = self._reindex_and_concat(\n            join_index, left_join_indexer, right_join_indexer\n        )",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2332,
+   "op": "statement",
+   "start": 85046,
+   "end": 85072,
+   "old": "self.tolerance = tolerance",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2738,
+   "op": "boolean",
+   "start": 100676,
+   "end": 100717,
+   "old": "sort or len(left_ax) != len(left_indexer)",
+   "new": "(sort and len(left_ax) != len(left_indexer))",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2886,
+   "op": "boolean",
+   "start": 105940,
+   "end": 105994,
+   "old": "needs_i8_conversion(lk.dtype) and lk.dtype == rk.dtype",
+   "new": "(needs_i8_conversion(lk.dtype) or lk.dtype == rk.dtype)",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 414,
+   "op": "constant",
+   "start": 13436,
+   "end": 13440,
+   "old": "\"_x\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 414,
+   "op": "constant",
+   "start": 13442,
+   "end": 13446,
+   "old": "\"_y\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 427,
+   "op": "comparison",
+   "start": 13714,
+   "end": 13728,
+   "old": "on is not None",
+   "new": "(on is None)",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 988,
+   "op": "boolean",
+   "start": 33210,
+   "end": 33232,
+   "old": "sort or how == \"outer\"",
+   "new": "(sort and how == 'outer')",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1000,
+   "op": "statement",
+   "start": 33561,
+   "end": 33679,
+   "old": "raise ValueError(\n                f\"right_index parameter must be of type bool, not {type(right_index)}\"\n            )",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1408,
+   "op": "boolean",
+   "start": 48810,
+   "end": 48869,
+   "old": "self.left_index and self.right_index and self.how != \"asof\"",
+   "new": "(self.left_index or self.right_index or self.how != 'asof')",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1983,
+   "op": "statement",
+   "start": 73908,
+   "end": 73978,
+   "old": "msg = x[x.duplicated()][:5].to_frame(name=name).to_string(index=False)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2081,
+   "op": "constant",
+   "start": 77349,
+   "end": 77350,
+   "old": "1",
+   "new": "(2)",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2318,
+   "op": "constant",
+   "start": 84649,
+   "end": 84654,
+   "old": "False",
+   "new": "(True)",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2327,
+   "op": "constant",
+   "start": 84926,
+   "end": 84936,
+   "old": "\"backward\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2337,
+   "op": "comparison",
+   "start": 85212,
+   "end": 85268,
+   "old": "self.direction not in [\"backward\", \"forward\", \"nearest\"]",
+   "new": "(self.direction in ['backward', 'forward', 'nearest'])",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2367,
+   "op": "statement",
+   "start": 86196,
+   "end": 86247,
+   "old": "raise MergeError(\"can only asof on a key for left\")",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2369,
+   "op": "boolean",
+   "start": 86260,
+   "end": 86303,
+   "old": "len(right_on) != 1 and not self.right_index",
+   "new": "(len(right_on) != 1 or not self.right_index)",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2376,
+   "op": "statement",
+   "start": 86591,
+   "end": 86640,
+   "old": "raise MergeError(\"right can only have one index\")",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2389,
+   "op": "boolean",
+   "start": 87200,
+   "end": 87219,
+   "old": "not self.left_index",
+   "new": "(self.left_index)",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2390,
+   "op": "statement",
+   "start": 87233,
+   "end": 87255,
+   "old": "left_on_0 = left_on[0]",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2403,
+   "op": "statement",
+   "start": 87712,
+   "end": 87736,
+   "old": "right_on_0 = right_on[0]",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2495,
+   "op": "statement",
+   "start": 91350,
+   "end": 91489,
+   "old": "msg = (\n                f\"incompatible tolerance {self.tolerance}, must be compat \"\n                f\"with type {lt.dtype!r}\"\n            )",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2825,
+   "op": "statement",
+   "start": 103700,
+   "end": 103738,
+   "old": "rk = lk._encode_with_my_categories(rk)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2977,
+   "op": "statement",
+   "start": 109400,
+   "end": 109435,
+   "old": "klass = _factorizers[lk.dtype.type]",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 932,
+   "op": "constant",
+   "start": 31418,
+   "end": 31424,
+   "old": "\"asof\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1054,
+   "op": "constant",
+   "start": 35460,
+   "end": 35467,
+   "old": "\"inner\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1056,
+   "op": "constant",
+   "start": 35502,
+   "end": 35513,
+   "old": "\"left_anti\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1201,
+   "op": "constant",
+   "start": 40352,
+   "end": 40370,
+   "old": "\"_right_indicator\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1323,
+   "op": "statement",
+   "start": 44946,
+   "end": 44982,
+   "old": "take_right = self.right_join_keys[i]",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1495,
+   "op": "boolean",
+   "start": 51931,
+   "end": 51970,
+   "old": "not isinstance(other_index, MultiIndex)",
+   "new": "(isinstance(other_index, MultiIndex))",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1579,
+   "op": "boolean",
+   "start": 54898,
+   "end": 54944,
+   "old": "isinstance(x, _known) and len(x) == len(right)",
+   "new": "(isinstance(x, _known) or len(x) == len(right))",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1705,
+   "op": "boolean",
+   "start": 60974,
+   "end": 61058,
+   "old": "is_object_dtype(lk.dtype) or is_string_dtype(\n                lk.dtype\n            )",
+   "new": "(is_object_dtype(lk.dtype) and is_string_dtype(lk.dtype))",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2000,
+   "op": "boolean",
+   "start": 74707,
+   "end": 74723,
+   "old": "not right_unique",
+   "new": "(right_unique)",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2006,
+   "op": "comparison",
+   "start": 74939,
+   "end": 74973,
+   "old": "validate in [\"one_to_many\", \"1:m\"]",
+   "new": "(validate not in ['one_to_many', '1:m'])",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2280,
+   "op": "constant",
+   "start": 83430,
+   "end": 83437,
+   "old": "\"ffill\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2366,
+   "op": "comparison",
+   "start": 86141,
+   "end": 86158,
+   "old": "len(left_on) != 1",
+   "new": "(len(left_on) == 1)",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2383,
+   "op": "comparison",
+   "start": 86910,
+   "end": 86930,
+   "old": "self.left_by is None",
+   "new": "(self.left_by is not None)",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2432,
+   "op": "statement",
+   "start": 88798,
+   "end": 88829,
+   "old": "self.right_by = [self.right_by]",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2597,
+   "op": "statement",
+   "start": 95784,
+   "end": 95826,
+   "old": "left_join_keys = self.left_join_keys[0:-1]",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2598,
+   "op": "statement",
+   "start": 95843,
+   "end": 95887,
+   "old": "right_join_keys = self.right_join_keys[0:-1]",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2611,
+   "op": "statement",
+   "start": 96244,
+   "end": 96274,
+   "old": "right_by_values = mapped[0][1]",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2618,
+   "op": "statement",
+   "start": 96552,
+   "end": 96585,
+   "old": "left_len = len(left_join_keys[0])",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2981,
+   "op": "statement",
+   "start": 109569,
+   "end": 109604,
+   "old": "klass = _factorizers[lk.dtype.type]",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1326,
+   "op": "comparison",
+   "start": 45067,
+   "end": 45084,
+   "old": "take_left is None",
+   "new": "(take_left is not None)",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1336,
+   "op": "comparison",
+   "start": 45554,
+   "end": 45572,
+   "old": "take_right is None",
+   "new": "(take_right is not None)",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1597,
+   "op": "statement",
+   "start": 55910,
+   "end": 55934,
+   "old": "lk = cast(ArrayLike, lk)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1788,
+   "op": "statement",
+   "start": 64953,
+   "end": 64973,
+   "old": "match = rk == casted",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1914,
+   "op": "statement",
+   "start": 70907,
+   "end": 71071,
+   "old": "raise MergeError(\n                    'Can only pass argument \"on\" OR \"left_on\" '\n                    'and \"right_on\", not a combination of both.'\n                )",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2390,
+   "op": "constant",
+   "start": 87253,
+   "end": 87254,
+   "old": "0",
+   "new": "(1)",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2505,
+   "op": "comparison",
+   "start": 91766,
+   "end": 91795,
+   "old": "self.tolerance < Timedelta(0)",
+   "new": "(self.tolerance <= Timedelta(0))",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2964,
+   "op": "boolean",
+   "start": 108836,
+   "end": 108870,
+   "old": "not isinstance(lk, ExtensionArray)",
+   "new": "(isinstance(lk, ExtensionArray))",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1353,
+   "op": "statement",
+   "start": 46515,
+   "end": 46541,
+   "old": "result_dtype = lvals.dtype",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1697,
+   "op": "boolean",
+   "start": 60648,
+   "end": 60659,
+   "old": "not len(lk)",
+   "new": "(len(lk))",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1820,
+   "op": "statement",
+   "start": 66346,
+   "end": 66395,
+   "old": "inferred_left = lib.infer_dtype(lk, skipna=False)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1913,
+   "op": "comparison",
+   "start": 70869,
+   "end": 70889,
+   "old": "right_on is not None",
+   "new": "(right_on is None)",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2006,
+   "op": "constant",
+   "start": 74967,
+   "end": 74972,
+   "old": "\"1:m\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2072,
+   "op": "constant",
+   "start": 77058,
+   "end": 77062,
+   "old": "True",
+   "new": "(False)",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2150,
+   "op": "constant",
+   "start": 79406,
+   "end": 79413,
+   "old": "\"outer\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2872,
+   "op": "boolean",
+   "start": 105379,
+   "end": 105414,
+   "old": "not isinstance(lk, BaseMaskedArray)",
+   "new": "(isinstance(lk, BaseMaskedArray))",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1361,
+   "op": "boolean",
+   "start": 46938,
+   "end": 47066,
+   "old": "lvals.dtype.kind == \"M\"\n                        and rvals.dtype.kind == \"M\"\n                        and result_dtype.kind == \"O\"",
+   "new": "(lvals.dtype.kind == 'M' or rvals.dtype.kind == 'M' or result_dtype.kind == 'O')",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1607,
+   "op": "comparison",
+   "start": 56411,
+   "end": 56425,
+   "old": "rk is not None",
+   "new": "(rk is None)",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1619,
+   "op": "comparison",
+   "start": 57074,
+   "end": 57088,
+   "old": "rk is not None",
+   "new": "(rk is None)",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1898,
+   "op": "comparison",
+   "start": 70096,
+   "end": 70117,
+   "old": "len(common_cols) == 0",
+   "new": "(len(common_cols) != 0)",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2516,
+   "op": "statement",
+   "start": 92223,
+   "end": 92244,
+   "old": "raise MergeError(msg)",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 2863,
+   "op": "comparison",
+   "start": 105105,
+   "end": 105115,
+   "old": "rlab == -1",
+   "new": "(rlab != -1)",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1826,
+   "op": "comparison",
+   "start": 66673,
+   "end": 66700,
+   "old": "inferred_left in bool_types",
+   "new": "(inferred_left not in bool_types)",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1332,
+   "op": "constant",
+   "start": 45379,
+   "end": 45383,
+   "old": "True",
+   "new": "(False)",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1355,
+   "op": "constant",
+   "start": 46631,
+   "end": 46636,
+   "old": "False",
+   "new": "(True)",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1448,
+   "op": "statement",
+   "start": 50449,
+   "end": 50650,
+   "old": "join_index = self._create_join_index(\n                        right_ax,\n                        left_ax,\n                        right_indexer,\n                        how=\"left\",\n                    )",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1781,
+   "op": "constant",
+   "start": 64548,
+   "end": 64556,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1842,
+   "op": "boolean",
+   "start": 67432,
+   "end": 67545,
+   "old": "isinstance(lk.dtype, DatetimeTZDtype) and not isinstance(\n                rk.dtype, DatetimeTZDtype\n            )",
+   "new": "(isinstance(lk.dtype, DatetimeTZDtype) or not isinstance(rk.dtype, DatetimeTZDtype))",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/reshape/merge.py",
+   "line": 1833,
+   "op": "comparison",
+   "start": 67024,
+   "end": 67057,
+   "old": "inferred_left not in string_types",
+   "new": "(inferred_left in string_types)",
+   "id": 99
+  }
+ ]
+}

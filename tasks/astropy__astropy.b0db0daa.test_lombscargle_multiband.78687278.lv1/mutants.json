@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_lombscargle_multiband.78687278.lv1",
+ "pool": 256,
+ "mutants": [
+  {
+   "path": "astropy/table/table.py",
+   "line": 1196,
+   "op": "return",
+   "start": 43788,
+   "end": 43850,
+   "old": "return out.data if isinstance(out, np.ma.MaskedArray) else out",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1443,
+   "op": "statement",
+   "start": 53867,
+   "end": 53919,
+   "old": "data_names = data.dtype.names or _auto_names(n_cols)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1444,
+   "op": "statement",
+   "start": 53928,
+   "end": 53965,
+   "old": "struct = data.dtype.names is not None",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1445,
+   "op": "statement",
+   "start": 53974,
+   "end": 54037,
+   "old": "names = [name or data_names[i] for i, name in enumerate(names)]",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1447,
+   "op": "statement",
+   "start": 54047,
+   "end": 54188,
+   "old": "cols = (\n            [data[name] for name in data_names]\n            if struct\n            else [data[:, i] for i in range(n_cols)]\n        )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1453,
+   "op": "statement",
+   "start": 54198,
+   "end": 54252,
+   "old": "self._init_from_list(cols, names, dtype, n_cols, copy)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1179,
+   "op": "comparison",
+   "start": 43150,
+   "end": 43167,
+   "old": "dtype is not None",
+   "new": "(dtype is None)",
+   "id": 6
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1185,
+   "op": "return",
+   "start": 43378,
+   "end": 43388,
+   "old": "return out",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1443,
+   "op": "boolean",
+   "start": 53880,
+   "end": 53919,
+   "old": "data.dtype.names or _auto_names(n_cols)",
+   "new": "(data.dtype.names and _auto_names(n_cols))",
+   "id": 8
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1444,
+   "op": "comparison",
+   "start": 53937,
+   "end": 53965,
+   "old": "data.dtype.names is not None",
+   "new": "(data.dtype.names is None)",
+   "id": 9
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1181,
+   "op": "constant",
+   "start": 43244,
+   "end": 43278,
+   "old": "\"Datatype coercion is not allowed\"",
+   "new": "('XX')",
+   "id": 10
+  },
+  {
+   "path": "astropy/time/core.py",
+   "line": 3366,
+   "op": "comparison",
+   "start": 127410,
+   "end": 127455,
+   "old": "_LEAP_SECONDS_CHECK != _LeapSecondsCheck.DONE",
+   "new": "(_LEAP_SECONDS_CHECK == _LeapSecondsCheck.DONE)",
+   "id": 11
+  },
+  {
+   "path": "astropy/time/core.py",
+   "line": 3375,
+   "op": "comparison",
+   "start": 127920,
+   "end": 127972,
+   "old": "_LEAP_SECONDS_CHECK == _LeapSecondsCheck.NOT_STARTED",
+   "new": "(_LEAP_SECONDS_CHECK != _LeapSecondsCheck.NOT_STARTED)",
+   "id": 12
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1692,
+   "op": "statement",
+   "start": 61361,
+   "end": 61417,
+   "old": "_, _, str_fmt = self._select_subfmts(self.out_subfmt)[0]",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1694,
+   "op": "statement",
+   "start": 61427,
+   "end": 61438,
+   "old": "yday = None",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1695,
+   "op": "statement",
+   "start": 61447,
+   "end": 61477,
+   "old": "has_yday = \"{yday:\" in str_fmt",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1697,
+   "op": "statement",
+   "start": 61487,
+   "end": 61505,
+   "old": "ihrs = ihmsfs[\"h\"]",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1698,
+   "op": "statement",
+   "start": 61514,
+   "end": 61533,
+   "old": "imins = ihmsfs[\"m\"]",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1699,
+   "op": "statement",
+   "start": 61542,
+   "end": 61561,
+   "old": "isecs = ihmsfs[\"s\"]",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1707,
+   "op": "statement",
+   "start": 61856,
+   "end": 62148,
+   "old": "yield {\n                \"year\": int(iy),\n                \"mon\": int(im),\n                \"day\": int(id),\n                \"hour\": int(ihr),\n                \"min\": int(imin),\n                \"sec\": int(isec),\n                \"fracsec\": int(ifracsec),\n                \"yday\": yday,\n            }",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1692,
+   "op": "constant",
+   "start": 61415,
+   "end": 61416,
+   "old": "0",
+   "new": "(1)",
+   "id": 20
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1695,
+   "op": "constant",
+   "start": 61458,
+   "end": 61466,
+   "old": "\"{yday:\"",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1705,
+   "op": "statement",
+   "start": 61786,
+   "end": 61842,
+   "old": "yday = datetime.datetime(iy, im, id).timetuple().tm_yday",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1688,
+   "op": "constant",
+   "start": 61183,
+   "end": 61190,
+   "old": "\"ascii\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1702,
+   "op": "constant",
+   "start": 61719,
+   "end": 61732,
+   "old": "\"zerosize_ok\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "astropy/time/formats.py",
+   "line": 1714,
+   "op": "constant",
+   "start": 62079,
+   "end": 62088,
+   "old": "\"fracsec\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "astropy/time/utils.py",
+   "line": 99,
+   "op": "comparison",
+   "start": 3889,
+   "end": 3905,
+   "old": "val2 is not None",
+   "new": "(val2 is None)",
+   "id": 26
+  },
+  {
+   "path": "astropy/time/utils.py",
+   "line": 119,
+   "op": "return",
+   "start": 4571,
+   "end": 4620,
+   "old": "return day_frac(val1.value, 0.0, divisor=divisor)",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "astropy/time/utils.py",
+   "line": 110,
+   "op": "return",
+   "start": 4342,
+   "end": 4374,
+   "old": "return val1.to_value(u.day), 0.0",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "astropy/time/utils.py",
+   "line": 103,
+   "op": "arithmetic",
+   "start": 4089,
+   "end": 4102,
+   "old": "res11 + res21",
+   "new": "(res11 - res21)",
+   "id": 29
+  },
+  {
+   "path": "astropy/time/utils.py",
+   "line": 103,
+   "op": "arithmetic",
+   "start": 4104,
+   "end": 4117,
+   "old": "res12 + res22",
+   "new": "(res12 - res22)",
+   "id": 30
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 68,
+   "op": "comparison",
+   "start": 2014,
+   "end": 2048,
+   "old": "self._required_columns is not None",
+   "new": "(self._required_columns is None)",
+   "id": 31
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 74,
+   "op": "statement",
+   "start": 2264,
+   "end": 2313,
+   "old": "plural = \"s\" if len(required_columns) > 1 else \"\"",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 58,
+   "op": "boolean",
+   "start": 1753,
+   "end": 1780,
+   "old": "not hasattr(obj, \"__len__\")",
+   "new": "(hasattr(obj, '__len__'))",
+   "id": 33
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2111,
+   "end": 2174,
+   "old": "required_columns = self._required_columns[: len(self.colnames)]",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 76,
+   "op": "boolean",
+   "start": 2330,
+   "end": 2390,
+   "old": "not self._required_columns_relax and len(self.colnames) == 0",
+   "new": "(not self._required_columns_relax or len(self.colnames) == 0)",
+   "id": 35
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 60,
+   "op": "comparison",
+   "start": 1833,
+   "end": 1846,
+   "old": "len(obj) == 1",
+   "new": "(len(obj) != 1)",
+   "id": 36
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 61,
+   "op": "return",
+   "start": 1864,
+   "end": 1884,
+   "old": "return f\"'{obj[0]}'\"",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 63,
+   "op": "return",
+   "start": 1919,
+   "end": 1934,
+   "old": "return str(obj)",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 74,
+   "op": "constant",
+   "start": 2273,
+   "end": 2276,
+   "old": "\"s\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 76,
+   "op": "boolean",
+   "start": 2330,
+   "end": 2362,
+   "old": "not self._required_columns_relax",
+   "new": "(self._required_columns_relax)",
+   "id": 40
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 96,
+   "op": "constant",
+   "start": 3308,
+   "end": 3313,
+   "old": "False",
+   "new": "(True)",
+   "id": 41
+  },
+  {
+   "path": "astropy/timeseries/core.py",
+   "line": 58,
+   "op": "constant",
+   "start": 1770,
+   "end": 1779,
+   "old": "\"__len__\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/core.py",
+   "line": 16,
+   "op": "return",
+   "start": 398,
+   "end": 425,
+   "old": "return hasattr(obj, \"unit\")",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/core.py",
+   "line": 16,
+   "op": "constant",
+   "start": 418,
+   "end": 424,
+   "old": "\"unit\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1367,
+   "end": 1414,
+   "old": "x, y = map(np.ravel, np.broadcast_arrays(x, y))",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1629,
+   "end": 1664,
+   "old": "result = np.zeros(N, dtype=y.dtype)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 63,
+   "op": "statement",
+   "start": 1732,
+   "end": 1753,
+   "old": "integers = x % 1 == 0",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2060,
+   "end": 2109,
+   "old": "ilo = np.clip((x - M // 2).astype(int), 0, N - M)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 71,
+   "op": "statement",
+   "start": 2114,
+   "end": 2179,
+   "old": "numerator = y * np.prod(x - ilo - np.arange(M)[:, np.newaxis], 0)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 79,
+   "op": "return",
+   "start": 2402,
+   "end": 2415,
+   "old": "return result",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 125,
+   "op": "statement",
+   "start": 4012,
+   "end": 4029,
+   "old": "df *= freq_factor",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4034,
+   "end": 4051,
+   "old": "f0 *= freq_factor",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 159,
+   "op": "return",
+   "start": 4992,
+   "end": 5003,
+   "old": "return S, C",
+   "new": "return None",
+   "id": 53
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 55,
+   "op": "comparison",
+   "start": 1423,
+   "end": 1432,
+   "old": "N is None",
+   "new": "(N is not None)",
+   "id": 54
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2304,
+   "end": 2327,
+   "old": "ind = ilo + (M - 1 - j)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4077,
+   "end": 4116,
+   "old": "raise ValueError(\"df must be positive\")",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 144,
+   "op": "statement",
+   "start": 4511,
+   "end": 4548,
+   "old": "tnorm = ((t - t0) * Nfft * df) % Nfft",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 145,
+   "op": "statement",
+   "start": 4557,
+   "end": 4597,
+   "old": "grid = extirpolate(tnorm, h, Nfft, Mfft)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 152,
+   "op": "statement",
+   "start": 4758,
+   "end": 4781,
+   "old": "C = Nfft * fftgrid.real",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 63,
+   "op": "arithmetic",
+   "start": 1743,
+   "end": 1748,
+   "old": "x % 1",
+   "new": "(x * 1)",
+   "id": 60
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 70,
+   "op": "arithmetic",
+   "start": 2103,
+   "end": 2108,
+   "old": "N - M",
+   "new": "(N + M)",
+   "id": 61
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 76,
+   "op": "statement",
+   "start": 2269,
+   "end": 2295,
+   "old": "denominator *= j / (j - M)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4066,
+   "end": 4067,
+   "old": "0",
+   "new": "(1)",
+   "id": 63
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 134,
+   "op": "comparison",
+   "start": 4222,
+   "end": 4231,
+   "old": "Mfft <= 0",
+   "new": "(Mfft < 0)",
+   "id": 64
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 148,
+   "op": "comparison",
+   "start": 4650,
+   "end": 4657,
+   "old": "t0 != 0",
+   "new": "(t0 == 0)",
+   "id": 65
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4671,
+   "end": 4697,
+   "old": "f = f0 + df * np.arange(N)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 155,
+   "op": "arithmetic",
+   "start": 4836,
+   "end": 4858,
+   "old": "f0 + df * np.arange(N)",
+   "new": "(f0 - df * np.arange(N))",
+   "id": 67
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 63,
+   "op": "constant",
+   "start": 1747,
+   "end": 1748,
+   "old": "1",
+   "new": "(2)",
+   "id": 68
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 71,
+   "op": "arithmetic",
+   "start": 2138,
+   "end": 2175,
+   "old": "x - ilo - np.arange(M)[:, np.newaxis]",
+   "new": "(x - ilo + np.arange(M)[:, np.newaxis])",
+   "id": 69
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2212,
+   "end": 2213,
+   "old": "1",
+   "new": "(2)",
+   "id": 70
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 78,
+   "op": "arithmetic",
+   "start": 2359,
+   "end": 2396,
+   "old": "numerator / (denominator * (x - ind))",
+   "new": "(numerator // (denominator * (x - ind)))",
+   "id": 71
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 129,
+   "op": "constant",
+   "start": 4094,
+   "end": 4115,
+   "old": "\"df must be positive\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 142,
+   "op": "arithmetic",
+   "start": 4463,
+   "end": 4501,
+   "old": "h * np.exp(2j * np.pi * f0 * (t - t0))",
+   "new": "(h / np.exp(2j * np.pi * f0 * (t - t0)))",
+   "id": 73
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 144,
+   "op": "arithmetic",
+   "start": 4520,
+   "end": 4540,
+   "old": "(t - t0) * Nfft * df",
+   "new": "((t - t0) * Nfft / df)",
+   "id": 74
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 56,
+   "op": "arithmetic",
+   "start": 1450,
+   "end": 1469,
+   "old": "np.max(x) + 0.5 * M",
+   "new": "(np.max(x) - 0.5 * M)",
+   "id": 75
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 77,
+   "op": "arithmetic",
+   "start": 2317,
+   "end": 2322,
+   "old": "M - 1",
+   "new": "(M + 1)",
+   "id": 76
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 144,
+   "op": "arithmetic",
+   "start": 4520,
+   "end": 4535,
+   "old": "(t - t0) * Nfft",
+   "new": "((t - t0) / Nfft)",
+   "id": 77
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 149,
+   "op": "arithmetic",
+   "start": 4680,
+   "end": 4697,
+   "old": "df * np.arange(N)",
+   "new": "(df / np.arange(N))",
+   "id": 78
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 156,
+   "op": "arithmetic",
+   "start": 4888,
+   "end": 4920,
+   "old": "2 * np.pi * f * t[:, np.newaxis]",
+   "new": "(2 * np.pi * f / t[:, np.newaxis])",
+   "id": 79
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 77,
+   "op": "constant",
+   "start": 2321,
+   "end": 2322,
+   "old": "1",
+   "new": "(2)",
+   "id": 80
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2084,
+   "end": 2085,
+   "old": "2",
+   "new": "(3)",
+   "id": 81
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 142,
+   "op": "arithmetic",
+   "start": 4493,
+   "end": 4499,
+   "old": "t - t0",
+   "new": "(t + t0)",
+   "id": 82
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle/implementations/utils.py",
+   "line": 156,
+   "op": "arithmetic",
+   "start": 4888,
+   "end": 4897,
+   "old": "2 * np.pi",
+   "new": "(2 / np.pi)",
+   "id": 83
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle_multiband/core.py",
+   "line": 22,
+   "op": "return",
+   "start": 588,
+   "end": 618,
+   "old": "return getattr(obj, \"unit\", 1)",
+   "new": "return None",
+   "id": 84
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle_multiband/core.py",
+   "line": 27,
+   "op": "comparison",
+   "start": 711,
+   "end": 725,
+   "old": "len(arrs) == 1",
+   "new": "(len(arrs) != 1)",
+   "id": 85
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle_multiband/core.py",
+   "line": 22,
+   "op": "constant",
+   "start": 608,
+   "end": 614,
+   "old": "\"unit\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle_multiband/core.py",
+   "line": 27,
+   "op": "constant",
+   "start": 724,
+   "end": 725,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "astropy/timeseries/periodograms/lombscargle_multiband/core.py",
+   "line": 28,
+   "op": "constant",
+   "start": 753,
+   "end": 754,
+   "old": "0",
+   "new": "(1)",
+   "id": 88
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 2756,
+   "op": "statement",
+   "start": 94662,
+   "end": 94712,
+   "old": "one: Final[CompositeUnit] = dimensionless_unscaled",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 512,
+   "op": "statement",
+   "start": 16513,
+   "end": 16549,
+   "old": "unit_str = unit.to_string(\"generic\")",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 517,
+   "op": "statement",
+   "start": 16735,
+   "end": 16761,
+   "old": "unit_str = f\"'{unit_str}'\"",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "statement",
+   "start": 22099,
+   "end": 22138,
+   "old": "__doc__ += \"\\n\\n\" + \"\\n\".join(doclines)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 278,
+   "op": "return",
+   "start": 10539,
+   "end": 10575,
+   "old": "return \"/\".join(self._physical_type)",
+   "new": "return None",
+   "id": 93
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "arithmetic",
+   "start": 22110,
+   "end": 22138,
+   "old": "\"\\n\\n\" + \"\\n\".join(doclines)",
+   "new": "('\\n\\n' - '\\n'.join(doclines))",
+   "id": 94
+  },
+  {
+   "path": "astropy/utils/masked/function_helpers.py",
+   "line": 719,
+   "op": "statement",
+   "start": 24033,
+   "end": 24136,
+   "old": "data = [\n        (arg.unmasked if is_masked else arg) for arg, is_masked in zip(args, are_masked)\n    ]",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "astropy/utils/masked/function_helpers.py",
+   "line": 725,
+   "op": "statement",
+   "start": 24246,
+   "end": 24270,
+   "old": "shape = results[0].shape",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "astropy/utils/masked/function_helpers.py",
+   "line": 730,
+   "op": "statement",
+   "start": 24426,
+   "end": 24567,
+   "old": "results = return_type(\n        (Masked(result, mask) if mask is not None else result)\n        for (result, mask) in zip(results, masks)\n    )",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "astropy/utils/masked/function_helpers.py",
+   "line": 725,
+   "op": "constant",
+   "start": 24262,
+   "end": 24263,
+   "old": "0",
+   "new": "(1)",
+   "id": 98
+  },
+  {
+   "path": "astropy/utils/masked/function_helpers.py",
+   "line": 731,
+   "op": "comparison",
+   "start": 24482,
+   "end": 24498,
+   "old": "mask is not None",
+   "new": "(mask is None)",
+   "id": 99
+  }
+ ]
+}

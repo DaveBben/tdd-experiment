@@ -1,0 +1,1006 @@
+{
+ "task": "pypa__hatch.ff4b4040.test_fmt.782c88a8.lv1",
+ "pool": 1005,
+ "mutants": [
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 188,
+   "op": "return",
+   "start": 6997,
+   "end": 7044,
+   "old": "return self.data_dir / \"env\" / environment_type",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 188,
+   "op": "arithmetic",
+   "start": 7004,
+   "end": 7044,
+   "old": "self.data_dir / \"env\" / environment_type",
+   "new": "(self.data_dir / 'env' // environment_type)",
+   "id": 1
+  },
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 73,
+   "op": "statement",
+   "start": 2567,
+   "end": 2585,
+   "old": "sys.stdout.flush()",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 68,
+   "op": "constant",
+   "start": 2391,
+   "end": 2395,
+   "old": "\"- \"",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 76,
+   "op": "boolean",
+   "start": 2699,
+   "end": 2737,
+   "old": "first_error_code or process.returncode",
+   "new": "(first_error_code and process.returncode)",
+   "id": 4
+  },
+  {
+   "path": "src/hatch/cli/application.py",
+   "line": 81,
+   "op": "statement",
+   "start": 2889,
+   "end": 2972,
+   "old": "self.abort(f\"Failed with exit code: {process.returncode}\", code=process.returncode)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 140,
+   "op": "return",
+   "start": 4613,
+   "end": 4669,
+   "old": "return load_toml_data(self.user_config_file.read_text())",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 155,
+   "op": "return",
+   "start": 5112,
+   "end": 5184,
+   "old": "return self.user_config.get(\"tool\", {}).get(\"ruff\", {}).get(section, {})",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 31,
+   "op": "arithmetic",
+   "start": 915,
+   "end": 978,
+   "old": "self.env.isolated_data_directory / \".config\" / self.env.root.id",
+   "new": "(self.env.isolated_data_directory / '.config' // self.env.root.id)",
+   "id": 8
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 127,
+   "op": "constant",
+   "start": 4241,
+   "end": 4253,
+   "old": "\".ruff.toml\"",
+   "new": "('XX')",
+   "id": 9
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 129,
+   "op": "return",
+   "start": 4380,
+   "end": 4398,
+   "old": "return config_file",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 59,
+   "op": "constant",
+   "start": 1873,
+   "end": 1876,
+   "old": "\"]\"",
+   "new": "('XX')",
+   "id": 11
+  },
+  {
+   "path": "src/hatch/cli/fmt/core.py",
+   "line": 144,
+   "op": "constant",
+   "start": 4761,
+   "end": 4767,
+   "old": "\"lint\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "src/hatch/env/context.py",
+   "line": 37,
+   "op": "return",
+   "start": 1195,
+   "end": 1212,
+   "old": "return formatters",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "src/hatch/env/plugin/hooks.py",
+   "line": 8,
+   "op": "return",
+   "start": 184,
+   "end": 230,
+   "old": "return [SystemEnvironment, VirtualEnvironment]",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 137,
+   "op": "return",
+   "start": 3443,
+   "end": 3480,
+   "old": "return self.__isolated_data_directory",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 242,
+   "op": "statement",
+   "start": 6824,
+   "end": 6872,
+   "old": "env_exclude = self.config.get(\"env-exclude\", [])",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 863,
+   "op": "return",
+   "start": 30842,
+   "end": 30893,
+   "old": "return self.platform.run_command(command, **kwargs)",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 887,
+   "op": "statement",
+   "start": 31804,
+   "end": 31876,
+   "old": "possible_script, args, _ignore_exit_code = parse_script_command(command)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 970,
+   "op": "return",
+   "start": 35219,
+   "end": 35259,
+   "old": "return EnvironmentContextFormatter(self)",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 195,
+   "op": "boolean",
+   "start": 5123,
+   "end": 5153,
+   "old": "not isinstance(env_vars, dict)",
+   "new": "(isinstance(env_vars, dict))",
+   "id": 20
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 579,
+   "op": "statement",
+   "start": 20478,
+   "end": 20520,
+   "old": "script_config = self.config.get(field, {})",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 194,
+   "op": "constant",
+   "start": 5096,
+   "end": 5106,
+   "old": "\"env-vars\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 201,
+   "op": "statement",
+   "start": 5384,
+   "end": 5530,
+   "old": "message = (\n                    f\"Environment variable `{key}` of field `tool.hatch.envs.{self.name}.env-vars` must be a string\"\n                )",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 227,
+   "op": "constant",
+   "start": 6342,
+   "end": 6343,
+   "old": "1",
+   "new": "(2)",
+   "id": 24
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 228,
+   "op": "boolean",
+   "start": 6361,
+   "end": 6389,
+   "old": "not isinstance(pattern, str)",
+   "new": "(isinstance(pattern, str))",
+   "id": 25
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 230,
+   "op": "statement",
+   "start": 6517,
+   "end": 6541,
+   "old": "raise TypeError(message)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 578,
+   "op": "constant",
+   "start": 20437,
+   "end": 20452,
+   "old": "\"extra-scripts\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 1366,
+   "op": "statement",
+   "start": 50764,
+   "end": 50832,
+   "old": "yield from _recurse_members(entry.path, matcher_index + 1, matchers)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 589,
+   "op": "statement",
+   "start": 20982,
+   "end": 21007,
+   "old": "raise ValueError(message)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "src/hatch/env/plugin/interface.py",
+   "line": 804,
+   "op": "constant",
+   "start": 28712,
+   "end": 28735,
+   "old": "\"optional-dependencies\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "src/hatch/env/utils.py",
+   "line": 25,
+   "op": "statement",
+   "start": 728,
+   "end": 766,
+   "old": "members = workspace.get(\"members\", [])",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "src/hatch/env/utils.py",
+   "line": 25,
+   "op": "constant",
+   "start": 752,
+   "end": 761,
+   "old": "\"members\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "src/hatch/env/utils.py",
+   "line": 39,
+   "op": "boolean",
+   "start": 1290,
+   "end": 1315,
+   "old": "not isinstance(path, str)",
+   "new": "(isinstance(path, str))",
+   "id": 33
+  },
+  {
+   "path": "src/hatch/env/virtual.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1116,
+   "end": 1326,
+   "old": "project_name = (\n            project_id\n            if project_is_script\n            else self.metadata.name\n            if \"project\" in self.metadata.config\n            else f\"{project_id}-unmanaged\"\n        )",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "src/hatch/env/virtual.py",
+   "line": 144,
+   "op": "constant",
+   "start": 5416,
+   "end": 5425,
+   "old": "\"uv-path\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 677,
+   "op": "comparison",
+   "start": 27919,
+   "end": 27946,
+   "old": "template_name not in config",
+   "new": "(template_name in config)",
+   "id": 36
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 41,
+   "op": "boolean",
+   "start": 1198,
+   "end": 1226,
+   "old": "not isinstance(config, dict)",
+   "new": "(isinstance(config, dict))",
+   "id": 37
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1240,
+   "end": 1292,
+   "old": "message = \"Field `tool.hatch.build` must be a table\"",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1305,
+   "end": 1329,
+   "old": "raise TypeError(message)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 146,
+   "op": "comparison",
+   "start": 4454,
+   "end": 4472,
+   "old": "self._envs is None",
+   "new": "(self._envs is not None)",
+   "id": 40
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 153,
+   "op": "statement",
+   "start": 4722,
+   "end": 4749,
+   "old": "environment_collectors = []",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 188,
+   "op": "statement",
+   "start": 6254,
+   "end": 6271,
+   "old": "final_config = {}",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 494,
+   "op": "statement",
+   "start": 21115,
+   "end": 21126,
+   "old": "active = []",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 498,
+   "op": "statement",
+   "start": 21295,
+   "end": 21317,
+   "old": "self._scripts = config",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 676,
+   "op": "constant",
+   "start": 27901,
+   "end": 27910,
+   "old": "\"default\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 219,
+   "op": "statement",
+   "start": 7701,
+   "end": 7751,
+   "old": "platform_overrides = overrides.get(\"platform\", {})",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 71,
+   "op": "constant",
+   "start": 2183,
+   "end": 2184,
+   "old": "1",
+   "new": "(2)",
+   "id": 47
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 147,
+   "op": "constant",
+   "start": 4515,
+   "end": 4521,
+   "old": "\"envs\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7117,
+   "end": 7309,
+   "old": "message = (\n                        f\"Field `tool.hatch.envs.{env_name}.matrix-name-format` must \"\n                        f\"contain at least the `{{value}}` placeholder\"\n                    )",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 215,
+   "op": "statement",
+   "start": 7493,
+   "end": 7566,
+   "old": "message = f\"Field `tool.hatch.envs.{env_name}.overrides` must be a table\"",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 257,
+   "op": "boolean",
+   "start": 9676,
+   "end": 9706,
+   "old": "not isinstance(matrices, list)",
+   "new": "(isinstance(matrices, list))",
+   "id": 51
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 455,
+   "op": "statement",
+   "start": 19727,
+   "end": 19751,
+   "old": "raise TypeError(message)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 472,
+   "op": "comparison",
+   "start": 20211,
+   "end": 20222,
+   "old": "\" \" in name",
+   "new": "(' ' not in name)",
+   "id": 53
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 479,
+   "op": "statement",
+   "start": 20472,
+   "end": 20493,
+   "old": "commands.append(data)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 201,
+   "op": "constant",
+   "start": 6820,
+   "end": 6829,
+   "old": "\"{value}\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 236,
+   "op": "constant",
+   "start": 8678,
+   "end": 8683,
+   "old": "\"env\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 242,
+   "op": "boolean",
+   "start": 8983,
+   "end": 9012,
+   "old": "not isinstance(options, dict)",
+   "new": "(isinstance(options, dict))",
+   "id": 57
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 252,
+   "op": "constant",
+   "start": 9479,
+   "end": 9487,
+   "old": "\"matrix\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 272,
+   "op": "constant",
+   "start": 10507,
+   "end": 10513,
+   "old": "\"envs\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 277,
+   "op": "statement",
+   "start": 10807,
+   "end": 10831,
+   "old": "raise TypeError(message)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 279,
+   "op": "boolean",
+   "start": 10856,
+   "end": 10866,
+   "old": "not matrix",
+   "new": "(matrix)",
+   "id": 61
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 280,
+   "op": "statement",
+   "start": 10892,
+   "end": 10977,
+   "old": "message = f\"Matrix #{i} in field `tool.hatch.envs.{env_name}.matrix` cannot be empty\"",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 281,
+   "op": "statement",
+   "start": 11002,
+   "end": 11027,
+   "old": "raise ValueError(message)",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 488,
+   "op": "statement",
+   "start": 20907,
+   "end": 20993,
+   "old": "message = f\"Field `tool.hatch.scripts.{name}` must be a string or an array of strings\"",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 284,
+   "op": "boolean",
+   "start": 11135,
+   "end": 11147,
+   "old": "not variable",
+   "new": "(variable)",
+   "id": 65
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 398,
+   "op": "statement",
+   "start": 17014,
+   "end": 17091,
+   "old": "apply_overrides(env_name, \"name\", pattern, new_env_name, options, new_config)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 399,
+   "op": "statement",
+   "start": 17120,
+   "end": 17182,
+   "old": "cached_name_overrides.append((pattern, new_env_name, options))",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 314,
+   "op": "boolean",
+   "start": 12657,
+   "end": 12666,
+   "old": "not value",
+   "new": "(value)",
+   "id": 68
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 315,
+   "op": "statement",
+   "start": 12700,
+   "end": 12946,
+   "old": "message = (\n                                    f\"Value #{k} of variable `{variable}` in matrix #{i} in field \"\n                                    f\"`tool.hatch.envs.{env_name}.matrix` cannot be an empty string\"\n                                )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 326,
+   "op": "statement",
+   "start": 13363,
+   "end": 13388,
+   "old": "raise ValueError(message)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 395,
+   "op": "boolean",
+   "start": 16906,
+   "end": 16942,
+   "old": "not re.search(pattern, new_env_name)",
+   "new": "(re.search(pattern, new_env_name))",
+   "id": 71
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 410,
+   "op": "constant",
+   "start": 17724,
+   "end": 17730,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 379,
+   "op": "comparison",
+   "start": 15976,
+   "end": 15982,
+   "old": "j == 0",
+   "new": "(j != 0)",
+   "id": 73
+  },
+  {
+   "path": "src/hatch/project/config.py",
+   "line": 414,
+   "op": "constant",
+   "start": 17982,
+   "end": 17986,
+   "old": "\"py\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 70,
+   "op": "return",
+   "start": 2036,
+   "end": 2053,
+   "old": "return self._root",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 168,
+   "op": "statement",
+   "start": 5731,
+   "end": 5803,
+   "old": "self.config.finalize_env_overrides(environment_class.get_option_types())",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 170,
+   "op": "return",
+   "start": 5813,
+   "end": 6154,
+   "old": "return environment_class(\n            self.location,\n            self.metadata,\n            env_name,\n            config,\n            self.config.matrix_variables.get(env_name, {}),\n            data_directory,\n            isolated_data_directory,\n            self.app.platform,\n            self.app.verbosity,\n            self.app,\n        )",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 186,
+   "op": "boolean",
+   "start": 6357,
+   "end": 6381,
+   "old": "not environment.exists()",
+   "new": "(environment.exists())",
+   "id": 78
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 383,
+   "op": "statement",
+   "start": 14507,
+   "end": 14592,
+   "old": "self._metadata = ProjectMetadata(self.location, self.plugin_manager, self.raw_config)",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 161,
+   "op": "arithmetic",
+   "start": 5331,
+   "end": 5388,
+   "old": "self.app.data_dir / \"env\" / environment_type / \".scripts\"",
+   "new": "(self.app.data_dir / 'env' / environment_type // '.scripts')",
+   "id": 80
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 396,
+   "op": "statement",
+   "start": 15019,
+   "end": 15076,
+   "old": "raw_config = load_toml_file(str(self._project_file_path))",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 109,
+   "op": "arithmetic",
+   "start": 3320,
+   "end": 3345,
+   "old": "self.app.data_dir / \"env\"",
+   "new": "(self.app.data_dir // 'env')",
+   "id": 82
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 109,
+   "op": "constant",
+   "start": 3348,
+   "end": 3359,
+   "old": "\".metadata\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 390,
+   "op": "comparison",
+   "start": 14717,
+   "end": 14734,
+   "old": "self.root is None",
+   "new": "(self.root is not None)",
+   "id": 84
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 109,
+   "op": "constant",
+   "start": 3340,
+   "end": 3345,
+   "old": "\"env\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 408,
+   "op": "constant",
+   "start": 15453,
+   "end": 15460,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "src/hatch/project/core.py",
+   "line": 163,
+   "op": "constant",
+   "start": 5520,
+   "end": 5525,
+   "old": "\"env\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "src/hatch/project/env.py",
+   "line": 416,
+   "op": "return",
+   "start": 16172,
+   "end": 16254,
+   "old": "return self._storage_dir / environment.config[\"type\"] / f\"{environment.name}.json\"",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "src/hatch/project/env.py",
+   "line": 414,
+   "op": "arithmetic",
+   "start": 16104,
+   "end": 16162,
+   "old": "self.__data_dir / \".internal\" / f\"{environment.name}.json\"",
+   "new": "(self.__data_dir / '.internal' // f'{environment.name}.json')",
+   "id": 89
+  },
+  {
+   "path": "src/hatch/utils/env.py",
+   "line": 17,
+   "op": "statement",
+   "start": 464,
+   "end": 504,
+   "old": "self.__sys_path: list[str] | None = None",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 71,
+   "op": "return",
+   "start": 2614,
+   "end": 2654,
+   "old": "return self.modules.shlex.split(command)",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 152,
+   "op": "comparison",
+   "start": 6448,
+   "end": 6474,
+   "old": "\"executable\" not in kwargs",
+   "new": "('executable' in kwargs)",
+   "id": 92
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 160,
+   "op": "statement",
+   "start": 6790,
+   "end": 6830,
+   "old": "normalized_path = os.path.normpath(path)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 70,
+   "op": "boolean",
+   "start": 2562,
+   "end": 2571,
+   "old": "not shell",
+   "new": "(shell)",
+   "id": 94
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 171,
+   "op": "constant",
+   "start": 7239,
+   "end": 7245,
+   "old": "\"bash\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 174,
+   "op": "statement",
+   "start": 7397,
+   "end": 7430,
+   "old": "kwargs[\"executable\"] = executable",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "src/hatch/utils/platform.py",
+   "line": 155,
+   "op": "constant",
+   "start": 6564,
+   "end": 6571,
+   "old": "\"DYLD_\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "src/hatch/utils/shells.py",
+   "line": 28,
+   "op": "statement",
+   "start": 678,
+   "end": 708,
+   "old": "self.environment = environment",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "src/hatch/venv/core.py",
+   "line": 114,
+   "op": "statement",
+   "start": 3848,
+   "end": 3886,
+   "old": "self.parent_dir = TemporaryDirectory()",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

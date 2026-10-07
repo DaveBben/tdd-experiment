@@ -1,0 +1,420 @@
+=== xarray/backends/chunks.py
+import numpy as np
+
+from xarray.core.datatree import Variable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def validate_grid_chunks_alignment(
+    nd_v_chunks: tuple[tuple[int, ...], ...] | None,
+    enc_chunks: tuple[int, ...],
+    backend_shape: tuple[int, ...],
+    region: tuple[slice, ...],
+    allow_partial_chunks: bool,
+    name: str,
+):
+    if nd_v_chunks is None:
+        return
+    base_error = (
+        "Specified Zarr chunks encoding['chunks']={enc_chunks!r} for "
+        "variable named {name!r} would overlap multiple Dask chunks. "
+        "Please check the Dask chunks at position {v_chunk_pos} and "
+        "{v_chunk_pos_next}, on axis {axis}, they are overlapped "
+        "on the same Zarr chunk in the region {region}. "
+        "Writing this array in parallel with Dask could lead to corrupted data. "
+        "To resolve this issue, consider one of the following options: "
+        "- Rechunk the array using `chunk()`. "
+        "- Modify or delete `encoding['chunks']`. "
+        "- Set `safe_chunks=False`. "
+        "- Enable automatic chunks alignment with `align_chunks=True`."
+    )
+
+    for axis, chunk_size, v_chunks, interval, size in zip(
+        range(len(enc_chunks)),
+        enc_chunks,
+        nd_v_chunks,
+        region,
+        backend_shape,
+        strict=True,
+    ):
+        for i, chunk in enumerate(v_chunks[1:-1]):
+            if chunk % chunk_size:
+                raise ValueError(
+                    base_error.format(
+                        v_chunk_pos=i + 1,
+                        v_chunk_pos_next=i + 2,
+                        v_chunk_size=chunk,
+                        axis=axis,
+                        name=name,
+                        chunk_size=chunk_size,
+                        region=interval,
+                        enc_chunks=enc_chunks,
+                    )
+                )
+
+        interval_start = interval.start or 0
+
+        if len(v_chunks) > 1:
+            # The first border size is the amount of data that needs to be updated on the
+            # first chunk taking into account the region slice.
+            first_border_size = chunk_size
+            if allow_partial_chunks:
+                first_border_size = chunk_size - interval_start % chunk_size
+
+            if (v_chunks[0] - first_border_size) % chunk_size:
+                raise ValueError(
+                    base_error.format(
+                        v_chunk_pos=0,
+                        v_chunk_pos_next=0,
+                        v_chunk_size=v_chunks[0],
+                        axis=axis,
+                        name=name,
+                        chunk_size=chunk_size,
+                        region=interval,
+                        enc_chunks=enc_chunks,
+                    )
+                )
+
+        if not allow_partial_chunks:
+            region_stop = interval.stop or size
+
+            error_on_last_chunk = base_error.format(
+                v_chunk_pos=len(v_chunks) - 1,
+                v_chunk_pos_next=len(v_chunks) - 1,
+                v_chunk_size=v_chunks[-1],
+                axis=axis,
+                name=name,
+                chunk_size=chunk_size,
+                region=interval,
+                enc_chunks=enc_chunks,
+            )
+            if interval_start % chunk_size:
+                # The last chunk which can also be the only one is a partial chunk
+                # if it is not aligned at the beginning
+                raise ValueError(error_on_last_chunk)
+
+            if np.ceil(region_stop / chunk_size) == np.ceil(size / chunk_size):
+                # If the region is covering the last chunk then check
+                # if the reminder with the default chunk size
+                # is equal to the size of the last chunk
+                if v_chunks[-1] % chunk_size != size % chunk_size:
+                    raise ValueError(error_on_last_chunk)
+            elif v_chunks[-1] % chunk_size:
+                raise ValueError(error_on_last_chunk)
+
+
+def align_nd_chunks(nd_v_chunks: tuple[tuple[int, ...], ...], nd_backend_chunks: tuple[tuple[int, ...], ...]) -> tuple[tuple[int, ...], ...]:
+    """
+    Align n-dimensional chunks between variable chunks and backend chunks to optimize memory usage and performance.
+
+    This function takes variable chunks and backend chunks for multiple dimensions and produces
+    aligned chunks that are compatible with both the variable's chunking scheme and the backend's
+    chunking requirements. The alignment process aims to minimize memory usage while ensuring
+    efficient data access patterns.
+
+    For each dimension, the result preserves the total size and keeps existing
+    variable chunks when they are already suitable. Otherwise, chunk boundaries are
+    adjusted to avoid multiple variable chunks overlapping the same backend chunk,
+    without exceeding the largest existing variable or regular backend chunk size.
+
+    Parameters
+    ----------
+    nd_v_chunks : tuple[tuple[int, ...], ...]
+        A tuple containing chunk sizes for each dimension of the variable. Each inner tuple
+        represents the chunk sizes along one dimension.
+    nd_backend_chunks : tuple[tuple[int, ...], ...]
+        A tuple containing chunk sizes for each dimension of the backend storage. Each inner
+        tuple represents the chunk sizes along one dimension in the backend.
+
+    Returns
+    -------
+    tuple[tuple[int, ...], ...]
+        A tuple of aligned chunk sizes for each dimension. The returned chunks are optimized
+        to work efficiently with both the variable's data layout and the backend's storage
+        requirements.
+
+    Raises
+    ------
+    ValueError
+        If the number of dimensions between backend and variable chunks don't match.
+    ValueError
+        If the total number of elements in backend chunks doesn't match the variable chunks.
+    ValueError
+        If backend chunks are not uniformly sized (excluding border chunks). This indicates
+        an internal error that should be reported.
+
+    Notes
+    -----
+    - The function assumes backend chunks have uniform sizes except for border chunks
+    - Dimensions with a single backend chunk or a single variable chunk are
+      returned unchanged for that dimension
+    - The algorithm prioritizes preserving original variable chunks when possible
+    - Border chunks are handled specially to account for partial chunks at array boundaries
+    - Memory usage is optimized by choosing chunk sizes that don't exceed the maximum of
+      backend chunk size and variable chunk sizes
+    """
+    raise NotImplementedError
+
+
+def build_grid_chunks(size: int, chunk_size: int, region: slice | None = None) -> tuple[int, ...]:
+    """
+    Build grid-aligned chunks for a variable dimension at an optional region offset.
+
+    This function partitions ``size`` variable elements into chunks aligned to a
+    backend grid. When a region is supplied, only its start offset affects the first
+    chunk; ``region.stop`` does not limit or otherwise alter the partition.
+
+    Parameters
+    ----------
+    size : int
+        The number of variable elements to partition.
+    chunk_size : int
+        The desired size for each chunk. Must be a positive integer.
+    region : slice or None, optional
+        A slice whose start gives the variable's offset in the backend grid.
+        If None, the offset is zero. The stop value is ignored.
+
+    Returns
+    -------
+    tuple[int, ...]
+        A tuple summing to ``size``. The first chunk is shortened when the start
+        offset is not on a grid boundary, and the last may be shortened when the
+        remaining variable data does not fill a complete chunk.
+
+    Notes
+    -----
+    - If the first calculated chunk size is greater than or equal to ``size``,
+      returns a single chunk containing all the data: (size,)
+    - The function handles partial chunks at boundaries automatically
+    - The algorithm accounts for region offsets when calculating the first chunk size
+    - This function is typically used in the context of aligning Dask array chunks
+      with backend storage chunks (like Zarr)
+
+    Examples
+    --------
+    For a dimension of size 13 with chunk_size 5 and no region specified:
+    - Returns (5, 5, 3) representing three chunks
+
+    For a dimension of size 10 with chunk_size 15:
+    - Returns (10,) as the chunk_size exceeds the total size
+    """
+    raise NotImplementedError
+
+
+def grid_rechunk(v: Variable, enc_chunks: tuple[int, ...], region: tuple[slice, ...]) -> Variable:
+    """
+    Rechunk a Variable to align with grid-based backend chunks for efficient parallel writing.
+
+    This function optimizes chunk alignment between Dask arrays and backend storage (like Zarr)
+    by creating new chunk boundaries that are compatible with both the variable's existing
+    chunks and the target encoding chunks. This prevents data corruption during parallel
+    writes by ensuring that no backend chunk is overlapped by more than one Dask chunk;
+    a larger Dask chunk may still span multiple whole backend chunks.
+
+    Parameters
+    ----------
+    v : Variable
+        The xarray Variable containing a chunked Dask array to be rechunked.
+    enc_chunks : tuple of int
+        The target chunk sizes for each dimension as specified in the encoding.
+        These represent the desired chunk sizes for the backend storage format.
+    region : tuple of slice
+        The region slices defining the subset of the backend array where this
+        variable will be written. Each slice corresponds to a dimension.
+
+    Returns
+    -------
+    Variable
+        A new Variable with rechunked data that aligns with the grid-based backend
+        chunks. If the input Variable is not chunked (no Dask array), returns
+        the original Variable unchanged.
+
+    Notes
+    -----
+    - The function only processes Variables that contain chunked Dask arrays.
+      Non-chunked Variables are returned as-is.
+    - The rechunking algorithm attempts to preserve the original chunk structure
+      while ensuring alignment with backend chunks to prevent overlaps.
+    - The alignment process considers border effects and partial chunks at the
+      boundaries of the specified region.
+    - This function is typically used internally during dataset writing operations
+      to ensure safe parallel writes to chunked storage backends like Zarr.
+    """
+    raise NotImplementedError

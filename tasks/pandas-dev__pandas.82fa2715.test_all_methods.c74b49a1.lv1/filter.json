@@ -1,0 +1,26 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_all_methods.c74b49a1.lv1",
+ "image": "libercoders/featurebench-specs_pandas-instance_15f634a6@sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "================== 162 passed, 6 skipped, 2 xfailed in 0.51s ==================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 212 passed in 9.40s =============================="
+ },
+ "mutant_pool": 1213,
+ "stub_compiles": true,
+ "stub_imports": false,
+ "stub_p2p": {
+  "exit": 4,
+  "failing": [],
+  "summary": "+ /opt/miniconda3/envs/testbed/bin/ninja"
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": false
+}

@@ -1,0 +1,26 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_scales.d9dcdef6.lv1",
+ "image": "libercoders/featurebench-specs_seaborn-instance_52738fbb@sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 102 passed, 1 xfailed in 2.49s ========================"
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 96 passed, 55 skipped in 1.50s ========================"
+ },
+ "mutant_pool": 641,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 96 passed, 55 skipped in 1.52s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

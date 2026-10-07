@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_scorer_description.9163195a.lv1",
+ "pool": 132,
+ "mutants": [
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 24,
+   "op": "statement",
+   "start": 799,
+   "end": 837,
+   "old": "pb_value_types = get_args(PbValueType)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 29,
+   "op": "statement",
+   "start": 933,
+   "end": 973,
+   "old": "origin = get_origin(feedback_value_type)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 84,
+   "op": "statement",
+   "start": 3170,
+   "end": 3486,
+   "old": "raise MlflowException.invalid_parameter_value(\n        f\"Unsupported feedback_value_type: {feedback_value_type}. \"\n        f\"Supported types (FeedbackValueType): str, int, float, bool, Literal[...], \"\n        f\"as well as a dict and list of these types. \"\n        f\"Pydantic BaseModel types are not supported.\"\n    )",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 207,
+   "op": "statement",
+   "start": 8582,
+   "end": 8632,
+   "old": "_validate_feedback_value_type(feedback_value_type)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 209,
+   "op": "return",
+   "start": 8638,
+   "end": 8826,
+   "old": "return InstructionsJudge(\n        name=name,\n        instructions=instructions,\n        model=model,\n        description=description,\n        feedback_value_type=feedback_value_type,\n    )",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 25,
+   "op": "comparison",
+   "start": 845,
+   "end": 882,
+   "old": "feedback_value_type in pb_value_types",
+   "new": "(feedback_value_type not in pb_value_types)",
+   "id": 5
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 30,
+   "op": "comparison",
+   "start": 981,
+   "end": 998,
+   "old": "origin is Literal",
+   "new": "(origin is not Literal)",
+   "id": 6
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 32,
+   "op": "statement",
+   "start": 1070,
+   "end": 1116,
+   "old": "literal_values = get_args(feedback_value_type)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 45,
+   "op": "comparison",
+   "start": 1657,
+   "end": 1671,
+   "old": "origin is dict",
+   "new": "(origin is not dict)",
+   "id": 8
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2542,
+   "end": 2578,
+   "old": "args = get_args(feedback_value_type)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 204,
+   "op": "comparison",
+   "start": 8514,
+   "end": 8541,
+   "old": "feedback_value_type is None",
+   "new": "(feedback_value_type is not None)",
+   "id": 10
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 205,
+   "op": "statement",
+   "start": 8551,
+   "end": 8576,
+   "old": "feedback_value_type = str",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 47,
+   "op": "comparison",
+   "start": 1729,
+   "end": 1743,
+   "old": "len(args) == 2",
+   "new": "(len(args) != 2)",
+   "id": 12
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1757,
+   "end": 1784,
+   "old": "key_type, value_type = args",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 2590,
+   "end": 2604,
+   "old": "len(args) == 1",
+   "new": "(len(args) != 1)",
+   "id": 14
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2618,
+   "end": 2640,
+   "old": "element_type = args[0]",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3511,
+   "end": 3518,
+   "old": "\"3.4.0\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 34,
+   "op": "boolean",
+   "start": 1169,
+   "end": 1206,
+   "old": "not isinstance(value, pb_value_types)",
+   "new": "(isinstance(value, pb_value_types))",
+   "id": 17
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1287,
+   "end": 1594,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    \"The `feedback_value_type` argument does not support a Literal type\"\n                    f\"with non-primitive types, but got {type(value).__name__}. \"\n                    f\"Literal values must be str, int, float, or bool.\"\n                )",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 50,
+   "op": "comparison",
+   "start": 1830,
+   "end": 1845,
+   "old": "key_type != str",
+   "new": "(key_type == str)",
+   "id": 19
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1926,
+   "end": 2055,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    f\"dict key type must be str, got {key_type}\"\n                )",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 57,
+   "op": "comparison",
+   "start": 2113,
+   "end": 2145,
+   "old": "value_type not in pb_value_types",
+   "new": "(value_type in pb_value_types)",
+   "id": 21
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 60,
+   "op": "statement",
+   "start": 2226,
+   "end": 2456,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    \"The `feedback_value_type` argument does not support a dict type\"\n                    f\"with non-primitive values, but got {value_type.__name__}\"\n                )",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 69,
+   "op": "constant",
+   "start": 2603,
+   "end": 2604,
+   "old": "1",
+   "new": "(2)",
+   "id": 23
+  },
+  {
+   "path": "mlflow/genai/judges/make_judge.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2638,
+   "end": 2639,
+   "old": "0",
+   "new": "(1)",
+   "id": 24
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1021,
+   "op": "statement",
+   "start": 42076,
+   "end": 42111,
+   "old": "signature = inspect.signature(func)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1022,
+   "op": "statement",
+   "start": 42116,
+   "end": 42160,
+   "old": "params = list(signature.parameters.values())",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1023,
+   "op": "statement",
+   "start": 42165,
+   "end": 42255,
+   "old": "new_params = [inspect.Parameter(\"self\", inspect.Parameter.POSITIONAL_OR_KEYWORD)] + params",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1024,
+   "op": "statement",
+   "start": 42260,
+   "end": 42316,
+   "old": "new_signature = signature.replace(parameters=new_params)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1025,
+   "op": "statement",
+   "start": 42321,
+   "end": 42372,
+   "old": "CustomScorer.__call__.__signature__ = new_signature",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1027,
+   "op": "return",
+   "start": 42378,
+   "end": 42508,
+   "old": "return CustomScorer(\n        name=name or func.__name__,\n        description=description,\n        aggregations=aggregations,\n    )",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 90,
+   "op": "statement",
+   "start": 2677,
+   "end": 2735,
+   "old": "has_builtin_fields = self.builtin_scorer_class is not None",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 91,
+   "op": "statement",
+   "start": 2744,
+   "end": 2795,
+   "old": "has_decorator_fields = self.call_source is not None",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 92,
+   "op": "statement",
+   "start": 2804,
+   "end": 2879,
+   "old": "has_instructions_fields = self.instructions_judge_pydantic_data is not None",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 994,
+   "op": "comparison",
+   "start": 40946,
+   "end": 40958,
+   "old": "func is None",
+   "new": "(func is not None)",
+   "id": 34
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 995,
+   "op": "return",
+   "start": 40968,
+   "end": 41085,
+   "old": "return functools.partial(\n            scorer, name=name, description=description, aggregations=aggregations\n        )",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1001,
+   "op": "statement",
+   "start": 41178,
+   "end": 41247,
+   "old": "_original_func: Callable[..., Any] | None = PrivateAttr(default=None)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1023,
+   "op": "arithmetic",
+   "start": 42178,
+   "end": 42255,
+   "old": "[inspect.Parameter(\"self\", inspect.Parameter.POSITIONAL_OR_KEYWORD)] + params",
+   "new": "([inspect.Parameter('self', inspect.Parameter.POSITIONAL_OR_KEYWORD)] - params)",
+   "id": 37
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 90,
+   "op": "comparison",
+   "start": 2698,
+   "end": 2735,
+   "old": "self.builtin_scorer_class is not None",
+   "new": "(self.builtin_scorer_class is None)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 91,
+   "op": "comparison",
+   "start": 2767,
+   "end": 2795,
+   "old": "self.call_source is not None",
+   "new": "(self.call_source is None)",
+   "id": 39
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 92,
+   "op": "comparison",
+   "start": 2830,
+   "end": 2879,
+   "old": "self.instructions_judge_pydantic_data is not None",
+   "new": "(self.instructions_judge_pydantic_data is None)",
+   "id": 40
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 104,
+   "op": "comparison",
+   "start": 3358,
+   "end": 3373,
+   "old": "field_count > 1",
+   "new": "(field_count >= 1)",
+   "id": 41
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1004,
+   "op": "statement",
+   "start": 41297,
+   "end": 41321,
+   "old": "super().__init__(**data)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1009,
+   "op": "statement",
+   "start": 41630,
+   "end": 41678,
+   "old": "object.__setattr__(self, \"_original_func\", func)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1016,
+   "op": "return",
+   "start": 41835,
+   "end": 41862,
+   "old": "return ScorerKind.DECORATOR",
+   "new": "return None",
+   "id": 44
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 97,
+   "op": "constant",
+   "start": 3052,
+   "end": 3053,
+   "old": "0",
+   "new": "(1)",
+   "id": 45
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3372,
+   "end": 3373,
+   "old": "1",
+   "new": "(2)",
+   "id": 46
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 99,
+   "op": "constant",
+   "start": 3101,
+   "end": 3331,
+   "old": "\"SerializedScorer must have either builtin scorer fields \"\n                \"(builtin_scorer_class), decorator scorer fields (call_source), \"\n                \"or instructions judge fields (instructions_judge_pydantic_data) present\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1009,
+   "op": "constant",
+   "start": 41655,
+   "end": 41671,
+   "old": "\"_original_func\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 66,
+   "op": "statement",
+   "start": 2304,
+   "end": 2350,
+   "old": "source_lines, _ = inspect.getsourcelines(func)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2355,
+   "end": 2402,
+   "old": "dedented_source = dedent(\"\".join(source_lines))",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2407,
+   "end": 2432,
+   "old": "func_name = func.__name__",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2438,
+   "end": 2499,
+   "old": "extractor = FunctionBodyExtractor(func_name, dedented_source)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 71,
+   "op": "statement",
+   "start": 2504,
+   "end": 2546,
+   "old": "parsed_source = ast.parse(dedented_source)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 72,
+   "op": "statement",
+   "start": 2551,
+   "end": 2581,
+   "old": "extractor.visit(parsed_source)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 92,
+   "op": "statement",
+   "start": 3125,
+   "end": 3170,
+   "old": "sig_match = re.match(r\"\\((.*?)\\)\", signature)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 102,
+   "op": "arithmetic",
+   "start": 3519,
+   "end": 3566,
+   "old": "func_def += f\"def {func_name}({params_str}):\\n\"",
+   "new": "func_def -= f'def {func_name}({params_str}):\\n'",
+   "id": 56
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 105,
+   "op": "arithmetic",
+   "start": 3678,
+   "end": 3705,
+   "old": "func_def += indented_source",
+   "new": "func_def -= indented_source",
+   "id": 57
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 105,
+   "op": "statement",
+   "start": 3678,
+   "end": 3705,
+   "old": "func_def += indented_source",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4812,
+   "end": 4832,
+   "old": "local_namespace = {}",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 143,
+   "op": "statement",
+   "start": 4906,
+   "end": 4955,
+   "old": "exec(func_def, import_namespace, local_namespace)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 22,
+   "op": "statement",
+   "start": 674,
+   "end": 700,
+   "old": "self.func_name = func_name",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 23,
+   "op": "statement",
+   "start": 709,
+   "end": 739,
+   "old": "self.source_code = source_code",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 24,
+   "op": "statement",
+   "start": 748,
+   "end": 771,
+   "old": "self.function_body = \"\"",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 25,
+   "op": "statement",
+   "start": 780,
+   "end": 800,
+   "old": "self.indent_unit = 4",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 26,
+   "op": "statement",
+   "start": 809,
+   "end": 827,
+   "old": "self.found = False",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 34,
+   "op": "statement",
+   "start": 1070,
+   "end": 1086,
+   "old": "body = node.body",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1428,
+   "end": 1460,
+   "old": "end_lineno = body[-1].end_lineno",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1536,
+   "end": 1601,
+   "old": "function_body_lines = source_lines[start_lineno - 1 : end_lineno]",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1611,
+   "end": 1681,
+   "old": "self.function_body = dedent(\"\".join(function_body_lines)).rstrip(\"\\n\")",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1691,
+   "end": 1766,
+   "old": "indents = [stmt.col_offset for stmt in body if stmt.col_offset is not None]",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 93,
+   "op": "boolean",
+   "start": 3178,
+   "end": 3191,
+   "old": "not sig_match",
+   "new": "(sig_match)",
+   "id": 71
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3201,
+   "end": 3324,
+   "old": "raise MlflowException(\n            f\"Invalid signature format: '{signature}'\", error_code=INVALID_PARAMETER_VALUE\n        )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 125,
+   "op": "statement",
+   "start": 4260,
+   "end": 4658,
+   "old": "import_namespace.update(\n            {\n                \"Feedback\": Feedback,\n                \"Assessment\": Assessment,\n                \"AssessmentSource\": AssessmentSource,\n                \"AssessmentError\": AssessmentError,\n                \"AssessmentSourceType\": AssessmentSourceType,\n                \"Trace\": Trace,\n                \"CategoricalRating\": CategoricalRating,\n            }\n        )",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 25,
+   "op": "constant",
+   "start": 799,
+   "end": 800,
+   "old": "4",
+   "new": "(5)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 26,
+   "op": "constant",
+   "start": 822,
+   "end": 827,
+   "old": "False",
+   "new": "(True)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 29,
+   "op": "boolean",
+   "start": 896,
+   "end": 942,
+   "old": "not self.found and node.name == self.func_name",
+   "new": "(not self.found or node.name == self.func_name)",
+   "id": 76
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 31,
+   "op": "statement",
+   "start": 986,
+   "end": 1009,
+   "old": "self.extract_body(node)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 37,
+   "op": "boolean",
+   "start": 1141,
+   "end": 1300,
+   "old": "body\n            and isinstance(body[0], ast.Expr)\n            and isinstance(body[0].value, ast.Constant)\n            and isinstance(body[0].value.value, str)",
+   "new": "(body or isinstance(body[0], ast.Expr) or isinstance(body[0].value, ast.Constant) or isinstance(body[0].value.value, str))",
+   "id": 78
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1324,
+   "end": 1339,
+   "old": "body = body[1:]",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 44,
+   "op": "boolean",
+   "start": 1352,
+   "end": 1360,
+   "old": "not body",
+   "new": "(body)",
+   "id": 80
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 57,
+   "op": "statement",
+   "start": 1799,
+   "end": 1830,
+   "old": "self.indent_unit = min(indents)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3146,
+   "end": 3158,
+   "old": "r\"\\((.*?)\\)\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 110,
+   "op": "constant",
+   "start": 3911,
+   "end": 3919,
+   "old": "\"mlflow\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 29,
+   "op": "boolean",
+   "start": 896,
+   "end": 910,
+   "old": "not self.found",
+   "new": "(self.found)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 29,
+   "op": "comparison",
+   "start": 915,
+   "end": 942,
+   "old": "node.name == self.func_name",
+   "new": "(node.name != self.func_name)",
+   "id": 85
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 30,
+   "op": "constant",
+   "start": 969,
+   "end": 973,
+   "old": "True",
+   "new": "(False)",
+   "id": 86
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3618,
+   "end": 3622,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 51,
+   "op": "arithmetic",
+   "start": 1571,
+   "end": 1587,
+   "old": "start_lineno - 1",
+   "new": "(start_lineno + 1)",
+   "id": 88
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 55,
+   "op": "comparison",
+   "start": 1738,
+   "end": 1765,
+   "old": "stmt.col_offset is not None",
+   "new": "(stmt.col_offset is None)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3359,
+   "end": 3360,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4353,
+   "end": 4365,
+   "old": "\"Assessment\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 129,
+   "op": "constant",
+   "start": 4395,
+   "end": 4413,
+   "old": "\"AssessmentSource\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 131,
+   "op": "constant",
+   "start": 4501,
+   "end": 4523,
+   "old": "\"AssessmentSourceType\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 132,
+   "op": "constant",
+   "start": 4563,
+   "end": 4570,
+   "old": "\"Trace\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 133,
+   "op": "constant",
+   "start": 4595,
+   "end": 4614,
+   "old": "\"CategoricalRating\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1336,
+   "end": 1337,
+   "old": "1",
+   "new": "(2)",
+   "id": 96
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 48,
+   "op": "constant",
+   "start": 1447,
+   "end": 1448,
+   "old": "1",
+   "new": "(2)",
+   "id": 97
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 51,
+   "op": "constant",
+   "start": 1586,
+   "end": 1587,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "mlflow/genai/scorers/scorer_utils.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3667,
+   "end": 3671,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

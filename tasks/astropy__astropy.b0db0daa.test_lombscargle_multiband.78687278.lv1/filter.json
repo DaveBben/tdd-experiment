@@ -1,0 +1,28 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_lombscargle_multiband.78687278.lv1",
+ "image": "libercoders/featurebench-specs_astropy-instance_493bb78b@sha256:4b5e7489d8bee8e20b53f94c74833e6d9ee0163673ac4a36eecb0372ef01fda2",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 1,
+  "failing": [
+   "astropy/timeseries/periodograms/lombscargle_multiband/tests/test_lombscargle_multiband.py::test_absolute_times[False]"
+  ],
+  "summary": "======================== 1 failed, 959 passed in 11.38s ========================"
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 66 passed in 2.13s =============================="
+ },
+ "mutant_pool": 256,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 66 passed in 2.12s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": false
+}

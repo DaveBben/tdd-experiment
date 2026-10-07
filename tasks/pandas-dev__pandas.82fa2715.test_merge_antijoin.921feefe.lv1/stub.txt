@@ -1,0 +1,5127 @@
+=== pandas/core/dtypes/astype.py
+"""
+Functions for implementing 'astype' methods according to pandas conventions,
+particularly ones that differ from numpy.
+"""
+
+from __future__ import annotations
+
+import inspect
+from typing import (
+    TYPE_CHECKING,
+    overload,
+)
+import warnings
+
+import numpy as np
+
+from pandas._libs import lib
+from pandas._libs.tslibs.timedeltas import array_to_timedelta64
+from pandas.errors import IntCastingNaNError
+
+from pandas.core.dtypes.common import (
+    is_object_dtype,
+    is_string_dtype,
+    pandas_dtype,
+)
+from pandas.core.dtypes.dtypes import (
+    ExtensionDtype,
+    NumpyEADtype,
+)
+
+if TYPE_CHECKING:
+    from pandas._typing import (
+        ArrayLike,
+        DtypeObj,
+        IgnoreRaise,
+    )
+
+    from pandas.core.arrays import ExtensionArray
+
+
+@overload
+def _astype_nansafe(
+    arr: np.ndarray, dtype: np.dtype, copy: bool = ..., skipna: bool = ...
+) -> np.ndarray: ...
+
+
+@overload
+def _astype_nansafe(
+    arr: np.ndarray, dtype: ExtensionDtype, copy: bool = ..., skipna: bool = ...
+) -> ExtensionArray: ...
+
+
+def _astype_nansafe(
+    arr: np.ndarray, dtype: DtypeObj, copy: bool = True, skipna: bool = False
+) -> ArrayLike:
+    """
+    Cast the elements of an array to a given dtype a nan-safe manner.
+
+    Parameters
+    ----------
+    arr : ndarray
+    dtype : np.dtype or ExtensionDtype
+    copy : bool, default True
+        If False, a view will be attempted but may fail, if
+        e.g. the item sizes don't align.
+    skipna: bool, default False
+        Whether or not we should skip NaN when casting as a string-type.
+
+    Raises
+    ------
+    ValueError
+        The dtype was a datetime64/timedelta64 dtype, but it had no unit.
+    """
+
+    # dispatch on extension dtype if needed
+    if isinstance(dtype, ExtensionDtype):
+        return dtype.construct_array_type()._from_sequence(arr, dtype=dtype, copy=copy)
+
+    elif not isinstance(dtype, np.dtype):  # pragma: no cover
+        raise ValueError("dtype must be np.dtype or ExtensionDtype")
+
+    if arr.dtype.kind in "mM":
+        from pandas.core.construction import ensure_wrapped_if_datetimelike
+
+        arr = ensure_wrapped_if_datetimelike(arr)
+        res = arr.astype(dtype, copy=copy)
+        return np.asarray(res)
+
+    if issubclass(dtype.type, str):
+        shape = arr.shape
+        if arr.ndim > 1:
+            arr = arr.ravel()
+        return lib.ensure_string_array(
+            arr, skipna=skipna, convert_na_value=False
+        ).reshape(shape)
+
+    elif np.issubdtype(arr.dtype, np.floating) and dtype.kind in "iu":
+        return _astype_float_to_int_nansafe(arr, dtype, copy)
+
+    elif arr.dtype == object:
+        # if we have a datetime/timedelta array of objects
+        # then coerce to datetime64[ns] and use DatetimeArray.astype
+
+        if lib.is_np_dtype(dtype, "M"):
+            from pandas.core.arrays import DatetimeArray
+
+            dta = DatetimeArray._from_sequence(arr, dtype=dtype)
+            return dta._ndarray
+
+        elif lib.is_np_dtype(dtype, "m"):
+            from pandas.core.construction import ensure_wrapped_if_datetimelike
+
+            # bc we know arr.dtype == object, this is equivalent to
+            #  `np.asarray(to_timedelta(arr))`, but using a lower-level API that
+            #  does not require a circular import.
+            tdvals = array_to_timedelta64(arr).view("m8[ns]")
+
+            tda = ensure_wrapped_if_datetimelike(tdvals)
+            return tda.astype(dtype, copy=False)._ndarray
+
+    if dtype.name in ("datetime64", "timedelta64"):
+        msg = (
+            f"The '{dtype.name}' dtype has no unit. Please pass in "
+            f"'{dtype.name}[ns]' instead."
+        )
+        raise ValueError(msg)
+
+    if copy or arr.dtype == object or dtype == object:
+        # Explicit copy, or required since NumPy can't view from / to object.
+        return arr.astype(dtype, copy=True)
+
+    return arr.astype(dtype, copy=copy)
+
+
+def _astype_float_to_int_nansafe(
+    values: np.ndarray, dtype: np.dtype, copy: bool
+) -> np.ndarray:
+    """
+    astype with a check preventing converting NaN to an meaningless integer value.
+    """
+    if not np.isfinite(values).all():
+        raise IntCastingNaNError(
+            "Cannot convert non-finite values (NA or inf) to integer"
+        )
+    if dtype.kind == "u":
+        # GH#45151
+        if not (values >= 0).all():
+            raise ValueError(f"Cannot losslessly cast from {values.dtype} to {dtype}")
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        return values.astype(dtype, copy=copy)
+
+
+def astype_array(values: ArrayLike, dtype: DtypeObj, copy: bool = False) -> ArrayLike:
+    """
+    Cast array (ndarray or ExtensionArray) to the new dtype.
+
+    Parameters
+    ----------
+    values : ndarray or ExtensionArray
+    dtype : dtype object
+    copy : bool, default False
+        copy if indicated
+
+    Returns
+    -------
+    ndarray or ExtensionArray
+    """
+    if values.dtype == dtype:
+        if copy:
+            return values.copy()
+        return values
+
+    if not isinstance(values, np.ndarray):
+        # i.e. ExtensionArray
+        values = values.astype(dtype, copy=copy)
+
+    else:
+        values = _astype_nansafe(values, dtype, copy=copy)
+
+    # in pandas we don't store numpy str dtypes, so convert to object
+    if isinstance(dtype, np.dtype) and issubclass(values.dtype.type, str):
+        values = np.array(values, dtype=object)
+
+    return values
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def astype_is_view(dtype: DtypeObj, new_dtype: DtypeObj) -> bool:
+    """Checks if astype avoided copying the data.
+
+    Parameters
+    ----------
+    dtype : Original dtype
+    new_dtype : target dtype
+
+    Returns
+    -------
+    True if new data is a view or not guaranteed to be a copy, False otherwise
+    """
+    if dtype.kind in "iufb" and dtype.kind == new_dtype.kind:
+        # fastpath for numeric dtypes
+        if hasattr(dtype, "itemsize") and hasattr(new_dtype, "itemsize"):
+            return dtype.itemsize == new_dtype.itemsize  # pyright: ignore[reportAttributeAccessIssue]
+
+    if isinstance(dtype, np.dtype) and not isinstance(new_dtype, np.dtype):
+        new_dtype, dtype = dtype, new_dtype
+
+    if dtype == new_dtype:
+        return True
+
+    elif isinstance(dtype, np.dtype) and isinstance(new_dtype, np.dtype):
+        # Only equal numpy dtypes avoid a copy
+        return False
+
+    elif is_string_dtype(dtype) and is_string_dtype(new_dtype):
+        # Potentially! a view when converting from object to string
+        return True
+
+    elif is_object_dtype(dtype) and new_dtype.kind == "O":
+        # When the underlying array has dtype object, we don't have to make a copy
+        return True
+
+    elif dtype.kind in "mM" and new_dtype.kind in "mM":
+        dtype = getattr(dtype, "numpy_dtype", dtype)
+        new_dtype = getattr(new_dtype, "numpy_dtype", new_dtype)
+        return getattr(dtype, "unit", None) == getattr(new_dtype, "unit", None)
+
+    numpy_dtype = getattr(dtype, "numpy_dtype", None)
+    new_numpy_dtype = getattr(new_dtype, "numpy_dtype", None)
+
+    if numpy_dtype is None and isinstance(dtype, np.dtype):
+        numpy_dtype = dtype
+
+    if new_numpy_dtype is None and isinstance(new_dtype, np.dtype):
+        new_numpy_dtype = new_dtype
+
+    if numpy_dtype is not None and new_numpy_dtype is not None:
+        # if both have NumPy dtype or one of them is a numpy dtype
+        # they are only a view when the numpy dtypes are equal, e.g.
+        # int64 -> Int64 or int64[pyarrow]
+        # int64 -> Int32 copies
+        return numpy_dtype == new_numpy_dtype
+
+    # Assume this is a view since we don't know for sure if a copy was made
+    return True
+
+
+def astype_array_safe(values: ArrayLike, dtype, copy: bool = False, errors: IgnoreRaise = 'raise') -> ArrayLike:
+    """
+    Cast array (ndarray or ExtensionArray) to the new dtype with error handling.
+
+    This function provides the core implementation for DataFrame/Series.astype and
+    includes all custom pandas logic for type conversion, including NaN-safety,
+    converting string dtypes to object, and proper handling of extension dtypes.
+
+    Parameters
+    ----------
+    values : ArrayLike
+        Input array to be cast. Can be either a numpy ndarray or pandas ExtensionArray.
+    dtype : str or dtype convertible
+        Target data type to cast the array to. Can be a string representation of a dtype,
+        a numpy dtype, or an ExtensionDtype instance.
+    copy : bool, default False
+        Whether to force a copy of the data during conversion. If False, a view will be
+        returned when possible.
+    errors : {'raise', 'ignore'}, default 'raise'
+        How to handle conversion errors:
+        - 'raise': Allow exceptions to be raised when conversion fails
+        - 'ignore': Suppress exceptions and return the original array unchanged on error
+
+    Returns
+    -------
+    ArrayLike
+        Array cast to the specified dtype. Returns either a numpy ndarray or pandas
+        ExtensionArray depending on the target dtype.
+
+    Raises
+    ------
+    ValueError
+        If the 'errors' parameter is not one of the allowed values ('raise', 'ignore').
+    TypeError
+        If an ExtensionDtype class is passed instead of an instance.
+        If conversion fails and errors='raise' (various conversion-specific errors may be raised).
+
+    Notes
+    -----
+    This function handles several pandas-specific conversion behaviors:
+    - Prevents conversion of NaN values to meaningless integer values
+    - Automatically converts numpy string dtypes to object dtype
+    - Handles conversion between different datetime/timedelta units
+    - Supports conversion to and from pandas ExtensionArrays while preserving the
+      documented return type and `copy` behavior
+    """
+    raise NotImplementedError
+
+=== pandas/core/internals/concat.py
+from __future__ import annotations
+
+from typing import (
+    TYPE_CHECKING,
+    cast,
+)
+
+import numpy as np
+
+from pandas._libs import (
+    NaT,
+    algos as libalgos,
+    internals as libinternals,
+    lib,
+)
+from pandas._libs.missing import NA
+from pandas.util._decorators import cache_readonly
+
+from pandas.core.dtypes.cast import ensure_dtype_can_hold_na
+
+
+
+from pandas.core.dtypes.common import (
+    is_1d_only_ea_dtype,
+    needs_i8_conversion,
+)
+from pandas.core.dtypes.concat import concat_compat
+from pandas.core.dtypes.dtypes import ExtensionDtype
+from pandas.core.dtypes.missing import is_valid_na_for_dtype
+
+from pandas.core.construction import ensure_wrapped_if_datetimelike
+from pandas.core.internals.blocks import (
+    ensure_block_shape,
+    new_block_2d,
+)
+from pandas.core.internals.managers import (
+    BlockManager,
+    make_na_array,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import (
+        Generator,
+        Sequence,
+    )
+
+    from pandas._typing import (
+        ArrayLike,
+        AxisInt,
+        DtypeObj,
+        Shape,
+    )
+
+    from pandas import Index
+    from pandas.core.internals.blocks import (
+        Block,
+        BlockPlacement,
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _is_homogeneous_mgr(mgr: BlockManager, first_dtype: DtypeObj) -> bool:
+    """
+    Check if this Manager can be treated as a single ndarray.
+    """
+    if mgr.nblocks != 1:
+        return False
+    blk = mgr.blocks[0]
+    if not (blk.mgr_locs.is_slice_like and blk.mgr_locs.as_slice.step == 1):
+        return False
+
+    return blk.dtype == first_dtype
+
+
+def _concat_homogeneous_fastpath(
+    mgrs_indexers, shape: Shape, first_dtype: np.dtype
+) -> Block:
+    """
+    With single-Block managers with homogeneous dtypes (that can already hold nan),
+    we avoid [...]
+    """
+    # assumes
+    #  all(_is_homogeneous_mgr(mgr, first_dtype) for mgr, _ in in mgrs_indexers)
+
+    if all(not indexers for _, indexers in mgrs_indexers):
+        # https://github.com/pandas-dev/pandas/pull/52685#issuecomment-1523287739
+        arrs = [mgr.blocks[0].values.T for mgr, _ in mgrs_indexers]
+        arr = np.concatenate(arrs).T
+        bp = libinternals.BlockPlacement(slice(shape[0]))
+        nb = new_block_2d(arr, bp)
+        return nb
+
+    arr = np.empty(shape, dtype=first_dtype)
+
+    if first_dtype == np.float64:
+        take_func = libalgos.take_2d_axis0_float64_float64
+    else:
+        take_func = libalgos.take_2d_axis0_float32_float32
+
+    start = 0
+    for mgr, indexers in mgrs_indexers:
+        mgr_len = mgr.shape[1]
+        end = start + mgr_len
+
+        if 0 in indexers:
+            take_func(
+                mgr.blocks[0].values,
+                indexers[0],
+                arr[:, start:end],
+            )
+        else:
+            # No reindexing necessary, we can copy values directly
+            arr[:, start:end] = mgr.blocks[0].values
+
+        start += mgr_len
+
+    bp = libinternals.BlockPlacement(slice(shape[0]))
+    nb = new_block_2d(arr, bp)
+    return nb
+
+
+def _get_combined_plan(
+    mgrs: list[BlockManager],
+) -> Generator[tuple[BlockPlacement, list[JoinUnit]]]:
+    max_len = mgrs[0].shape[0]
+
+    blknos_list = [mgr.blknos for mgr in mgrs]
+    pairs = libinternals.get_concat_blkno_indexers(blknos_list)
+    for blknos, bp in pairs:
+        # assert bp.is_slice_like
+        # assert len(bp) > 0
+
+        units_for_bp = []
+        for k, mgr in enumerate(mgrs):
+            blkno = blknos[k]
+
+            nb = _get_block_for_concat_plan(mgr, bp, blkno, max_len=max_len)
+            unit = JoinUnit(nb)
+            units_for_bp.append(unit)
+
+        yield bp, units_for_bp
+
+
+def _get_block_for_concat_plan(
+    mgr: BlockManager, bp: BlockPlacement, blkno: int, *, max_len: int
+) -> Block:
+    blk = mgr.blocks[blkno]
+    # Assertions disabled for performance:
+    #  assert bp.is_slice_like
+    #  assert blkno != -1
+    #  assert (mgr.blknos[bp] == blkno).all()
+
+    if len(bp) == len(blk.mgr_locs) and (
+        blk.mgr_locs.is_slice_like and blk.mgr_locs.as_slice.step == 1
+    ):
+        nb = blk
+    else:
+        ax0_blk_indexer = mgr.blklocs[bp.indexer]
+
+        slc = lib.maybe_indices_to_slice(ax0_blk_indexer, max_len)
+        # TODO: in all extant test cases 2023-04-08 we have a slice here.
+        #  Will this always be the case?
+        if isinstance(slc, slice):
+            nb = blk.slice_block_columns(slc)
+        else:
+            nb = blk.take_block_columns(slc)
+
+    # assert nb.shape == (len(bp), mgr.shape[1])
+    return nb
+
+
+class JoinUnit:
+    def __init__(self, block: Block) -> None:
+        self.block = block
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.block!r})"
+
+    def _is_valid_na_for(self, dtype: DtypeObj) -> bool:
+        """
+        Check that we are all-NA of a type/dtype that is compatible with this dtype.
+        Augments `self.is_na` with an additional check of the type of NA values.
+        """
+        if not self.is_na:
+            return False
+
+        blk = self.block
+        if blk.dtype.kind == "V":
+            return True
+
+        if blk.dtype == object:
+            values = blk.values
+            return all(is_valid_na_for_dtype(x, dtype) for x in values.ravel(order="K"))
+
+        na_value = blk.fill_value
+        if na_value is NaT and blk.dtype != dtype:
+            # e.g. we are dt64 and other is td64
+            # fill_values match but we should not cast blk.values to dtype
+            # TODO: this will need updating if we ever have non-nano dt64/td64
+            return False
+
+        if na_value is NA and needs_i8_conversion(dtype):
+            # FIXME: kludge; test_append_empty_frame_with_timedelta64ns_nat
+            #  e.g. blk.dtype == "Int64" and dtype is td64, we dont want
+            #  to consider these as matching
+            return False
+
+        # TODO: better to use can_hold_element?
+        return is_valid_na_for_dtype(na_value, dtype)
+
+    @cache_readonly
+    def is_na(self) -> bool:
+        blk = self.block
+        if blk.dtype.kind == "V":
+            return True
+        return False
+
+    def get_reindexed_values(self, empty_dtype: DtypeObj, upcasted_na) -> ArrayLike:
+        values: ArrayLike
+
+        if upcasted_na is None and self.block.dtype.kind != "V":
+            # No upcasting is necessary
+            return self.block.values
+        else:
+            fill_value = upcasted_na
+
+            if self._is_valid_na_for(empty_dtype):
+                # note: always holds when self.block.dtype.kind == "V"
+                blk_dtype = self.block.dtype
+
+                if blk_dtype == np.dtype("object"):
+                    # we want to avoid filling with np.nan if we are
+                    # using None; we already know that we are all
+                    # nulls
+                    values = cast(np.ndarray, self.block.values)
+                    if values.size and values[0, 0] is None:
+                        fill_value = None
+
+                return make_na_array(empty_dtype, self.block.shape, fill_value)
+
+            return self.block.values
+
+
+def _concatenate_join_units(join_units: list[JoinUnit], copy: bool) -> ArrayLike:
+    """
+    Concatenate values from several join units along axis=1.
+    """
+    empty_dtype = _get_empty_dtype(join_units)
+
+    has_none_blocks = any(unit.block.dtype.kind == "V" for unit in join_units)
+    upcasted_na = _dtype_to_na_value(empty_dtype, has_none_blocks)
+
+    to_concat = [
+        ju.get_reindexed_values(empty_dtype=empty_dtype, upcasted_na=upcasted_na)
+        for ju in join_units
+    ]
+
+    if any(is_1d_only_ea_dtype(t.dtype) for t in to_concat):
+        # TODO(EA2D): special case not needed if all EAs used HybridBlocks
+
+        # error: No overload variant of "__getitem__" of "ExtensionArray" matches
+        # argument type "Tuple[int, slice]"
+        to_concat = [
+            t if is_1d_only_ea_dtype(t.dtype) else t[0, :]  # type: ignore[call-overload]
+            for t in to_concat
+        ]
+        concat_values = concat_compat(to_concat, axis=0, ea_compat_axis=True)
+        concat_values = ensure_block_shape(concat_values, 2)
+
+    else:
+        concat_values = concat_compat(to_concat, axis=1)
+
+    return concat_values
+
+
+def _dtype_to_na_value(dtype: DtypeObj, has_none_blocks: bool):
+    """
+    Find the NA value to go with this dtype.
+    """
+    if isinstance(dtype, ExtensionDtype):
+        return dtype.na_value
+    elif dtype.kind in "mM":
+        return dtype.type("NaT")
+    elif dtype.kind in "fc":
+        return dtype.type("NaN")
+    elif dtype.kind == "b":
+        # different from missing.na_value_for_dtype
+        return None
+    elif dtype.kind in "iu":
+        if not has_none_blocks:
+            # different from missing.na_value_for_dtype
+            return None
+        return np.nan
+    elif dtype.kind == "O":
+        return np.nan
+    raise NotImplementedError
+
+
+def _get_empty_dtype(join_units: Sequence[JoinUnit]) -> DtypeObj:
+    """
+    Return dtype and N/A values to use when concatenating specified units.
+
+    Returned N/A value may be None which means there was no casting involved.
+
+    Returns
+    -------
+    dtype
+    """
+    if lib.dtypes_all_equal([ju.block.dtype for ju in join_units]):
+        empty_dtype = join_units[0].block.dtype
+        return empty_dtype
+
+    has_none_blocks = any(unit.block.dtype.kind == "V" for unit in join_units)
+
+    dtypes = [unit.block.dtype for unit in join_units if not unit.is_na]
+
+    dtype = find_common_type(dtypes)
+    if has_none_blocks:
+        dtype = ensure_dtype_can_hold_na(dtype)
+
+    return dtype
+
+
+def _is_uniform_join_units(join_units: list[JoinUnit]) -> bool:
+    """
+    Check if the join units consist of blocks of uniform type that can
+    be concatenated using Block.concat_same_type instead of the generic
+    _concatenate_join_units (which uses `concat_compat`).
+
+    """
+    first = join_units[0].block
+    if first.dtype.kind == "V":
+        return False
+    return (
+        # exclude cases where a) ju.block is None or b) we have e.g. Int64+int64
+        all(type(ju.block) is type(first) for ju in join_units)
+        and
+        # e.g. DatetimeLikeBlock can be dt64 or td64, but these are not uniform
+        all(
+            ju.block.dtype == first.dtype
+            # GH#42092 we only want the dtype_equal check for non-numeric blocks
+            #  (for now, may change but that would need a deprecation)
+            or ju.block.dtype.kind in "iub"
+            for ju in join_units
+        )
+        and
+        # no blocks that would get missing values (can lead to type upcasts)
+        # unless we're an extension dtype.
+        all(not ju.is_na or ju.block.is_extension for ju in join_units)
+    )
+
+
+def _maybe_reindex_columns_na_proxy(axes: list[Index], mgrs_indexers: list[tuple[BlockManager, dict[int, np.ndarray]]], needs_copy: bool) -> list[BlockManager]:
+    """
+    Reindex along columns so that all of the BlockManagers being concatenated
+    have matching columns.
+
+    Columns added in this reindexing have dtype=np.void, indicating they
+    should be ignored when choosing a column's final dtype.
+
+    Parameters
+    ----------
+    axes : list[Index]
+        List of Index objects representing the target axes for reindexing.
+        The axes define the desired structure for all BlockManagers.
+    mgrs_indexers : list[tuple[BlockManager, dict[int, np.ndarray]]]
+        List of tuples where each tuple contains:
+        - BlockManager: The block manager to be reindexed
+        - dict[int, np.ndarray]: Dictionary mapping axis numbers to indexer arrays
+          that specify how to reindex along each axis
+    needs_copy : bool
+        Whether to create a copy of the BlockManager when no reindexing is needed.
+        If True and no indexers are provided, a copy will be made.
+
+    Returns
+    -------
+    list[BlockManager]
+        List of reindexed BlockManagers with matching column structure.
+        All returned managers will have columns that align with the provided axes.
+
+    Notes
+    -----
+    - Columns introduced while aligning managers use `np.void` placeholders and do
+      not influence the final dtype selected for those columns
+    - When `needs_copy` is True and a manager requires no reindexing, the returned
+      manager is a copy
+    """
+    raise NotImplementedError
+
+
+def concatenate_managers(mgrs_indexers, axes: list[Index], concat_axis: AxisInt, copy: bool) -> BlockManager:
+    """
+    Concatenate block managers along a specified axis to create a single BlockManager.
+
+    This function combines multiple BlockManager objects into one along the specified
+    axis while respecting the supplied result axes, reindexers, dtype compatibility,
+    missing columns, and copy semantics.
+
+    Parameters
+    ----------
+    mgrs_indexers : list of tuple
+        List of tuples where each tuple contains a BlockManager and a dictionary
+        mapping axis numbers to indexer arrays. The indexers specify how to
+        reindex each manager's axes during concatenation.
+    axes : list of Index
+        List of Index objects representing the axes of the resulting BlockManager.
+        The length should match the number of dimensions in the data.
+    concat_axis : int
+        The internal BlockManager axis along which to concatenate: 0 corresponds
+        to horizontal/column concatenation, while 1 corresponds to vertical/row
+        concatenation.
+    copy : bool
+        Whether to copy the data. When True and concat_axis is 0, forces a copy
+        of the data to avoid modifying the original managers.
+
+    Returns
+    -------
+    BlockManager
+        A new BlockManager containing the concatenated data from all input
+        managers with the specified axes.
+
+    Notes
+    -----
+    - For horizontal concatenation, managers are aligned to the result columns and
+      the supplied `copy` flag prevents reuse of mutable input data when requested
+    - For vertical concatenation, columns are aligned before combining values and
+      missing-column placeholders do not force an inappropriate result dtype
+    - NumPy-backed and extension-array-backed columns retain pandas-compatible
+      concatenation and dtype behavior
+    """
+    raise NotImplementedError
+
+=== pandas/core/reshape/concat.py
+"""
+Concat routines.
+"""
+
+from __future__ import annotations
+
+from collections import abc
+import types
+from typing import (
+    TYPE_CHECKING,
+    Literal,
+    cast,
+    overload,
+)
+import warnings
+
+import numpy as np
+
+from pandas._libs import lib
+from pandas.errors import Pandas4Warning
+from pandas.util._decorators import set_module
+from pandas.util._exceptions import find_stack_level
+
+from pandas.core.dtypes.common import (
+    is_bool,
+    is_scalar,
+)
+from pandas.core.dtypes.concat import concat_compat
+from pandas.core.dtypes.generic import (
+    ABCDataFrame,
+    ABCSeries,
+)
+from pandas.core.dtypes.missing import isna
+
+from pandas.core.arrays.categorical import (
+    factorize_from_iterable,
+    factorize_from_iterables,
+)
+import pandas.core.common as com
+from pandas.core.indexes.api import (
+    Index,
+    MultiIndex,
+    all_indexes_same,
+    default_index,
+    ensure_index,
+    get_objs_combined_axis,
+    get_unanimous_names,
+)
+
+
+if TYPE_CHECKING:
+    from collections.abc import (
+        Callable,
+        Hashable,
+        Iterable,
+        Mapping,
+    )
+
+    from pandas._typing import (
+        Axis,
+        AxisInt,
+        HashableT,
+    )
+
+    from pandas import (
+        DataFrame,
+        Series,
+    )
+
+# ---------------------------------------------------------------------
+# Concatenate DataFrame objects
+
+
+@overload
+def concat(
+    objs: Iterable[DataFrame] | Mapping[HashableT, DataFrame],
+    *,
+    axis: Literal[0, "index"] = ...,
+    join: str = ...,
+    ignore_index: bool = ...,
+    keys: Iterable[Hashable] | None = ...,
+    levels=...,
+    names: list[HashableT] | None = ...,
+    verify_integrity: bool = ...,
+    sort: bool = ...,
+    copy: bool | lib.NoDefault = ...,
+) -> DataFrame: ...
+
+
+@overload
+def concat(
+    objs: Iterable[Series] | Mapping[HashableT, Series],
+    *,
+    axis: Literal[0, "index"] = ...,
+    join: str = ...,
+    ignore_index: bool = ...,
+    keys: Iterable[Hashable] | None = ...,
+    levels=...,
+    names: list[HashableT] | None = ...,
+    verify_integrity: bool = ...,
+    sort: bool = ...,
+    copy: bool | lib.NoDefault = ...,
+) -> Series: ...
+
+
+@overload
+def concat(
+    objs: Iterable[Series | DataFrame] | Mapping[HashableT, Series | DataFrame],
+    *,
+    axis: Literal[0, "index"] = ...,
+    join: str = ...,
+    ignore_index: bool = ...,
+    keys: Iterable[Hashable] | None = ...,
+    levels=...,
+    names: list[HashableT] | None = ...,
+    verify_integrity: bool = ...,
+    sort: bool = ...,
+    copy: bool | lib.NoDefault = ...,
+) -> DataFrame | Series: ...
+
+
+@overload
+def concat(
+    objs: Iterable[Series | DataFrame] | Mapping[HashableT, Series | DataFrame],
+    *,
+    axis: Literal[1, "columns"],
+    join: str = ...,
+    ignore_index: bool = ...,
+    keys: Iterable[Hashable] | None = ...,
+    levels=...,
+    names: list[HashableT] | None = ...,
+    verify_integrity: bool = ...,
+    sort: bool = ...,
+    copy: bool | lib.NoDefault = ...,
+) -> DataFrame: ...
+
+
+@overload
+def concat(
+    objs: Iterable[Series | DataFrame] | Mapping[HashableT, Series | DataFrame],
+    *,
+    axis: Axis = ...,
+    join: str = ...,
+    ignore_index: bool = ...,
+    keys: Iterable[Hashable] | None = ...,
+    levels=...,
+    names: list[HashableT] | None = ...,
+    verify_integrity: bool = ...,
+    sort: bool = ...,
+    copy: bool | lib.NoDefault = ...,
+) -> DataFrame | Series: ...
+
+
+@set_module("pandas")
+def concat(
+    objs: Iterable[Series | DataFrame] | Mapping[HashableT, Series | DataFrame],
+    *,
+    axis: Axis = 0,
+    join: str = "outer",
+    ignore_index: bool = False,
+    keys: Iterable[Hashable] | None = None,
+    levels=None,
+    names: list[HashableT] | None = None,
+    verify_integrity: bool = False,
+    sort: bool = False,
+    copy: bool | lib.NoDefault = lib.no_default,
+) -> DataFrame | Series:
+    """
+    Concatenate pandas objects along a particular axis.
+
+    Allows optional set logic along the other axes.
+
+    Can also add a layer of hierarchical indexing on the concatenation axis,
+    which may be useful if the labels are the same (or overlapping) on
+    the passed axis number.
+
+    Parameters
+    ----------
+    objs : an iterable or mapping of Series or DataFrame objects
+        If a mapping is passed, the keys will be used as the `keys`
+        argument, unless it is passed, in which case the values will be
+        selected (see below). Any None objects will be dropped silently unless
+        they are all None in which case a ValueError will be raised.
+    axis : {0/'index', 1/'columns'}, default 0
+        The axis to concatenate along.
+    join : {'inner', 'outer'}, default 'outer'
+        How to handle indexes on other axis (or axes).
+    ignore_index : bool, default False
+        If True, do not use the index values along the concatenation axis. The
+        resulting axis will be labeled 0, ..., n - 1. This is useful if you are
+        concatenating objects where the concatenation axis does not have
+        meaningful indexing information. Note the index values on the other
+        axes are still respected in the join.
+    keys : sequence, default None
+        If multiple levels passed, should contain tuples. Construct
+        hierarchical index using the passed keys as the outermost level.
+    levels : list of sequences, default None
+        Specific levels (unique values) to use for constructing a
+        MultiIndex. Otherwise they will be inferred from the keys.
+    names : list, default None
+        Names for the levels in the resulting hierarchical index.
+    verify_integrity : bool, default False
+        Check whether the new concatenated axis contains duplicates. This can
+        be very expensive relative to the actual data concatenation.
+    sort : bool, default False
+        Sort non-concatenation axis. One exception to this is when the
+        non-concatenation axis is a DatetimeIndex and join='outer' and the axis is
+        not already aligned. In that case, the non-concatenation axis is always
+        sorted lexicographically.
+    copy : bool, default False
+        If False, do not copy data unnecessarily.
+
+        .. note::
+            The `copy` keyword will change behavior in pandas 3.0.
+            `Copy-on-Write
+            <https://pandas.pydata.org/docs/dev/user_guide/copy_on_write.html>`__
+            will be enabled by default, which means that all methods with a
+            `copy` keyword will use a lazy copy mechanism to defer the copy and
+            ignore the `copy` keyword. The `copy` keyword will be removed in a
+            future version of pandas.
+
+            You can already get the future behavior and improvements through
+            enabling copy on write ``pd.options.mode.copy_on_write = True``
+
+        .. deprecated:: 3.0.0
+
+    Returns
+    -------
+    object, type of objs
+        When concatenating all ``Series`` along the index (axis=0), a
+        ``Series`` is returned. When ``objs`` contains at least one
+        ``DataFrame``, a ``DataFrame`` is returned. When concatenating along
+        the columns (axis=1), a ``DataFrame`` is returned.
+
+    See Also
+    --------
+    DataFrame.join : Join DataFrames using indexes.
+    DataFrame.merge : Merge DataFrames by indexes or columns.
+
+    Notes
+    -----
+    The keys, levels, and names arguments are all optional.
+
+    A walkthrough of how this method fits in with other tools for combining
+    pandas objects can be found `here
+    <https://pandas.pydata.org/pandas-docs/stable/user_guide/merging.html>`__.
+
+    It is not recommended to build DataFrames by adding single rows in a
+    for loop. Build a list of rows and make a DataFrame in a single concat.
+
+    Examples
+    --------
+    Combine two ``Series``.
+
+    >>> s1 = pd.Series(["a", "b"])
+    >>> s2 = pd.Series(["c", "d"])
+    >>> pd.concat([s1, s2])
+    0    a
+    1    b
+    0    c
+    1    d
+    dtype: str
+
+    Clear the existing index and reset it in the result
+    by setting the ``ignore_index`` option to ``True``.
+
+    >>> pd.concat([s1, s2], ignore_index=True)
+    0    a
+    1    b
+    2    c
+    3    d
+    dtype: str
+
+    Add a hierarchical index at the outermost level of
+    the data with the ``keys`` option.
+
+    >>> pd.concat([s1, s2], keys=["s1", "s2"])
+    s1  0    a
+        1    b
+    s2  0    c
+        1    d
+    dtype: str
+
+    Label the index keys you create with the ``names`` option.
+
+    >>> pd.concat([s1, s2], keys=["s1", "s2"], names=["Series name", "Row ID"])
+    Series name  Row ID
+    s1           0         a
+                 1         b
+    s2           0         c
+                 1         d
+    dtype: str
+
+    Combine two ``DataFrame`` objects with identical columns.
+
+    >>> df1 = pd.DataFrame([["a", 1], ["b", 2]], columns=["letter", "number"])
+    >>> df1
+      letter  number
+    0      a       1
+    1      b       2
+    >>> df2 = pd.DataFrame([["c", 3], ["d", 4]], columns=["letter", "number"])
+    >>> df2
+      letter  number
+    0      c       3
+    1      d       4
+    >>> pd.concat([df1, df2])
+      letter  number
+    0      a       1
+    1      b       2
+    0      c       3
+    1      d       4
+
+    Combine ``DataFrame`` objects with overlapping columns
+    and return everything. Columns outside the intersection will
+    be filled with ``NaN`` values.
+
+    >>> df3 = pd.DataFrame(
+    ...     [["c", 3, "cat"], ["d", 4, "dog"]], columns=["letter", "number", "animal"]
+    ... )
+    >>> df3
+      letter  number animal
+    0      c       3    cat
+    1      d       4    dog
+    >>> pd.concat([df1, df3], sort=False)
+      letter  number animal
+    0      a       1    NaN
+    1      b       2    NaN
+    0      c       3    cat
+    1      d       4    dog
+
+    Combine ``DataFrame`` objects with overlapping columns
+    and return only those that are shared by passing ``inner`` to
+    the ``join`` keyword argument.
+
+    >>> pd.concat([df1, df3], join="inner")
+      letter  number
+    0      a       1
+    1      b       2
+    0      c       3
+    1      d       4
+
+    Combine ``DataFrame`` objects horizontally along the x axis by
+    passing in ``axis=1``.
+
+    >>> df4 = pd.DataFrame(
+    ...     [["bird", "polly"], ["monkey", "george"]], columns=["animal", "name"]
+    ... )
+    >>> pd.concat([df1, df4], axis=1)
+      letter  number  animal    name
+    0      a       1    bird   polly
+    1      b       2  monkey  george
+
+    Prevent the result from including duplicate index values with the
+    ``verify_integrity`` option.
+
+    >>> df5 = pd.DataFrame([1], index=["a"])
+    >>> df5
+       0
+    a  1
+    >>> df6 = pd.DataFrame([2], index=["a"])
+    >>> df6
+       0
+    a  2
+    >>> pd.concat([df5, df6], verify_integrity=True)
+    Traceback (most recent call last):
+        ...
+    ValueError: Indexes have overlapping values: ['a']
+
+    Append a single row to the end of a ``DataFrame`` object.
+
+    >>> df7 = pd.DataFrame({"a": 1, "b": 2}, index=[0])
+    >>> df7
+        a   b
+    0   1   2
+    >>> new_row = pd.Series({"a": 3, "b": 4})
+    >>> new_row
+    a    3
+    b    4
+    dtype: int64
+    >>> pd.concat([df7, new_row.to_frame().T], ignore_index=True)
+        a   b
+    0   1   2
+    1   3   4
+    """
+    if ignore_index and keys is not None:
+        raise ValueError(
+            f"Cannot set {ignore_index=} and specify keys. Either should be used."
+        )
+
+    if copy is not lib.no_default:
+        warnings.warn(
+            "The copy keyword is deprecated and will be removed in a future "
+            "version. Copy-on-Write is active in pandas since 3.0 which utilizes "
+            "a lazy copy mechanism that defers copies until necessary. Use "
+            ".copy() to make an eager copy if necessary.",
+            Pandas4Warning,
+            stacklevel=find_stack_level(),
+        )
+    if join == "outer":
+        intersect = False
+    elif join == "inner":
+        intersect = True
+    else:  # pragma: no cover
+        raise ValueError(
+            "Only can inner (intersect) or outer (union) join the other axis"
+        )
+
+    if not is_bool(sort):
+        raise ValueError(
+            f"The 'sort' keyword only accepts boolean values; {sort} was passed."
+        )
+    sort = bool(sort)
+
+    objs, keys, ndims = _clean_keys_and_objs(objs, keys)
+
+    # select an object to be our result reference
+    sample, objs = _get_sample_object(objs, ndims, keys, names, levels, intersect)
+
+    # Standardize axis parameter to int
+    if sample.ndim == 1:
+        from pandas import DataFrame
+
+        bm_axis = DataFrame._get_axis_number(axis)
+        is_frame = False
+        is_series = True
+    else:
+        bm_axis = sample._get_axis_number(axis)
+        is_frame = True
+        is_series = False
+
+        # Need to flip BlockManager axis in the DataFrame special case
+        bm_axis = sample._get_block_manager_axis(bm_axis)
+
+    # if we have mixed ndims, then convert to highest ndim
+    # creating column numbers as needed
+    if len(ndims) > 1:
+        objs = _sanitize_mixed_ndim(objs, sample, ignore_index, bm_axis)
+
+    axis = 1 - bm_axis if is_frame else 0
+    names = names or getattr(keys, "names", None)
+    return _get_result(
+        objs,
+        is_series,
+        bm_axis,
+        ignore_index,
+        intersect,
+        sort,
+        keys,
+        levels,
+        verify_integrity,
+        names,
+        axis,
+    )
+
+
+def _sanitize_mixed_ndim(
+    objs: list[Series | DataFrame],
+    sample: Series | DataFrame,
+    ignore_index: bool,
+    axis: AxisInt,
+) -> list[Series | DataFrame]:
+    # if we have mixed ndims, then convert to highest ndim
+    # creating column numbers as needed
+
+    new_objs = []
+
+    current_column = 0
+    max_ndim = sample.ndim
+    for obj in objs:
+        ndim = obj.ndim
+        if ndim == max_ndim:
+            pass
+
+        elif ndim != max_ndim - 1:
+            raise ValueError(
+                "cannot concatenate unaligned mixed dimensional NDFrame objects"
+            )
+
+        else:
+            name = getattr(obj, "name", None)
+            rename_columns = False
+            if ignore_index or name is None:
+                if axis == 1:
+                    # doing a row-wise concatenation so need everything
+                    # to line up
+                    if name is None:
+                        name = 0
+                        rename_columns = True
+                else:
+                    # doing a column-wise concatenation so need series
+                    # to have unique names
+                    if name is None:
+                        rename_columns = True
+                        name = current_column
+                        current_column += 1
+                obj = sample._constructor(obj, copy=False)
+                if isinstance(obj, ABCDataFrame) and rename_columns:
+                    obj.columns = range(name, name + 1, 1)
+            else:
+                obj = sample._constructor({name: obj}, copy=False)
+
+        new_objs.append(obj)
+
+    return new_objs
+
+
+def _get_result(
+    objs: list[Series | DataFrame],
+    is_series: bool,
+    bm_axis: AxisInt,
+    ignore_index: bool,
+    intersect: bool,
+    sort: bool,
+    keys: Iterable[Hashable] | None,
+    levels,
+    verify_integrity: bool,
+    names: list[HashableT] | None,
+    axis: AxisInt,
+):
+    cons: Callable[..., DataFrame | Series]
+    sample: DataFrame | Series
+
+    # series only
+    if is_series:
+        sample = cast("Series", objs[0])
+
+        # stack blocks
+        if bm_axis == 0:
+            name = com.consensus_name_attr(objs)
+            cons = sample._constructor
+
+            arrs = [ser._values for ser in objs]
+
+            res = concat_compat(arrs, axis=0)
+
+            if ignore_index:
+                new_index: Index = default_index(len(res))
+            else:
+                new_index = _get_concat_axis_series(
+                    objs,
+                    ignore_index,
+                    bm_axis,
+                    keys,
+                    levels,
+                    verify_integrity,
+                    names,
+                )
+
+            mgr = type(sample._mgr).from_array(res, index=new_index)
+
+            result = sample._constructor_from_mgr(mgr, axes=mgr.axes)
+            result._name = name
+            return result.__finalize__(
+                types.SimpleNamespace(input_objs=objs), method="concat"
+            )
+
+        # combine as columns in a frame
+        else:
+            data = dict(enumerate(objs))
+
+            # GH28330 Preserves subclassed objects through concat
+            cons = sample._constructor_expanddim
+
+            index = get_objs_combined_axis(
+                objs,
+                axis=objs[0]._get_block_manager_axis(0),
+                intersect=intersect,
+                sort=sort,
+            )
+            columns = _get_concat_axis_series(
+                objs, ignore_index, bm_axis, keys, levels, verify_integrity, names
+            )
+            df = cons(data, index=index, copy=False)
+            df.columns = columns
+            return df.__finalize__(
+                types.SimpleNamespace(input_objs=objs), method="concat"
+            )
+
+    # combine block managers
+    else:
+        sample = cast("DataFrame", objs[0])
+
+        mgrs_indexers = []
+        result_axes = new_axes(
+            objs,
+            bm_axis,
+            intersect,
+            sort,
+            keys,
+            names,
+            axis,
+            levels,
+            verify_integrity,
+            ignore_index,
+        )
+        for obj in objs:
+            indexers = {}
+            for ax, new_labels in enumerate(result_axes):
+                # ::-1 to convert BlockManager ax to DataFrame ax
+                if ax == bm_axis:
+                    # Suppress reindexing on concat axis
+                    continue
+
+                # 1-ax to convert BlockManager axis to DataFrame axis
+                obj_labels = obj.axes[1 - ax]
+                if not new_labels.equals(obj_labels):
+                    indexers[ax] = obj_labels.get_indexer(new_labels)
+
+            mgrs_indexers.append((obj._mgr, indexers))
+
+        new_data = concatenate_managers(
+            mgrs_indexers, result_axes, concat_axis=bm_axis, copy=False
+        )
+
+        out = sample._constructor_from_mgr(new_data, axes=new_data.axes)
+        return out.__finalize__(types.SimpleNamespace(input_objs=objs), method="concat")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _get_concat_axis_series(
+    objs: list[Series | DataFrame],
+    ignore_index: bool,
+    bm_axis: AxisInt,
+    keys: Iterable[Hashable] | None,
+    levels,
+    verify_integrity: bool,
+    names: list[HashableT] | None,
+) -> Index:
+    """Return result concat axis when concatenating Series objects."""
+    if ignore_index:
+        return default_index(len(objs))
+    elif bm_axis == 0:
+        indexes = [x.index for x in objs]
+        if keys is None:
+            if levels is not None:
+                raise ValueError("levels supported only when keys is not None")
+            concat_axis = _concat_indexes(indexes)
+        else:
+            concat_axis = _make_concat_multiindex(indexes, keys, levels, names)
+        if verify_integrity and not concat_axis.is_unique:
+            overlap = concat_axis[concat_axis.duplicated()].unique()
+            raise ValueError(f"Indexes have overlapping values: {overlap}")
+        return concat_axis
+    elif keys is None:
+        result_names: list[Hashable] = [None] * len(objs)
+        num = 0
+        has_names = False
+        for i, x in enumerate(objs):
+            if x.ndim != 1:
+                raise TypeError(
+                    f"Cannot concatenate type 'Series' with "
+                    f"object of type '{type(x).__name__}'"
+                )
+            if x.name is not None:
+                result_names[i] = x.name
+                has_names = True
+            else:
+                result_names[i] = num
+                num += 1
+        if has_names:
+            return Index(result_names)
+        else:
+            return default_index(len(objs))
+    else:
+        return ensure_index(keys).set_names(names)  # type: ignore[arg-type]
+
+
+def _get_concat_axis_dataframe(
+    objs: list[Series | DataFrame],
+    axis: AxisInt,
+    ignore_index: bool,
+    keys: Iterable[Hashable] | None,
+    names: list[HashableT] | None,
+    levels,
+    verify_integrity: bool,
+) -> Index:
+    """Return result concat axis when concatenating DataFrame objects."""
+    indexes_gen = (x.axes[axis] for x in objs)
+
+    if ignore_index:
+        return default_index(sum(len(i) for i in indexes_gen))
+    else:
+        indexes = list(indexes_gen)
+
+    if keys is None:
+        if levels is not None:
+            raise ValueError("levels supported only when keys is not None")
+        concat_axis = _concat_indexes(indexes)
+    else:
+        concat_axis = _make_concat_multiindex(indexes, keys, levels, names)
+
+    if verify_integrity and not concat_axis.is_unique:
+        overlap = concat_axis[concat_axis.duplicated()].unique()
+        raise ValueError(f"Indexes have overlapping values: {overlap}")
+
+    return concat_axis
+
+
+def _clean_keys_and_objs(
+    objs: Iterable[Series | DataFrame] | Mapping[HashableT, Series | DataFrame],
+    keys,
+) -> tuple[list[Series | DataFrame], Index | None, set[int]]:
+    """
+    Returns
+    -------
+    clean_objs : list[Series | DataFrame]
+        List of DataFrame and Series with Nones removed.
+    keys : Index | None
+        None if keys was None
+        Index if objs was a Mapping or keys was not None. Filtered where objs was None.
+    ndim : set[int]
+        Unique .ndim attribute of obj encountered.
+    """
+    if isinstance(objs, abc.Mapping):
+        if keys is None:
+            keys = objs.keys()
+        objs = [objs[k] for k in keys]
+    elif isinstance(objs, (ABCSeries, ABCDataFrame)) or is_scalar(objs):
+        raise TypeError(
+            "first argument must be an iterable of pandas "
+            f'objects, you passed an object of type "{type(objs).__name__}"'
+        )
+    elif not isinstance(objs, abc.Sized):
+        objs = list(objs)
+
+    if len(objs) == 0:
+        raise ValueError("No objects to concatenate")
+
+    if keys is not None:
+        if not isinstance(keys, Index):
+            keys = Index(keys)
+        if len(keys) != len(objs):
+            # GH#43485
+            raise ValueError(
+                f"The length of the keys ({len(keys)}) must match "
+                f"the length of the objects to concatenate ({len(objs)})"
+            )
+
+    # GH#1649
+    key_indices = []
+    clean_objs = []
+    ndims = set()
+    for i, obj in enumerate(objs):
+        if obj is None:
+            continue
+        elif isinstance(obj, (ABCSeries, ABCDataFrame)):
+            key_indices.append(i)
+            clean_objs.append(obj)
+            ndims.add(obj.ndim)
+        else:
+            msg = (
+                f"cannot concatenate object of type '{type(obj)}'; "
+                "only Series and DataFrame objs are valid"
+            )
+            raise TypeError(msg)
+
+    if keys is not None and len(key_indices) < len(keys):
+        keys = keys.take(key_indices)
+
+    if len(clean_objs) == 0:
+        raise ValueError("All objects passed were None")
+
+    return clean_objs, keys, ndims
+
+
+def _get_sample_object(
+    objs: list[Series | DataFrame],
+    ndims: set[int],
+    keys,
+    names,
+    levels,
+    intersect: bool,
+) -> tuple[Series | DataFrame, list[Series | DataFrame]]:
+    # get the sample
+    # want the highest ndim that we have, and must be non-empty
+    # unless all objs are empty
+    if len(ndims) > 1:
+        max_ndim = max(ndims)
+        for obj in objs:
+            if obj.ndim == max_ndim and sum(obj.shape):  # type: ignore[arg-type]
+                return obj, objs
+    elif keys is None and names is None and levels is None and not intersect:
+        # filter out the empties if we have not multi-index possibilities
+        # note to keep empty Series as it affect to result columns / name
+        if ndims.pop() == 2:
+            non_empties = [obj for obj in objs if sum(obj.shape)]
+        else:
+            non_empties = objs
+
+        if len(non_empties):
+            return non_empties[0], non_empties
+
+    return objs[0], objs
+
+
+def _concat_indexes(indexes) -> Index:
+    return indexes[0].append(indexes[1:])
+
+
+def validate_unique_levels(levels: list[Index]) -> None:
+    for level in levels:
+        if not level.is_unique:
+            raise ValueError(f"Level values not unique: {level.tolist()}")
+
+
+def _make_concat_multiindex(indexes, keys, levels=None, names=None) -> MultiIndex:
+    if (levels is None and isinstance(keys[0], tuple)) or (
+        levels is not None and len(levels) > 1
+    ):
+        zipped = list(zip(*keys))
+        if names is None:
+            names = [None] * len(zipped)
+
+        if levels is None:
+            _, levels = factorize_from_iterables(zipped)
+        else:
+            levels = [ensure_index(x) for x in levels]
+            validate_unique_levels(levels)
+    else:
+        zipped = [keys]
+        if names is None:
+            names = [None]
+
+        if levels is None:
+            levels = [ensure_index(keys).unique()]
+        else:
+            levels = [ensure_index(x) for x in levels]
+            validate_unique_levels(levels)
+
+    if not all_indexes_same(indexes):
+        codes_list = []
+
+        # things are potentially different sizes, so compute the exact codes
+        # for each level and pass those to MultiIndex.from_arrays
+
+        for hlevel, level in zip(zipped, levels):
+            to_concat = []
+            if isinstance(hlevel, Index) and hlevel.equals(level):
+                lens = [len(idx) for idx in indexes]
+                codes_list.append(np.repeat(np.arange(len(hlevel)), lens))
+            else:
+                for key, index in zip(hlevel, indexes):
+                    # Find matching codes, include matching nan values as equal.
+                    mask = (isna(level) & isna(key)) | (level == key)
+                    if not mask.any():
+                        raise ValueError(f"Key {key} not in level {level}")
+                    i = np.nonzero(mask)[0][0]
+
+                    to_concat.append(np.repeat(i, len(index)))
+                codes_list.append(np.concatenate(to_concat))
+
+        concat_index = _concat_indexes(indexes)
+
+        # these go at the end
+        if isinstance(concat_index, MultiIndex):
+            levels.extend(concat_index.levels)
+            codes_list.extend(concat_index.codes)
+        else:
+            codes, categories = factorize_from_iterable(concat_index)
+            levels.append(categories)
+            codes_list.append(codes)
+
+        if len(names) == len(levels):
+            names = list(names)
+        else:
+            # make sure that all of the passed indices have the same nlevels
+            if not len({idx.nlevels for idx in indexes}) == 1:
+                raise AssertionError(
+                    "Cannot concat indices that do not have the same number of levels"
+                )
+
+            # also copies
+            names = list(names) + list(get_unanimous_names(*indexes))
+
+        return MultiIndex(
+            levels=levels, codes=codes_list, names=names, verify_integrity=False
+        )
+
+    new_index = indexes[0]
+    n = len(new_index)
+    kpieces = len(indexes)
+
+    # also copies
+    new_names = list(names)
+    new_levels = list(levels)
+
+    # construct codes
+    new_codes = []
+
+    # do something a bit more speedy
+
+    for hlevel, level in zip(zipped, levels):
+        hlevel_index = ensure_index(hlevel)
+        mapped = level.get_indexer(hlevel_index)
+
+        mask = mapped == -1
+        if mask.any():
+            raise ValueError(
+                f"Values not found in passed level: {hlevel_index[mask]!s}"
+            )
+
+        new_codes.append(np.repeat(mapped, n))
+
+    if isinstance(new_index, MultiIndex):
+        new_levels.extend(new_index.levels)
+        new_codes.extend(np.tile(lab, kpieces) for lab in new_index.codes)
+    else:
+        new_levels.append(new_index.unique())
+        single_codes = new_index.unique().get_indexer(new_index)
+        new_codes.append(np.tile(single_codes, kpieces))
+
+    if len(new_names) < len(new_levels):
+        new_names.extend(new_index.names)
+
+    return MultiIndex(
+        levels=new_levels, codes=new_codes, names=new_names, verify_integrity=False
+    )
+
+
+def new_axes(objs: list[Series | DataFrame], bm_axis: AxisInt, intersect: bool, sort: bool, keys: Iterable[Hashable] | None, names: list[HashableT] | None, axis: AxisInt, levels, verify_integrity: bool, ignore_index: bool) -> list[Index]:
+    """
+    Generate new axes for concatenated DataFrame objects.
+
+    This function creates the appropriate index and column axes for the result of
+    concatenating DataFrame objects along a specified axis. It handles the creation
+    of new axes based on the concatenation parameters, including handling of keys,
+    levels, and axis intersection/union logic.
+
+    Parameters
+    ----------
+    objs : list[Series | DataFrame]
+        List of pandas objects to be concatenated.
+    bm_axis : AxisInt
+        The block manager axis along which concatenation occurs (0 or 1).
+    intersect : bool
+        If True, take intersection of axes (inner join). If False, take union
+        of axes (outer join).
+    sort : bool
+        Whether to sort the non-concatenation axis if it's not already aligned.
+    keys : Iterable[Hashable] | None
+        Sequence of keys to use for constructing hierarchical index. If None,
+        no hierarchical index is created.
+    names : list[HashableT] | None
+        Names for the levels in the resulting hierarchical index. Only used
+        when keys is not None.
+    axis : AxisInt
+        The DataFrame axis number (0 for index, 1 for columns) along which
+        concatenation occurs.
+    levels : optional
+        Specific levels (unique values) to use for constructing a MultiIndex.
+        If None, levels will be inferred from keys.
+    verify_integrity : bool
+        If True, check whether the new concatenated axis contains duplicates.
+    ignore_index : bool
+        If True, do not use the index values along the concatenation axis.
+        The resulting axis will be labeled with default integer index.
+
+    Returns
+    -------
+    list[Index]
+        A list containing the two BlockManager axes for the concatenated result.
+        Their order is `[columns, index]`, regardless of the DataFrame concatenation
+        direction.
+
+    Notes
+    -----
+    This function is used by the concat operation to determine the
+    final shape and labeling of the concatenated DataFrame. It handles both
+    the concatenation axis (which gets special treatment for keys/levels) and
+    the non-concatenation axis (which may be intersected or unioned based on
+    the join parameter).
+
+    The concatenation axis reflects `ignore_index`, keys, levels, names, and
+    integrity checking. The other axis is the requested intersection or union,
+    with `sort` controlling its ordering where applicable.
+    """
+    raise NotImplementedError
+
+=== pandas/core/reshape/merge.py
+"""
+SQL-style merge routines
+"""
+
+from __future__ import annotations
+
+from collections.abc import (
+    Hashable,
+    Sequence,
+)
+import datetime
+from functools import partial
+import types
+from typing import (
+    TYPE_CHECKING,
+    Literal,
+    cast,
+    final,
+)
+import uuid
+import warnings
+
+import numpy as np
+
+from pandas._libs import (
+    Timedelta,
+    hashtable as libhashtable,
+    join as libjoin,
+    lib,
+)
+from pandas._libs.lib import is_range_indexer
+from pandas._typing import (
+    AnyArrayLike,
+    ArrayLike,
+    IndexLabel,
+    JoinHow,
+    MergeHow,
+    Shape,
+    Suffixes,
+    npt,
+)
+from pandas.errors import MergeError
+from pandas.util._decorators import (
+    cache_readonly,
+    set_module,
+)
+from pandas.util._exceptions import find_stack_level
+
+from pandas.core.dtypes.base import ExtensionDtype
+
+from pandas.core.dtypes.common import (
+    ensure_int64,
+    ensure_object,
+    is_bool,
+    is_bool_dtype,
+    is_float_dtype,
+    is_integer,
+    is_integer_dtype,
+    is_list_like,
+    is_number,
+    is_numeric_dtype,
+    is_object_dtype,
+    is_string_dtype,
+    needs_i8_conversion,
+)
+from pandas.core.dtypes.dtypes import (
+    CategoricalDtype,
+    DatetimeTZDtype,
+)
+from pandas.core.dtypes.generic import (
+    ABCDataFrame,
+    ABCSeries,
+)
+from pandas.core.dtypes.missing import (
+    isna,
+    na_value_for_dtype,
+)
+
+from pandas import (
+    ArrowDtype,
+    Categorical,
+    Index,
+    MultiIndex,
+    Series,
+)
+import pandas.core.algorithms as algos
+from pandas.core.arrays import (
+    ArrowExtensionArray,
+    BaseMaskedArray,
+    ExtensionArray,
+)
+from pandas.core.arrays.string_ import StringDtype
+import pandas.core.common as com
+from pandas.core.construction import (
+    ensure_wrapped_if_datetimelike,
+    extract_array,
+)
+from pandas.core.indexes.api import default_index
+from pandas.core.sorting import (
+    get_group_index,
+    is_int64_overflow_possible,
+)
+
+if TYPE_CHECKING:
+    from pandas import DataFrame
+    from pandas.core import groupby
+    from pandas.core.arrays import DatetimeArray
+    from pandas.core.indexes.frozen import FrozenList
+
+_factorizers = {
+    np.int64: libhashtable.Int64Factorizer,
+    np.longlong: libhashtable.Int64Factorizer,
+    np.int32: libhashtable.Int32Factorizer,
+    np.int16: libhashtable.Int16Factorizer,
+    np.int8: libhashtable.Int8Factorizer,
+    np.uint64: libhashtable.UInt64Factorizer,
+    np.uint32: libhashtable.UInt32Factorizer,
+    np.uint16: libhashtable.UInt16Factorizer,
+    np.uint8: libhashtable.UInt8Factorizer,
+    np.bool_: libhashtable.UInt8Factorizer,
+    np.float64: libhashtable.Float64Factorizer,
+    np.float32: libhashtable.Float32Factorizer,
+    np.complex64: libhashtable.Complex64Factorizer,
+    np.complex128: libhashtable.Complex128Factorizer,
+    np.object_: libhashtable.ObjectFactorizer,
+}
+
+# See https://github.com/pandas-dev/pandas/issues/52451
+if np.intc is not np.int32:
+    if np.dtype(np.intc).itemsize == 4:
+        _factorizers[np.intc] = libhashtable.Int32Factorizer
+    else:
+        _factorizers[np.intc] = libhashtable.Int64Factorizer
+
+if np.uintc is not np.uint32:
+    if np.dtype(np.uintc).itemsize == 4:
+        _factorizers[np.uintc] = libhashtable.UInt32Factorizer
+    else:
+        _factorizers[np.uintc] = libhashtable.UInt64Factorizer
+
+
+_known = (np.ndarray, ExtensionArray, Index, ABCSeries)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _cross_merge(
+    left: DataFrame,
+    right: DataFrame,
+    on: IndexLabel | AnyArrayLike | None = None,
+    left_on: IndexLabel | AnyArrayLike | None = None,
+    right_on: IndexLabel | AnyArrayLike | None = None,
+    left_index: bool = False,
+    right_index: bool = False,
+    sort: bool = False,
+    suffixes: Suffixes = ("_x", "_y"),
+    indicator: str | bool = False,
+    validate: str | None = None,
+) -> DataFrame:
+    """
+    See merge.__doc__ with how='cross'
+    """
+
+    if (
+        left_index
+        or right_index
+        or right_on is not None
+        or left_on is not None
+        or on is not None
+    ):
+        raise MergeError(
+            "Can not pass on, right_on, left_on or set right_index=True or "
+            "left_index=True"
+        )
+
+    cross_col = f"_cross_{uuid.uuid4()}"
+    left = left.assign(**{cross_col: 1})
+    right = right.assign(**{cross_col: 1})
+
+    left_on = right_on = [cross_col]
+
+    res = merge(
+        left,
+        right,
+        how="inner",
+        on=on,
+        left_on=left_on,
+        right_on=right_on,
+        left_index=left_index,
+        right_index=right_index,
+        sort=sort,
+        suffixes=suffixes,
+        indicator=indicator,
+        validate=validate,
+    )
+    del res[cross_col]
+    return res
+
+
+def _groupby_and_merge(
+    by, left: DataFrame | Series, right: DataFrame | Series, merge_pieces
+):
+    """
+    groupby & merge; we are always performing a left-by type operation
+
+    Parameters
+    ----------
+    by: field to group
+    left: DataFrame
+    right: DataFrame
+    merge_pieces: function for merging
+    """
+    pieces = []
+    if not isinstance(by, (list, tuple)):
+        by = [by]
+
+    lby = left.groupby(by, sort=False)
+    rby: groupby.DataFrameGroupBy | groupby.SeriesGroupBy | None = None
+
+    # if we can groupby the rhs
+    # then we can get vastly better perf
+    if all(item in right.columns for item in by):
+        rby = right.groupby(by, sort=False)
+
+    for key, lhs in lby._grouper.get_iterator(lby._selected_obj):
+        if rby is None:
+            rhs = right
+        else:
+            try:
+                rhs = right.take(rby.indices[key])
+            except KeyError:
+                # key doesn't exist in left
+                lcols = lhs.columns.tolist()
+                cols = lcols + [r for r in right.columns if r not in set(lcols)]
+                merged = lhs.reindex(columns=cols)
+                merged.index = range(len(merged))
+                pieces.append(merged)
+                continue
+
+        merged = merge_pieces(lhs, rhs)
+
+        # make sure join keys are in the merged
+        # TODO, should merge_pieces do this?
+        merged[by] = key
+
+        pieces.append(merged)
+
+    # preserve the original order
+    # if we have a missing piece this can be reset
+    from pandas.core.reshape.concat import concat
+
+    result = concat(pieces, ignore_index=True)
+    result = result.reindex(columns=pieces[0].columns)
+    return result, lby
+
+
+@set_module("pandas")
+def merge_ordered(
+    left: DataFrame | Series,
+    right: DataFrame | Series,
+    on: IndexLabel | None = None,
+    left_on: IndexLabel | None = None,
+    right_on: IndexLabel | None = None,
+    left_by=None,
+    right_by=None,
+    fill_method: str | None = None,
+    suffixes: Suffixes = ("_x", "_y"),
+    how: JoinHow = "outer",
+) -> DataFrame:
+    """
+    Perform a merge for ordered data with optional filling/interpolation.
+
+    Designed for ordered data like time series data. Optionally
+    perform group-wise merge (see examples).
+
+    Parameters
+    ----------
+    left : DataFrame or named Series
+        First pandas object to merge.
+    right : DataFrame or named Series
+        Second pandas object to merge.
+    on : Hashable or a sequence of the previous
+        Field names to join on. Must be found in both DataFrames.
+    left_on : Hashable or a sequence of the previous, or array-like
+        Field names to join on in left DataFrame. Can be a vector or list of
+        vectors of the length of the DataFrame to use a particular vector as
+        the join key instead of columns.
+    right_on : Hashable or a sequence of the previous, or array-like
+        Field names to join on in right DataFrame or vector/list of vectors per
+        left_on docs.
+    left_by : column name or list of column names
+        Group left DataFrame by group columns and merge piece by piece with
+        right DataFrame. Must be None if either left or right are a Series.
+    right_by : column name or list of column names
+        Group right DataFrame by group columns and merge piece by piece with
+        left DataFrame. Must be None if either left or right are a Series.
+    fill_method : {'ffill', None}, default None
+        Interpolation method for data.
+    suffixes : list-like, default is ("_x", "_y")
+        A length-2 sequence where each element is optionally a string
+        indicating the suffix to add to overlapping column names in
+        `left` and `right` respectively. Pass a value of `None` instead
+        of a string to indicate that the column name from `left` or
+        `right` should be left as-is, with no suffix. At least one of the
+        values must not be None.
+
+    how : {'left', 'right', 'outer', 'inner'}, default 'outer'
+        * left: use only keys from left frame (SQL: left outer join)
+        * right: use only keys from right frame (SQL: right outer join)
+        * outer: use union of keys from both frames (SQL: full outer join)
+        * inner: use intersection of keys from both frames (SQL: inner join).
+
+    Returns
+    -------
+    DataFrame
+        The merged DataFrame output type will be the same as
+        'left', if it is a subclass of DataFrame.
+
+    See Also
+    --------
+    merge : Merge with a database-style join.
+    merge_asof : Merge on nearest keys.
+
+    Examples
+    --------
+    >>> from pandas import merge_ordered
+    >>> df1 = pd.DataFrame(
+    ...     {
+    ...         "key": ["a", "c", "e", "a", "c", "e"],
+    ...         "lvalue": [1, 2, 3, 1, 2, 3],
+    ...         "group": ["a", "a", "a", "b", "b", "b"],
+    ...     }
+    ... )
+    >>> df1
+      key  lvalue group
+    0   a       1     a
+    1   c       2     a
+    2   e       3     a
+    3   a       1     b
+    4   c       2     b
+    5   e       3     b
+
+    >>> df2 = pd.DataFrame({"key": ["b", "c", "d"], "rvalue": [1, 2, 3]})
+    >>> df2
+      key  rvalue
+    0   b       1
+    1   c       2
+    2   d       3
+
+    >>> merge_ordered(df1, df2, fill_method="ffill", left_by="group")
+      key  lvalue group  rvalue
+    0   a       1     a     NaN
+    1   b       1     a     1.0
+    2   c       2     a     2.0
+    3   d       2     a     3.0
+    4   e       3     a     3.0
+    5   a       1     b     NaN
+    6   b       1     b     1.0
+    7   c       2     b     2.0
+    8   d       2     b     3.0
+    9   e       3     b     3.0
+    """
+
+    def _merger(x, y) -> DataFrame:
+        # perform the ordered merge operation
+        op = _OrderedMerge(
+            x,
+            y,
+            on=on,
+            left_on=left_on,
+            right_on=right_on,
+            suffixes=suffixes,
+            fill_method=fill_method,
+            how=how,
+        )
+        return op.get_result()
+
+    if left_by is not None and right_by is not None:
+        raise ValueError("Can only group either left or right frames")
+    if left_by is not None:
+        if isinstance(left_by, str):
+            left_by = [left_by]
+        check = set(left_by).difference(left.columns)
+        if len(check) != 0:
+            raise KeyError(f"{check} not found in left columns")
+        result, _ = _groupby_and_merge(left_by, left, right, lambda x, y: _merger(x, y))
+    elif right_by is not None:
+        if isinstance(right_by, str):
+            right_by = [right_by]
+        check = set(right_by).difference(right.columns)
+        if len(check) != 0:
+            raise KeyError(f"{check} not found in right columns")
+        result, _ = _groupby_and_merge(
+            right_by, right, left, lambda x, y: _merger(y, x)
+        )
+    else:
+        result = _merger(left, right)
+    return result
+
+
+@set_module("pandas")
+def merge_asof(
+    left: DataFrame | Series,
+    right: DataFrame | Series,
+    on: IndexLabel | None = None,
+    left_on: IndexLabel | None = None,
+    right_on: IndexLabel | None = None,
+    left_index: bool = False,
+    right_index: bool = False,
+    by=None,
+    left_by=None,
+    right_by=None,
+    suffixes: Suffixes = ("_x", "_y"),
+    tolerance: int | datetime.timedelta | None = None,
+    allow_exact_matches: bool = True,
+    direction: str = "backward",
+) -> DataFrame:
+    """
+    Perform a merge by key distance.
+
+    This is similar to a left-join except that we match on nearest
+    key rather than equal keys. Both DataFrames must be first sorted by
+    the merge key in ascending order before calling this function.
+    Sorting by any additional 'by' grouping columns is not required.
+
+    For each row in the left DataFrame:
+
+      - A "backward" search selects the last row in the right DataFrame whose
+        'on' key is less than or equal to the left's key.
+
+      - A "forward" search selects the first row in the right DataFrame whose
+        'on' key is greater than or equal to the left's key.
+
+      - A "nearest" search selects the row in the right DataFrame whose 'on'
+        key is closest in absolute distance to the left's key.
+
+    Optionally match on equivalent keys with 'by' before searching with 'on'.
+
+    Parameters
+    ----------
+    left : DataFrame or named Series
+        First pandas object to merge.
+    right : DataFrame or named Series
+        Second pandas object to merge.
+    on : label
+        Field name to join on. Must be found in both DataFrames.
+        The data MUST be in ascending order. Furthermore this must be
+        a numeric column, such as datetimelike, integer, or float. ``on``
+        or ``left_on`` / ``right_on`` must be given.
+    left_on : label
+        Field name to join on in left DataFrame. If specified, sort the left
+        DataFrame by this column in ascending order before merging.
+    right_on : label
+        Field name to join on in right DataFrame. If specified, sort the right
+        DataFrame by this column in ascending order before merging.
+    left_index : bool
+        Use the index of the left DataFrame as the join key.
+    right_index : bool
+        Use the index of the right DataFrame as the join key.
+    by : column name or list of column names
+        Match on these columns before performing merge operation. It is not required
+        to sort by these columns.
+    left_by : column name
+        Field names to match on in the left DataFrame.
+    right_by : column name
+        Field names to match on in the right DataFrame.
+    suffixes : 2-length sequence (tuple, list, ...)
+        Suffix to apply to overlapping column names in the left and right
+        side, respectively.
+    tolerance : int or timedelta, optional, default None
+        Select asof tolerance within this range; must be compatible
+        with the merge index.
+    allow_exact_matches : bool, default True
+
+        - If True, allow matching with the same 'on' value
+          (i.e. less-than-or-equal-to / greater-than-or-equal-to)
+        - If False, don't match the same 'on' value
+          (i.e., strictly less-than / strictly greater-than).
+
+    direction : 'backward' (default), 'forward', or 'nearest'
+        Whether to search for prior, subsequent, or closest matches.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame of the two merged objects, containing all rows from the
+        left DataFrame and the nearest matches from the right DataFrame.
+
+    See Also
+    --------
+    merge : Merge with a database-style join.
+    merge_ordered : Merge with optional filling/interpolation.
+
+    Examples
+    --------
+    >>> left = pd.DataFrame({"a": [1, 5, 10], "left_val": ["a", "b", "c"]})
+    >>> left
+        a left_val
+    0   1        a
+    1   5        b
+    2  10        c
+
+    >>> right = pd.DataFrame({"a": [1, 2, 3, 6, 7], "right_val": [1, 2, 3, 6, 7]})
+    >>> right
+       a  right_val
+    0  1          1
+    1  2          2
+    2  3          3
+    3  6          6
+    4  7          7
+
+    >>> pd.merge_asof(left, right, on="a")
+        a left_val  right_val
+    0   1        a          1
+    1   5        b          3
+    2  10        c          7
+
+    >>> pd.merge_asof(left, right, on="a", allow_exact_matches=False)
+        a left_val  right_val
+    0   1        a        NaN
+    1   5        b        3.0
+    2  10        c        7.0
+
+    >>> pd.merge_asof(left, right, on="a", direction="forward")
+        a left_val  right_val
+    0   1        a        1.0
+    1   5        b        6.0
+    2  10        c        NaN
+
+    >>> pd.merge_asof(left, right, on="a", direction="nearest")
+        a left_val  right_val
+    0   1        a          1
+    1   5        b          6
+    2  10        c          7
+
+    We can use indexed DataFrames as well.
+
+    >>> left = pd.DataFrame({"left_val": ["a", "b", "c"]}, index=[1, 5, 10])
+    >>> left
+       left_val
+    1         a
+    5         b
+    10        c
+
+    >>> right = pd.DataFrame({"right_val": [1, 2, 3, 6, 7]}, index=[1, 2, 3, 6, 7])
+    >>> right
+       right_val
+    1          1
+    2          2
+    3          3
+    6          6
+    7          7
+
+    >>> pd.merge_asof(left, right, left_index=True, right_index=True)
+       left_val  right_val
+    1         a          1
+    5         b          3
+    10        c          7
+
+    Here is a real-world times-series example
+
+    >>> quotes = pd.DataFrame(
+    ...     {
+    ...         "time": [
+    ...             pd.Timestamp("2016-05-25 13:30:00.023"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.023"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.030"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.041"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.048"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.049"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.072"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.075"),
+    ...         ],
+    ...         "ticker": [
+    ...             "GOOG",
+    ...             "MSFT",
+    ...             "MSFT",
+    ...             "MSFT",
+    ...             "GOOG",
+    ...             "AAPL",
+    ...             "GOOG",
+    ...             "MSFT",
+    ...         ],
+    ...         "bid": [720.50, 51.95, 51.97, 51.99, 720.50, 97.99, 720.50, 52.01],
+    ...         "ask": [720.93, 51.96, 51.98, 52.00, 720.93, 98.01, 720.88, 52.03],
+    ...     }
+    ... )
+    >>> quotes
+                         time ticker     bid     ask
+    0 2016-05-25 13:30:00.023   GOOG  720.50  720.93
+    1 2016-05-25 13:30:00.023   MSFT   51.95   51.96
+    2 2016-05-25 13:30:00.030   MSFT   51.97   51.98
+    3 2016-05-25 13:30:00.041   MSFT   51.99   52.00
+    4 2016-05-25 13:30:00.048   GOOG  720.50  720.93
+    5 2016-05-25 13:30:00.049   AAPL   97.99   98.01
+    6 2016-05-25 13:30:00.072   GOOG  720.50  720.88
+    7 2016-05-25 13:30:00.075   MSFT   52.01   52.03
+
+    >>> trades = pd.DataFrame(
+    ...     {
+    ...         "time": [
+    ...             pd.Timestamp("2016-05-25 13:30:00.023"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.038"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.048"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.048"),
+    ...             pd.Timestamp("2016-05-25 13:30:00.048"),
+    ...         ],
+    ...         "ticker": ["MSFT", "MSFT", "GOOG", "GOOG", "AAPL"],
+    ...         "price": [51.95, 51.95, 720.77, 720.92, 98.0],
+    ...         "quantity": [75, 155, 100, 100, 100],
+    ...     }
+    ... )
+    >>> trades
+                         time ticker   price  quantity
+    0 2016-05-25 13:30:00.023   MSFT   51.95        75
+    1 2016-05-25 13:30:00.038   MSFT   51.95       155
+    2 2016-05-25 13:30:00.048   GOOG  720.77       100
+    3 2016-05-25 13:30:00.048   GOOG  720.92       100
+    4 2016-05-25 13:30:00.048   AAPL   98.00       100
+
+    By default we are taking the asof of the quotes
+
+    >>> pd.merge_asof(trades, quotes, on="time", by="ticker")
+                         time ticker   price  quantity     bid     ask
+    0 2016-05-25 13:30:00.023   MSFT   51.95        75   51.95   51.96
+    1 2016-05-25 13:30:00.038   MSFT   51.95       155   51.97   51.98
+    2 2016-05-25 13:30:00.048   GOOG  720.77       100  720.50  720.93
+    3 2016-05-25 13:30:00.048   GOOG  720.92       100  720.50  720.93
+    4 2016-05-25 13:30:00.048   AAPL   98.00       100     NaN     NaN
+
+    We only asof within 2ms between the quote time and the trade time
+
+    >>> pd.merge_asof(
+    ...     trades, quotes, on="time", by="ticker", tolerance=pd.Timedelta("2ms")
+    ... )
+                         time ticker   price  quantity     bid     ask
+    0 2016-05-25 13:30:00.023   MSFT   51.95        75   51.95   51.96
+    1 2016-05-25 13:30:00.038   MSFT   51.95       155     NaN     NaN
+    2 2016-05-25 13:30:00.048   GOOG  720.77       100  720.50  720.93
+    3 2016-05-25 13:30:00.048   GOOG  720.92       100  720.50  720.93
+    4 2016-05-25 13:30:00.048   AAPL   98.00       100     NaN     NaN
+
+    We only asof within 10ms between the quote time and the trade time
+    and we exclude exact matches on time. However *prior* data will
+    propagate forward
+
+    >>> pd.merge_asof(
+    ...     trades,
+    ...     quotes,
+    ...     on="time",
+    ...     by="ticker",
+    ...     tolerance=pd.Timedelta("10ms"),
+    ...     allow_exact_matches=False,
+    ... )
+                         time ticker   price  quantity     bid     ask
+    0 2016-05-25 13:30:00.023   MSFT   51.95        75     NaN     NaN
+    1 2016-05-25 13:30:00.038   MSFT   51.95       155   51.97   51.98
+    2 2016-05-25 13:30:00.048   GOOG  720.77       100     NaN     NaN
+    3 2016-05-25 13:30:00.048   GOOG  720.92       100     NaN     NaN
+    4 2016-05-25 13:30:00.048   AAPL   98.00       100     NaN     NaN
+    """
+    op = _AsOfMerge(
+        left,
+        right,
+        on=on,
+        left_on=left_on,
+        right_on=right_on,
+        left_index=left_index,
+        right_index=right_index,
+        by=by,
+        left_by=left_by,
+        right_by=right_by,
+        suffixes=suffixes,
+        how="asof",
+        tolerance=tolerance,
+        allow_exact_matches=allow_exact_matches,
+        direction=direction,
+    )
+    return op.get_result()
+
+
+# TODO: transformations??
+class _MergeOperation:
+    """
+    Perform a database (SQL) merge operation between two DataFrame or Series
+    objects using either columns as keys or their row indexes
+    """
+
+    _merge_type = "merge"
+    how: JoinHow | Literal["asof"]
+    on: IndexLabel | None
+    # left_on/right_on may be None when passed, but in validate_specification
+    #  get replaced with non-None.
+    left_on: Sequence[Hashable | AnyArrayLike]
+    right_on: Sequence[Hashable | AnyArrayLike]
+    left_index: bool
+    right_index: bool
+    sort: bool
+    suffixes: Suffixes
+    indicator: str | bool
+    validate: str | None
+    join_names: list[Hashable]
+    right_join_keys: list[ArrayLike]
+    left_join_keys: list[ArrayLike]
+
+    def __init__(
+        self,
+        left: DataFrame | Series,
+        right: DataFrame | Series,
+        how: JoinHow | Literal["left_anti", "right_anti", "asof"] = "inner",
+        on: IndexLabel | AnyArrayLike | None = None,
+        left_on: IndexLabel | AnyArrayLike | None = None,
+        right_on: IndexLabel | AnyArrayLike | None = None,
+        left_index: bool = False,
+        right_index: bool = False,
+        sort: bool = True,
+        suffixes: Suffixes = ("_x", "_y"),
+        indicator: str | bool = False,
+        validate: str | None = None,
+    ) -> None:
+        _left = _validate_operand(left)
+        _right = _validate_operand(right)
+        self.left = self.orig_left = _left
+        self.right = self.orig_right = _right
+        self.how, self.anti_join = self._validate_how(how)
+
+        self.on = com.maybe_make_list(on)
+
+        self.suffixes = suffixes
+        self.sort = sort or how == "outer"
+
+        self.left_index = left_index
+        self.right_index = right_index
+
+        self.indicator = indicator
+
+        if not is_bool(left_index):
+            raise ValueError(
+                f"left_index parameter must be of type bool, not {type(left_index)}"
+            )
+        if not is_bool(right_index):
+            raise ValueError(
+                f"right_index parameter must be of type bool, not {type(right_index)}"
+            )
+
+        # GH 40993: raise when merging between different levels; enforced in 2.0
+        if _left.columns.nlevels != _right.columns.nlevels:
+            msg = (
+                "Not allowed to merge between different levels. "
+                f"({_left.columns.nlevels} levels on the left, "
+                f"{_right.columns.nlevels} on the right)"
+            )
+            raise MergeError(msg)
+
+        self.left_on, self.right_on = self._validate_left_right_on(left_on, right_on)
+
+        (
+            self.left_join_keys,
+            self.right_join_keys,
+            self.join_names,
+            left_drop,
+            right_drop,
+        ) = self._get_merge_keys()
+
+        if left_drop:
+            self.left = self.left._drop_labels_or_levels(left_drop)
+
+        if right_drop:
+            self.right = self.right._drop_labels_or_levels(right_drop)
+
+        self._maybe_require_matching_dtypes(self.left_join_keys, self.right_join_keys)
+        self._validate_tolerance(self.left_join_keys)
+
+        # validate the merge keys dtypes. We may need to coerce
+        # to avoid incompatible dtypes
+        self._maybe_coerce_merge_keys()
+
+        # If argument passed to validate,
+        # check if columns specified as unique
+        # are in fact unique.
+        if validate is not None:
+            self._validate_validate_kwd(validate)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _maybe_require_matching_dtypes(
+        self, left_join_keys: list[ArrayLike], right_join_keys: list[ArrayLike]
+    ) -> None:
+        # Overridden by AsOfMerge
+        pass
+
+    def _validate_tolerance(self, left_join_keys: list[ArrayLike]) -> None:
+        # Overridden by AsOfMerge
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_result(self) -> DataFrame:
+        """
+        Execute the merge.
+        """
+        if self.indicator:
+            self.left, self.right = self._indicator_pre_merge(self.left, self.right)
+
+        join_index, left_indexer, right_indexer = self._get_join_info()
+
+        result = self._reindex_and_concat(join_index, left_indexer, right_indexer)
+
+        if self.indicator:
+            result = self._indicator_post_merge(result)
+
+        self._maybe_add_join_keys(result, left_indexer, right_indexer)
+
+        self._maybe_restore_index_levels(result)
+
+        return result.__finalize__(
+            types.SimpleNamespace(input_objs=[self.left, self.right]), method="merge"
+        )
+
+    @final
+    @cache_readonly
+    def _indicator_name(self) -> str | None:
+        if isinstance(self.indicator, str):
+            return self.indicator
+        elif isinstance(self.indicator, bool):
+            return "_merge" if self.indicator else None
+        else:
+            raise ValueError(
+                "indicator option can only accept boolean or string arguments"
+            )
+
+    @final
+    def _indicator_pre_merge(
+        self, left: DataFrame, right: DataFrame
+    ) -> tuple[DataFrame, DataFrame]:
+        """
+        Add one indicator column to each of the left and right inputs.
+
+        These columns are used to produce another column in the output of the
+        merge, indicating for each row of the output whether it was produced
+        using the left, right or both inputs.
+        """
+        columns = left.columns.union(right.columns)
+
+        for i in ["_left_indicator", "_right_indicator"]:
+            if i in columns:
+                raise ValueError(
+                    "Cannot use `indicator=True` option when "
+                    f"data contains a column named {i}"
+                )
+        if self._indicator_name in columns:
+            raise ValueError(
+                "Cannot use name of an existing column for indicator column"
+            )
+
+        left = left.copy(deep=False)
+        right = right.copy(deep=False)
+
+        left["_left_indicator"] = 1
+        left["_left_indicator"] = left["_left_indicator"].astype("int8")
+
+        right["_right_indicator"] = 2
+        right["_right_indicator"] = right["_right_indicator"].astype("int8")
+
+        return left, right
+
+    @final
+    def _indicator_post_merge(self, result: DataFrame) -> DataFrame:
+        """
+        Add an indicator column to the merge result.
+
+        This column indicates for each row of the output whether it was produced using
+        the left, right or both inputs.
+        """
+        result["_left_indicator"] = result["_left_indicator"].fillna(0)
+        result["_right_indicator"] = result["_right_indicator"].fillna(0)
+
+        result[self._indicator_name] = Categorical(
+            (result["_left_indicator"] + result["_right_indicator"]),
+            categories=[1, 2, 3],
+        )
+        result[self._indicator_name] = result[
+            self._indicator_name
+        ].cat.rename_categories(["left_only", "right_only", "both"])
+
+        result = result.drop(labels=["_left_indicator", "_right_indicator"], axis=1)
+        return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _get_join_indexers(
+        self,
+    ) -> tuple[npt.NDArray[np.intp] | None, npt.NDArray[np.intp] | None]:
+        """return the join indexers"""
+        # make mypy happy
+        assert self.how != "asof"
+        return get_join_indexers(
+            self.left_join_keys, self.right_join_keys, sort=self.sort, how=self.how
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @final
+    def _create_join_index(
+        self,
+        index: Index,
+        other_index: Index,
+        indexer: npt.NDArray[np.intp] | None,
+        how: JoinHow = "left",
+    ) -> Index:
+        """
+        Create a join index by rearranging one index to match another
+
+        Parameters
+        ----------
+        index : Index
+            index being rearranged
+        other_index : Index
+            used to supply values not found in index
+        indexer : np.ndarray[np.intp] or None
+            how to rearrange index
+        how : str
+            Replacement is only necessary if indexer based on other_index.
+
+        Returns
+        -------
+        Index
+        """
+        if self.how in (how, "outer") and not isinstance(other_index, MultiIndex):
+            # if final index requires values in other_index but not target
+            # index, indexer may hold missing (-1) values, causing Index.take
+            # to take the final value in target index. So, we set the last
+            # element to be the desired fill value. We do not use allow_fill
+            # and fill_value because it throws a ValueError on integer indices
+            mask = indexer == -1
+            if np.any(mask):
+                fill_value = na_value_for_dtype(index.dtype, compat=False)
+                if not index._can_hold_na:
+                    new_index = Index([fill_value])
+                else:
+                    new_index = Index([fill_value], dtype=index.dtype)
+                index = index.append(new_index)
+        if indexer is None:
+            return index.copy()
+        return index.take(indexer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _validate_left_right_on(self, left_on, right_on):
+        left_on = com.maybe_make_list(left_on)
+        right_on = com.maybe_make_list(right_on)
+
+        # Hm, any way to make this logic less complicated??
+        if self.on is None and left_on is None and right_on is None:
+            if self.left_index and self.right_index:
+                left_on, right_on = (), ()
+            elif self.left_index:
+                raise MergeError("Must pass right_on or right_index=True")
+            elif self.right_index:
+                raise MergeError("Must pass left_on or left_index=True")
+            else:
+                # use the common columns
+                left_cols = self.left.columns
+                right_cols = self.right.columns
+                common_cols = left_cols.intersection(right_cols)
+                if len(common_cols) == 0:
+                    raise MergeError(
+                        "No common columns to perform merge on. "
+                        f"Merge options: left_on={left_on}, "
+                        f"right_on={right_on}, "
+                        f"left_index={self.left_index}, "
+                        f"right_index={self.right_index}"
+                    )
+                if (
+                    not left_cols.join(common_cols, how="inner").is_unique
+                    or not right_cols.join(common_cols, how="inner").is_unique
+                ):
+                    raise MergeError(f"Data columns not unique: {common_cols!r}")
+                left_on = right_on = common_cols
+        elif self.on is not None:
+            if left_on is not None or right_on is not None:
+                raise MergeError(
+                    'Can only pass argument "on" OR "left_on" '
+                    'and "right_on", not a combination of both.'
+                )
+            if self.left_index or self.right_index:
+                raise MergeError(
+                    'Can only pass argument "on" OR "left_index" '
+                    'and "right_index", not a combination of both.'
+                )
+            left_on = right_on = self.on
+        elif left_on is not None:
+            if self.left_index:
+                raise MergeError(
+                    'Can only pass argument "left_on" OR "left_index" not both.'
+                )
+            if not self.right_index and right_on is None:
+                raise MergeError('Must pass "right_on" OR "right_index".')
+            n = len(left_on)
+            if self.right_index:
+                if len(left_on) != self.right.index.nlevels:
+                    raise ValueError(
+                        "len(left_on) must equal the number "
+                        'of levels in the index of "right"'
+                    )
+                right_on = [None] * n
+        elif right_on is not None:
+            if self.right_index:
+                raise MergeError(
+                    'Can only pass argument "right_on" OR "right_index" not both.'
+                )
+            if not self.left_index and left_on is None:
+                raise MergeError('Must pass "left_on" OR "left_index".')
+            n = len(right_on)
+            if self.left_index:
+                if len(right_on) != self.left.index.nlevels:
+                    raise ValueError(
+                        "len(right_on) must equal the number "
+                        'of levels in the index of "left"'
+                    )
+                left_on = [None] * n
+        if len(right_on) != len(left_on):
+            raise ValueError("len(right_on) must equal len(left_on)")
+
+        return left_on, right_on
+
+    @final
+    def _validate_validate_kwd(self, validate: str) -> None:
+        # Check uniqueness of each
+        if self.left_index:
+            left_join_index = self.orig_left.index
+            left_unique = left_join_index.is_unique
+        else:
+            left_join_index = MultiIndex.from_arrays(self.left_join_keys)
+            left_unique = left_join_index.is_unique
+
+        if self.right_index:
+            right_join_index = self.orig_right.index
+            right_unique = self.orig_right.index.is_unique
+        else:
+            right_join_index = MultiIndex.from_arrays(self.right_join_keys)
+            right_unique = right_join_index.is_unique
+
+        def left_error_msg(x: Index) -> str:
+            name = self.left_on if not self.left_index else lib.no_default
+            msg = x[x.duplicated()][:5].to_frame(name=name).to_string(index=False)
+            return f"\nDuplicates in left:\n {msg} ..."
+
+        def right_error_msg(x: Index) -> str:
+            name = self.right_on if not self.right_index else lib.no_default
+            msg = x[x.duplicated()][:5].to_frame(name=name).to_string(index=False)
+            return f"\nDuplicates in right:\n {msg} ..."
+
+        # Check data integrity
+        if validate in ["one_to_one", "1:1"]:
+            if not left_unique and not right_unique:
+                raise MergeError(
+                    "Merge keys are not unique in either left "
+                    "or right dataset; not a one-to-one merge."
+                    f"{left_error_msg(left_join_index)}"
+                    f"{right_error_msg(right_join_index)}"
+                )
+            if not left_unique:
+                raise MergeError(
+                    "Merge keys are not unique in left dataset; not a one-to-one merge"
+                    f"{left_error_msg(left_join_index)}"
+                )
+            if not right_unique:
+                raise MergeError(
+                    "Merge keys are not unique in right dataset; not a one-to-one merge"
+                    f"{right_error_msg(right_join_index)}"
+                )
+
+        elif validate in ["one_to_many", "1:m"]:
+            if not left_unique:
+                raise MergeError(
+                    "Merge keys are not unique in left dataset; not a one-to-many merge"
+                    f"{left_error_msg(left_join_index)}"
+                )
+
+        elif validate in ["many_to_one", "m:1"]:
+            if not right_unique:
+                raise MergeError(
+                    "Merge keys are not unique in right dataset; "
+                    "not a many-to-one merge\n"
+                    f"{right_error_msg(right_join_index)}"
+                )
+
+        elif validate in ["many_to_many", "m:m"]:
+            pass
+
+        else:
+            raise ValueError(
+                f'"{validate}" is not a valid argument. '
+                "Valid arguments are:\n"
+                '- "1:1"\n'
+                '- "1:m"\n'
+                '- "m:1"\n'
+                '- "m:m"\n'
+                '- "one_to_one"\n'
+                '- "one_to_many"\n'
+                '- "many_to_one"\n'
+                '- "many_to_many"'
+            )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def restore_dropped_levels_multijoin(
+    left: MultiIndex,
+    right: MultiIndex,
+    dropped_level_names,
+    join_index: Index,
+    lindexer: npt.NDArray[np.intp],
+    rindexer: npt.NDArray[np.intp],
+) -> tuple[FrozenList, FrozenList, FrozenList]:
+    """
+    *this is an internal non-public method*
+
+    Returns the levels, labels and names of a multi-index to multi-index join.
+    Depending on the type of join, this method restores the appropriate
+    dropped levels of the joined multi-index.
+    The method relies on lindexer, rindexer which hold the index positions of
+    left and right, where a join was feasible
+
+    Parameters
+    ----------
+    left : MultiIndex
+        left index
+    right : MultiIndex
+        right index
+    dropped_level_names : str array
+        list of non-common level names
+    join_index : Index
+        the index of the join between the
+        common levels of left and right
+    lindexer : np.ndarray[np.intp]
+        left indexer
+    rindexer : np.ndarray[np.intp]
+        right indexer
+
+    Returns
+    -------
+    levels : list of Index
+        levels of combined multiindexes
+    labels : np.ndarray[np.intp]
+        labels of combined multiindexes
+    names : List[Hashable]
+        names of combined multiindex levels
+
+    """
+
+    def _convert_to_multiindex(index: Index) -> MultiIndex:
+        if isinstance(index, MultiIndex):
+            return index
+        else:
+            return MultiIndex.from_arrays([index._values], names=[index.name])
+
+    # For multi-multi joins with one overlapping level,
+    # the returned index if of type Index
+    # Assure that join_index is of type MultiIndex
+    # so that dropped levels can be appended
+    join_index = _convert_to_multiindex(join_index)
+
+    join_levels = join_index.levels
+    join_codes = join_index.codes
+    join_names = join_index.names
+
+    # Iterate through the levels that must be restored
+    for dropped_level_name in dropped_level_names:
+        if dropped_level_name in left.names:
+            idx = left
+            indexer = lindexer
+        else:
+            idx = right
+            indexer = rindexer
+
+        # The index of the level name to be restored
+        name_idx = idx.names.index(dropped_level_name)
+
+        restore_levels = idx.levels[name_idx]
+        # Inject -1 in the codes list where a join was not possible
+        # IOW indexer[i]=-1
+        codes = idx.codes[name_idx]
+        if indexer is None:
+            restore_codes = codes
+        else:
+            restore_codes = algos.take_nd(codes, indexer, fill_value=-1)
+
+        join_levels = join_levels + [restore_levels]
+        join_codes = join_codes + [restore_codes]
+        join_names = join_names + [dropped_level_name]
+
+    return join_levels, join_codes, join_names
+
+
+class _OrderedMerge(_MergeOperation):
+    _merge_type = "ordered_merge"
+
+    def __init__(
+        self,
+        left: DataFrame | Series,
+        right: DataFrame | Series,
+        on: IndexLabel | None = None,
+        left_on: IndexLabel | None = None,
+        right_on: IndexLabel | None = None,
+        left_index: bool = False,
+        right_index: bool = False,
+        suffixes: Suffixes = ("_x", "_y"),
+        fill_method: str | None = None,
+        how: JoinHow | Literal["asof"] = "outer",
+    ) -> None:
+        self.fill_method = fill_method
+        _MergeOperation.__init__(
+            self,
+            left,
+            right,
+            on=on,
+            left_on=left_on,
+            left_index=left_index,
+            right_index=right_index,
+            right_on=right_on,
+            how=how,
+            suffixes=suffixes,
+            sort=True,  # factorize sorts
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _asof_by_function(direction: str):
+    name = f"asof_join_{direction}_on_X_by_Y"
+    return getattr(libjoin, name, None)
+
+
+class _AsOfMerge(_OrderedMerge):
+    _merge_type = "asof_merge"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _convert_values_for_libjoin(
+        self, values: AnyArrayLike, side: str
+    ) -> np.ndarray:
+        # we require sortedness and non-null values in the join keys
+        if not Index(values).is_monotonic_increasing:
+            if isna(values).any():
+                raise ValueError(f"Merge keys contain null values on {side} side")
+            raise ValueError(f"{side} keys must be sorted")
+
+        if isinstance(values, ArrowExtensionArray):
+            values = values._maybe_convert_datelike_array()
+
+        if needs_i8_conversion(values.dtype):
+            values = values.view("i8")
+
+        elif isinstance(values, BaseMaskedArray):
+            # we've verified above that no nulls exist
+            values = values._data
+        elif isinstance(values, ExtensionArray):
+            values = values.to_numpy()
+
+        # error: Incompatible return value type (got "Union[ExtensionArray,
+        # Any, ndarray[Any, Any], ndarray[Any, dtype[Any]], Index, Series]",
+        # expected "ndarray[Any, Any]")
+        return values  # type: ignore[return-value]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _get_multiindex_indexer(
+    join_keys: list[ArrayLike], index: MultiIndex, sort: bool
+) -> tuple[npt.NDArray[np.intp], npt.NDArray[np.intp]]:
+    # left & right join labels and num. of levels at each location
+    mapped = (
+        _factorize_keys(index.levels[n]._values, join_keys[n], sort=sort)
+        for n in range(index.nlevels)
+    )
+    zipped = zip(*mapped)
+    rcodes, lcodes, shape = (list(x) for x in zipped)
+    if sort:
+        rcodes = list(map(np.take, rcodes, index.codes))
+    else:
+        i8copy = lambda a: a.astype("i8", subok=False)
+        rcodes = list(map(i8copy, index.codes))
+
+    # fix right labels if there were any nulls
+    for i, join_key in enumerate(join_keys):
+        mask = index.codes[i] == -1
+        if mask.any():
+            # check if there already was any nulls at this location
+            # if there was, it is factorized to `shape[i] - 1`
+            a = join_key[lcodes[i] == shape[i] - 1]
+            if a.size == 0 or not a[0] != a[0]:
+                shape[i] += 1
+
+            rcodes[i][mask] = shape[i] - 1
+
+    # get flat i8 join keys
+    lkey, rkey = _get_join_keys(lcodes, rcodes, tuple(shape), sort)
+    return lkey, rkey
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _left_join_on_index(
+    left_ax: Index, right_ax: Index, join_keys: list[ArrayLike], sort: bool = False
+) -> tuple[Index, npt.NDArray[np.intp] | None, npt.NDArray[np.intp]]:
+    if isinstance(right_ax, MultiIndex):
+        lkey, rkey = _get_multiindex_indexer(join_keys, right_ax, sort=sort)
+    else:
+        # error: Incompatible types in assignment (expression has type
+        # "Union[Union[ExtensionArray, ndarray[Any, Any]], Index, Series]",
+        # variable has type "ndarray[Any, dtype[signedinteger[Any]]]")
+        lkey = join_keys[0]  # type: ignore[assignment]
+        # error: Incompatible types in assignment (expression has type "Index",
+        # variable has type "ndarray[Any, dtype[signedinteger[Any]]]")
+        rkey = right_ax._values  # type: ignore[assignment]
+
+    left_key, right_key, count = _factorize_keys(lkey, rkey, sort=sort)
+    left_indexer, right_indexer = libjoin.left_outer_join(
+        left_key, right_key, count, sort=sort
+    )
+
+    if sort or len(left_ax) != len(left_indexer):
+        # if asked to sort or there are 1-to-many matches
+        join_index = left_ax.take(left_indexer)
+        return join_index, left_indexer, right_indexer
+
+    # left frame preserves order & length of its index
+    return left_ax, None, right_indexer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _sort_labels(
+    uniques: np.ndarray, left: npt.NDArray[np.intp], right: npt.NDArray[np.intp]
+) -> tuple[npt.NDArray[np.intp], npt.NDArray[np.intp]]:
+    llength = len(left)
+    labels = np.concatenate([left, right])
+
+    _, new_labels = algos.safe_sort(uniques, labels, use_na_sentinel=True)
+    new_left, new_right = new_labels[:llength], new_labels[llength:]
+
+    return new_left, new_right
+
+
+def _get_join_keys(
+    llab: list[npt.NDArray[np.int64 | np.intp]],
+    rlab: list[npt.NDArray[np.int64 | np.intp]],
+    shape: Shape,
+    sort: bool,
+) -> tuple[npt.NDArray[np.int64], npt.NDArray[np.int64]]:
+    # how many levels can be done without overflow
+    nlev = next(
+        lev
+        for lev in range(len(shape), 0, -1)
+        if not is_int64_overflow_possible(shape[:lev])
+    )
+
+    # get keys for the first `nlev` levels
+    stride = np.prod(shape[1:nlev], dtype="i8")
+    lkey = stride * llab[0].astype("i8", subok=False, copy=False)
+    rkey = stride * rlab[0].astype("i8", subok=False, copy=False)
+
+    for i in range(1, nlev):
+        with np.errstate(divide="ignore"):
+            stride //= shape[i]
+        lkey += llab[i] * stride
+        rkey += rlab[i] * stride
+
+    if nlev == len(shape):  # all done!
+        return lkey, rkey
+
+    # densify current keys to avoid overflow
+    lkey, rkey, count = _factorize_keys(lkey, rkey, sort=sort)
+
+    llab = [lkey] + llab[nlev:]
+    rlab = [rkey] + rlab[nlev:]
+    shape = (count,) + shape[nlev:]
+
+    return _get_join_keys(llab, rlab, shape, sort)
+
+
+@set_module('pandas')
+def merge(left: DataFrame | Series, right: DataFrame | Series, how: MergeHow = 'inner', on: IndexLabel | AnyArrayLike | None = None, left_on: IndexLabel | AnyArrayLike | None = None, right_on: IndexLabel | AnyArrayLike | None = None, left_index: bool = False, right_index: bool = False, sort: bool = False, suffixes: Suffixes = ('_x', '_y'), copy: bool | lib.NoDefault = lib.no_default, indicator: str | bool = False, validate: str | None = None) -> DataFrame:
+    """
+    Merge DataFrame or named Series objects with a database-style join.
+
+    A named Series object is treated as a DataFrame with a single named column.
+
+    The join is done on columns or indexes. If joining columns on
+    columns, the DataFrame indexes *will be ignored*. Otherwise if joining indexes
+    on indexes or indexes on a column or columns, the index will be passed on.
+    When performing a cross merge, no column specifications to merge on are
+    allowed.
+
+    .. warning::
+
+        If both key columns contain rows where the key is a null value, those
+        rows will be matched against each other. This is different from usual SQL
+        join behaviour and can lead to unexpected results.
+
+    Parameters
+    ----------
+    left : DataFrame or named Series
+        First pandas object to merge.
+    right : DataFrame or named Series
+        Second pandas object to merge.
+    how : {'left', 'right', 'outer', 'inner', 'cross', 'left_anti', 'right_anti},
+        default 'inner'
+        Type of merge to be performed.
+
+        * left: use only keys from left frame, similar to a SQL left outer join;
+          preserve key order.
+        * right: use only keys from right frame, similar to a SQL right outer join;
+          preserve key order.
+        * outer: use union of keys from both frames, similar to a SQL full outer
+          join; sort keys lexicographically.
+        * inner: use intersection of keys from both frames, similar to a SQL inner
+          join; preserve the order of the left keys.
+        * cross: creates the cartesian product from both frames, preserves the order
+          of the left keys.
+        * left_anti: retain left rows whose join key has no match on the right, similar
+          to a SQL left anti join; preserve left key order.
+        * right_anti: retain right rows whose join key has no match on the left, similar
+          to a SQL right anti join; preserve right key order.
+    on : Hashable or a sequence of the previous
+        Column or index level names to join on. These must be found in both
+        DataFrames. If `on` is None and not merging on indexes then this defaults
+        to the intersection of the columns in both DataFrames.
+    left_on : Hashable or a sequence of the previous, or array-like
+        Column or index level names to join on in the left DataFrame. Can also
+        be an array or list of arrays of the length of the left DataFrame.
+        These arrays are treated as if they are columns.
+    right_on : Hashable or a sequence of the previous, or array-like
+        Column or index level names to join on in the right DataFrame. Can also
+        be an array or list of arrays of the length of the right DataFrame.
+        These arrays are treated as if they are columns.
+    left_index : bool, default False
+        Use the index from the left DataFrame as the join key(s). If it is a
+        MultiIndex, the number of keys in the other DataFrame (either the index
+        or a number of columns) must match the number of levels.
+    right_index : bool, default False
+        Use the index from the right DataFrame as the join key. Same caveats as
+        left_index.
+    sort : bool, default False
+        Sort the join keys lexicographically in the result DataFrame. If False,
+        the order of the join keys depends on the join type (how keyword).
+    suffixes : list-like, default is ("_x", "_y")
+        A length-2 sequence where each element is optionally a string
+        indicating the suffix to add to overlapping column names in
+        `left` and `right` respectively. Pass a value of `None` instead
+        of a string to indicate that the column name from `left` or
+        `right` should be left as-is, with no suffix. At least one of the
+        values must not be None.
+    copy : bool, default False
+        If False, avoid copy if possible.
+
+        .. note::
+            The `copy` keyword will change behavior in pandas 3.0.
+            `Copy-on-Write
+            <https://pandas.pydata.org/docs/dev/user_guide/copy_on_write.html>`__
+            will be enabled by default, which means that all methods with a
+            `copy` keyword will use a lazy copy mechanism to defer the copy and
+            ignore the `copy` keyword. The `copy` keyword will be removed in a
+            future version of pandas.
+
+            You can already get the future behavior and improvements through
+            enabling copy on write ``pd.options.mode.copy_on_write = True``
+
+        .. deprecated:: 3.0.0
+    indicator : bool or str, default False
+        If True, adds a column to the output DataFrame called "_merge" with
+        information on the source of each row. The column can be given a different
+        name by providing a string argument. The column will have a Categorical
+        type with the value of "left_only" for observations whose merge key only
+        appears in the left DataFrame, "right_only" for observations
+        whose merge key only appears in the right DataFrame, and "both"
+        if the observation's merge key is found in both DataFrames.
+
+    validate : str, optional
+        If specified, checks if merge is of specified type.
+
+        * "one_to_one" or "1:1": check if merge keys are unique in both
+          left and right datasets.
+        * "one_to_many" or "1:m": check if merge keys are unique in left
+          dataset.
+        * "many_to_one" or "m:1": check if merge keys are unique in right
+          dataset.
+        * "many_to_many" or "m:m": allowed, but does not result in checks.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame of the two merged objects.
+
+    Raises
+    ------
+    MergeError
+        When merge keys are not unique and validation is requested, or when
+        invalid merge parameters are provided.
+    ValueError
+        When incompatible merge keys are provided or when column overlap
+        occurs without proper suffix specification.
+
+    See Also
+    --------
+    merge_ordered : Merge with optional filling/interpolation.
+    merge_asof : Merge on nearest keys.
+    DataFrame.join : Similar method using indices.
+
+    Notes
+    -----
+    Support for specifying index levels as the `on`, `left_on`, and
+    `right_on` parameters was added in version 0.23.0.
+    Support for merging named Series objects was added in version 0.24.0.
+
+    Anti joins retain the multiplicity of unmatched rows and remove every retained-side
+    row whose key has at least one match. Their result still contains columns from both
+    inputs, with the absent side filled with missing values. As described in the warning
+    above, null keys match null keys and therefore do not survive an anti join when both
+    sides contain a null key. These semantics also apply to index and MultiIndex joins,
+    different left/right key columns, and supported extension or mixed key dtypes.
+
+
+    Merge df1 and df2 on the lkey and rkey columns. The value columns have
+    the default suffixes, _x and _y, appended.
+
+
+    Merge DataFrames df1 and df2 with specified left and right suffixes
+    appended to any overlapping columns.
+
+
+    Merge DataFrames df1 and df2, but raise an exception if the DataFrames have
+    any overlapping columns.
+
+
+
+
+
+
+    """
+    raise NotImplementedError

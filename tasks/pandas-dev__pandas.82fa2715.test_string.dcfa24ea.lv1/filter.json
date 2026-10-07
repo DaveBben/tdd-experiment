@@ -1,0 +1,26 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_string.dcfa24ea.lv1",
+ "image": "libercoders/featurebench-specs_pandas-instance_15f634a6@sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "================== 336 passed, 1 skipped, 11 xfailed in 0.77s =================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 49 passed in 0.23s =============================="
+ },
+ "mutant_pool": 164,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 49 passed in 0.24s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_comparison.445d81a3.lv1",
+ "pool": 175,
+ "mutants": [
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 417,
+   "op": "comparison",
+   "start": 15379,
+   "end": 15416,
+   "old": "other.__class__ is not self.__class__",
+   "new": "(other.__class__ is self.__class__)",
+   "id": 0
+  },
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 422,
+   "op": "boolean",
+   "start": 15546,
+   "end": 16168,
+   "old": "self.name == other.name\n            # check all parameters in 'other' match those in 'self' and 'other'\n            # has no extra parameters (latter part should never happen b/c same\n            # class). We do not use `self.parameters == other.parameters` because\n            # it does not work for aggregating the truthiness of arrays, e.g. `m_nu`.\n            # TODO! element-wise when there are array cosmologies\n            and self._parameters_all == other._parameters_all\n            and all(\n                np.all(getattr(self, k) == getattr(other, k))\n                for k in self._parameters_all\n            )",
+   "new": "(self.name == other.name or self._parameters_all == other._parameters_all or all((np.all(getattr(self, k) == getattr(other, k)) for k in self._parameters_all)))",
+   "id": 1
+  },
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 422,
+   "op": "comparison",
+   "start": 15546,
+   "end": 15569,
+   "old": "self.name == other.name",
+   "new": "(self.name != other.name)",
+   "id": 2
+  },
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 428,
+   "op": "comparison",
+   "start": 15980,
+   "end": 16025,
+   "old": "self._parameters_all == other._parameters_all",
+   "new": "(self._parameters_all != other._parameters_all)",
+   "id": 3
+  },
+  {
+   "path": "astropy/cosmology/_src/core.py",
+   "line": 430,
+   "op": "comparison",
+   "start": 16070,
+   "end": 16107,
+   "old": "getattr(self, k) == getattr(other, k)",
+   "new": "(getattr(self, k) != getattr(other, k))",
+   "id": 4
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4724,
+   "end": 4794,
+   "old": "formats = np.broadcast_to(np.array(format, dtype=object), len(cosmos))",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 147,
+   "op": "statement",
+   "start": 5012,
+   "end": 5127,
+   "old": "wcosmos = [\n        c if not isinstance(c, _CANT_BROADCAST) else _CosmologyWrapper(c)\n        for c in cosmos\n    ]",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 365,
+   "op": "return",
+   "start": 13327,
+   "end": 13404,
+   "old": "return not cosmology_equal(cosmo1, cosmo2, allow_equivalent=allow_equivalent)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 311,
+   "op": "statement",
+   "start": 11153,
+   "end": 11182,
+   "old": "eq = cosmo1.__equiv__(cosmo2)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 312,
+   "op": "comparison",
+   "start": 11194,
+   "end": 11214,
+   "old": "eq is NotImplemented",
+   "new": "(eq is not NotImplemented)",
+   "id": 9
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 313,
+   "op": "statement",
+   "start": 11228,
+   "end": 11257,
+   "old": "eq = cosmo2.__equiv__(cosmo1)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 148,
+   "op": "boolean",
+   "start": 5037,
+   "end": 5071,
+   "old": "not isinstance(c, _CANT_BROADCAST)",
+   "new": "(isinstance(c, _CANT_BROADCAST))",
+   "id": 11
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 315,
+   "op": "comparison",
+   "start": 11314,
+   "end": 11334,
+   "old": "eq is NotImplemented",
+   "new": "(eq is not NotImplemented)",
+   "id": 12
+  },
+  {
+   "path": "astropy/cosmology/_src/funcs/comparison.py",
+   "line": 315,
+   "op": "constant",
+   "start": 11305,
+   "end": 11310,
+   "old": "False",
+   "new": "(True)",
+   "id": 13
+  },
+  {
+   "path": "astropy/cosmology/_src/io/builtin/model.py",
+   "line": 299,
+   "op": "statement",
+   "start": 10546,
+   "end": 10626,
+   "old": "convert_registry.register_identifier(\"astropy.model\", Cosmology, model_identify)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "astropy/cosmology/_src/io/builtin/utils.py",
+   "line": 23,
+   "op": "statement",
+   "start": 556,
+   "end": 586,
+   "old": "shape = (1,) + np.shape(value)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "astropy/cosmology/_src/io/builtin/utils.py",
+   "line": 23,
+   "op": "arithmetic",
+   "start": 564,
+   "end": 586,
+   "old": "(1,) + np.shape(value)",
+   "new": "((1,) - np.shape(value))",
+   "id": 16
+  },
+  {
+   "path": "astropy/cosmology/_src/io/builtin/utils.py",
+   "line": 23,
+   "op": "constant",
+   "start": 565,
+   "end": 566,
+   "old": "1",
+   "new": "(2)",
+   "id": 17
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 304,
+   "op": "return",
+   "start": 11255,
+   "end": 11316,
+   "old": "return f\"{self.__class__.__name__}({', '.join(fields_repr)})\"",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 190,
+   "op": "statement",
+   "start": 7100,
+   "end": 7161,
+   "old": "raise AttributeError(f\"cannot assign to field {self.name!r}\")",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 198,
+   "op": "statement",
+   "start": 7578,
+   "end": 7598,
+   "old": "value = self.default",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 205,
+   "op": "statement",
+   "start": 7828,
+   "end": 7855,
+   "old": "value.setflags(write=False)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "astropy/cosmology/_src/parameter/core.py",
+   "line": 205,
+   "op": "constant",
+   "start": 7849,
+   "end": 7854,
+   "old": "False",
+   "new": "(True)",
+   "id": 22
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 4818,
+   "op": "return",
+   "start": 183828,
+   "end": 183840,
+   "old": "return model",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2898,
+   "op": "statement",
+   "start": 113325,
+   "end": 113555,
+   "old": "default_keywords = [\n            (\"Model\", self.__class__.__name__),\n            (\"Name\", self.name),\n            (\"Inputs\", self.inputs),\n            (\"Outputs\", self.outputs),\n            (\"Model set size\", len(self)),\n        ]",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 3709,
+   "op": "statement",
+   "start": 143174,
+   "end": 143212,
+   "old": "components = self._format_components()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2918,
+   "op": "comparison",
+   "start": 113948,
+   "end": 113962,
+   "old": "len(self) == 1",
+   "new": "(len(self) != 1)",
+   "id": 26
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2919,
+   "op": "statement",
+   "start": 113976,
+   "end": 114044,
+   "old": "columns = [[getattr(self, name).value] for name in self.param_names]",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2913,
+   "op": "boolean",
+   "start": 113759,
+   "end": 113825,
+   "old": "keyword.lower() in defaults and defaults[keyword.lower()] == value",
+   "new": "(keyword.lower() in defaults or defaults[keyword.lower()] == value)",
+   "id": 28
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2914,
+   "op": "statement",
+   "start": 113843,
+   "end": 113851,
+   "old": "continue",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2918,
+   "op": "constant",
+   "start": 113961,
+   "end": 113962,
+   "old": "1",
+   "new": "(2)",
+   "id": 30
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2927,
+   "op": "statement",
+   "start": 114321,
+   "end": 114370,
+   "old": "param_table[name].unit = getattr(self, name).unit",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2899,
+   "op": "constant",
+   "start": 113359,
+   "end": 113366,
+   "old": "\"Model\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2900,
+   "op": "constant",
+   "start": 113407,
+   "end": 113413,
+   "old": "\"Name\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2901,
+   "op": "constant",
+   "start": 113440,
+   "end": 113448,
+   "old": "\"Inputs\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2902,
+   "op": "constant",
+   "start": 113477,
+   "end": 113486,
+   "old": "\"Outputs\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2903,
+   "op": "constant",
+   "start": 113516,
+   "end": 113532,
+   "old": "\"Model set size\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2909,
+   "op": "comparison",
+   "start": 113675,
+   "end": 113692,
+   "old": "value is not None",
+   "new": "(value is None)",
+   "id": 37
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2913,
+   "op": "comparison",
+   "start": 113759,
+   "end": 113786,
+   "old": "keyword.lower() in defaults",
+   "new": "(keyword.lower() not in defaults)",
+   "id": 38
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2913,
+   "op": "comparison",
+   "start": 113791,
+   "end": 113825,
+   "old": "defaults[keyword.lower()] == value",
+   "new": "(defaults[keyword.lower()] != value)",
+   "id": 39
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 3712,
+   "op": "constant",
+   "start": 143287,
+   "end": 143299,
+   "old": "\"Components\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 3712,
+   "op": "arithmetic",
+   "start": 143301,
+   "end": 143335,
+   "old": "\"\\n\" + indent(components, 4 * \" \")",
+   "new": "('\\n' - indent(components, 4 * ' '))",
+   "id": 41
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2928,
+   "op": "arithmetic",
+   "start": 114421,
+   "end": 114428,
+   "old": "4 * \" \"",
+   "new": "(4 / ' ')",
+   "id": 42
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 3712,
+   "op": "constant",
+   "start": 143301,
+   "end": 143305,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 2928,
+   "op": "constant",
+   "start": 114425,
+   "end": 114428,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "astropy/modeling/core.py",
+   "line": 3712,
+   "op": "constant",
+   "start": 143331,
+   "end": 143334,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "astropy/modeling/parameters.py",
+   "line": 332,
+   "op": "return",
+   "start": 11274,
+   "end": 11291,
+   "old": "return self._name",
+   "new": "return None",
+   "id": 46
+  },
+  {
+   "path": "astropy/table/index.py",
+   "line": 363,
+   "op": "statement",
+   "start": 14878,
+   "end": 14947,
+   "old": "has_quantity = any(isinstance(col, Quantity) for col in self.columns)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "astropy/table/index.py",
+   "line": 687,
+   "op": "return",
+   "start": 25561,
+   "end": 25612,
+   "old": "return tuple(col.info.name for col in self.columns)",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "astropy/table/index.py",
+   "line": 851,
+   "op": "return",
+   "start": 30593,
+   "end": 30618,
+   "old": "return self.index.columns",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7142,
+   "end": 7180,
+   "old": "collections.abc.Sequence.register(Row)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 220,
+   "op": "return",
+   "start": 7003,
+   "end": 7072,
+   "old": "return \"\\n\".join(self.table[index : index + 1].pformat(max_width=-1))",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 219,
+   "op": "comparison",
+   "start": 6943,
+   "end": 6958,
+   "old": "self.index >= 0",
+   "new": "(self.index > 0)",
+   "id": 52
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 219,
+   "op": "constant",
+   "start": 6957,
+   "end": 6958,
+   "old": "0",
+   "new": "(1)",
+   "id": 53
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 220,
+   "op": "constant",
+   "start": 7010,
+   "end": 7014,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "astropy/table/row.py",
+   "line": 220,
+   "op": "arithmetic",
+   "start": 7039,
+   "end": 7048,
+   "old": "index + 1",
+   "new": "(index - 1)",
+   "id": 55
+  },
+  {
+   "path": "astropy/table/sorted_array.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1297,
+   "end": 1313,
+   "old": "self.data = data",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/table/sorted_array.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1416,
+   "end": 1436,
+   "old": "self.unique = unique",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1106,
+   "op": "statement",
+   "start": 40391,
+   "end": 40463,
+   "old": "colnames = (colnames,) if isinstance(colnames, str) else tuple(colnames)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1107,
+   "op": "statement",
+   "start": 40472,
+   "end": 40513,
+   "old": "columns = self.columns[colnames].values()",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1122,
+   "op": "statement",
+   "start": 41039,
+   "end": 41068,
+   "old": "is_primary = not self.indices",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1123,
+   "op": "statement",
+   "start": 41077,
+   "end": 41129,
+   "old": "index = Index(columns, engine=engine, unique=unique)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1689,
+   "op": "return",
+   "start": 63470,
+   "end": 63532,
+   "old": "return \"\\n\".join(self.pformat(max_lines=None, max_width=None))",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1122,
+   "op": "boolean",
+   "start": 41052,
+   "end": 41068,
+   "old": "not self.indices",
+   "new": "(self.indices)",
+   "id": 63
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1128,
+   "op": "statement",
+   "start": 41309,
+   "end": 41346,
+   "old": "col.info.indices.append(sliced_index)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1689,
+   "op": "constant",
+   "start": 63477,
+   "end": 63481,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "astropy/table/table.py",
+   "line": 1111,
+   "op": "constant",
+   "start": 40651,
+   "end": 40656,
+   "old": "False",
+   "new": "(True)",
+   "id": 66
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 2756,
+   "op": "statement",
+   "start": 94662,
+   "end": 94712,
+   "old": "one: Final[CompositeUnit] = dimensionless_unscaled",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 512,
+   "op": "statement",
+   "start": 16513,
+   "end": 16549,
+   "old": "unit_str = unit.to_string(\"generic\")",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 513,
+   "op": "statement",
+   "start": 16562,
+   "end": 16596,
+   "old": "physical_type = unit.physical_type",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 518,
+   "op": "return",
+   "start": 16774,
+   "end": 16789,
+   "old": "return unit_str",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 514,
+   "op": "comparison",
+   "start": 16612,
+   "end": 16638,
+   "old": "physical_type != \"unknown\"",
+   "new": "(physical_type == 'unknown')",
+   "id": 71
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 515,
+   "op": "statement",
+   "start": 16656,
+   "end": 16700,
+   "old": "unit_str = f\"'{unit_str}' ({physical_type})\"",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 517,
+   "op": "statement",
+   "start": 16735,
+   "end": 16761,
+   "old": "unit_str = f\"'{unit_str}'\"",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 514,
+   "op": "constant",
+   "start": 16629,
+   "end": 16638,
+   "old": "\"unknown\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "arithmetic",
+   "start": 22099,
+   "end": 22138,
+   "old": "__doc__ += \"\\n\\n\" + \"\\n\".join(doclines)",
+   "new": "__doc__ -= '\\n\\n' + '\\n'.join(doclines)",
+   "id": 75
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "statement",
+   "start": 22099,
+   "end": 22138,
+   "old": "__doc__ += \"\\n\\n\" + \"\\n\".join(doclines)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 278,
+   "op": "return",
+   "start": 10539,
+   "end": 10575,
+   "old": "return \"/\".join(self._physical_type)",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "constant",
+   "start": 22110,
+   "end": 22116,
+   "old": "\"\\n\\n\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 278,
+   "op": "constant",
+   "start": 10546,
+   "end": 10549,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 391,
+   "op": "return",
+   "start": 13622,
+   "end": 13813,
+   "old": "return {\n            key: val\n            for key in (self._represent_as_dict_attrs if attrs is None else attrs)\n            if (val := getattr(self._parent, key, None)) is not None\n        }",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 686,
+   "op": "return",
+   "start": 23784,
+   "end": 23800,
+   "old": "return col_slice",
+   "new": "return None",
+   "id": 81
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 662,
+   "op": "boolean",
+   "start": 22625,
+   "end": 22665,
+   "old": "not getattr(self, \"_copy_indices\", True)",
+   "new": "(getattr(self, '_copy_indices', True))",
+   "id": 82
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 664,
+   "op": "statement",
+   "start": 22751,
+   "end": 22778,
+   "old": "col_slice.info.indices = []",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 807,
+   "op": "constant",
+   "start": 27694,
+   "end": 27701,
+   "old": "\"dtype\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 394,
+   "op": "comparison",
+   "start": 13750,
+   "end": 13803,
+   "old": "(val := getattr(self._parent, key, None)) is not None",
+   "new": "((val := getattr(self._parent, key, None)) is None)",
+   "id": 85
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 662,
+   "op": "constant",
+   "start": 22643,
+   "end": 22658,
+   "old": "\"_copy_indices\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 676,
+   "op": "statement",
+   "start": 23360,
+   "end": 23394,
+   "old": "small = len(item) <= 0.6 * col_len",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 393,
+   "op": "comparison",
+   "start": 13709,
+   "end": 13722,
+   "old": "attrs is None",
+   "new": "(attrs is not None)",
+   "id": 88
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 669,
+   "op": "boolean",
+   "start": 22957,
+   "end": 23012,
+   "old": "isinstance(item, np.ndarray) and item.dtype.kind == \"b\"",
+   "new": "(isinstance(item, np.ndarray) or item.dtype.kind == 'b')",
+   "id": 89
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 671,
+   "op": "statement",
+   "start": 23061,
+   "end": 23085,
+   "old": "item = np.where(item)[0]",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 676,
+   "op": "comparison",
+   "start": 23368,
+   "end": 23394,
+   "old": "len(item) <= 0.6 * col_len",
+   "new": "(len(item) < 0.6 * col_len)",
+   "id": 91
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 684,
+   "op": "statement",
+   "start": 23734,
+   "end": 23774,
+   "old": "col_slice.info.indices.append(new_index)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 676,
+   "op": "arithmetic",
+   "start": 23381,
+   "end": 23394,
+   "old": "0.6 * col_len",
+   "new": "(0.6 / col_len)",
+   "id": 93
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 679,
+   "op": "boolean",
+   "start": 23493,
+   "end": 23532,
+   "old": "small or isinstance(index, SortedArray)",
+   "new": "(small and isinstance(index, SortedArray))",
+   "id": 94
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 680,
+   "op": "statement",
+   "start": 23554,
+   "end": 23598,
+   "old": "new_index = index.get_slice(col_slice, item)",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 682,
+   "op": "statement",
+   "start": 23641,
+   "end": 23668,
+   "old": "new_index = deepcopy(index)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 683,
+   "op": "statement",
+   "start": 23689,
+   "end": 23717,
+   "old": "new_index.replace_rows(item)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 669,
+   "op": "constant",
+   "start": 23009,
+   "end": 23012,
+   "old": "\"b\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "astropy/utils/data_info.py",
+   "line": 671,
+   "op": "constant",
+   "start": 23083,
+   "end": 23084,
+   "old": "0",
+   "new": "(1)",
+   "id": 99
+  }
+ ]
+}

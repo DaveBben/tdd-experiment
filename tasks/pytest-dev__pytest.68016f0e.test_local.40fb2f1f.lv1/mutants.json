@@ -1,0 +1,1006 @@
+{
+ "task": "pytest-dev__pytest.68016f0e.test_local.40fb2f1f.lv1",
+ "pool": 465,
+ "mutants": [
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1475,
+   "op": "statement",
+   "start": 49202,
+   "end": 49219,
+   "old": "local = LocalPath",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 254,
+   "op": "return",
+   "start": 6972,
+   "end": 6983,
+   "old": "return user",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1449,
+   "op": "statement",
+   "start": 48619,
+   "end": 48655,
+   "old": "shutil.copystat(str(src), str(dest))",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 253,
+   "op": "statement",
+   "start": 6896,
+   "end": 6924,
+   "old": "user = pwd.getpwnam(user)[2]",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 493,
+   "op": "statement",
+   "start": 15056,
+   "end": 15070,
+   "old": "current = self",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 538,
+   "op": "statement",
+   "start": 16569,
+   "end": 16625,
+   "old": "yield from Visitor(fil, rec, ignore, bf, sort).gen(self)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 577,
+   "op": "return",
+   "start": 17583,
+   "end": 17609,
+   "old": "return not (self == other)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 771,
+   "op": "return",
+   "start": 24427,
+   "end": 24454,
+   "old": "return islink(self.strpath)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 874,
+   "op": "return",
+   "start": 27875,
+   "end": 27933,
+   "old": "return error.checked_call(os.rename, self.strpath, target)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 878,
+   "op": "statement",
+   "start": 28022,
+   "end": 28041,
+   "old": "f = self.open(\"wb\")",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 889,
+   "op": "statement",
+   "start": 28302,
+   "end": 28344,
+   "old": "error.checked_call(os.mkdir, os.fspath(p))",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1002,
+   "op": "return",
+   "start": 32102,
+   "end": 32112,
+   "old": "return old",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1024,
+   "op": "return",
+   "start": 32732,
+   "end": 32756,
+   "old": "return self.stat().atime",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1027,
+   "op": "return",
+   "start": 32790,
+   "end": 32823,
+   "old": "return f\"local({self.strpath!r})\"",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1050,
+   "op": "statement",
+   "start": 33652,
+   "end": 33666,
+   "old": "pkgpath = None",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1104,
+   "op": "statement",
+   "start": 35899,
+   "end": 35913,
+   "old": "pkgpath = None",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1248,
+   "op": "return",
+   "start": 41159,
+   "end": 41172,
+   "old": "return cls(x)",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1376,
+   "op": "statement",
+   "start": 45960,
+   "end": 45987,
+   "old": "udir_time = get_mtime(udir)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 210,
+   "op": "statement",
+   "start": 5802,
+   "end": 5805,
+   "old": "...",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 222,
+   "op": "statement",
+   "start": 6089,
+   "end": 6127,
+   "old": "raise NotImplementedError(\"XXX win32\")",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 365,
+   "op": "return",
+   "start": 10853,
+   "end": 10868,
+   "old": "return f.read()",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 370,
+   "op": "return",
+   "start": 11040,
+   "end": 11055,
+   "old": "return f.read()",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 375,
+   "op": "return",
+   "start": 11200,
+   "end": 11215,
+   "old": "return f.read()",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 407,
+   "op": "statement",
+   "start": 12115,
+   "end": 12134,
+   "old": "self.rename(target)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 497,
+   "op": "statement",
+   "start": 15148,
+   "end": 15175,
+   "old": "current = current.dirpath()",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 502,
+   "op": "statement",
+   "start": 15298,
+   "end": 15311,
+   "old": "lst.reverse()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 583,
+   "op": "comparison",
+   "start": 17735,
+   "end": 17769,
+   "old": "os.fspath(self) > os.fspath(other)",
+   "new": "(os.fspath(self) >= os.fspath(other))",
+   "id": 26
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 590,
+   "op": "comparison",
+   "start": 17983,
+   "end": 17996,
+   "old": "self == other",
+   "new": "(self != other)",
+   "id": 27
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 596,
+   "op": "constant",
+   "start": 18191,
+   "end": 18192,
+   "old": "1",
+   "new": "(2)",
+   "id": 28
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 618,
+   "op": "constant",
+   "start": 19002,
+   "end": 19008,
+   "old": "524288",
+   "new": "(524289)",
+   "id": 29
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 834,
+   "op": "constant",
+   "start": 26514,
+   "end": 26519,
+   "old": "False",
+   "new": "(True)",
+   "id": 30
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 916,
+   "op": "comparison",
+   "start": 29214,
+   "end": 29225,
+   "old": "\"b\" in mode",
+   "new": "('b' not in mode)",
+   "id": 31
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1094,
+   "op": "comparison",
+   "start": 35447,
+   "end": 35475,
+   "old": "ensuresyspath == \"importlib\"",
+   "new": "(ensuresyspath != 'importlib')",
+   "id": 32
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1102,
+   "op": "return",
+   "start": 35879,
+   "end": 35889,
+   "old": "return mod",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1118,
+   "op": "statement",
+   "start": 36423,
+   "end": 36442,
+   "old": "__import__(modname)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1180,
+   "op": "comparison",
+   "start": 38815,
+   "end": 38823,
+   "old": "ret != 0",
+   "new": "(ret == 0)",
+   "id": 35
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1183,
+   "op": "statement",
+   "start": 38944,
+   "end": 39094,
+   "old": "raise RuntimeError(\n                ret,\n                ret,\n                str(self),\n                stdout,\n                stderr,\n            )",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1270,
+   "op": "statement",
+   "start": 41724,
+   "end": 41752,
+   "old": "rootdir = cls.get_temproot()",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1276,
+   "op": "constant",
+   "start": 41913,
+   "end": 41923,
+   "old": "\"session-\"",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1372,
+   "op": "statement",
+   "start": 45851,
+   "end": 45869,
+   "old": "bn = path.basename",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1373,
+   "op": "return",
+   "start": 45882,
+   "end": 45918,
+   "old": "return bn.startswith(garbage_prefix)",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 253,
+   "op": "constant",
+   "start": 6922,
+   "end": 6923,
+   "old": "2",
+   "new": "(3)",
+   "id": 41
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 333,
+   "op": "statement",
+   "start": 9931,
+   "end": 9958,
+   "old": "n = reldest.count(self.sep)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 335,
+   "op": "statement",
+   "start": 10042,
+   "end": 10094,
+   "old": "error.checked_call(os.symlink, target, self.strpath)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 355,
+   "op": "constant",
+   "start": 10577,
+   "end": 10578,
+   "old": "0",
+   "new": "(1)",
+   "id": 44
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 498,
+   "op": "comparison",
+   "start": 15191,
+   "end": 15206,
+   "old": "last == current",
+   "new": "(last != current)",
+   "id": 45
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 499,
+   "op": "statement",
+   "start": 15224,
+   "end": 15229,
+   "old": "break",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 591,
+   "op": "constant",
+   "start": 18017,
+   "end": 18021,
+   "old": "True",
+   "new": "(False)",
+   "id": 47
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 612,
+   "op": "statement",
+   "start": 18778,
+   "end": 18820,
+   "old": "error.checked_call(os.rmdir, self.strpath)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 615,
+   "op": "statement",
+   "start": 18875,
+   "end": 18892,
+   "old": "self.chmod(0o700)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 843,
+   "op": "statement",
+   "start": 26852,
+   "end": 26887,
+   "old": "target = target.join(self.basename)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 847,
+   "op": "statement",
+   "start": 26997,
+   "end": 27035,
+   "old": "copymode(self.strpath, target.strpath)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 858,
+   "op": "statement",
+   "start": 27317,
+   "end": 27345,
+   "old": "newx.dirpath().ensure(dir=1)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1015,
+   "op": "comparison",
+   "start": 32453,
+   "end": 32468,
+   "old": "old is not None",
+   "new": "(old is None)",
+   "id": 53
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1109,
+   "op": "statement",
+   "start": 36077,
+   "end": 36132,
+   "old": "names = self.new(ext=\"\").relto(pkgroot).split(self.sep)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1112,
+   "op": "statement",
+   "start": 36225,
+   "end": 36250,
+   "old": "modname = \".\".join(names)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1114,
+   "op": "statement",
+   "start": 36285,
+   "end": 36309,
+   "old": "pkgroot = self.dirpath()",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1115,
+   "op": "statement",
+   "start": 36326,
+   "end": 36353,
+   "old": "modname = self.purebasename",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1126,
+   "op": "statement",
+   "start": 36800,
+   "end": 36822,
+   "old": "modfile = modfile[:-1]",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1170,
+   "op": "arithmetic",
+   "start": 38479,
+   "end": 38519,
+   "old": "[str(self)] + [str(arg) for arg in argv]",
+   "new": "([str(self)] - [str(arg) for arg in argv])",
+   "id": 59
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1204,
+   "op": "return",
+   "start": 39637,
+   "end": 39645,
+   "old": "return p",
+   "new": "return None",
+   "id": 60
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1206,
+   "op": "comparison",
+   "start": 39675,
+   "end": 39688,
+   "old": "paths is None",
+   "new": "(paths is not None)",
+   "id": 61
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1223,
+   "op": "statement",
+   "start": 40349,
+   "end": 40398,
+   "old": "tryadd += os.environ[\"PATHEXT\"].split(os.pathsep)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1368,
+   "op": "constant",
+   "start": 45725,
+   "end": 45735,
+   "old": "\"garbage-\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1379,
+   "op": "statement",
+   "start": 46078,
+   "end": 46099,
+   "old": "num = parse_num(path)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 605,
+   "op": "statement",
+   "start": 18557,
+   "end": 18581,
+   "old": "self.chmod(0o700, rec=1)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 841,
+   "op": "constant",
+   "start": 26796,
+   "end": 26797,
+   "old": "1",
+   "new": "(2)",
+   "id": 66
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 869,
+   "op": "statement",
+   "start": 27741,
+   "end": 27758,
+   "old": "copystat(x, newx)",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 907,
+   "op": "constant",
+   "start": 28927,
+   "end": 28930,
+   "old": "\"w\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 921,
+   "op": "boolean",
+   "start": 29405,
+   "end": 29432,
+   "old": "not isinstance(data, bytes)",
+   "new": "(isinstance(data, bytes))",
+   "id": 69
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1055,
+   "op": "boolean",
+   "start": 33851,
+   "end": 33884,
+   "old": "not isimportable(parent.basename)",
+   "new": "(isimportable(parent.basename))",
+   "id": 70
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1098,
+   "op": "comparison",
+   "start": 35662,
+   "end": 35681,
+   "old": "spec.loader is None",
+   "new": "(spec.loader is not None)",
+   "id": 71
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1128,
+   "op": "statement",
+   "start": 36887,
+   "end": 36917,
+   "old": "modfile = modfile[:-9] + \".py\"",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1157,
+   "op": "return",
+   "start": 38002,
+   "end": 38012,
+   "old": "return mod",
+   "new": "return None",
+   "id": 73
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1322,
+   "op": "comparison",
+   "start": 43882,
+   "end": 43902,
+   "old": "os.getpid() != mypid",
+   "new": "(os.getpid() == mypid)",
+   "id": 74
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1334,
+   "op": "constant",
+   "start": 44237,
+   "end": 44238,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1345,
+   "op": "statement",
+   "start": 44626,
+   "end": 44658,
+   "old": "atexit_remove_lockfile(lockfile)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1380,
+   "op": "boolean",
+   "start": 46119,
+   "end": 46161,
+   "old": "num is not None and num <= (maxnum - keep)",
+   "new": "(num is not None or num <= maxnum - keep)",
+   "id": 77
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 842,
+   "op": "constant",
+   "start": 26832,
+   "end": 26833,
+   "old": "1",
+   "new": "(2)",
+   "id": 78
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 897,
+   "op": "constant",
+   "start": 28583,
+   "end": 28584,
+   "old": "1",
+   "new": "(2)",
+   "id": 79
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1125,
+   "op": "constant",
+   "start": 36767,
+   "end": 36773,
+   "old": "\".pyc\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1127,
+   "op": "constant",
+   "start": 36857,
+   "end": 36868,
+   "old": "\"$py.class\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1138,
+   "op": "constant",
+   "start": 37318,
+   "end": 37321,
+   "old": "\"1\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1355,
+   "op": "comparison",
+   "start": 45381,
+   "end": 45398,
+   "old": "lastmax == maxnum",
+   "new": "(lastmax != maxnum)",
+   "id": 83
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1380,
+   "op": "comparison",
+   "start": 46139,
+   "end": 46161,
+   "old": "num <= (maxnum - keep)",
+   "new": "(num < maxnum - keep)",
+   "id": 84
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1400,
+   "op": "statement",
+   "start": 47213,
+   "end": 47238,
+   "old": "path.rename(garbage_path)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1401,
+   "op": "statement",
+   "start": 47263,
+   "end": 47289,
+   "old": "garbage_path.remove(rec=1)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 625,
+   "op": "constant",
+   "start": 19240,
+   "end": 19245,
+   "old": "\"sha\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1068,
+   "op": "constant",
+   "start": 34273,
+   "end": 34274,
+   "old": "0",
+   "new": "(1)",
+   "id": 88
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1156,
+   "op": "statement",
+   "start": 37980,
+   "end": 37985,
+   "old": "raise",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1403,
+   "op": "statement",
+   "start": 47360,
+   "end": 47365,
+   "old": "raise",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1419,
+   "op": "constant",
+   "start": 47950,
+   "end": 47960,
+   "old": "\"USERNAME\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1125,
+   "op": "constant",
+   "start": 36759,
+   "end": 36760,
+   "old": "4",
+   "new": "(5)",
+   "id": 92
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1209,
+   "op": "constant",
+   "start": 39819,
+   "end": 39822,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1245,
+   "op": "constant",
+   "start": 41082,
+   "end": 41092,
+   "old": "\"HOMEPATH\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1208,
+   "op": "constant",
+   "start": 39757,
+   "end": 39763,
+   "old": "\"Path\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1220,
+   "op": "constant",
+   "start": 40266,
+   "end": 40272,
+   "old": "\"PATH\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1230,
+   "op": "constant",
+   "start": 40624,
+   "end": 40625,
+   "old": "1",
+   "new": "(2)",
+   "id": 97
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1408,
+   "op": "constant",
+   "start": 47582,
+   "end": 47583,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "src/_pytest/_py/path.py",
+   "line": 1128,
+   "op": "constant",
+   "start": 36907,
+   "end": 36908,
+   "old": "9",
+   "new": "(10)",
+   "id": 99
+  }
+ ]
+}

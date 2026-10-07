@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_basic_rgb.067e927c.lv1",
+ "pool": 123,
+ "mutants": [
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 217,
+   "op": "return",
+   "start": 7266,
+   "end": 7276,
+   "old": "return rgb",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1483,
+   "end": 1508,
+   "old": "self.intervals = interval",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1517,
+   "end": 1539,
+   "old": "self.stretch = stretch",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2554,
+   "end": 2583,
+   "old": "image_g = np.asarray(image_g)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 79,
+   "op": "statement",
+   "start": 2592,
+   "end": 2621,
+   "old": "image_b = np.asarray(image_b)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 85,
+   "op": "statement",
+   "start": 2867,
+   "end": 2925,
+   "old": "image_rgb = self.apply_mappings(image_r, image_g, image_b)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 91,
+   "op": "return",
+   "start": 3205,
+   "end": 3234,
+   "old": "return np.dstack(conv_images)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 114,
+   "op": "statement",
+   "start": 3915,
+   "end": 3954,
+   "old": "image_rgb = [image_r, image_g, image_b]",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 137,
+   "op": "return",
+   "start": 4707,
+   "end": 4735,
+   "old": "return np.asarray(image_rgb)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 143,
+   "op": "return",
+   "start": 4891,
+   "end": 4928,
+   "old": "return image_rgb.astype(output_dtype)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 149,
+   "op": "statement",
+   "start": 5100,
+   "end": 5142,
+   "old": "pixmax = float(np.iinfo(output_dtype).max)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 151,
+   "op": "arithmetic",
+   "start": 5152,
+   "end": 5171,
+   "old": "image_rgb *= pixmax",
+   "new": "image_rgb /= pixmax",
+   "id": 11
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 151,
+   "op": "statement",
+   "start": 5152,
+   "end": 5171,
+   "old": "image_rgb *= pixmax",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1287,
+   "end": 1300,
+   "old": "len(interval)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 43,
+   "op": "comparison",
+   "start": 1376,
+   "end": 1394,
+   "old": "len(interval) != 3",
+   "new": "(len(interval) == 3)",
+   "id": 14
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 74,
+   "op": "comparison",
+   "start": 2376,
+   "end": 2417,
+   "old": "output_dtype not in _OUTPUT_IMAGE_FORMATS",
+   "new": "(output_dtype in _OUTPUT_IMAGE_FORMATS)",
+   "id": 15
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2431,
+   "end": 2506,
+   "old": "raise ValueError(f\"'output_dtype' must be one of {_OUTPUT_IMAGE_FORMATS}!\")",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 81,
+   "op": "boolean",
+   "start": 2634,
+   "end": 2702,
+   "old": "(image_r.shape != image_g.shape) or (image_g.shape != image_b.shape)",
+   "new": "(image_r.shape != image_g.shape and image_g.shape != image_b.shape)",
+   "id": 17
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2784,
+   "end": 2857,
+   "old": "raise ValueError(msg.format(image_r.shape, image_g.shape, image_b.shape))",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2985,
+   "end": 3053,
+   "old": "conv_images = self._convert_images_to_float(image_rgb, output_dtype)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 120,
+   "op": "statement",
+   "start": 4183,
+   "end": 4229,
+   "old": "vmin, vmax = self.intervals[i].get_limits(img)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 123,
+   "op": "statement",
+   "start": 4299,
+   "end": 4342,
+   "old": "img = np.array(img, copy=True, dtype=float)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4403,
+   "end": 4434,
+   "old": "np.subtract(img, vmin, out=img)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 127,
+   "op": "statement",
+   "start": 4447,
+   "end": 4488,
+   "old": "np.true_divide(img, vmax - vmin, out=img)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 130,
+   "op": "statement",
+   "start": 4541,
+   "end": 4578,
+   "old": "img = np.clip(img, 0.0, 1.0, out=img)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 133,
+   "op": "statement",
+   "start": 4621,
+   "end": 4665,
+   "old": "img = self.stretch(img, out=img, clip=False)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 135,
+   "op": "statement",
+   "start": 4679,
+   "end": 4697,
+   "old": "image_rgb[i] = img",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 81,
+   "op": "comparison",
+   "start": 2635,
+   "end": 2665,
+   "old": "image_r.shape != image_g.shape",
+   "new": "(image_r.shape == image_g.shape)",
+   "id": 27
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 81,
+   "op": "comparison",
+   "start": 2671,
+   "end": 2701,
+   "old": "image_g.shape != image_b.shape",
+   "new": "(image_g.shape == image_b.shape)",
+   "id": 28
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 82,
+   "op": "constant",
+   "start": 2722,
+   "end": 2771,
+   "old": "\"The image shapes must match. r: {}, g: {} b: {}\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 89,
+   "op": "statement",
+   "start": 3128,
+   "end": 3195,
+   "old": "conv_images = self._convert_images_to_uint(image_rgb, output_dtype)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1216,
+   "end": 1217,
+   "old": "0",
+   "new": "(1)",
+   "id": 31
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 42,
+   "op": "arithmetic",
+   "start": 1350,
+   "end": 1364,
+   "old": "3 * [interval]",
+   "new": "(3 / [interval])",
+   "id": 32
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 44,
+   "op": "constant",
+   "start": 1425,
+   "end": 1472,
+   "old": "\"please provide 1 or 3 instances for interval.\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 127,
+   "op": "arithmetic",
+   "start": 4467,
+   "end": 4478,
+   "old": "vmax - vmin",
+   "new": "(vmax + vmin)",
+   "id": 34
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1350,
+   "end": 1351,
+   "old": "3",
+   "new": "(4)",
+   "id": 35
+  },
+  {
+   "path": "astropy/visualization/basic_rgb.py",
+   "line": 123,
+   "op": "constant",
+   "start": 4324,
+   "end": 4328,
+   "old": "True",
+   "new": "(False)",
+   "id": 36
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 70,
+   "op": "statement",
+   "start": 1586,
+   "end": 1639,
+   "old": "data, mask = get_data_and_mask(np.asanyarray(values))",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 71,
+   "op": "statement",
+   "start": 1648,
+   "end": 1670,
+   "old": "ok = np.isfinite(data)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 75,
+   "op": "return",
+   "start": 1733,
+   "end": 1748,
+   "old": "return data[ok]",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 322,
+   "op": "statement",
+   "start": 9687,
+   "end": 9724,
+   "old": "values = self._process_values(values)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 325,
+   "op": "statement",
+   "start": 9761,
+   "end": 9813,
+   "old": "stride = int(max(1.0, values.size / self.n_samples))",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 326,
+   "op": "statement",
+   "start": 9822,
+   "end": 9866,
+   "old": "samples = values[::stride][: self.n_samples]",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 327,
+   "op": "statement",
+   "start": 9875,
+   "end": 9889,
+   "old": "samples.sort()",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 329,
+   "op": "statement",
+   "start": 9899,
+   "end": 9918,
+   "old": "npix = len(samples)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 330,
+   "op": "statement",
+   "start": 9927,
+   "end": 9944,
+   "old": "vmin = samples[0]",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 331,
+   "op": "statement",
+   "start": 9953,
+   "end": 9971,
+   "old": "vmax = samples[-1]",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 335,
+   "op": "statement",
+   "start": 10101,
+   "end": 10120,
+   "old": "x = np.arange(npix)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 336,
+   "op": "statement",
+   "start": 10129,
+   "end": 10144,
+   "old": "ngoodpix = npix",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 337,
+   "op": "statement",
+   "start": 10153,
+   "end": 10177,
+   "old": "last_ngoodpix = npix + 1",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 340,
+   "op": "statement",
+   "start": 10238,
+   "end": 10273,
+   "old": "badpix = np.zeros(npix, dtype=bool)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 343,
+   "op": "statement",
+   "start": 10335,
+   "end": 10367,
+   "old": "ngrow = max(1, int(npix * 0.01))",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 344,
+   "op": "statement",
+   "start": 10376,
+   "end": 10411,
+   "old": "kernel = np.ones(ngrow, dtype=bool)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 72,
+   "op": "comparison",
+   "start": 1682,
+   "end": 1698,
+   "old": "mask is not None",
+   "new": "(mask is None)",
+   "id": 53
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 73,
+   "op": "statement",
+   "start": 1712,
+   "end": 1723,
+   "old": "ok &= ~mask",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 337,
+   "op": "arithmetic",
+   "start": 10169,
+   "end": 10177,
+   "old": "npix + 1",
+   "new": "(npix - 1)",
+   "id": 55
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 350,
+   "op": "statement",
+   "start": 10556,
+   "end": 10616,
+   "old": "fit = np.polyfit(x, samples, deg=1, w=(~badpix).astype(int))",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 351,
+   "op": "statement",
+   "start": 10629,
+   "end": 10655,
+   "old": "fitted = np.poly1d(fit)(x)",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 354,
+   "op": "statement",
+   "start": 10724,
+   "end": 10747,
+   "old": "flat = samples - fitted",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 361,
+   "op": "statement",
+   "start": 10967,
+   "end": 11022,
+   "old": "badpix[(flat < -threshold) | (flat > threshold)] = True",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 364,
+   "op": "statement",
+   "start": 11089,
+   "end": 11138,
+   "old": "badpix = np.convolve(badpix, kernel, mode=\"same\")",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 366,
+   "op": "statement",
+   "start": 11152,
+   "end": 11176,
+   "old": "last_ngoodpix = ngoodpix",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 367,
+   "op": "statement",
+   "start": 11189,
+   "end": 11215,
+   "old": "ngoodpix = np.sum(~badpix)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 370,
+   "op": "statement",
+   "start": 11260,
+   "end": 11274,
+   "old": "slope, _ = fit",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 375,
+   "op": "statement",
+   "start": 11411,
+   "end": 11438,
+   "old": "median = np.median(samples)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 376,
+   "op": "statement",
+   "start": 11451,
+   "end": 11504,
+   "old": "vmin = max(vmin, median - (center_pixel - 1) * slope)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 377,
+   "op": "statement",
+   "start": 11517,
+   "end": 11573,
+   "old": "vmax = min(vmax, median + (npix - center_pixel) * slope)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 337,
+   "op": "constant",
+   "start": 10176,
+   "end": 10177,
+   "old": "1",
+   "new": "(2)",
+   "id": 67
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 347,
+   "op": "boolean",
+   "start": 10473,
+   "end": 10519,
+   "old": "ngoodpix >= last_ngoodpix or ngoodpix < minpix",
+   "new": "(ngoodpix >= last_ngoodpix and ngoodpix < minpix)",
+   "id": 68
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 348,
+   "op": "statement",
+   "start": 10537,
+   "end": 10542,
+   "old": "break",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 354,
+   "op": "arithmetic",
+   "start": 10731,
+   "end": 10747,
+   "old": "samples - fitted",
+   "new": "(samples + fitted)",
+   "id": 70
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 357,
+   "op": "arithmetic",
+   "start": 10827,
+   "end": 10858,
+   "old": "self.krej * flat[~badpix].std()",
+   "new": "(self.krej / flat[~badpix].std())",
+   "id": 71
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 361,
+   "op": "constant",
+   "start": 11018,
+   "end": 11022,
+   "old": "True",
+   "new": "(False)",
+   "id": 72
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 372,
+   "op": "comparison",
+   "start": 11291,
+   "end": 11308,
+   "old": "self.contrast > 0",
+   "new": "(self.contrast >= 0)",
+   "id": 73
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 373,
+   "op": "statement",
+   "start": 11326,
+   "end": 11355,
+   "old": "slope = slope / self.contrast",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 374,
+   "op": "arithmetic",
+   "start": 11383,
+   "end": 11398,
+   "old": "(npix - 1) // 2",
+   "new": "((npix - 1) / 2)",
+   "id": 75
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 325,
+   "op": "arithmetic",
+   "start": 9783,
+   "end": 9811,
+   "old": "values.size / self.n_samples",
+   "new": "(values.size * self.n_samples)",
+   "id": 76
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 325,
+   "op": "arithmetic",
+   "start": 9783,
+   "end": 9811,
+   "old": "values.size / self.n_samples",
+   "new": "(values.size // self.n_samples)",
+   "id": 77
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 331,
+   "op": "constant",
+   "start": 9969,
+   "end": 9970,
+   "old": "1",
+   "new": "(2)",
+   "id": 78
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 343,
+   "op": "arithmetic",
+   "start": 10354,
+   "end": 10365,
+   "old": "npix * 0.01",
+   "new": "(npix / 0.01)",
+   "id": 79
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 347,
+   "op": "comparison",
+   "start": 10502,
+   "end": 10519,
+   "old": "ngoodpix < minpix",
+   "new": "(ngoodpix <= minpix)",
+   "id": 80
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 372,
+   "op": "constant",
+   "start": 11307,
+   "end": 11308,
+   "old": "0",
+   "new": "(1)",
+   "id": 81
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 373,
+   "op": "arithmetic",
+   "start": 11334,
+   "end": 11355,
+   "old": "slope / self.contrast",
+   "new": "(slope * self.contrast)",
+   "id": 82
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 374,
+   "op": "arithmetic",
+   "start": 11384,
+   "end": 11392,
+   "old": "npix - 1",
+   "new": "(npix + 1)",
+   "id": 83
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 350,
+   "op": "constant",
+   "start": 10589,
+   "end": 10590,
+   "old": "1",
+   "new": "(2)",
+   "id": 84
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 361,
+   "op": "comparison",
+   "start": 10975,
+   "end": 10992,
+   "old": "flat < -threshold",
+   "new": "(flat <= -threshold)",
+   "id": 85
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 361,
+   "op": "comparison",
+   "start": 10997,
+   "end": 11013,
+   "old": "flat > threshold",
+   "new": "(flat >= threshold)",
+   "id": 86
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 364,
+   "op": "constant",
+   "start": 11131,
+   "end": 11137,
+   "old": "\"same\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 376,
+   "op": "arithmetic",
+   "start": 11477,
+   "end": 11503,
+   "old": "(center_pixel - 1) * slope",
+   "new": "((center_pixel - 1) / slope)",
+   "id": 88
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 377,
+   "op": "arithmetic",
+   "start": 11543,
+   "end": 11572,
+   "old": "(npix - center_pixel) * slope",
+   "new": "((npix - center_pixel) / slope)",
+   "id": 89
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 376,
+   "op": "arithmetic",
+   "start": 11478,
+   "end": 11494,
+   "old": "center_pixel - 1",
+   "new": "(center_pixel + 1)",
+   "id": 90
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 377,
+   "op": "arithmetic",
+   "start": 11544,
+   "end": 11563,
+   "old": "npix - center_pixel",
+   "new": "(npix + center_pixel)",
+   "id": 91
+  },
+  {
+   "path": "astropy/visualization/interval.py",
+   "line": 376,
+   "op": "constant",
+   "start": 11493,
+   "end": 11494,
+   "old": "1",
+   "new": "(2)",
+   "id": 92
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 40,
+   "op": "constant",
+   "start": 892,
+   "end": 896,
+   "old": "True",
+   "new": "(False)",
+   "id": 93
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 46,
+   "op": "return",
+   "start": 1088,
+   "end": 1129,
+   "old": "return np.clip(values, 0.0, 1.0, out=out)",
+   "new": "return None",
+   "id": 94
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 48,
+   "op": "comparison",
+   "start": 1151,
+   "end": 1162,
+   "old": "out is None",
+   "new": "(out is not None)",
+   "id": 95
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 49,
+   "op": "return",
+   "start": 1176,
+   "end": 1210,
+   "old": "return np.array(values, copy=True)",
+   "new": "return None",
+   "id": 96
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1237,
+   "end": 1264,
+   "old": "out[:] = np.asarray(values)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 988,
+   "op": "constant",
+   "start": 29069,
+   "end": 29073,
+   "old": "True",
+   "new": "(False)",
+   "id": 98
+  },
+  {
+   "path": "astropy/visualization/stretch.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1205,
+   "end": 1209,
+   "old": "True",
+   "new": "(False)",
+   "id": 99
+  }
+ ]
+}

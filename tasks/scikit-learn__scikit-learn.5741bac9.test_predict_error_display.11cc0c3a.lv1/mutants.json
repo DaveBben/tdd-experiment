@@ -1,0 +1,1006 @@
+{
+ "task": "scikit-learn__scikit-learn.5741bac9.test_predict_error_display.11cc0c3a.lv1",
+ "pool": 152,
+ "mutants": [
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 82,
+   "op": "statement",
+   "start": 2686,
+   "end": 2706,
+   "old": "self.y_true = y_true",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2715,
+   "end": 2735,
+   "old": "self.y_pred = y_pred",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 127,
+   "op": "statement",
+   "start": 4105,
+   "end": 4164,
+   "old": "check_matplotlib_support(f\"{self.__class__.__name__}.plot\")",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4174,
+   "end": 4238,
+   "old": "expected_kind = (\"actual_vs_predicted\", \"residual_vs_predicted\")",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 143,
+   "op": "statement",
+   "start": 4611,
+   "end": 4671,
+   "old": "default_scatter_kwargs = {\"color\": \"tab:blue\", \"alpha\": 0.8}",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 144,
+   "op": "statement",
+   "start": 4680,
+   "end": 4753,
+   "old": "default_line_kwargs = {\"color\": \"black\", \"alpha\": 0.7, \"linestyle\": \"--\"}",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 146,
+   "op": "statement",
+   "start": 4763,
+   "end": 4842,
+   "old": "scatter_kwargs = _validate_style_kwargs(default_scatter_kwargs, scatter_kwargs)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4931,
+   "end": 4992,
+   "old": "scatter_kwargs = {**default_scatter_kwargs, **scatter_kwargs}",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 150,
+   "op": "statement",
+   "start": 5001,
+   "end": 5053,
+   "old": "line_kwargs = {**default_line_kwargs, **line_kwargs}",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 182,
+   "op": "statement",
+   "start": 6289,
+   "end": 6325,
+   "old": "ax.set(xlabel=xlabel, ylabel=ylabel)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 185,
+   "op": "statement",
+   "start": 6357,
+   "end": 6381,
+   "old": "self.figure_ = ax.figure",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 279,
+   "op": "statement",
+   "start": 9827,
+   "end": 9885,
+   "old": "check_matplotlib_support(f\"{cls.__name__}.from_estimator\")",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 281,
+   "op": "statement",
+   "start": 9895,
+   "end": 9924,
+   "old": "y_pred = estimator.predict(X)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 380,
+   "op": "statement",
+   "start": 13509,
+   "end": 13569,
+   "old": "check_matplotlib_support(f\"{cls.__name__}.from_predictions\")",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 384,
+   "op": "statement",
+   "start": 13636,
+   "end": 13659,
+   "old": "n_samples = len(y_true)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 408,
+   "op": "return",
+   "start": 14557,
+   "end": 14705,
+   "old": "return viz.plot(\n            ax=ax,\n            kind=kind,\n            scatter_kwargs=scatter_kwargs,\n            line_kwargs=line_kwargs,\n        )",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 131,
+   "op": "statement",
+   "start": 4289,
+   "end": 4431,
+   "old": "raise ValueError(\n                f\"`kind` must be one of {', '.join(expected_kind)}. \"\n                f\"Got {kind!r} instead.\"\n            )",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4585,
+   "end": 4601,
+   "old": "line_kwargs = {}",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 156,
+   "op": "statement",
+   "start": 5168,
+   "end": 5225,
+   "old": "max_value = max(np.max(self.y_true), np.max(self.y_pred))",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 157,
+   "op": "statement",
+   "start": 5238,
+   "end": 5295,
+   "old": "min_value = min(np.min(self.y_true), np.min(self.y_pred))",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 158,
+   "op": "statement",
+   "start": 5308,
+   "end": 5424,
+   "old": "self.line_ = ax.plot(\n                [min_value, max_value], [min_value, max_value], **line_kwargs\n            )[0]",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 169,
+   "op": "statement",
+   "start": 5732,
+   "end": 5787,
+   "old": "ax.set_xticks(np.linspace(min_value, max_value, num=5))",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 172,
+   "op": "statement",
+   "start": 5917,
+   "end": 6070,
+   "old": "self.line_ = ax.plot(\n                [np.min(self.y_pred), np.max(self.y_pred)],\n                [0, 0],\n                **line_kwargs,\n            )[0]",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 177,
+   "op": "statement",
+   "start": 6083,
+   "end": 6197,
+   "old": "self.scatter_ = ax.scatter(\n                self.y_pred, self.y_true - self.y_pred, **scatter_kwargs\n            )",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 180,
+   "op": "statement",
+   "start": 6210,
+   "end": 6279,
+   "old": "xlabel, ylabel = \"Predicted values\", \"Residuals (actual - predicted)\"",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 196,
+   "op": "constant",
+   "start": 6523,
+   "end": 6546,
+   "old": "\"residual_vs_predicted\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 197,
+   "op": "constant",
+   "start": 6566,
+   "end": 6571,
+   "old": "1_000",
+   "new": "(1001)",
+   "id": 26
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 300,
+   "op": "constant",
+   "start": 10329,
+   "end": 10352,
+   "old": "\"residual_vs_predicted\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 301,
+   "op": "constant",
+   "start": 10372,
+   "end": 10377,
+   "old": "1_000",
+   "new": "(1001)",
+   "id": 28
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 398,
+   "op": "boolean",
+   "start": 14213,
+   "end": 14260,
+   "old": "subsample is not None and subsample < n_samples",
+   "new": "(subsample is not None or subsample < n_samples)",
+   "id": 29
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 399,
+   "op": "statement",
+   "start": 14274,
+   "end": 14341,
+   "old": "indices = random_state.choice(np.arange(n_samples), size=subsample)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 400,
+   "op": "statement",
+   "start": 14354,
+   "end": 14402,
+   "old": "y_true = _safe_indexing(y_true, indices, axis=0)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 401,
+   "op": "statement",
+   "start": 14415,
+   "end": 14463,
+   "old": "y_pred = _safe_indexing(y_pred, indices, axis=0)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 143,
+   "op": "constant",
+   "start": 4637,
+   "end": 4644,
+   "old": "\"color\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 144,
+   "op": "constant",
+   "start": 4721,
+   "end": 4728,
+   "old": "\"alpha\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 144,
+   "op": "constant",
+   "start": 4735,
+   "end": 4746,
+   "old": "\"linestyle\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 144,
+   "op": "constant",
+   "start": 4748,
+   "end": 4752,
+   "old": "\"--\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 155,
+   "op": "constant",
+   "start": 5133,
+   "end": 5154,
+   "old": "\"actual_vs_predicted\"",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 386,
+   "op": "comparison",
+   "start": 13727,
+   "end": 13741,
+   "old": "subsample <= 0",
+   "new": "(subsample < 0)",
+   "id": 38
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 387,
+   "op": "statement",
+   "start": 13759,
+   "end": 13876,
+   "old": "raise ValueError(\n                    f\"When an integer, subsample={subsample} should be positive.\"\n                )",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 396,
+   "op": "statement",
+   "start": 14162,
+   "end": 14200,
+   "old": "subsample = int(n_samples * subsample)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 398,
+   "op": "comparison",
+   "start": 14239,
+   "end": 14260,
+   "old": "subsample < n_samples",
+   "new": "(subsample <= n_samples)",
+   "id": 41
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 168,
+   "op": "constant",
+   "start": 5689,
+   "end": 5696,
+   "old": "\"equal\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 176,
+   "op": "constant",
+   "start": 6068,
+   "end": 6069,
+   "old": "0",
+   "new": "(1)",
+   "id": 43
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 178,
+   "op": "arithmetic",
+   "start": 6140,
+   "end": 6165,
+   "old": "self.y_true - self.y_pred",
+   "new": "(self.y_true + self.y_pred)",
+   "id": 44
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 180,
+   "op": "constant",
+   "start": 6227,
+   "end": 6245,
+   "old": "\"Predicted values\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 180,
+   "op": "constant",
+   "start": 6247,
+   "end": 6279,
+   "old": "\"Residuals (actual - predicted)\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 392,
+   "op": "statement",
+   "start": 13992,
+   "end": 14149,
+   "old": "raise ValueError(\n                    f\"When a floating-point, subsample={subsample} should\"\n                    \" be in the (0, 1) range.\"\n                )",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 168,
+   "op": "constant",
+   "start": 5709,
+   "end": 5718,
+   "old": "\"datalim\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 391,
+   "op": "comparison",
+   "start": 13960,
+   "end": 13974,
+   "old": "subsample >= 1",
+   "new": "(subsample > 1)",
+   "id": 49
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 396,
+   "op": "arithmetic",
+   "start": 14178,
+   "end": 14199,
+   "old": "n_samples * subsample",
+   "new": "(n_samples / subsample)",
+   "id": 50
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 400,
+   "op": "constant",
+   "start": 14400,
+   "end": 14401,
+   "old": "0",
+   "new": "(1)",
+   "id": 51
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 401,
+   "op": "constant",
+   "start": 14461,
+   "end": 14462,
+   "old": "0",
+   "new": "(1)",
+   "id": 52
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 169,
+   "op": "constant",
+   "start": 5784,
+   "end": 5785,
+   "old": "5",
+   "new": "(6)",
+   "id": 53
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5852,
+   "end": 5853,
+   "old": "5",
+   "new": "(6)",
+   "id": 54
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 174,
+   "op": "constant",
+   "start": 6016,
+   "end": 6017,
+   "old": "0",
+   "new": "(1)",
+   "id": 55
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 174,
+   "op": "constant",
+   "start": 6019,
+   "end": 6020,
+   "old": "0",
+   "new": "(1)",
+   "id": 56
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 391,
+   "op": "constant",
+   "start": 13955,
+   "end": 13956,
+   "old": "0",
+   "new": "(1)",
+   "id": 57
+  },
+  {
+   "path": "sklearn/metrics/_plot/regression.py",
+   "line": 391,
+   "op": "constant",
+   "start": 13973,
+   "end": 13974,
+   "old": "1",
+   "new": "(2)",
+   "id": 58
+  },
+  {
+   "path": "sklearn/utils/_optional_dependencies.py",
+   "line": 19,
+   "op": "statement",
+   "start": 552,
+   "end": 717,
+   "old": "raise ImportError(\n            \"{} requires matplotlib. You can install matplotlib with \"\n            \"`pip install matplotlib`\".format(caller_name)\n        ) from e",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sklearn/utils/_optional_dependencies.py",
+   "line": 46,
+   "op": "constant",
+   "start": 1250,
+   "end": 1271,
+   "old": "\"{} requires pandas.\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 303,
+   "op": "statement",
+   "start": 11445,
+   "end": 12186,
+   "old": "invalid_to_valid_kw = {\n        \"ls\": \"linestyle\",\n        \"c\": \"color\",\n        \"ec\": \"edgecolor\",\n        \"fc\": \"facecolor\",\n        \"lw\": \"linewidth\",\n        \"mec\": \"markeredgecolor\",\n        \"mfcalt\": \"markerfacecoloralt\",\n        \"ms\": \"markersize\",\n        \"mew\": \"markeredgewidth\",\n        \"mfc\": \"markerfacecolor\",\n        \"aa\": \"antialiased\",\n        \"ds\": \"drawstyle\",\n        \"font\": \"fontproperties\",\n        \"family\": \"fontfamily\",\n        \"name\": \"fontname\",\n        \"size\": \"fontsize\",\n        \"stretch\": \"fontstretch\",\n        \"style\": \"fontstyle\",\n        \"variant\": \"fontvariant\",\n        \"weight\": \"fontweight\",\n        \"ha\": \"horizontalalignment\",\n        \"va\": \"verticalalignment\",\n        \"ma\": \"multialignment\",\n    }",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 342,
+   "op": "return",
+   "start": 12780,
+   "end": 12805,
+   "old": "return valid_style_kwargs",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 304,
+   "op": "constant",
+   "start": 11477,
+   "end": 11481,
+   "old": "\"ls\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 306,
+   "op": "constant",
+   "start": 11526,
+   "end": 11530,
+   "old": "\"ec\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 307,
+   "op": "constant",
+   "start": 11553,
+   "end": 11557,
+   "old": "\"fc\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 308,
+   "op": "constant",
+   "start": 11580,
+   "end": 11584,
+   "old": "\"lw\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 309,
+   "op": "constant",
+   "start": 11607,
+   "end": 11612,
+   "old": "\"mec\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 310,
+   "op": "constant",
+   "start": 11641,
+   "end": 11649,
+   "old": "\"mfcalt\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 312,
+   "op": "constant",
+   "start": 11709,
+   "end": 11714,
+   "old": "\"mew\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 313,
+   "op": "constant",
+   "start": 11743,
+   "end": 11748,
+   "old": "\"mfc\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 314,
+   "op": "constant",
+   "start": 11777,
+   "end": 11781,
+   "old": "\"aa\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 316,
+   "op": "constant",
+   "start": 11833,
+   "end": 11839,
+   "old": "\"font\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 317,
+   "op": "constant",
+   "start": 11867,
+   "end": 11875,
+   "old": "\"family\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 318,
+   "op": "constant",
+   "start": 11899,
+   "end": 11905,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 319,
+   "op": "constant",
+   "start": 11927,
+   "end": 11933,
+   "old": "\"size\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 320,
+   "op": "constant",
+   "start": 11955,
+   "end": 11964,
+   "old": "\"stretch\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 321,
+   "op": "constant",
+   "start": 11989,
+   "end": 11996,
+   "old": "\"style\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 322,
+   "op": "constant",
+   "start": 12019,
+   "end": 12028,
+   "old": "\"variant\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 325,
+   "op": "constant",
+   "start": 12122,
+   "end": 12126,
+   "old": "\"va\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 326,
+   "op": "constant",
+   "start": 12157,
+   "end": 12161,
+   "old": "\"ma\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 306,
+   "op": "constant",
+   "start": 11532,
+   "end": 11543,
+   "old": "\"edgecolor\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 307,
+   "op": "constant",
+   "start": 11559,
+   "end": 11570,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 308,
+   "op": "constant",
+   "start": 11586,
+   "end": 11597,
+   "old": "\"linewidth\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 309,
+   "op": "constant",
+   "start": 11614,
+   "end": 11631,
+   "old": "\"markeredgecolor\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 312,
+   "op": "constant",
+   "start": 11716,
+   "end": 11733,
+   "old": "\"markeredgewidth\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 316,
+   "op": "constant",
+   "start": 11841,
+   "end": 11857,
+   "old": "\"fontproperties\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 317,
+   "op": "constant",
+   "start": 11877,
+   "end": 11889,
+   "old": "\"fontfamily\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 319,
+   "op": "constant",
+   "start": 11935,
+   "end": 11945,
+   "old": "\"fontsize\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 320,
+   "op": "constant",
+   "start": 11966,
+   "end": 11979,
+   "old": "\"fontstretch\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 322,
+   "op": "constant",
+   "start": 12030,
+   "end": 12043,
+   "old": "\"fontvariant\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 323,
+   "op": "constant",
+   "start": 12063,
+   "end": 12075,
+   "old": "\"fontweight\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 325,
+   "op": "constant",
+   "start": 12128,
+   "end": 12147,
+   "old": "\"verticalalignment\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 326,
+   "op": "constant",
+   "start": 12163,
+   "end": 12179,
+   "old": "\"multialignment\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 329,
+   "op": "boolean",
+   "start": 12261,
+   "end": 12328,
+   "old": "invalid_key in user_style_kwargs and valid_key in user_style_kwargs",
+   "new": "(invalid_key in user_style_kwargs or valid_key in user_style_kwargs)",
+   "id": 94
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 330,
+   "op": "statement",
+   "start": 12342,
+   "end": 12483,
+   "old": "raise TypeError(\n                f\"Got both {invalid_key} and {valid_key}, which are aliases of one \"\n                \"another\"\n            )",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 337,
+   "op": "comparison",
+   "start": 12590,
+   "end": 12616,
+   "old": "key in invalid_to_valid_kw",
+   "new": "(key not in invalid_to_valid_kw)",
+   "id": 96
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 340,
+   "op": "statement",
+   "start": 12726,
+   "end": 12774,
+   "old": "valid_style_kwargs[key] = user_style_kwargs[key]",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 329,
+   "op": "comparison",
+   "start": 12261,
+   "end": 12293,
+   "old": "invalid_key in user_style_kwargs",
+   "new": "(invalid_key not in user_style_kwargs)",
+   "id": 98
+  },
+  {
+   "path": "sklearn/utils/_plotting.py",
+   "line": 329,
+   "op": "comparison",
+   "start": 12298,
+   "end": 12328,
+   "old": "valid_key in user_style_kwargs",
+   "new": "(valid_key not in user_style_kwargs)",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_containers.6079987d.lv1",
+ "pool": 238,
+ "mutants": [
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 671,
+   "op": "statement",
+   "start": 27629,
+   "end": 27697,
+   "old": "Distribution._generated_subclasses[np.ndarray] = NdarrayDistribution",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 103,
+   "op": "statement",
+   "start": 4625,
+   "end": 4653,
+   "old": "structured.dtype = new_dtype",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 109,
+   "op": "statement",
+   "start": 4907,
+   "end": 4957,
+   "old": "new_cls = cls._get_distribution_cls(type(samples))",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 110,
+   "op": "statement",
+   "start": 4966,
+   "end": 4997,
+   "old": "self = structured.view(new_cls)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 119,
+   "op": "statement",
+   "start": 5216,
+   "end": 5268,
+   "old": "new_cls = cls._generated_subclasses.get(samples_cls)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 180,
+   "op": "return",
+   "start": 8382,
+   "end": 8394,
+   "old": "return dtype",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 414,
+   "op": "return",
+   "start": 17833,
+   "end": 17886,
+   "old": "return np.median(self.distribution, axis=-1, out=out)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 550,
+   "op": "statement",
+   "start": 22816,
+   "end": 22839,
+   "old": "dtype = np.dtype(dtype)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 589,
+   "op": "statement",
+   "start": 24562,
+   "end": 24599,
+   "old": "distribution.__array_finalize__(self)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 97,
+   "op": "statement",
+   "start": 4268,
+   "end": 4313,
+   "old": "interface = dict(samples.__array_interface__)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 98,
+   "op": "statement",
+   "start": 4326,
+   "end": 4395,
+   "old": "interface[\"descr\"] = interface[\"typestr\"] = f\"|V{new_dtype.itemsize}\"",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 101,
+   "op": "statement",
+   "start": 4516,
+   "end": 4576,
+   "old": "structured = np.asarray(DummyArray(interface, base=samples))",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 117,
+   "op": "return",
+   "start": 5188,
+   "end": 5206,
+   "old": "return samples_cls",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 120,
+   "op": "comparison",
+   "start": 5280,
+   "end": 5295,
+   "old": "new_cls is None",
+   "new": "(new_cls is not None)",
+   "id": 13
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 151,
+   "op": "statement",
+   "start": 6998,
+   "end": 7202,
+   "old": "new_cls = type(\n                samples_cls.__name__ + \"Distribution\",\n                (_DistributionRepr, samples_cls) + base_cls.__mro__[2:],\n                {\"_samples_cls\": samples_cls},\n            )",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 156,
+   "op": "statement",
+   "start": 7215,
+   "end": 7263,
+   "old": "cls._generated_subclasses[samples_cls] = new_cls",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 171,
+   "op": "comparison",
+   "start": 8050,
+   "end": 8077,
+   "old": "dtype.names != (\"samples\",)",
+   "new": "(dtype.names == ('samples',))",
+   "id": 16
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 172,
+   "op": "statement",
+   "start": 8091,
+   "end": 8301,
+   "old": "sample_dtype = np.dtype(\n                dict(\n                    names=[\"sample\"],\n                    formats=[dtype],\n                    itemsize=itemsize or dtype.itemsize,\n                )\n            )",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 179,
+   "op": "statement",
+   "start": 8314,
+   "end": 8373,
+   "old": "dtype = np.dtype([(\"samples\", sample_dtype, (n_samples,))])",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 214,
+   "op": "comparison",
+   "start": 9484,
+   "end": 9530,
+   "old": "method in {\"reduce\", \"accumulate\", \"reduceat\"}",
+   "new": "(method not in {'reduce', 'accumulate', 'reduceat'})",
+   "id": 19
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 240,
+   "op": "statement",
+   "start": 10687,
+   "end": 10762,
+   "old": "in_sig, out_sig = _parse_gufunc_signature(ufunc.signature.replace(\" \", \"\"))",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 241,
+   "op": "statement",
+   "start": 10775,
+   "end": 10814,
+   "old": "ncore_in = [len(sig) for sig in in_sig]",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 242,
+   "op": "statement",
+   "start": 10827,
+   "end": 10893,
+   "old": "ncore_out = [len(sig) + (1 if keepdims else 0) for sig in out_sig]",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 247,
+   "op": "statement",
+   "start": 11034,
+   "end": 11288,
+   "old": "converted = [\n                np.moveaxis(conv, -1, normalize_axis_index(axis, conv.ndim) - ncore)\n                if ncore and getattr(conv, \"shape\", ())\n                else conv\n                for conv, ncore in zip(converted, ncore_in)\n            ]",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 278,
+   "op": "return",
+   "start": 12334,
+   "end": 12398,
+   "old": "return super().__array_function__(function, types, args, kwargs)",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 284,
+   "op": "return",
+   "start": 12633,
+   "end": 12654,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 319,
+   "op": "return",
+   "start": 14112,
+   "end": 14306,
+   "old": "return result_cls(\n                self._result_as_distribution(result_, out_, axis=axis, ncore_out=ncore)\n                for (result_, out_, ncore) in zip(result, out, ncore_out)\n            )",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 537,
+   "op": "comparison",
+   "start": 22384,
+   "end": 22396,
+   "old": "type is None",
+   "new": "(type is not None)",
+   "id": 27
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 547,
+   "op": "comparison",
+   "start": 22749,
+   "end": 22762,
+   "old": "dtype is None",
+   "new": "(dtype is not None)",
+   "id": 28
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 558,
+   "op": "boolean",
+   "start": 23070,
+   "end": 23129,
+   "old": "dtype.shape == () and dtype.itemsize == self.dtype.itemsize",
+   "new": "(dtype.shape == () or dtype.itemsize == self.dtype.itemsize)",
+   "id": 29
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 567,
+   "op": "comparison",
+   "start": 23430,
+   "end": 23467,
+   "old": "dtype.itemsize == self.dtype.itemsize",
+   "new": "(dtype.itemsize != self.dtype.itemsize)",
+   "id": 30
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 569,
+   "op": "statement",
+   "start": 23519,
+   "end": 23562,
+   "old": "distr_view = distr.view(dtype, samples_cls)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 571,
+   "op": "return",
+   "start": 23657,
+   "end": 23721,
+   "old": "return Distribution(np.moveaxis(distr_view, distr.ndim - 1, -1))",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2484,
+   "end": 2527,
+   "old": "samples = np.asanyarray(samples, order=\"C\")",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 136,
+   "op": "return",
+   "start": 6185,
+   "end": 6211,
+   "old": "return NdarrayDistribution",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 203,
+   "op": "constant",
+   "start": 9114,
+   "end": 9119,
+   "old": "\"out\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 212,
+   "op": "constant",
+   "start": 9416,
+   "end": 9422,
+   "old": "\"axis\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 223,
+   "op": "statement",
+   "start": 9928,
+   "end": 9965,
+   "old": "converted.append(input_.distribution)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 235,
+   "op": "statement",
+   "start": 10418,
+   "end": 10544,
+   "old": "raise NotImplementedError(\n                    \"Distribution does not yet support gufunc calls with 'axes'.\"\n                )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 243,
+   "op": "comparison",
+   "start": 10909,
+   "end": 10924,
+   "old": "ufunc.nout == 1",
+   "new": "(ufunc.nout != 1)",
+   "id": 39
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 244,
+   "op": "statement",
+   "start": 10942,
+   "end": 10966,
+   "old": "ncore_out = ncore_out[0]",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 246,
+   "op": "statement",
+   "start": 11012,
+   "end": 11021,
+   "old": "axis = -1",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 266,
+   "op": "statement",
+   "start": 11783,
+   "end": 11835,
+   "old": "args, kwargs, out = function_helper(*args, **kwargs)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 274,
+   "op": "return",
+   "start": 12217,
+   "end": 12230,
+   "old": "return result",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 314,
+   "op": "comparison",
+   "start": 13795,
+   "end": 13812,
+   "old": "ncore_out is None",
+   "new": "(ncore_out is not None)",
+   "id": 44
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 326,
+   "op": "boolean",
+   "start": 14408,
+   "end": 14477,
+   "old": "not isinstance(result, Distribution) and getattr(result, \"shape\", ())",
+   "new": "(not isinstance(result, Distribution) or getattr(result, 'shape', ()))",
+   "id": 45
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 377,
+   "op": "constant",
+   "start": 16715,
+   "end": 16716,
+   "old": "0",
+   "new": "(1)",
+   "id": 46
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 558,
+   "op": "comparison",
+   "start": 23092,
+   "end": 23129,
+   "old": "dtype.itemsize == self.dtype.itemsize",
+   "new": "(dtype.itemsize != self.dtype.itemsize)",
+   "id": 47
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 572,
+   "op": "comparison",
+   "start": 23735,
+   "end": 23809,
+   "old": "dtype.itemsize == super(Distribution, self).dtype[\"samples\"].base.itemsize",
+   "new": "(dtype.itemsize != super(Distribution, self).dtype['samples'].base.itemsize)",
+   "id": 48
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 573,
+   "op": "statement",
+   "start": 23823,
+   "end": 23869,
+   "old": "distr = np.moveaxis(self.distribution, -1, -2)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 67,
+   "op": "boolean",
+   "start": 2336,
+   "end": 2427,
+   "old": "samples.strides[-1] < samples.dtype.itemsize\n                and samples.shape[-1:] != (1,)",
+   "new": "(samples.strides[-1] < samples.dtype.itemsize or samples.shape[-1:] != (1,))",
+   "id": 50
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 98,
+   "op": "constant",
+   "start": 4336,
+   "end": 4343,
+   "old": "\"descr\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 99,
+   "op": "constant",
+   "start": 4418,
+   "end": 4425,
+   "old": "\"shape\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 152,
+   "op": "arithmetic",
+   "start": 7030,
+   "end": 7067,
+   "old": "samples_cls.__name__ + \"Distribution\"",
+   "new": "(samples_cls.__name__ - 'Distribution')",
+   "id": 53
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 153,
+   "op": "arithmetic",
+   "start": 7085,
+   "end": 7140,
+   "old": "(_DistributionRepr, samples_cls) + base_cls.__mro__[2:]",
+   "new": "((_DistributionRepr, samples_cls) - base_cls.__mro__[2:])",
+   "id": 54
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 205,
+   "op": "constant",
+   "start": 9166,
+   "end": 9171,
+   "old": "\"out\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 209,
+   "op": "constant",
+   "start": 9349,
+   "end": 9350,
+   "old": "1",
+   "new": "(2)",
+   "id": 56
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 214,
+   "op": "constant",
+   "start": 9505,
+   "end": 9517,
+   "old": "\"accumulate\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 214,
+   "op": "constant",
+   "start": 9519,
+   "end": 9529,
+   "old": "\"reduceat\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 234,
+   "op": "constant",
+   "start": 10384,
+   "end": 10390,
+   "old": "\"axes\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 313,
+   "op": "arithmetic",
+   "start": 13758,
+   "end": 13779,
+   "old": "(None,) * len(result)",
+   "new": "((None,) / len(result))",
+   "id": 60
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 326,
+   "op": "boolean",
+   "start": 14408,
+   "end": 14444,
+   "old": "not isinstance(result, Distribution)",
+   "new": "(isinstance(result, Distribution))",
+   "id": 61
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 67,
+   "op": "comparison",
+   "start": 2336,
+   "end": 2380,
+   "old": "samples.strides[-1] < samples.dtype.itemsize",
+   "new": "(samples.strides[-1] <= samples.dtype.itemsize)",
+   "id": 62
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 83,
+   "op": "constant",
+   "start": 3350,
+   "end": 3351,
+   "old": "1",
+   "new": "(2)",
+   "id": 63
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 142,
+   "op": "constant",
+   "start": 6512,
+   "end": 6513,
+   "old": "1",
+   "new": "(2)",
+   "id": 64
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 152,
+   "op": "constant",
+   "start": 7053,
+   "end": 7067,
+   "old": "\"Distribution\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 154,
+   "op": "constant",
+   "start": 7159,
+   "end": 7173,
+   "old": "\"_samples_cls\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 210,
+   "op": "constant",
+   "start": 9386,
+   "end": 9387,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 236,
+   "op": "constant",
+   "start": 10465,
+   "end": 10526,
+   "old": "\"Distribution does not yet support gufunc calls with 'axes'.\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 240,
+   "op": "constant",
+   "start": 10753,
+   "end": 10756,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 249,
+   "op": "boolean",
+   "start": 11152,
+   "end": 11188,
+   "old": "ncore and getattr(conv, \"shape\", ())",
+   "new": "(ncore or getattr(conv, 'shape', ()))",
+   "id": 70
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 326,
+   "op": "constant",
+   "start": 14465,
+   "end": 14472,
+   "old": "\"shape\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 377,
+   "op": "constant",
+   "start": 16698,
+   "end": 16707,
+   "old": "\"samples\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 571,
+   "op": "arithmetic",
+   "start": 23701,
+   "end": 23715,
+   "old": "distr.ndim - 1",
+   "new": "(distr.ndim + 1)",
+   "id": 73
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2523,
+   "end": 2526,
+   "old": "\"C\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 100,
+   "op": "constant",
+   "start": 4501,
+   "end": 4502,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 176,
+   "op": "boolean",
+   "start": 8242,
+   "end": 8268,
+   "old": "itemsize or dtype.itemsize",
+   "new": "(itemsize and dtype.itemsize)",
+   "id": 76
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 179,
+   "op": "constant",
+   "start": 8333,
+   "end": 8342,
+   "old": "\"samples\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 216,
+   "op": "constant",
+   "start": 9602,
+   "end": 9603,
+   "old": "0",
+   "new": "(1)",
+   "id": 78
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 242,
+   "op": "constant",
+   "start": 10852,
+   "end": 10853,
+   "old": "1",
+   "new": "(2)",
+   "id": 79
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 242,
+   "op": "constant",
+   "start": 10871,
+   "end": 10872,
+   "old": "0",
+   "new": "(1)",
+   "id": 80
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 248,
+   "op": "arithmetic",
+   "start": 11086,
+   "end": 11131,
+   "old": "normalize_axis_index(axis, conv.ndim) - ncore",
+   "new": "(normalize_axis_index(axis, conv.ndim) + ncore)",
+   "id": 81
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 329,
+   "op": "arithmetic",
+   "start": 14595,
+   "end": 14646,
+   "old": "normalize_axis_index(axis, result.ndim) - ncore_out",
+   "new": "(normalize_axis_index(axis, result.ndim) + ncore_out)",
+   "id": 82
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 574,
+   "op": "constant",
+   "start": 23935,
+   "end": 23936,
+   "old": "1",
+   "new": "(2)",
+   "id": 83
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 588,
+   "op": "constant",
+   "start": 24509,
+   "end": 24518,
+   "old": "\"samples\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 68,
+   "op": "constant",
+   "start": 2424,
+   "end": 2425,
+   "old": "1",
+   "new": "(2)",
+   "id": 85
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 249,
+   "op": "constant",
+   "start": 11176,
+   "end": 11183,
+   "old": "\"shape\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "astropy/uncertainty/core.py",
+   "line": 67,
+   "op": "constant",
+   "start": 2353,
+   "end": 2354,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 78,
+   "op": "return",
+   "start": 2699,
+   "end": 2733,
+   "old": "return isinstance(x, Distribution)",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 93,
+   "op": "statement",
+   "start": 3185,
+   "end": 3252,
+   "old": "raise RuntimeError(\"no Distribution found! Please raise an issue.\")",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 128,
+   "op": "statement",
+   "start": 4368,
+   "end": 4407,
+   "old": "n_samples = get_n_samples(*arrays, out)",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 149,
+   "op": "return",
+   "start": 5031,
+   "end": 5063,
+   "old": "return (converted,), kwargs, out",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3558,
+   "end": 3563,
+   "old": "False",
+   "new": "(True)",
+   "id": 92
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 122,
+   "op": "constant",
+   "start": 4153,
+   "end": 4154,
+   "old": "0",
+   "new": "(1)",
+   "id": 93
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 122,
+   "op": "constant",
+   "start": 4186,
+   "end": 4197,
+   "old": "\"same_kind\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 91,
+   "op": "return",
+   "start": 3157,
+   "end": 3179,
+   "old": "return array.n_samples",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 99,
+   "op": "comparison",
+   "start": 3402,
+   "end": 3415,
+   "old": "dtype is None",
+   "new": "(dtype is not None)",
+   "id": 96
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 118,
+   "op": "constant",
+   "start": 4084,
+   "end": 4091,
+   "old": "\"subok\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 118,
+   "op": "constant",
+   "start": 4093,
+   "end": 4097,
+   "old": "True",
+   "new": "(False)",
+   "id": 98
+  },
+  {
+   "path": "astropy/uncertainty/function_helpers.py",
+   "line": 146,
+   "op": "constant",
+   "start": 4949,
+   "end": 4954,
+   "old": "\"out\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

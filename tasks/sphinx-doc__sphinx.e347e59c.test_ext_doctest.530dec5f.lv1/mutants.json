@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_ext_doctest.530dec5f.lv1",
+ "pool": 391,
+ "mutants": [
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 60,
+   "op": "return",
+   "start": 1536,
+   "end": 1581,
+   "old": "return Version(version) in SpecifierSet(spec)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 664,
+   "op": "return",
+   "start": 24529,
+   "end": 24601,
+   "old": "return _condition_default(node) or isinstance(node, nodes.doctest_block)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2069,
+   "end": 2080,
+   "old": "test = None",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 91,
+   "op": "statement",
+   "start": 2571,
+   "end": 2620,
+   "old": "nodetype: type[TextElement] = nodes.literal_block",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 99,
+   "op": "statement",
+   "start": 2966,
+   "end": 2992,
+   "old": "self.set_source_info(node)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 147,
+   "op": "return",
+   "start": 5275,
+   "end": 5288,
+   "old": "return [node]",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 263,
+   "op": "statement",
+   "start": 8748,
+   "end": 8770,
+   "old": "sys.stdout = string_io",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 368,
+   "op": "statement",
+   "start": 12415,
+   "end": 12735,
+   "old": "self._out(\n            f\"\"\"\n{header}\n{underline}\n{self.total_tries:5} test{s(self.total_tries)}\n{self.total_failures:5} failure{s(self.total_failures)} in tests\n{self.setup_failures:5} failure{s(self.setup_failures)} in setup code\n{self.cleanup_failures:5} failure{s(self.cleanup_failures)} in cleanup code\n\"\"\"\n        )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 505,
+   "op": "statement",
+   "start": 18328,
+   "end": 18396,
+   "old": "res_f, res_t = self.setup_runner.summarize(self._out, verbose=False)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 506,
+   "op": "arithmetic",
+   "start": 18405,
+   "end": 18433,
+   "old": "self.setup_failures += res_f",
+   "new": "self.setup_failures -= res_f",
+   "id": 9
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 506,
+   "op": "statement",
+   "start": 18405,
+   "end": 18433,
+   "old": "self.setup_failures += res_f",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 92,
+   "op": "boolean",
+   "start": 2632,
+   "end": 2699,
+   "old": "self.name in {'testsetup', 'testcleanup'} or 'hide' in self.options",
+   "new": "(self.name in {'testsetup', 'testcleanup'} and 'hide' in self.options)",
+   "id": 11
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 93,
+   "op": "statement",
+   "start": 2713,
+   "end": 2737,
+   "old": "nodetype = nodes.comment",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 97,
+   "op": "statement",
+   "start": 2862,
+   "end": 2882,
+   "old": "groups = ['default']",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 113,
+   "op": "statement",
+   "start": 3555,
+   "end": 3621,
+   "old": "option_strings = self.options['options'].replace(',', ' ').split()",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 344,
+   "op": "comparison",
+   "start": 11639,
+   "end": 11664,
+   "old": "self.config.verbosity < 0",
+   "new": "(self.config.verbosity <= 0)",
+   "id": 15
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 361,
+   "op": "constant",
+   "start": 12116,
+   "end": 12133,
+   "old": "'Doctest summary'",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 416,
+   "op": "comparison",
+   "start": 14441,
+   "end": 14461,
+   "old": "'skipif' not in node",
+   "new": "('skipif' in node)",
+   "id": 17
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 439,
+   "op": "statement",
+   "start": 15582,
+   "end": 15617,
+   "old": "condition = _condition_with_doctest",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 456,
+   "op": "statement",
+   "start": 16334,
+   "end": 16648,
+   "old": "code = TestCode(\n                source,\n                type=node.get('testnodetype', 'doctest'),  # type: ignore[attr-defined]\n                filename=filename,\n                lineno=line_number,  # type: ignore[arg-type]\n                options=node.get('options'),  # type: ignore[attr-defined]\n            )",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 497,
+   "op": "statement",
+   "start": 17987,
+   "end": 18056,
+   "old": "self._out(f'\\nDocument: {docname}\\n----------{\"-\" * len(docname)}\\n')",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 509,
+   "op": "statement",
+   "start": 18515,
+   "end": 18591,
+   "old": "res_f, res_t = self.test_runner.summarize(self._out, verbose=show_successes)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 510,
+   "op": "statement",
+   "start": 18604,
+   "end": 18632,
+   "old": "self.total_failures += res_f",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 516,
+   "op": "arithmetic",
+   "start": 18843,
+   "end": 18873,
+   "old": "self.cleanup_failures += res_f",
+   "new": "self.cleanup_failures -= res_f",
+   "id": 23
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 516,
+   "op": "statement",
+   "start": 18843,
+   "end": 18873,
+   "old": "self.cleanup_failures += res_f",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 538,
+   "op": "statement",
+   "start": 19619,
+   "end": 19836,
+   "old": "sim_doctest = doctest.DocTest(\n                examples,\n                {},\n                f'{group.name} ({what} code)',\n                testcodes[0].filename,\n                0,\n                None,\n            )",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 553,
+   "op": "boolean",
+   "start": 20146,
+   "end": 20208,
+   "old": "not run_setup_cleanup(self.setup_runner, group.setup, 'setup')",
+   "new": "(run_setup_cleanup(self.setup_runner, group.setup, 'setup'))",
+   "id": 26
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 555,
+   "op": "return",
+   "start": 20273,
+   "end": 20285,
+   "old": "return False",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 558,
+   "op": "constant",
+   "start": 20329,
+   "end": 20333,
+   "old": "True",
+   "new": "(False)",
+   "id": 28
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 610,
+   "op": "statement",
+   "start": 22538,
+   "end": 22553,
+   "old": "test.globs = ns",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2278,
+   "end": 2311,
+   "old": "code = blankline_re.sub('', code)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 103,
+   "op": "constant",
+   "start": 3126,
+   "end": 3135,
+   "old": "'doctest'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 105,
+   "op": "comparison",
+   "start": 3189,
+   "end": 3212,
+   "old": "self.name == 'testcode'",
+   "new": "(self.name != 'testcode')",
+   "id": 32
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3226,
+   "end": 3253,
+   "old": "node['language'] = 'python'",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 111,
+   "op": "comparison",
+   "start": 3416,
+   "end": 3454,
+   "old": "self.name in {'doctest', 'testoutput'}",
+   "new": "(self.name not in {'doctest', 'testoutput'})",
+   "id": 34
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 111,
+   "op": "comparison",
+   "start": 3459,
+   "end": 3484,
+   "old": "'options' in self.options",
+   "new": "('options' not in self.options)",
+   "id": 35
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 133,
+   "op": "statement",
+   "start": 4549,
+   "end": 4606,
+   "old": "python_version = '.'.join(map(str, sys.version_info[:3]))",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 212,
+   "op": "statement",
+   "start": 7120,
+   "end": 7143,
+   "old": "self.setup.append(code)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 336,
+   "op": "constant",
+   "start": 11428,
+   "end": 11437,
+   "old": "'outfile'",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 344,
+   "op": "constant",
+   "start": 11663,
+   "end": 11664,
+   "old": "0",
+   "new": "(1)",
+   "id": 39
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 386,
+   "op": "boolean",
+   "start": 13078,
+   "end": 13123,
+   "old": "not success and self.config.doctest_fail_fast",
+   "new": "(not success or self.config.doctest_fail_fast)",
+   "id": 40
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 425,
+   "op": "statement",
+   "start": 14841,
+   "end": 14890,
+   "old": "exec(self.config.doctest_global_cleanup, context)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 470,
+   "op": "statement",
+   "start": 17037,
+   "end": 17069,
+   "old": "groups[groupname].add_code(code)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 491,
+   "op": "statement",
+   "start": 17819,
+   "end": 17839,
+   "old": "group.add_code(code)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 493,
+   "op": "constant",
+   "start": 17882,
+   "end": 17886,
+   "old": "True",
+   "new": "(False)",
+   "id": 44
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 500,
+   "op": "boolean",
+   "start": 18133,
+   "end": 18159,
+   "old": "not self.test_group(group)",
+   "new": "(self.test_group(group))",
+   "id": 45
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 533,
+   "op": "statement",
+   "start": 19393,
+   "end": 19461,
+   "old": "example = doctest.Example(testcode.code, '', lineno=testcode.lineno)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 536,
+   "op": "return",
+   "start": 19548,
+   "end": 19559,
+   "old": "return True",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 560,
+   "op": "comparison",
+   "start": 20382,
+   "end": 20396,
+   "old": "len(code) == 1",
+   "new": "(len(code) != 1)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 580,
+   "op": "statement",
+   "start": 21269,
+   "end": 21289,
+   "old": "self.type = 'single'",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 584,
+   "op": "statement",
+   "start": 21456,
+   "end": 21500,
+   "old": "options = code[1].options if code[1] else {}",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 588,
+   "op": "statement",
+   "start": 21705,
+   "end": 21743,
+   "old": "m = parser._EXCEPTION_RE.match(output)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 593,
+   "op": "statement",
+   "start": 21914,
+   "end": 22137,
+   "old": "example = doctest.Example(\n                    code[0].code,\n                    output,\n                    exc_msg=exc_msg,\n                    lineno=code[0].lineno,\n                    options=options,\n                )",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3154,
+   "end": 3164,
+   "old": "'language'",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3202,
+   "end": 3212,
+   "old": "'testcode'",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 116,
+   "op": "comparison",
+   "start": 3743,
+   "end": 3761,
+   "old": "prefix not in '+-'",
+   "new": "(prefix in '+-')",
+   "id": 55
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 121,
+   "op": "statement",
+   "start": 3980,
+   "end": 3988,
+   "old": "continue",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 122,
+   "op": "comparison",
+   "start": 4008,
+   "end": 4054,
+   "old": "option_name not in doctest.OPTIONFLAGS_BY_NAME",
+   "new": "(option_name in doctest.OPTIONFLAGS_BY_NAME)",
+   "id": 57
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 134,
+   "op": "boolean",
+   "start": 4626,
+   "end": 4670,
+   "old": "not is_allowed_version(spec, python_version)",
+   "new": "(is_allowed_version(spec, python_version))",
+   "id": 58
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 138,
+   "op": "statement",
+   "start": 4854,
+   "end": 4997,
+   "old": "self.state.document.reporter.warning(\n                    __(\"'%s' is not a valid pyversion option\") % spec, line=self.lineno\n                )",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 146,
+   "op": "constant",
+   "start": 5261,
+   "end": 5266,
+   "old": "False",
+   "new": "(True)",
+   "id": 60
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 213,
+   "op": "constant",
+   "start": 7170,
+   "end": 7183,
+   "old": "'testcleanup'",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 215,
+   "op": "comparison",
+   "start": 7236,
+   "end": 7258,
+   "old": "code.type == 'doctest'",
+   "new": "(code.type != 'doctest')",
+   "id": 62
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 216,
+   "op": "statement",
+   "start": 7272,
+   "end": 7297,
+   "old": "self.tests.append([code])",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 359,
+   "op": "constant",
+   "start": 12076,
+   "end": 12079,
+   "old": "'s'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 381,
+   "op": "constant",
+   "start": 12850,
+   "end": 12868,
+   "old": "'running tests...'",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 404,
+   "op": "boolean",
+   "start": 13917,
+   "end": 13934,
+   "old": "node.source or ''",
+   "new": "(node.source and '')",
+   "id": 66
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 463,
+   "op": "constant",
+   "start": 16684,
+   "end": 16692,
+   "old": "'groups'",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 501,
+   "op": "constant",
+   "start": 18187,
+   "end": 18192,
+   "old": "False",
+   "new": "(True)",
+   "id": 68
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 536,
+   "op": "constant",
+   "start": 19555,
+   "end": 19559,
+   "old": "True",
+   "new": "(False)",
+   "id": 69
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 578,
+   "op": "statement",
+   "start": 21175,
+   "end": 21206,
+   "old": "new_opt.update(example.options)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 580,
+   "op": "constant",
+   "start": 21281,
+   "end": 21289,
+   "old": "'single'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 592,
+   "op": "statement",
+   "start": 21883,
+   "end": 21897,
+   "old": "exc_msg = None",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 92,
+   "op": "constant",
+   "start": 2659,
+   "end": 2672,
+   "old": "'testcleanup'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 107,
+   "op": "constant",
+   "start": 3280,
+   "end": 3292,
+   "old": "'testoutput'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 109,
+   "op": "constant",
+   "start": 3369,
+   "end": 3375,
+   "old": "'none'",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 146,
+   "op": "constant",
+   "start": 5245,
+   "end": 5257,
+   "old": "'trim_flags'",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 276,
+   "op": "constant",
+   "start": 9260,
+   "end": 9266,
+   "old": "'name'",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 446,
+   "op": "constant",
+   "start": 15847,
+   "end": 15853,
+   "old": "'test'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 479,
+   "op": "constant",
+   "start": 17407,
+   "end": 17408,
+   "old": "0",
+   "new": "(1)",
+   "id": 79
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 572,
+   "op": "statement",
+   "start": 20921,
+   "end": 20929,
+   "old": "continue",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 115,
+   "op": "constant",
+   "start": 3709,
+   "end": 3710,
+   "old": "0",
+   "new": "(1)",
+   "id": 81
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 129,
+   "op": "constant",
+   "start": 4390,
+   "end": 4391,
+   "old": "0",
+   "new": "(1)",
+   "id": 82
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 217,
+   "op": "constant",
+   "start": 7324,
+   "end": 7334,
+   "old": "'testcode'",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7678,
+   "end": 7725,
+   "old": "raise RuntimeError(__('invalid TestCode type'))",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 397,
+   "op": "constant",
+   "start": 13592,
+   "end": 13597,
+   "old": "False",
+   "new": "(True)",
+   "id": 85
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 451,
+   "op": "constant",
+   "start": 16114,
+   "end": 16151,
+   "old": "'no code/output in %s block at %s:%s'",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 583,
+   "op": "constant",
+   "start": 21429,
+   "end": 21430,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 590,
+   "op": "constant",
+   "start": 21834,
+   "end": 21839,
+   "old": "'msg'",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 278,
+   "op": "constant",
+   "start": 9361,
+   "end": 9373,
+   "old": "'examplenum'",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 583,
+   "op": "constant",
+   "start": 21413,
+   "end": 21414,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 594,
+   "op": "constant",
+   "start": 21966,
+   "end": 21967,
+   "old": "0",
+   "new": "(1)",
+   "id": 91
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 605,
+   "op": "constant",
+   "start": 22328,
+   "end": 22329,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 564,
+   "op": "constant",
+   "start": 20605,
+   "end": 20606,
+   "old": "0",
+   "new": "(1)",
+   "id": 93
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 597,
+   "op": "constant",
+   "start": 22072,
+   "end": 22073,
+   "old": "0",
+   "new": "(1)",
+   "id": 94
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 577,
+   "op": "constant",
+   "start": 21137,
+   "end": 21138,
+   "old": "0",
+   "new": "(1)",
+   "id": 95
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 224,
+   "op": "constant",
+   "start": 7624,
+   "end": 7625,
+   "old": "1",
+   "new": "(2)",
+   "id": 96
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 570,
+   "op": "constant",
+   "start": 20849,
+   "end": 20850,
+   "old": "0",
+   "new": "(1)",
+   "id": 97
+  },
+  {
+   "path": "sphinx/ext/doctest.py",
+   "line": 570,
+   "op": "constant",
+   "start": 20867,
+   "end": 20868,
+   "old": "0",
+   "new": "(1)",
+   "id": 98
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/code.py",
+   "line": 113,
+   "op": "statement",
+   "start": 3556,
+   "end": 3586,
+   "old": "node[:] = [nodes.Text(source)]",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

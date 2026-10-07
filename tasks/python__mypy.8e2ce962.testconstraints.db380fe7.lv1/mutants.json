@@ -1,0 +1,786 @@
+{
+ "task": "python__mypy.8e2ce962.testconstraints.db380fe7.lv1",
+ "pool": 78,
+ "mutants": [
+  {
+   "path": "mypy/constraints.py",
+   "line": 1530,
+   "op": "statement",
+   "start": 71683,
+   "end": 71735,
+   "old": "template_unpack = find_unpack_in_list(template_args)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1532,
+   "op": "statement",
+   "start": 71779,
+   "end": 71812,
+   "old": "template_prefix = template_unpack",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1533,
+   "op": "statement",
+   "start": 71817,
+   "end": 71875,
+   "old": "template_suffix = len(template_args) - template_prefix - 1",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1535,
+   "op": "statement",
+   "start": 71881,
+   "end": 71896,
+   "old": "t_unpack = None",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1536,
+   "op": "statement",
+   "start": 71901,
+   "end": 71909,
+   "old": "res = []",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1538,
+   "op": "statement",
+   "start": 71915,
+   "end": 71963,
+   "old": "actual_unpack = find_unpack_in_list(actual_args)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1566,
+   "op": "statement",
+   "start": 73283,
+   "end": 73396,
+   "old": "start, middle, end = split_with_prefix_and_suffix(\n        tuple(actual_args), common_prefix, common_suffix\n    )",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1604,
+   "op": "return",
+   "start": 75468,
+   "end": 75478,
+   "old": "return res",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1713,
+   "op": "return",
+   "start": 80081,
+   "end": 80094,
+   "old": "return new_cs",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 107,
+   "op": "return",
+   "start": 2783,
+   "end": 2871,
+   "old": "return (self.type_var, self.op, self.target) == (other.type_var, other.op, other.target)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1531,
+   "op": "comparison",
+   "start": 71747,
+   "end": 71774,
+   "old": "template_unpack is not None",
+   "new": "(template_unpack is None)",
+   "id": 10
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1533,
+   "op": "arithmetic",
+   "start": 71835,
+   "end": 71875,
+   "old": "len(template_args) - template_prefix - 1",
+   "new": "(len(template_args) - template_prefix + 1)",
+   "id": 11
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1539,
+   "op": "comparison",
+   "start": 71971,
+   "end": 71992,
+   "old": "actual_unpack is None",
+   "new": "(actual_unpack is not None)",
+   "id": 12
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1540,
+   "op": "statement",
+   "start": 72002,
+   "end": 72043,
+   "old": "t_unpack = template_args[template_unpack]",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1553,
+   "op": "statement",
+   "start": 72601,
+   "end": 72632,
+   "old": "common_prefix = template_prefix",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1554,
+   "op": "statement",
+   "start": 72641,
+   "end": 72672,
+   "old": "common_suffix = template_suffix",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1556,
+   "op": "statement",
+   "start": 72691,
+   "end": 72720,
+   "old": "actual_prefix = actual_unpack",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1557,
+   "op": "statement",
+   "start": 72729,
+   "end": 72781,
+   "old": "actual_suffix = len(actual_args) - actual_prefix - 1",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1558,
+   "op": "statement",
+   "start": 72790,
+   "end": 72841,
+   "old": "common_prefix = min(template_prefix, actual_prefix)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1559,
+   "op": "statement",
+   "start": 72850,
+   "end": 72901,
+   "old": "common_suffix = min(template_suffix, actual_suffix)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1570,
+   "op": "statement",
+   "start": 73464,
+   "end": 73510,
+   "old": "res.extend(infer_constraints(t, a, direction))",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1575,
+   "op": "comparison",
+   "start": 73662,
+   "end": 73682,
+   "old": "t_unpack is not None",
+   "new": "(t_unpack is None)",
+   "id": 21
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1578,
+   "op": "statement",
+   "start": 73801,
+   "end": 73836,
+   "old": "tp = get_proper_type(t_unpack.type)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 105,
+   "op": "boolean",
+   "start": 2715,
+   "end": 2748,
+   "old": "not isinstance(other, Constraint)",
+   "new": "(isinstance(other, Constraint))",
+   "id": 23
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 106,
+   "op": "return",
+   "start": 2762,
+   "end": 2774,
+   "old": "return False",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 107,
+   "op": "comparison",
+   "start": 2790,
+   "end": 2871,
+   "old": "(self.type_var, self.op, self.target) == (other.type_var, other.op, other.target)",
+   "new": "((self.type_var, self.op, self.target) != (other.type_var, other.op, other.target))",
+   "id": 25
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1533,
+   "op": "arithmetic",
+   "start": 71835,
+   "end": 71871,
+   "old": "len(template_args) - template_prefix",
+   "new": "(len(template_args) + template_prefix)",
+   "id": 26
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1533,
+   "op": "constant",
+   "start": 71874,
+   "end": 71875,
+   "old": "1",
+   "new": "(2)",
+   "id": 27
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1541,
+   "op": "comparison",
+   "start": 72055,
+   "end": 72107,
+   "old": "template_prefix + template_suffix > len(actual_args)",
+   "new": "(template_prefix + template_suffix >= len(actual_args))",
+   "id": 28
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1557,
+   "op": "arithmetic",
+   "start": 72745,
+   "end": 72781,
+   "old": "len(actual_args) - actual_prefix - 1",
+   "new": "(len(actual_args) - actual_prefix + 1)",
+   "id": 29
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1560,
+   "op": "boolean",
+   "start": 72913,
+   "end": 72982,
+   "old": "actual_prefix >= template_prefix and actual_suffix >= template_suffix",
+   "new": "(actual_prefix >= template_prefix or actual_suffix >= template_suffix)",
+   "id": 30
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1563,
+   "op": "statement",
+   "start": 73181,
+   "end": 73222,
+   "old": "t_unpack = template_args[template_unpack]",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1573,
+   "op": "statement",
+   "start": 73607,
+   "end": 73653,
+   "old": "res.extend(infer_constraints(t, a, direction))",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1579,
+   "op": "boolean",
+   "start": 73848,
+   "end": 73913,
+   "old": "isinstance(tp, Instance) and tp.type.fullname == \"builtins.tuple\"",
+   "new": "(isinstance(tp, Instance) or tp.type.fullname == 'builtins.tuple')",
+   "id": 33
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1592,
+   "op": "comparison",
+   "start": 74682,
+   "end": 74707,
+   "old": "actual_unpack is not None",
+   "new": "(actual_unpack is None)",
+   "id": 34
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1595,
+   "op": "statement",
+   "start": 74877,
+   "end": 74924,
+   "old": "actual_unpack_type = actual_args[actual_unpack]",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1597,
+   "op": "statement",
+   "start": 74991,
+   "end": 75044,
+   "old": "a_unpacked = get_proper_type(actual_unpack_type.type)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 106,
+   "op": "constant",
+   "start": 2769,
+   "end": 2774,
+   "old": "False",
+   "new": "(True)",
+   "id": 37
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1541,
+   "op": "arithmetic",
+   "start": 72055,
+   "end": 72088,
+   "old": "template_prefix + template_suffix",
+   "new": "(template_prefix - template_suffix)",
+   "id": 38
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1546,
+   "op": "return",
+   "start": 72374,
+   "end": 72548,
+   "old": "return [\n                    Constraint(\n                        t_unpack.type, direction, TupleType([], t_unpack.type.tuple_fallback)\n                    )\n                ]",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1552,
+   "op": "return",
+   "start": 72583,
+   "end": 72592,
+   "old": "return []",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1557,
+   "op": "arithmetic",
+   "start": 72745,
+   "end": 72777,
+   "old": "len(actual_args) - actual_prefix",
+   "new": "(len(actual_args) + actual_prefix)",
+   "id": 41
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1557,
+   "op": "constant",
+   "start": 72780,
+   "end": 72781,
+   "old": "1",
+   "new": "(2)",
+   "id": 42
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1560,
+   "op": "comparison",
+   "start": 72913,
+   "end": 72945,
+   "old": "actual_prefix >= template_prefix",
+   "new": "(actual_prefix > template_prefix)",
+   "id": 43
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1560,
+   "op": "comparison",
+   "start": 72950,
+   "end": 72982,
+   "old": "actual_suffix >= template_suffix",
+   "new": "(actual_suffix > template_suffix)",
+   "id": 44
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1579,
+   "op": "comparison",
+   "start": 73877,
+   "end": 73913,
+   "old": "tp.type.fullname == \"builtins.tuple\"",
+   "new": "(tp.type.fullname != 'builtins.tuple')",
+   "id": 45
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1591,
+   "op": "statement",
+   "start": 74591,
+   "end": 74672,
+   "old": "res.append(Constraint(tp, direction, TupleType(list(middle), tp.tuple_fallback)))",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1598,
+   "op": "boolean",
+   "start": 75056,
+   "end": 75137,
+   "old": "isinstance(a_unpacked, Instance) and a_unpacked.type.fullname == \"builtins.tuple\"",
+   "new": "(isinstance(a_unpacked, Instance) or a_unpacked.type.fullname == 'builtins.tuple')",
+   "id": 47
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1599,
+   "op": "statement",
+   "start": 75151,
+   "end": 75192,
+   "old": "t_unpack = template_args[template_unpack]",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1601,
+   "op": "statement",
+   "start": 75257,
+   "end": 75292,
+   "old": "tp = get_proper_type(t_unpack.type)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1579,
+   "op": "constant",
+   "start": 73897,
+   "end": 73913,
+   "old": "\"builtins.tuple\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1583,
+   "op": "boolean",
+   "start": 74094,
+   "end": 74123,
+   "old": "not isinstance(a, UnpackType)",
+   "new": "(isinstance(a, UnpackType))",
+   "id": 51
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1584,
+   "op": "statement",
+   "start": 74145,
+   "end": 74200,
+   "old": "res.extend(infer_constraints(tp.args[0], a, direction))",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1586,
+   "op": "statement",
+   "start": 74243,
+   "end": 74273,
+   "old": "a_tp = get_proper_type(a.type)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1598,
+   "op": "comparison",
+   "start": 75093,
+   "end": 75137,
+   "old": "a_unpacked.type.fullname == \"builtins.tuple\"",
+   "new": "(a_unpacked.type.fullname != 'builtins.tuple')",
+   "id": 54
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1602,
+   "op": "boolean",
+   "start": 75308,
+   "end": 75373,
+   "old": "isinstance(tp, Instance) and tp.type.fullname == \"builtins.tuple\"",
+   "new": "(isinstance(tp, Instance) or tp.type.fullname == 'builtins.tuple')",
+   "id": 55
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1603,
+   "op": "statement",
+   "start": 75391,
+   "end": 75463,
+   "old": "res.extend(infer_constraints(tp.args[0], a_unpacked.args[0], direction))",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1588,
+   "op": "boolean",
+   "start": 74370,
+   "end": 74439,
+   "old": "isinstance(a_tp, Instance) and a_tp.type.fullname == \"builtins.tuple\"",
+   "new": "(isinstance(a_tp, Instance) or a_tp.type.fullname == 'builtins.tuple')",
+   "id": 57
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1589,
+   "op": "statement",
+   "start": 74465,
+   "end": 74531,
+   "old": "res.extend(infer_constraints(tp.args[0], a_tp.args[0], direction))",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1598,
+   "op": "constant",
+   "start": 75121,
+   "end": 75137,
+   "old": "\"builtins.tuple\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1602,
+   "op": "comparison",
+   "start": 75337,
+   "end": 75373,
+   "old": "tp.type.fullname == \"builtins.tuple\"",
+   "new": "(tp.type.fullname != 'builtins.tuple')",
+   "id": 60
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1588,
+   "op": "comparison",
+   "start": 74401,
+   "end": 74439,
+   "old": "a_tp.type.fullname == \"builtins.tuple\"",
+   "new": "(a_tp.type.fullname != 'builtins.tuple')",
+   "id": 61
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1602,
+   "op": "constant",
+   "start": 75357,
+   "end": 75373,
+   "old": "\"builtins.tuple\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1588,
+   "op": "constant",
+   "start": 74423,
+   "end": 74439,
+   "old": "\"builtins.tuple\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1584,
+   "op": "constant",
+   "start": 74182,
+   "end": 74183,
+   "old": "0",
+   "new": "(1)",
+   "id": 64
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1603,
+   "op": "constant",
+   "start": 75428,
+   "end": 75429,
+   "old": "0",
+   "new": "(1)",
+   "id": 65
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1603,
+   "op": "constant",
+   "start": 75448,
+   "end": 75449,
+   "old": "0",
+   "new": "(1)",
+   "id": 66
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1589,
+   "op": "constant",
+   "start": 74502,
+   "end": 74503,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "mypy/constraints.py",
+   "line": 1589,
+   "op": "constant",
+   "start": 74516,
+   "end": 74517,
+   "old": "0",
+   "new": "(1)",
+   "id": 68
+  },
+  {
+   "path": "mypy/type_visitor.py",
+   "line": 537,
+   "op": "return",
+   "start": 17059,
+   "end": 17110,
+   "old": "return self.query_types([t.upper_bound, t.default])",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "mypy/type_visitor.py",
+   "line": 540,
+   "op": "return",
+   "start": 17179,
+   "end": 17212,
+   "old": "return self.query_types([t.type])",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "mypy/type_visitor.py",
+   "line": 612,
+   "op": "return",
+   "start": 19933,
+   "end": 19974,
+   "old": "return all(t.accept(self) for t in types)",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4102,
+   "op": "comparison",
+   "start": 147967,
+   "end": 147996,
+   "old": "len(types) <= prefix + suffix",
+   "new": "(len(types) < prefix + suffix)",
+   "id": 72
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4103,
+   "op": "statement",
+   "start": 148006,
+   "end": 148070,
+   "old": "types = extend_args_for_prefix_and_suffix(types, prefix, suffix)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4105,
+   "op": "return",
+   "start": 148094,
+   "end": 148155,
+   "old": "return types[:prefix], types[prefix:-suffix], types[-suffix:]",
+   "new": "return None",
+   "id": 74
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4107,
+   "op": "return",
+   "start": 148174,
+   "end": 148215,
+   "old": "return types[:prefix], types[prefix:], ()",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4438,
+   "op": "return",
+   "start": 159099,
+   "end": 159146,
+   "old": "return TypeTranslator.visit_union_type(self, t)",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "mypy/types.py",
+   "line": 4102,
+   "op": "arithmetic",
+   "start": 147981,
+   "end": 147996,
+   "old": "prefix + suffix",
+   "new": "(prefix - suffix)",
+   "id": 77
+  }
+ ]
+}

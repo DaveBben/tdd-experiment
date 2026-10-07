@@ -1,0 +1,2830 @@
+=== seaborn/_core/plot.py
+"""The classes for specifying and compiling a declarative visualization."""
+from __future__ import annotations
+
+import io
+import os
+import re
+import inspect
+import itertools
+import textwrap
+from contextlib import contextmanager
+from collections import abc
+from collections.abc import Callable, Generator, Mapping
+from typing import Any, List, Literal, Optional, cast
+from xml.etree import ElementTree
+
+from cycler import cycler
+import pandas as pd
+from pandas import DataFrame, Series, Index
+import matplotlib as mpl
+from matplotlib.axes import Axes
+from matplotlib.artist import Artist
+from matplotlib.figure import Figure
+import numpy as np
+from PIL import Image
+
+from seaborn._marks.base import Mark
+from seaborn._stats.base import Stat
+from seaborn._core.data import PlotData
+from seaborn._core.moves import Move
+from seaborn._core.scales import Scale
+from seaborn._core.subplots import Subplots
+from seaborn._core.groupby import GroupBy
+from seaborn._core.properties import PROPERTIES, Property
+from seaborn._core.typing import (
+    DataSource,
+    VariableSpec,
+    VariableSpecList,
+    OrderSpec,
+    Default,
+)
+from seaborn._core.exceptions import PlotSpecError
+from seaborn._core.rules import categorical_order
+from seaborn._compat import get_layout_engine, set_layout_engine
+from seaborn.utils import _version_predates
+from seaborn.rcmod import axes_style, plotting_context
+from seaborn.palettes import color_palette
+
+from typing import TYPE_CHECKING, TypedDict
+if TYPE_CHECKING:
+    from matplotlib.figure import SubFigure
+
+
+default = Default()
+
+
+# ---- Definitions for internal specs ---------------------------------------------- #
+
+
+class Layer(TypedDict, total=False):
+
+    mark: Mark  # TODO allow list?
+    stat: Stat | None  # TODO allow list?
+    move: Move | list[Move] | None
+    data: PlotData
+    source: DataSource
+    vars: dict[str, VariableSpec]
+    orient: str
+    legend: bool
+    label: str | None
+
+
+class FacetSpec(TypedDict, total=False):
+
+    variables: dict[str, VariableSpec]
+    structure: dict[str, list[str]]
+    wrap: int | None
+
+
+class PairSpec(TypedDict, total=False):
+
+    variables: dict[str, VariableSpec]
+    structure: dict[str, list[str]]
+    cross: bool
+    wrap: int | None
+
+
+# --- Local helpers ---------------------------------------------------------------- #
+
+
+@contextmanager
+def theme_context(params: dict[str, Any]) -> Generator:
+    """Temporarily modify specifc matplotlib rcParams."""
+    orig_params = {k: mpl.rcParams[k] for k in params}
+    color_codes = "bgrmyck"
+    nice_colors = [*color_palette("deep6"), (.15, .15, .15)]
+    orig_colors = [mpl.colors.colorConverter.colors[x] for x in color_codes]
+    # TODO how to allow this to reflect the color cycle when relevant?
+    try:
+        mpl.rcParams.update(params)
+        for (code, color) in zip(color_codes, nice_colors):
+            mpl.colors.colorConverter.colors[code] = color
+        yield
+    finally:
+        mpl.rcParams.update(orig_params)
+        for (code, color) in zip(color_codes, orig_colors):
+            mpl.colors.colorConverter.colors[code] = color
+
+
+def build_plot_signature(cls):
+    """
+    Decorator function for giving Plot a useful signature.
+
+    Currently this mostly saves us some duplicated typing, but we would
+    like eventually to have a way of registering new semantic properties,
+    at which point dynamic signature generation would become more important.
+
+    """
+    sig = inspect.signature(cls)
+    params = [
+        inspect.Parameter("args", inspect.Parameter.VAR_POSITIONAL),
+        inspect.Parameter("data", inspect.Parameter.KEYWORD_ONLY, default=None)
+    ]
+    params.extend([
+        inspect.Parameter(name, inspect.Parameter.KEYWORD_ONLY, default=None)
+        for name in PROPERTIES
+    ])
+    new_sig = sig.replace(parameters=params)
+    cls.__signature__ = new_sig
+
+    known_properties = textwrap.fill(
+        ", ".join([f"|{p}|" for p in PROPERTIES]),
+        width=78, subsequent_indent=" " * 8,
+    )
+
+    if cls.__doc__ is not None:  # support python -OO mode
+        cls.__doc__ = cls.__doc__.format(known_properties=known_properties)
+
+    return cls
+
+
+# ---- Plot configuration ---------------------------------------------------------- #
+
+
+class ThemeConfig(mpl.RcParams):
+    """
+    Configuration object for the Plot.theme, using matplotlib rc parameters.
+    """
+    THEME_GROUPS = [
+        "axes", "figure", "font", "grid", "hatch", "legend", "lines",
+        "mathtext", "markers", "patch", "savefig", "scatter",
+        "xaxis", "xtick", "yaxis", "ytick",
+    ]
+
+    def __init__(self):
+        super().__init__()
+        self.reset()
+
+    @property
+    def _default(self) -> dict[str, Any]:
+
+        return {
+            **self._filter_params(mpl.rcParamsDefault),
+            **axes_style("darkgrid"),
+            **plotting_context("notebook"),
+            "axes.prop_cycle": cycler("color", color_palette("deep")),
+        }
+
+    def reset(self) -> None:
+        """Update the theme dictionary with seaborn's default values."""
+        self.update(self._default)
+
+    def update(self, other: dict[str, Any] | None = None, /, **kwds):
+        """Update the theme with a dictionary or keyword arguments of rc parameters."""
+        if other is not None:
+            theme = self._filter_params(other)
+        else:
+            theme = {}
+        theme.update(kwds)
+        super().update(theme)
+
+    def _filter_params(self, params: dict[str, Any]) -> dict[str, Any]:
+        """Restruct to thematic rc params."""
+        return {
+            k: v for k, v in params.items()
+            if any(k.startswith(p) for p in self.THEME_GROUPS)
+        }
+
+    def _repr_html_(self) -> str:
+        """
+        Generate HTML representation of the ThemeConfig for display in Jupyter notebooks.
+
+        This method creates a formatted HTML table displaying all the matplotlib rc parameters
+        currently stored in the ThemeConfig instance. The output is designed for rich display
+        in Jupyter notebook environments.
+
+        Returns
+        -------
+        str
+            HTML string containing a styled table with all theme parameters. The table is
+            wrapped in a div container with fixed height (300px) and an inset border style.
+            Each parameter is displayed as a table row with the parameter name in the first
+            column and its repr() value in the second column.
+
+        Notes
+        -----
+        This method is automatically called by Jupyter's display system when a ThemeConfig
+        object is the last expression in a cell. The HTML output includes:
+        - A fixed-height container (300px)
+        - An inset border style for visual separation
+        - Left-aligned parameter values for better readability
+        - All rc parameters currently stored in the ThemeConfig mapping
+
+        The table rows use consistent styling across the display.
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class DisplayConfig(TypedDict):
+    """Configuration for IPython's rich display hooks."""
+    format: Literal["png", "svg"]
+    scaling: float
+    hidpi: bool
+
+
+class PlotConfig:
+    """Configuration for default behavior / appearance of class:`Plot` instances."""
+    def __init__(self):
+
+        self._theme = ThemeConfig()
+        self._display = {"format": "png", "scaling": .85, "hidpi": True}
+
+    @property
+    def theme(self) -> dict[str, Any]:
+        """
+        Dictionary of base theme parameters for :class:`Plot`.
+
+        Keys and values correspond to matplotlib rc params, as documented here:
+        https://matplotlib.org/stable/tutorials/introductory/customizing.html
+
+        """
+        return self._theme
+
+    @property
+    def display(self) -> DisplayConfig:
+        """
+        Dictionary of parameters for rich display in Jupyter notebook.
+
+        Valid parameters:
+
+        - format ("png" or "svg"): Image format to produce
+        - scaling (float): Relative scaling of embedded image
+        - hidpi (bool): When True, double the DPI while preserving the size
+
+        """
+        return self._display
+
+
+# ---- The main interface for declarative plotting --------------------------------- #
+
+
+@build_plot_signature
+class Plot:
+    """
+    An interface for declaratively specifying statistical graphics.
+
+    Plots are constructed by initializing this class and adding one or more
+    layers, comprising a `Mark` and optional `Stat` or `Move`.  Additionally,
+    faceting variables or variable pairings may be defined to divide the space
+    into multiple subplots. The mappings from data values to visual properties
+    can be parametrized using scales, although the plot will try to infer good
+    defaults when scales are not explicitly defined.
+
+    The constructor accepts a data source (a :class:`pandas.DataFrame` or
+    dictionary with columnar values) and variable assignments. Variables can be
+    passed as keys to the data source or directly as data vectors.  If multiple
+    data-containing objects are provided, they will be index-aligned.
+
+    The data source and variables defined in the constructor will be used for
+    all layers in the plot, unless overridden or disabled when adding a layer.
+
+    The following variables can be defined in the constructor:
+        {known_properties}
+
+    The `data`, `x`, and `y` variables can be passed as positional arguments or
+    using keywords. Whether the first positional argument is interpreted as a
+    data source or `x` variable depends on its type.
+
+    The methods of this class return a copy of the instance; use chaining to
+    build up a plot through multiple calls. Methods can be called in any order.
+
+    Most methods only add information to the plot spec; no actual processing
+    happens until the plot is shown or saved. It is also possible to compile
+    the plot without rendering it to access the lower-level representation.
+
+    """
+    config = PlotConfig()
+
+    _data: PlotData
+    _layers: list[Layer]
+
+    _scales: dict[str, Scale]
+    _shares: dict[str, bool | str]
+    _limits: dict[str, tuple[Any, Any]]
+    _labels: dict[str, str | Callable[[str], str]]
+    _theme: dict[str, Any]
+
+    _facet_spec: FacetSpec
+    _pair_spec: PairSpec
+
+    _figure_spec: dict[str, Any]
+    _subplot_spec: dict[str, Any]
+    _layout_spec: dict[str, Any]
+
+    def __init__(
+        self,
+        *args: DataSource | VariableSpec,
+        data: DataSource = None,
+        **variables: VariableSpec,
+    ):
+
+        if args:
+            data, variables = self._resolve_positionals(args, data, variables)
+
+        unknown = [x for x in variables if x not in PROPERTIES]
+        if unknown:
+            err = f"Plot() got unexpected keyword argument(s): {', '.join(unknown)}"
+            raise TypeError(err)
+
+        self._data = PlotData(data, variables)
+
+        self._layers = []
+
+        self._scales = {}
+        self._shares = {}
+        self._limits = {}
+        self._labels = {}
+        self._theme = {}
+
+        self._facet_spec = {}
+        self._pair_spec = {}
+
+        self._figure_spec = {}
+        self._subplot_spec = {}
+        self._layout_spec = {}
+
+        self._target = None
+
+    def _resolve_positionals(
+        self,
+        args: tuple[DataSource | VariableSpec, ...],
+        data: DataSource,
+        variables: dict[str, VariableSpec],
+    ) -> tuple[DataSource, dict[str, VariableSpec]]:
+        """Handle positional arguments, which may contain data / x / y."""
+        if len(args) > 3:
+            err = "Plot() accepts no more than 3 positional arguments (data, x, y)."
+            raise TypeError(err)
+
+        if (
+            isinstance(args[0], (abc.Mapping, pd.DataFrame))
+            or hasattr(args[0], "__dataframe__")
+        ):
+            if data is not None:
+                raise TypeError("`data` given by both name and position.")
+            data, args = args[0], args[1:]
+
+        if len(args) == 2:
+            x, y = args
+        elif len(args) == 1:
+            x, y = *args, None
+        else:
+            x = y = None
+
+        for name, var in zip("yx", (y, x)):
+            if var is not None:
+                if name in variables:
+                    raise TypeError(f"`{name}` given by both name and position.")
+                # Keep coordinates at the front of the variables dict
+                # Cast type because we know this isn't a DataSource at this point
+                variables = {name: cast(VariableSpec, var), **variables}
+
+        return data, variables
+
+    def __add__(self, other):
+
+        if isinstance(other, Mark) or isinstance(other, Stat):
+            raise TypeError("Sorry, this isn't ggplot! Perhaps try Plot.add?")
+
+        other_type = other.__class__.__name__
+        raise TypeError(f"Unsupported operand type(s) for +: 'Plot' and '{other_type}")
+
+    def _repr_png_(self) -> tuple[bytes, dict[str, float]] | None:
+
+        if Plot.config.display["format"] != "png":
+            return None
+        return self.plot()._repr_png_()
+
+    def _repr_svg_(self) -> str | None:
+
+        if Plot.config.display["format"] != "svg":
+            return None
+        return self.plot()._repr_svg_()
+
+    def _clone(self) -> Plot:
+        """Generate a new object with the same information as the current spec."""
+        new = Plot()
+
+        # TODO any way to enforce that data does not get mutated?
+        new._data = self._data
+
+        new._layers.extend(self._layers)
+
+        new._scales.update(self._scales)
+        new._shares.update(self._shares)
+        new._limits.update(self._limits)
+        new._labels.update(self._labels)
+        new._theme.update(self._theme)
+
+        new._facet_spec.update(self._facet_spec)
+        new._pair_spec.update(self._pair_spec)
+
+        new._figure_spec.update(self._figure_spec)
+        new._subplot_spec.update(self._subplot_spec)
+        new._layout_spec.update(self._layout_spec)
+
+        new._target = self._target
+
+        return new
+
+    def _theme_with_defaults(self) -> dict[str, Any]:
+
+        theme = self.config.theme.copy()
+        theme.update(self._theme)
+        return theme
+
+    @property
+    def _variables(self) -> list[str]:
+
+        variables = (
+            list(self._data.frame)
+            + list(self._pair_spec.get("variables", []))
+            + list(self._facet_spec.get("variables", []))
+        )
+        for layer in self._layers:
+            variables.extend(v for v in layer["vars"] if v not in variables)
+
+        # Coerce to str in return to appease mypy; we know these will only
+        # ever be strings but I don't think we can type a DataFrame that way yet
+        return [str(v) for v in variables]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # TODO def twin()?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # TODO def legend (ugh)
+
+    def theme(self, config: Mapping[str, Any], /) -> Plot:
+        """
+        Control the appearance of elements in the plot.
+
+        .. note::
+
+            The API for customizing plot appearance is not yet finalized.
+            Currently, the only valid argument is a dict of matplotlib rc parameters.
+            (This dict must be passed as a positional argument.)
+
+            It is likely that this method will be enhanced in future releases.
+
+        Matplotlib rc parameters are documented on the following page:
+        https://matplotlib.org/stable/tutorials/introductory/customizing.html
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.theme.rst
+
+        """
+        new = self._clone()
+
+        rc = mpl.RcParams(config)
+        new._theme.update(rc)
+
+        return new
+
+    def save(self, loc, **kwargs) -> Plot:
+        """
+        Compile the plot and write it to a buffer or file on disk.
+
+        Parameters
+        ----------
+        loc : str, path, or buffer
+            Location on disk to save the figure, or a buffer to write into.
+        kwargs
+            Other keyword arguments are passed through to
+            :meth:`matplotlib.figure.Figure.savefig`.
+
+        """
+        # TODO expose important keyword arguments in our signature?
+        with theme_context(self._theme_with_defaults()):
+            self._plot().save(loc, **kwargs)
+        return self
+
+    def show(self, **kwargs) -> None:
+        """
+        Compile the plot and display it by hooking into pyplot.
+
+        Calling this method is not necessary to render a plot in notebook context,
+        but it may be in other environments (e.g., in a terminal). After compiling the
+        plot, it calls :func:`matplotlib.pyplot.show` (passing any keyword parameters).
+
+        Unlike other :class:`Plot` methods, there is no return value. This should be
+        the last method you call when specifying a plot.
+
+        """
+        # TODO make pyplot configurable at the class level, and when not using,
+        # import IPython.display and call on self to populate cell output?
+
+        # Keep an eye on whether matplotlib implements "attaching" an existing
+        # figure to pyplot: https://github.com/matplotlib/matplotlib/pull/14024
+
+        self.plot(pyplot=True).show(**kwargs)
+
+    def plot(self, pyplot: bool = False) -> Plotter:
+        """
+        Compile the plot spec and return the Plotter object.
+        """
+        with theme_context(self._theme_with_defaults()):
+            return self._plot(pyplot)
+
+    def _plot(self, pyplot: bool = False) -> Plotter:
+
+        # TODO if we have _target object, pyplot should be determined by whether it
+        # is hooked into the pyplot state machine (how do we check?)
+
+        plotter = Plotter(pyplot=pyplot, theme=self._theme_with_defaults())
+
+        # Process the variable assignments and initialize the figure
+        common, layers = plotter._extract_data(self)
+        plotter._setup_figure(self, common, layers)
+
+        # Process the scale spec for coordinate variables and transform their data
+        coord_vars = [v for v in self._variables if re.match(r"^x|y", v)]
+        plotter._setup_scales(self, common, layers, coord_vars)
+
+        # Apply statistical transform(s)
+        plotter._compute_stats(self, layers)
+
+        # Process scale spec for semantic variables and coordinates computed by stat
+        plotter._setup_scales(self, common, layers)
+
+        # TODO Remove these after updating other methods
+        # ---- Maybe have debug= param that attaches these when True?
+        plotter._data = common
+        plotter._layers = layers
+
+        # Process the data for each layer and add matplotlib artists
+        for layer in layers:
+            plotter._plot_layer(self, layer)
+
+        # Add various figure decorations
+        plotter._make_legend(self)
+        plotter._finalize_figure(self)
+
+        return plotter
+
+    def add(
+        self,
+        mark: Mark,
+        *transforms: Stat | Move,
+        orient: str | None = None,
+        legend: bool = True,
+        label: str | None = None,
+        data: DataSource = None,
+        **variables: VariableSpec,
+    ) -> Plot:
+        """
+        Add a layer to the plot specification with a mark and optional data transformations.
+
+        This is the primary method for defining how data should be visualized in a plot.
+        Multiple layers can be added by calling this method repeatedly with different
+        arguments, allowing for complex multi-layer visualizations.
+
+        Parameters
+        ----------
+        mark : Mark
+            The visual representation (e.g., points, lines, bars) to use for rendering
+            the data in this layer. Must be an instance of a Mark class.
+        *transforms : Stat or Move
+            Variable number of transformation objects to apply to the data before plotting.
+            Currently supports at most one Stat transformation (which must be first if present)
+            followed by any number of Move transformations. This constraint may be relaxed
+            in future versions.
+        orient : {"x", "y", "v", "h"}, optional
+            Specifies the orientation of the mark and affects how transformations are computed.
+            Generally corresponds to the axis that defines groups for aggregation operations.
+            "v" (vertical) and "h" (horizontal) are synonyms for "x" and "y" respectively.
+            If not provided, orientation will be automatically inferred from the data and scales.
+        legend : bool, default True
+            Whether to include this layer's mark and variable mappings in the plot legend.
+            Set to False to exclude this layer from legend generation.
+        label : str, optional
+            Custom label for this layer in the legend, independent of any variable mappings.
+            Useful for providing descriptive names for different layers.
+        data : DataFrame or dict, optional
+            Layer-specific data source that overrides the global data provided in the
+            Plot constructor. Should have the same structure as the global data.
+        **variables : data vectors or identifiers
+            Additional layer-specific variable mappings. These can include variables that
+            will be passed directly to transformations without scaling, or override
+            global variable assignments for this layer only.
+
+        Returns
+        -------
+        Plot
+            A new Plot object with the added layer. The original Plot object is unchanged.
+
+        Raises
+        ------
+        TypeError
+            If mark is not a Mark instance, or if transforms contain invalid types or
+            are provided in incorrect order (Stat must come before Move transforms).
+
+        Notes
+        -----
+        - Each call to add() creates a new Plot object; use method chaining to build
+          complex plots efficiently
+        - Layer-specific data and variables take precedence over global settings
+        - Transform order matters: Stat transformations must precede Move transformations
+        - The orient parameter affects both mark rendering and statistical computations
+
+        Examples
+        --------
+        Add a simple scatter plot layer:
+
+            p = Plot(data, x="x_var", y="y_var")
+            p = p.add(Dot())
+
+        Add multiple layers with different marks:
+
+            p = (Plot(data, x="x_var", y="y_var")
+                 .add(Dot(alpha=0.5))
+                 .add(Line(linestyle="--")))
+
+        Add a layer with statistical transformation:
+
+            p = Plot(data, x="category", y="value").add(Bar(), Agg(func="mean"))
+
+        Add a layer with custom data and legend label:
+
+            p = (Plot(global_data, x="x", y="y")
+                 .add(Dot(), data=special_data, label="Special points"))
+        """
+        raise NotImplementedError
+
+    def facet(self, col: VariableSpec = None, row: VariableSpec = None, order: OrderSpec | dict[str, OrderSpec] = None, wrap: int | None = None) -> Plot:
+        """
+        Produce subplots with conditional subsets of the data.
+
+        This method creates a grid of subplots where each subplot displays a subset of the data
+        based on the unique values of the specified faceting variables. The data is split
+        according to the values in the `col` and/or `row` variables, with each unique
+        combination creating a separate subplot.
+
+        Parameters
+        ----------
+        col : data vector or identifier, optional
+            Variable used to define subsets along the columns of the subplot grid.
+            Each unique value in this variable will create a separate column of subplots.
+            Can be a reference to a column in the global data source passed in the constructor,
+            or a data vector passed directly.
+        row : data vector or identifier, optional
+            Variable used to define subsets along the rows of the subplot grid.
+            Each unique value in this variable will create a separate row of subplots.
+            Can be a reference to a column in the global data source passed in the constructor,
+            or a data vector passed directly.
+        order : list of strings, or dict with dimensional keys, optional
+            Define the order of the faceting variables. If a list is provided, it specifies
+            the order for whichever single dimension is being faceted (col or row). If a dict
+            is provided, it should have keys 'col' and/or 'row' with corresponding lists
+            specifying the order for each dimension. If not specified, the order is inferred
+            from the data by the plotting system.
+        wrap : int, optional
+            When using only `col` or `row` (but not both), wrap subplots across a 
+            two-dimensional grid with this many subplots on the faceting dimension.
+            For example, if faceting by `col` with `wrap=3`, subplots will be arranged
+            in rows of 3 columns each.
+
+        Returns
+        -------
+        Plot
+            A new Plot object with the faceting specification applied. This follows the
+            method chaining pattern where Plot methods return copies of the instance.
+
+        Raises
+        ------
+        RuntimeError
+            If both ``col`` and ``row`` are specified while ``order`` is a single list.
+
+        Notes
+        -----
+        - Calling with neither `col` nor `row` is accepted and records an empty facet specification
+        - Supplying `wrap` with both `col` and `row` is rejected when the plot is compiled
+        - The `wrap` parameter only applies when faceting on a single dimension
+        - Each subplot will have the same scales and axis labels unless modified by
+          other Plot methods like `share()` or `scale()`
+        - Faceting variables are automatically added to the plot's variable namespace
+          and can be referenced in other methods
+
+        Examples
+        --------
+        Create subplots for each species in the dataset:
+
+            p = Plot(data, x="bill_length", y="bill_depth")
+            p.add(Dot()).facet(col="species")
+
+        Create a grid with species as columns and island as rows:
+
+            p = Plot(data, x="bill_length", y="bill_depth")  
+            p.add(Dot()).facet(col="species", row="island")
+
+        Control the order of facets:
+
+            p = Plot(data, x="bill_length", y="bill_depth")
+            p.add(Dot()).facet(col="species", order=["Chinstrap", "Adelie", "Gentoo"])
+
+        Wrap single-dimension facets across multiple rows:
+
+            p = Plot(data, x="bill_length", y="bill_depth")
+            p.add(Dot()).facet(col="species", wrap=2)
+        """
+        raise NotImplementedError
+
+    def label(
+        self,
+        *,
+        title: str | None = None,
+        legend: str | None = None,
+        **variables: str | Callable[[str], str],
+    ) -> Plot:
+        """
+        Control the labels and titles for axes, legends, and subplots.
+
+        Additional keywords correspond to variables defined in the plot.
+        Values can be one of the following types:
+
+        - string (used literally; pass "" to clear the default label)
+        - function (called on the default label)
+
+        For coordinate variables, the value sets the axis label.
+        For semantic variables, the value sets the legend title.
+        For faceting variables, `title=` modifies the subplot-specific label,
+        while `col=` and/or `row=` add a label for the faceting variable.
+
+        When using a single subplot, `title=` sets its title.
+
+        The `legend=` parameter sets the title for the "layer" legend
+        (i.e., when using `label` in :meth:`Plot.add`).
+
+        Parameters
+        ----------
+        title : str or None, optional
+            Title for the plot or subplot-specific labels in faceted plots.
+        legend : str or None, optional
+            Title for the layer legend when using labels in Plot.add().
+        **variables : str or callable
+            Variable-specific labels where keys correspond to variables defined
+            in the plot. Values can be strings (used as literal labels) or
+            functions that transform the default label.
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with updated label specifications.
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.label.rst
+        """
+        raise NotImplementedError
+
+    def layout(
+        self,
+        *,
+        size: tuple[float, float] | Default = default,
+        engine: str | None | Default = default,
+        extent: tuple[float, float, float, float] | Default = default,
+    ) -> Plot:
+        """
+        Control the figure size and layout.
+
+        .. note::
+
+            Default figure sizes and the API for specifying the figure size are subject
+            to change in future "experimental" releases of the objects API. The default
+            layout engine may also change.
+
+        Parameters
+        ----------
+        size : (width, height)
+            Size of the resulting figure, in inches. Size is inclusive of legend when
+            using pyplot, but not otherwise.
+        engine : {{"tight", "constrained", "none"}}
+            Name of method for automatically adjusting the layout to remove overlap.
+            The default depends on whether :meth:`Plot.on` is used.
+        extent : (left, bottom, right, top)
+            Boundaries of the plot layout, in fractions of the figure size. Takes
+            effect through the layout engine; exact results will vary across engines.
+            Note: the extent includes axis decorations when using a layout engine,
+            but it is exclusive of them when `engine="none"`.
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with updated layout specifications.
+
+        Notes
+        -----
+        This method returns a copy of the Plot instance with modified layout settings.
+        Like other Plot methods, it can be chained with additional method calls.
+
+        The layout engine determines how matplotlib automatically adjusts subplot
+        positioning to prevent overlapping elements. Different engines may produce
+        different results with the same extent specification.
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.layout.rst
+        """
+        raise NotImplementedError
+
+    def limit(self, **limits: tuple[Any, Any]) -> Plot:
+        """
+        Control the range of visible data.
+
+        Parameters
+        ----------
+        **limits : tuple[Any, Any]
+            Keywords correspond to variables defined in the plot, and values are a
+            `(min, max)` tuple (where either can be `None` to leave unset).
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with updated axis limits.
+
+        Notes
+        -----
+        Limits apply only to the axis; data outside the visible range are
+        still used for any stat transforms and added to the plot.
+
+        Behavior for non-coordinate variables is currently undefined.
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.limit.rst
+        """
+        raise NotImplementedError
+
+    def on(self, target: Axes | SubFigure | Figure) -> Plot:
+        """
+        Provide existing Matplotlib figure or axes for drawing the plot.
+
+        When using this method, you will also need to explicitly call a method that
+        triggers compilation, such as :meth:`Plot.show` or :meth:`Plot.save`. If you
+        want to postprocess using matplotlib, you'd need to call :meth:`Plot.plot`
+        first to compile the plot without rendering it.
+
+        Parameters
+        ----------
+        target : Axes, SubFigure, or Figure
+            Matplotlib object to use. Passing :class:`matplotlib.axes.Axes` will add
+            artists without otherwise modifying the figure. Otherwise, subplots will be
+            created within the space of the given :class:`matplotlib.figure.Figure` or
+            :class:`matplotlib.figure.SubFigure`.
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with the target matplotlib object set.
+            This allows for method chaining to continue building the plot specification.
+
+        Raises
+        ------
+        TypeError
+            If the target is not an instance of matplotlib.axes.Axes, 
+            matplotlib.figure.SubFigure, or matplotlib.figure.Figure.
+
+        Notes
+        -----
+        - This method returns a copy of the Plot instance, so the original Plot object
+          remains unchanged
+        - When targeting an existing Axes object, the plot will be drawn on that axes
+          without modifying other aspects of the figure
+        - When targeting a Figure or SubFigure, new subplots will be created within
+          that container as needed
+        - The plot compilation and rendering must be explicitly triggered after calling
+          this method by using show(), save(), or plot()
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.on.rst
+        """
+        raise NotImplementedError
+
+    def pair(self, x: VariableSpecList = None, y: VariableSpecList = None, wrap: int | None = None, cross: bool = True) -> Plot:
+        """
+        Produce subplots by pairing multiple `x` and/or `y` variables.
+
+        This method creates a grid of subplots where different combinations of variables
+        are plotted against each other. It's useful for exploring relationships between
+        multiple variables in a dataset, similar to a pairs plot or scatterplot matrix.
+
+        Parameters
+        ----------
+        x, y : sequence(s) of data vectors or identifiers, optional
+            Variables that will define the grid of subplots. Each variable can be a
+            column name from the data source or a data vector. When one axis is omitted,
+            any existing mapping for the other coordinate remains in use; the paired
+            variable is not automatically copied onto the omitted axis. If both are
+            provided, the behavior depends on the `cross` parameter.
+        wrap : int, optional
+            When using only `x` or `y`, "wrap" subplots across a two-dimensional grid
+            with this many columns (when using `x`) or rows (when using `y`). This
+            allows for more compact layouts when dealing with many variables.
+        cross : bool, default True
+            When False, zip the `x` and `y` lists such that the first subplot gets the
+            first pair, the second gets the second pair, etc. When True, create a
+            two-dimensional grid from the cartesian product of the lists, showing all
+            possible combinations.
+
+        Returns
+        -------
+        Plot
+            A new Plot object with the pairing specification applied. The original Plot
+            object is not modified.
+
+        Raises
+        ------
+        TypeError
+            If `x` or `y` is passed as a single string or int instead of a sequence.
+        ValueError
+            If `cross=False` and the lengths of the `x` and `y` lists don't match.
+        RuntimeError
+            When compilation encounters ``wrap`` with both axes paired.
+
+        Notes
+        -----
+        - When `cross=False`, the `x` and `y` sequences must have the same length
+        - The pairing specification is applied to all layers in the plot
+        - This method can be combined with other Plot methods like `facet()` for more complex layouts
+        - The resulting subplots share the same marks and statistical transformations as defined in the plot layers
+        """
+        raise NotImplementedError
+
+    def scale(self, **scales: Scale) -> Plot:
+        """
+        Specify mappings from data units to visual properties.
+
+        Keywords correspond to variables defined in the plot, including coordinate
+        variables (`x`, `y`) and semantic variables (`color`, `pointsize`, etc.).
+
+        A number of "magic" arguments are accepted, including:
+            - The name of a transform (e.g., `"log"`, `"sqrt"`)
+            - The name of a palette (e.g., `"viridis"`, `"muted"`)
+            - A tuple of values, defining the output range (e.g. `(1, 5)`)
+            - A dict, implying a :class:`Nominal` scale (e.g. `{"a": .2, "b": .5}`)
+            - A list of values, implying a :class:`Nominal` scale (e.g. `["b", "r"]`)
+
+        For more explicit control, pass a scale spec object such as :class:`Continuous`
+        or :class:`Nominal`. Or pass `None` to use an "identity" scale, which treats
+        data values as literally encoding visual properties.
+
+        Parameters
+        ----------
+        **scales : Scale
+            Keyword arguments where keys are variable names (e.g., 'x', 'y', 'color', 
+            'size') and values are Scale objects or scale specifications. Each scale
+            defines how data values for that variable are mapped to visual properties.
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with the specified scales applied.
+            This allows for method chaining to build up plot specifications.
+
+        Examples
+        --------
+        .. include:: ../docstrings/objects.Plot.scale.rst
+        """
+        raise NotImplementedError
+
+    def share(self, **shares: bool | str) -> Plot:
+        """
+        Control sharing of axis limits and ticks across subplots.
+
+        This method allows you to specify how axis limits and tick marks should be shared
+        across different subplots in a faceted or paired plot. Sharing can help maintain
+        consistent scales for easier comparison between subplots.
+
+        Parameters
+        ----------
+        **shares : bool or str
+            Keywords correspond to variables defined in the plot (typically coordinate
+            variables like 'x' or 'y'). Values control the sharing behavior:
+
+            - True or "all": Share across all subplots
+            - False or "none": No sharing (independent axes for each subplot)  
+            - "row": Share only across subplots in the same row
+            - "col": Share only across subplots in the same column
+
+        Returns
+        -------
+        Plot
+            Returns a copy of the Plot object with updated sharing specifications.
+            Use method chaining to continue building the plot.
+
+        Notes
+        -----
+        - Sharing affects both axis limits and tick positions/labels
+        - When axes are shared, tick labels are automatically hidden on interior
+          subplots to reduce clutter
+        - Behavior for non-coordinate variables (semantic variables like color, size)
+          is currently undefined
+        - The sharing specification only takes effect when the plot contains multiple
+          subplots created through faceting or pairing
+
+        Examples
+        --------
+        Share x-axis across all subplots:
+
+            p = Plot(data, x="x", y="y").facet(col="category")
+            p.share(x=True)
+
+        Share y-axis only within rows:
+
+            p = Plot(data, x="x", y="y").facet(col="cat1", row="cat2") 
+            p.share(y="row")
+
+        Independent axes for both x and y:
+
+            p = Plot(data, x="x", y="y").facet(col="category")
+            p.share(x=False, y=False)
+        """
+        raise NotImplementedError
+
+
+# ---- The plot compilation engine ---------------------------------------------- #
+
+
+class Plotter:
+    """
+    Engine for compiling a :class:`Plot` spec into a Matplotlib figure.
+
+    This class is not intended to be instantiated directly by users.
+
+    """
+    # TODO decide if we ever want these (Plot.plot(debug=True))?
+    _data: PlotData
+    _layers: list[Layer]
+    _figure: Figure
+
+    def __init__(self, pyplot: bool, theme: dict[str, Any]):
+
+        self._pyplot = pyplot
+        self._theme = theme
+        self._legend_contents: list[tuple[
+            tuple[str, str | int], list[Artist], list[str],
+        ]] = []
+        self._scales: dict[str, Scale] = {}
+
+    def save(self, loc, **kwargs) -> Plotter:  # TODO type args
+        kwargs.setdefault("dpi", 96)
+        try:
+            loc = os.path.expanduser(loc)
+        except TypeError:
+            # loc may be a buffer in which case that would not work
+            pass
+        self._figure.savefig(loc, **kwargs)
+        return self
+
+    def show(self, **kwargs) -> None:
+        """
+        Display the plot by hooking into pyplot.
+
+        This method calls :func:`matplotlib.pyplot.show` with any keyword parameters.
+
+        """
+        # TODO if we did not create the Plotter with pyplot, is it possible to do this?
+        # If not we should clearly raise.
+        import matplotlib.pyplot as plt
+        with theme_context(self._theme):
+            plt.show(**kwargs)
+
+    # TODO API for accessing the underlying matplotlib objects
+    # TODO what else is useful in the public API for this class?
+
+    def _repr_png_(self) -> tuple[bytes, dict[str, float]] | None:
+
+        # TODO use matplotlib backend directly instead of going through savefig?
+
+        # TODO perhaps have self.show() flip a switch to disable this, so that
+        # user does not end up with two versions of the figure in the output
+
+        # TODO use bbox_inches="tight" like the inline backend?
+        # pro: better results,  con: (sometimes) confusing results
+        # Better solution would be to default (with option to change)
+        # to using constrained/tight layout.
+
+        if Plot.config.display["format"] != "png":
+            return None
+
+        buffer = io.BytesIO()
+
+        factor = 2 if Plot.config.display["hidpi"] else 1
+        scaling = Plot.config.display["scaling"] / factor
+        dpi = 96 * factor  # TODO put dpi in Plot.config?
+
+        with theme_context(self._theme):  # TODO _theme_with_defaults?
+            self._figure.savefig(buffer, dpi=dpi, format="png", bbox_inches="tight")
+        data = buffer.getvalue()
+
+        w, h = Image.open(buffer).size
+        metadata = {"width": w * scaling, "height": h * scaling}
+        return data, metadata
+
+    def _repr_svg_(self) -> str | None:
+
+        if Plot.config.display["format"] != "svg":
+            return None
+
+        # TODO DPI for rasterized artists?
+
+        scaling = Plot.config.display["scaling"]
+
+        buffer = io.StringIO()
+        with theme_context(self._theme):  # TODO _theme_with_defaults?
+            self._figure.savefig(buffer, format="svg", bbox_inches="tight")
+
+        root = ElementTree.fromstring(buffer.getvalue())
+        w = scaling * float(root.attrib["width"][:-2])
+        h = scaling * float(root.attrib["height"][:-2])
+        root.attrib.update(width=f"{w}pt", height=f"{h}pt", viewbox=f"0 0 {w} {h}")
+        ElementTree.ElementTree(root).write(out := io.BytesIO())
+
+        return out.getvalue().decode()
+
+    def _extract_data(self, p: Plot) -> tuple[PlotData, list[Layer]]:
+
+        common_data = (
+            p._data
+            .join(None, p._facet_spec.get("variables"))
+            .join(None, p._pair_spec.get("variables"))
+        )
+
+        layers: list[Layer] = []
+        for layer in p._layers:
+            spec = layer.copy()
+            spec["data"] = common_data.join(layer.get("source"), layer.get("vars"))
+            layers.append(spec)
+
+        return common_data, layers
+
+    def _resolve_label(self, p: Plot, var: str, auto_label: str | None) -> str:
+
+        if re.match(r"[xy]\d+", var):
+            key = var if var in p._labels else var[0]
+        else:
+            key = var
+
+        label: str
+        if key in p._labels:
+            manual_label = p._labels[key]
+            if callable(manual_label) and auto_label is not None:
+                label = manual_label(auto_label)
+            else:
+                label = cast(str, manual_label)
+        elif auto_label is None:
+            label = ""
+        else:
+            label = auto_label
+        return label
+
+    def _setup_figure(self, p: Plot, common: PlotData, layers: list[Layer]) -> None:
+
+        # --- Parsing the faceting/pairing parameterization to specify figure grid
+
+        subplot_spec = p._subplot_spec.copy()
+        facet_spec = p._facet_spec.copy()
+        pair_spec = p._pair_spec.copy()
+
+        for axis in "xy":
+            if axis in p._shares:
+                subplot_spec[f"share{axis}"] = p._shares[axis]
+
+        for dim in ["col", "row"]:
+            if dim in common.frame and dim not in facet_spec["structure"]:
+                order = categorical_order(common.frame[dim])
+                facet_spec["structure"][dim] = order
+
+        self._subplots = subplots = Subplots(subplot_spec, facet_spec, pair_spec)
+
+        # --- Figure initialization
+        self._figure = subplots.init_figure(
+            pair_spec, self._pyplot, p._figure_spec, p._target,
+        )
+
+        # --- Figure annotation
+        for sub in subplots:
+            ax = sub["ax"]
+            for axis in "xy":
+                axis_key = sub[axis]
+
+                # ~~ Axis labels
+
+                # TODO Should we make it possible to use only one x/y label for
+                # all rows/columns in a faceted plot? Maybe using sub{axis}label,
+                # although the alignments of the labels from that method leaves
+                # something to be desired (in terms of how it defines 'centered').
+                names = [
+                    common.names.get(axis_key),
+                    *(layer["data"].names.get(axis_key) for layer in layers)
+                ]
+                auto_label = next((name for name in names if name is not None), None)
+                label = self._resolve_label(p, axis_key, auto_label)
+                ax.set(**{f"{axis}label": label})
+
+                # ~~ Decoration visibility
+
+                # TODO there should be some override (in Plot.layout?) so that
+                # axis / tick labels can be shown on interior shared axes if desired
+
+                axis_obj = getattr(ax, f"{axis}axis")
+                visible_side = {"x": "bottom", "y": "left"}.get(axis)
+                show_axis_label = (
+                    sub[visible_side]
+                    or not p._pair_spec.get("cross", True)
+                    or (
+                        axis in p._pair_spec.get("structure", {})
+                        and bool(p._pair_spec.get("wrap"))
+                    )
+                )
+                axis_obj.get_label().set_visible(show_axis_label)
+
+                show_tick_labels = (
+                    show_axis_label
+                    or subplot_spec.get(f"share{axis}") not in (
+                        True, "all", {"x": "col", "y": "row"}[axis]
+                    )
+                )
+                for group in ("major", "minor"):
+                    side = {"x": "bottom", "y": "left"}[axis]
+                    axis_obj.set_tick_params(**{f"label{side}": show_tick_labels})
+                    for t in getattr(axis_obj, f"get_{group}ticklabels")():
+                        t.set_visible(show_tick_labels)
+
+            # TODO we want right-side titles for row facets in most cases?
+            # Let's have what we currently call "margin titles" but properly using the
+            # ax.set_title interface (see my gist)
+            title_parts = []
+            for dim in ["col", "row"]:
+                if sub[dim] is not None:
+                    val = self._resolve_label(p, "title", f"{sub[dim]}")
+                    if dim in p._labels:
+                        key = self._resolve_label(p, dim, common.names.get(dim))
+                        val = f"{key} {val}"
+                    title_parts.append(val)
+
+            has_col = sub["col"] is not None
+            has_row = sub["row"] is not None
+            show_title = (
+                has_col and has_row
+                or (has_col or has_row) and p._facet_spec.get("wrap")
+                or (has_col and sub["top"])
+                # TODO or has_row and sub["right"] and <right titles>
+                or has_row  # TODO and not <right titles>
+            )
+            if title_parts:
+                title = " | ".join(title_parts)
+                title_text = ax.set_title(title)
+                title_text.set_visible(show_title)
+            elif not (has_col or has_row):
+                title = self._resolve_label(p, "title", None)
+                title_text = ax.set_title(title)
+
+    def _compute_stats(self, spec: Plot, layers: list[Layer]) -> None:
+
+        grouping_vars = [v for v in PROPERTIES if v not in "xy"]
+        grouping_vars += ["col", "row", "group"]
+
+        pair_vars = spec._pair_spec.get("structure", {})
+
+        for layer in layers:
+
+            data = layer["data"]
+            mark = layer["mark"]
+            stat = layer["stat"]
+
+            if stat is None:
+                continue
+
+            iter_axes = itertools.product(*[
+                pair_vars.get(axis, [axis]) for axis in "xy"
+            ])
+
+            old = data.frame
+
+            if pair_vars:
+                data.frames = {}
+                data.frame = data.frame.iloc[:0]  # TODO to simplify typing
+
+            for coord_vars in iter_axes:
+
+                pairings = "xy", coord_vars
+
+                df = old.copy()
+                scales = self._scales.copy()
+
+                for axis, var in zip(*pairings):
+                    if axis != var:
+                        df = df.rename(columns={var: axis})
+                        drop_cols = [x for x in df if re.match(rf"{axis}\d+", str(x))]
+                        df = df.drop(drop_cols, axis=1)
+                        scales[axis] = scales[var]
+
+                orient = layer["orient"] or mark._infer_orient(scales)
+
+                if stat.group_by_orient:
+                    grouper = [orient, *grouping_vars]
+                else:
+                    grouper = grouping_vars
+                groupby = GroupBy(grouper)
+                res = stat(df, groupby, orient, scales)
+
+                if pair_vars:
+                    data.frames[coord_vars] = res
+                else:
+                    data.frame = res
+
+    def _get_scale(
+        self, p: Plot, var: str, prop: Property, values: Series
+    ) -> Scale:
+
+        if re.match(r"[xy]\d+", var):
+            key = var if var in p._scales else var[0]
+        else:
+            key = var
+
+        if key in p._scales:
+            arg = p._scales[key]
+            if arg is None or isinstance(arg, Scale):
+                scale = arg
+            else:
+                scale = prop.infer_scale(arg, values)
+        else:
+            scale = prop.default_scale(values)
+
+        return scale
+
+    def _get_subplot_data(self, df, var, view, share_state):
+
+        if share_state in [True, "all"]:
+            # The all-shared case is easiest, every subplot sees all the data
+            seed_values = df[var]
+        else:
+            # Otherwise, we need to setup separate scales for different subplots
+            if share_state in [False, "none"]:
+                # Fully independent axes are also easy: use each subplot's data
+                idx = self._get_subplot_index(df, view)
+            elif share_state in df:
+                # Sharing within row/col is more complicated
+                use_rows = df[share_state] == view[share_state]
+                idx = df.index[use_rows]
+            else:
+                # This configuration doesn't make much sense, but it's fine
+                idx = df.index
+
+            seed_values = df.loc[idx, var]
+
+        return seed_values
+
+    def _setup_scales(
+        self,
+        p: Plot,
+        common: PlotData,
+        layers: list[Layer],
+        variables: list[str] | None = None,
+    ) -> None:
+
+        if variables is None:
+            # Add variables that have data but not a scale, which happens
+            # because this method can be called multiple time, to handle
+            # variables added during the Stat transform.
+            variables = []
+            for layer in layers:
+                variables.extend(layer["data"].frame.columns)
+                for df in layer["data"].frames.values():
+                    variables.extend(str(v) for v in df if v not in variables)
+            variables = [v for v in variables if v not in self._scales]
+
+        for var in variables:
+
+            # Determine whether this is a coordinate variable
+            # (i.e., x/y, paired x/y, or derivative such as xmax)
+            m = re.match(r"^(?P<coord>(?P<axis>x|y)\d*).*", var)
+            if m is None:
+                coord = axis = None
+            else:
+                coord = m["coord"]
+                axis = m["axis"]
+
+            # Get keys that handle things like x0, xmax, properly where relevant
+            prop_key = var if axis is None else axis
+            scale_key = var if coord is None else coord
+
+            if prop_key not in PROPERTIES:
+                continue
+
+            # Concatenate layers, using only the relevant coordinate and faceting vars,
+            # This is unnecessarily wasteful, as layer data will often be redundant.
+            # But figuring out the minimal amount we need is more complicated.
+            cols = [var, "col", "row"]
+            parts = [common.frame.filter(cols)]
+            for layer in layers:
+                parts.append(layer["data"].frame.filter(cols))
+                for df in layer["data"].frames.values():
+                    parts.append(df.filter(cols))
+            var_df = pd.concat(parts, ignore_index=True)
+
+            prop = PROPERTIES[prop_key]
+            scale = self._get_scale(p, scale_key, prop, var_df[var])
+
+            if scale_key not in p._variables:
+                # TODO this implies that the variable was added by the stat
+                # It allows downstream orientation inference to work properly.
+                # But it feels rather hacky, so ideally revisit.
+                scale._priority = 0  # type: ignore
+
+            if axis is None:
+                # We could think about having a broader concept of (un)shared properties
+                # In general, not something you want to do (different scales in facets)
+                # But could make sense e.g. with paired plots. Build later.
+                share_state = None
+                subplots = []
+            else:
+                share_state = self._subplots.subplot_spec[f"share{axis}"]
+                subplots = [view for view in self._subplots if view[axis] == coord]
+
+            if scale is None:
+                self._scales[var] = Scale._identity()
+            else:
+                try:
+                    self._scales[var] = scale._setup(var_df[var], prop)
+                except Exception as err:
+                    raise PlotSpecError._during("Scale setup", var) from err
+
+            if axis is None or (var != coord and coord in p._variables):
+                # Everything below here applies only to coordinate variables
+                continue
+
+            # Set up an empty series to receive the transformed values.
+            # We need this to handle piecemeal transforms of categories -> floats.
+            transformed_data = []
+            for layer in layers:
+                index = layer["data"].frame.index
+                empty_series = pd.Series(dtype=float, index=index, name=var)
+                transformed_data.append(empty_series)
+
+            for view in subplots:
+
+                axis_obj = getattr(view["ax"], f"{axis}axis")
+                seed_values = self._get_subplot_data(var_df, var, view, share_state)
+                view_scale = scale._setup(seed_values, prop, axis=axis_obj)
+                view["ax"].set(**{f"{axis}scale": view_scale._matplotlib_scale})
+
+                for layer, new_series in zip(layers, transformed_data):
+                    layer_df = layer["data"].frame
+                    if var not in layer_df:
+                        continue
+
+                    idx = self._get_subplot_index(layer_df, view)
+                    try:
+                        new_series.loc[idx] = view_scale(layer_df.loc[idx, var])
+                    except Exception as err:
+                        spec_error = PlotSpecError._during("Scaling operation", var)
+                        raise spec_error from err
+
+            # Now the transformed data series are complete, update the layer data
+            for layer, new_series in zip(layers, transformed_data):
+                layer_df = layer["data"].frame
+                if var in layer_df:
+                    layer_df[var] = pd.to_numeric(new_series)
+
+    def _plot_layer(self, p: Plot, layer: Layer) -> None:
+
+        data = layer["data"]
+        mark = layer["mark"]
+        move = layer["move"]
+
+        default_grouping_vars = ["col", "row", "group"]  # TODO where best to define?
+        grouping_properties = [v for v in PROPERTIES if v[0] not in "xy"]
+
+        pair_variables = p._pair_spec.get("structure", {})
+
+        for subplots, df, scales in self._generate_pairings(data, pair_variables):
+
+            orient = layer["orient"] or mark._infer_orient(scales)
+
+            def get_order(var):
+                # Ignore order for x/y: they have been scaled to numeric indices,
+                # so any original order is no longer valid. Default ordering rules
+                # sorted unique numbers will correctly reconstruct intended order
+                # TODO This is tricky, make sure we add some tests for this
+                if var not in "xy" and var in scales:
+                    return getattr(scales[var], "order", None)
+
+            if orient in df:
+                width = pd.Series(index=df.index, dtype=float)
+                for view in subplots:
+                    view_idx = self._get_subplot_data(
+                        df, orient, view, p._shares.get(orient)
+                    ).index
+                    view_df = df.loc[view_idx]
+                    if "width" in mark._mappable_props:
+                        view_width = mark._resolve(view_df, "width", None)
+                    elif "width" in df:
+                        view_width = view_df["width"]
+                    else:
+                        view_width = 0.8  # TODO what default?
+                    spacing = scales[orient]._spacing(view_df.loc[view_idx, orient])
+                    width.loc[view_idx] = view_width * spacing
+                df["width"] = width
+
+            if "baseline" in mark._mappable_props:
+                # TODO what marks should have this?
+                # If we can set baseline with, e.g., Bar(), then the
+                # "other" (e.g. y for x oriented bars) parameterization
+                # is somewhat ambiguous.
+                baseline = mark._resolve(df, "baseline", None)
+            else:
+                # TODO unlike width, we might not want to add baseline to data
+                # if the mark doesn't use it. Practically, there is a concern about
+                # Mark abstraction like Area / Ribbon
+                baseline = 0 if "baseline" not in df else df["baseline"]
+            df["baseline"] = baseline
+
+            if move is not None:
+                moves = move if isinstance(move, list) else [move]
+                for move_step in moves:
+                    move_by = getattr(move_step, "by", None)
+                    if move_by is None:
+                        move_by = grouping_properties
+                    move_groupers = [*move_by, *default_grouping_vars]
+                    if move_step.group_by_orient:
+                        move_groupers.insert(0, orient)
+                    order = {var: get_order(var) for var in move_groupers}
+                    groupby = GroupBy(order)
+                    df = move_step(df, groupby, orient, scales)
+
+            df = self._unscale_coords(subplots, df, orient)
+
+            grouping_vars = mark._grouping_props + default_grouping_vars
+            split_generator = self._setup_split_generator(grouping_vars, df, subplots)
+
+            mark._plot(split_generator, scales, orient)
+
+        # TODO is this the right place for this?
+        for view in self._subplots:
+            view["ax"].autoscale_view()
+
+        if layer["legend"]:
+            self._update_legend_contents(p, mark, data, scales, layer["label"])
+
+    def _unscale_coords(
+        self, subplots: list[dict], df: DataFrame, orient: str,
+    ) -> DataFrame:
+        # TODO do we still have numbers in the variable name at this point?
+        coord_cols = [c for c in df if re.match(r"^[xy]\D*$", str(c))]
+        out_df = (
+            df
+            .drop(coord_cols, axis=1)
+            .reindex(df.columns, axis=1)  # So unscaled columns retain their place
+            .copy(deep=False)
+        )
+
+        for view in subplots:
+            view_df = self._filter_subplot_data(df, view)
+            axes_df = view_df[coord_cols]
+            for var, values in axes_df.items():
+
+                axis = getattr(view["ax"], f"{str(var)[0]}axis")
+                # TODO see https://github.com/matplotlib/matplotlib/issues/22713
+                transform = axis.get_transform().inverted().transform
+                inverted = transform(values)
+                out_df.loc[values.index, str(var)] = inverted
+
+        return out_df
+
+    def _generate_pairings(
+        self, data: PlotData, pair_variables: dict,
+    ) -> Generator[
+        tuple[list[dict], DataFrame, dict[str, Scale]], None, None
+    ]:
+        # TODO retype return with subplot_spec or similar
+
+        iter_axes = itertools.product(*[
+            pair_variables.get(axis, [axis]) for axis in "xy"
+        ])
+
+        for x, y in iter_axes:
+
+            subplots = []
+            for view in self._subplots:
+                if (view["x"] == x) and (view["y"] == y):
+                    subplots.append(view)
+
+            if data.frame.empty and data.frames:
+                out_df = data.frames[(x, y)].copy()
+            elif not pair_variables:
+                out_df = data.frame.copy()
+            else:
+                if data.frame.empty and data.frames:
+                    out_df = data.frames[(x, y)].copy()
+                else:
+                    out_df = data.frame.copy()
+
+            scales = self._scales.copy()
+            if x in out_df:
+                scales["x"] = self._scales[x]
+            if y in out_df:
+                scales["y"] = self._scales[y]
+
+            for axis, var in zip("xy", (x, y)):
+                if axis != var:
+                    out_df = out_df.rename(columns={var: axis})
+                    cols = [col for col in out_df if re.match(rf"{axis}\d+", str(col))]
+                    out_df = out_df.drop(cols, axis=1)
+
+            yield subplots, out_df, scales
+
+    def _get_subplot_index(self, df: DataFrame, subplot: dict) -> Index:
+
+        dims = df.columns.intersection(["col", "row"])
+        if dims.empty:
+            return df.index
+
+        keep_rows = pd.Series(True, df.index, dtype=bool)
+        for dim in dims:
+            keep_rows &= df[dim] == subplot[dim]
+        return df.index[keep_rows]
+
+    def _filter_subplot_data(self, df: DataFrame, subplot: dict) -> DataFrame:
+        # TODO note redundancies with preceding function ... needs refactoring
+        dims = df.columns.intersection(["col", "row"])
+        if dims.empty:
+            return df
+
+        keep_rows = pd.Series(True, df.index, dtype=bool)
+        for dim in dims:
+            keep_rows &= df[dim] == subplot[dim]
+        return df[keep_rows]
+
+    def _setup_split_generator(
+        self, grouping_vars: list[str], df: DataFrame, subplots: list[dict[str, Any]],
+    ) -> Callable[[], Generator]:
+
+        grouping_keys = []
+        grouping_vars = [
+            v for v in grouping_vars if v in df and v not in ["col", "row"]
+        ]
+        for var in grouping_vars:
+            order = getattr(self._scales[var], "order", None)
+            if order is None:
+                order = categorical_order(df[var])
+            grouping_keys.append(order)
+
+        def split_generator(keep_na=False) -> Generator:
+
+            for view in subplots:
+
+                axes_df = self._filter_subplot_data(df, view)
+
+                axes_df_inf_as_nan = axes_df.copy()
+                axes_df_inf_as_nan = axes_df_inf_as_nan.mask(
+                    axes_df_inf_as_nan.isin([np.inf, -np.inf]), np.nan
+                )
+                if keep_na:
+                    # The simpler thing to do would be x.dropna().reindex(x.index).
+                    # But that doesn't work with the way that the subset iteration
+                    # is written below, which assumes data for grouping vars.
+                    # Matplotlib (usually?) masks nan data, so this should "work".
+                    # Downstream code can also drop these rows, at some speed cost.
+                    present = axes_df_inf_as_nan.notna().all(axis=1)
+                    nulled = {}
+                    for axis in "xy":
+                        if axis in axes_df:
+                            nulled[axis] = axes_df[axis].where(present)
+                    axes_df = axes_df_inf_as_nan.assign(**nulled)
+                else:
+                    axes_df = axes_df_inf_as_nan.dropna()
+
+                subplot_keys = {}
+                for dim in ["col", "row"]:
+                    if view[dim] is not None:
+                        subplot_keys[dim] = view[dim]
+
+                if not grouping_vars or not any(grouping_keys):
+                    if not axes_df.empty:
+                        yield subplot_keys, axes_df.copy(), view["ax"]
+                    continue
+
+                grouped_df = axes_df.groupby(
+                    grouping_vars, sort=False, as_index=False, observed=False,
+                )
+
+                for key in itertools.product(*grouping_keys):
+
+                    pd_key = (
+                        key[0] if len(key) == 1 and _version_predates(pd, "2.2.0")
+                        else key
+                    )
+                    try:
+                        df_subset = grouped_df.get_group(pd_key)
+                    except KeyError:
+                        # TODO (from initial work on categorical plots refactor)
+                        # We are adding this to allow backwards compatability
+                        # with the empty artists that old categorical plots would
+                        # add (before 0.12), which we may decide to break, in which
+                        # case this option could be removed
+                        df_subset = axes_df.loc[[]]
+
+                    if df_subset.empty:
+                        continue
+
+                    sub_vars = dict(zip(grouping_vars, key))
+                    sub_vars.update(subplot_keys)
+
+                    # TODO need copy(deep=...) policy (here, above, anywhere else?)
+                    yield sub_vars, df_subset.copy(), view["ax"]
+
+        return split_generator
+
+    def _update_legend_contents(
+        self,
+        p: Plot,
+        mark: Mark,
+        data: PlotData,
+        scales: dict[str, Scale],
+        layer_label: str | None,
+    ) -> None:
+        """Add legend artists / labels for one layer in the plot."""
+        if data.frame.empty and data.frames:
+            legend_vars: list[str] = []
+            for frame in data.frames.values():
+                frame_vars = frame.columns.intersection(list(scales))
+                legend_vars.extend(v for v in frame_vars if v not in legend_vars)
+        else:
+            legend_vars = list(data.frame.columns.intersection(list(scales)))
+
+        # First handle layer legends, which occupy a single entry in legend_contents.
+        if layer_label is not None:
+            legend_title = str(p._labels.get("legend", ""))
+            layer_key = (legend_title, -1)
+            artist = mark._legend_artist([], None, {})
+            if artist is not None:
+                for content in self._legend_contents:
+                    if content[0] == layer_key:
+                        content[1].append(artist)
+                        content[2].append(layer_label)
+                        break
+                else:
+                    self._legend_contents.append((layer_key, [artist], [layer_label]))
+
+        # Then handle the scale legends
+        # First pass: Identify the values that will be shown for each variable
+        schema: list[tuple[
+            tuple[str, str | int], list[str], tuple[list[Any], list[str]]
+        ]] = []
+        schema = []
+        for var in legend_vars:
+            var_legend = scales[var]._legend
+            if var_legend is not None:
+                values, labels = var_legend
+                for (_, part_id), part_vars, _ in schema:
+                    if data.ids[var] == part_id:
+                        # Allow multiple plot semantics to represent same data variable
+                        part_vars.append(var)
+                        break
+                else:
+                    title = self._resolve_label(p, var, data.names[var])
+                    entry = (title, data.ids[var]), [var], (values, labels)
+                    schema.append(entry)
+
+        # Second pass, generate an artist corresponding to each value
+        contents: list[tuple[tuple[str, str | int], Any, list[str]]] = []
+        for key, variables, (values, labels) in schema:
+            artists = []
+            for val in values:
+                artist = mark._legend_artist(variables, val, scales)
+                if artist is not None:
+                    artists.append(artist)
+            if artists:
+                contents.append((key, artists, labels))
+
+        self._legend_contents.extend(contents)
+
+    def _make_legend(self, p: Plot) -> None:
+        """Create the legend artist(s) and add onto the figure."""
+        # Combine artists representing same information across layers
+        # Input list has an entry for each distinct variable in each layer
+        # Output dict has an entry for each distinct variable
+        merged_contents: dict[
+            tuple[str, str | int], tuple[list[tuple[Artist, ...]], list[str]],
+        ] = {}
+        for key, new_artists, labels in self._legend_contents:
+            # Key is (name, id); we need the id to resolve variable uniqueness,
+            # but will need the name in the next step to title the legend
+            if key not in merged_contents:
+                # Matplotlib accepts a tuple of artists and will overlay them
+                new_artist_tuples = [tuple([a]) for a in new_artists]
+                merged_contents[key] = new_artist_tuples, labels
+            else:
+                existing_artists = merged_contents[key][0]
+                for i, new_artist in enumerate(new_artists):
+                    existing_artists[i] += tuple([new_artist])
+
+        # When using pyplot, an "external" legend won't be shown, so this
+        # keeps it inside the axes (though still attached to the figure)
+        # This is necessary because matplotlib layout engines currently don't
+        # support figure legends — ideally this will change.
+        loc = "center right" if self._pyplot else "center left"
+
+        base_legend = None
+        for (name, _), (handles, labels) in merged_contents.items():
+
+            legend = mpl.legend.Legend(
+                self._figure,
+                handles,  # type: ignore  # matplotlib/issues/26639
+                labels,
+                title=name,
+                loc=loc,
+                bbox_to_anchor=(.98, .55),
+            )
+
+            if base_legend:
+                # Matplotlib has no public API for this so it is a bit of a hack.
+                # Ideally we'd define our own legend class with more flexibility,
+                # but that is a lot of work!
+                base_legend_box = base_legend.get_children()[0]
+                this_legend_box = legend.get_children()[0]
+                base_legend_box.get_children().extend(this_legend_box.get_children())
+            else:
+                base_legend = legend
+                self._figure.legends.append(legend)
+
+    def _finalize_figure(self, p: Plot) -> None:
+
+        for sub in self._subplots:
+            ax = sub["ax"]
+            for axis in "xy":
+                axis_key = sub[axis]
+                axis_obj = getattr(ax, f"{axis}axis")
+
+                # Axis limits
+                if axis_key in p._limits or axis in p._limits:
+                    convert_units = getattr(ax, f"{axis}axis").convert_units
+                    a, b = p._limits.get(axis_key) or p._limits[axis]
+                    lo = a if a is None else convert_units(a)
+                    hi = b if b is None else convert_units(b)
+                    if isinstance(a, str):
+                        lo = cast(float, lo) - 0.5
+                    if isinstance(b, str):
+                        hi = cast(float, hi) + 0.5
+                    ax.set(**{f"{axis}lim": (lo, hi)})
+
+                if axis_key in self._scales:  # TODO when would it not be?
+                    self._scales[axis_key]._finalize(p, axis_obj)
+
+        if (engine_name := p._layout_spec.get("engine", default)) is not default:
+            # None is a valid arg for Figure.set_layout_engine, hence `default`
+            set_layout_engine(self._figure, engine_name)
+        elif p._target is None:
+            # Don't modify the layout engine if the user supplied their own
+            # matplotlib figure and didn't specify an engine through Plot
+            # TODO switch default to "constrained"?
+            # TODO either way, make configurable
+            set_layout_engine(self._figure, "tight")
+
+        if (extent := p._layout_spec.get("extent")) is not None:
+            engine = get_layout_engine(self._figure)
+            if engine is None:
+                self._figure.subplots_adjust(*extent)
+            else:
+                # Note the different parameterization for the layout engine rect...
+                left, bottom, right, top = extent
+                width, height = right - left, top - bottom
+                try:
+                    # The base LayoutEngine.set method doesn't have rect= so we need
+                    # to avoid typechecking this statement. We also catch a TypeError
+                    # as a plugin LayoutEngine may not support it either.
+                    # Alternatively we could guard this with a check on the engine type,
+                    # but that would make later-developed engines would un-useable.
+                    engine.set(rect=[left, bottom, width, height])  # type: ignore
+                except TypeError:
+                    # Should we warn / raise? Note that we don't expect to get here
+                    # under any normal circumstances.
+                    pass
+
+=== seaborn/external/version.py
+"""Extract reference documentation from the pypa/packaging source tree.
+
+In the process of copying, some unused methods / classes were removed.
+These include:
+
+- parse()
+- anything involving LegacyVersion
+
+This software is made available under the terms of *either* of the licenses
+found in LICENSE.APACHE or LICENSE.BSD. Contributions to this software is made
+under the terms of *both* these licenses.
+
+Vendored from:
+- https://github.com/pypa/packaging/
+- commit ba07d8287b4554754ac7178d177033ea3f75d489 (09/09/2021)
+"""
+
+
+# This file is dual licensed under the terms of the Apache License, Version
+# 2.0, and the BSD License. See the LICENSE file in the root of this repository
+# for complete details.
+
+
+import collections
+import itertools
+import re
+from typing import Callable, Optional, SupportsInt, Tuple, Union
+
+__all__ = ["Version", "InvalidVersion", "VERSION_PATTERN"]
+
+
+# Vendored from https://github.com/pypa/packaging/blob/main/packaging/_structures.py
+
+class InfinityType:
+    def __repr__(self) -> str:
+        return "Infinity"
+
+    def __hash__(self) -> int:
+        return hash(repr(self))
+
+    def __lt__(self, other: object) -> bool:
+        return False
+
+    def __le__(self, other: object) -> bool:
+        return False
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __ne__(self, other: object) -> bool:
+        return not isinstance(other, self.__class__)
+
+    def __gt__(self, other: object) -> bool:
+        return True
+
+    def __ge__(self, other: object) -> bool:
+        return True
+
+    def __neg__(self: object) -> "NegativeInfinityType":
+        return NegativeInfinity
+
+
+Infinity = InfinityType()
+
+
+class NegativeInfinityType:
+    def __repr__(self) -> str:
+        return "-Infinity"
+
+    def __hash__(self) -> int:
+        return hash(repr(self))
+
+    def __lt__(self, other: object) -> bool:
+        return True
+
+    def __le__(self, other: object) -> bool:
+        return True
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __ne__(self, other: object) -> bool:
+        return not isinstance(other, self.__class__)
+
+    def __gt__(self, other: object) -> bool:
+        return False
+
+    def __ge__(self, other: object) -> bool:
+        return False
+
+    def __neg__(self: object) -> InfinityType:
+        return Infinity
+
+
+NegativeInfinity = NegativeInfinityType()
+
+
+# Vendored from https://github.com/pypa/packaging/blob/main/packaging/version.py
+
+InfiniteTypes = Union[InfinityType, NegativeInfinityType]
+PrePostDevType = Union[InfiniteTypes, Tuple[str, int]]
+SubLocalType = Union[InfiniteTypes, int, str]
+LocalType = Union[
+    NegativeInfinityType,
+    Tuple[
+        Union[
+            SubLocalType,
+            Tuple[SubLocalType, str],
+            Tuple[NegativeInfinityType, SubLocalType],
+        ],
+        ...,
+    ],
+]
+CmpKey = Tuple[
+    int, Tuple[int, ...], PrePostDevType, PrePostDevType, PrePostDevType, LocalType
+]
+LegacyCmpKey = Tuple[int, Tuple[str, ...]]
+VersionComparisonMethod = Callable[
+    [Union[CmpKey, LegacyCmpKey], Union[CmpKey, LegacyCmpKey]], bool
+]
+
+_Version = collections.namedtuple(
+    "_Version", ["epoch", "release", "dev", "pre", "post", "local"]
+)
+
+
+
+class InvalidVersion(ValueError):
+    """
+    An invalid version was found, users should refer to PEP 440.
+    """
+
+
+class _BaseVersion:
+    _key: Union[CmpKey, LegacyCmpKey]
+
+    def __hash__(self) -> int:
+        return hash(self._key)
+
+    # Please keep the duplicated `isinstance` check
+    # in the six comparisons hereunder
+    # unless you find a way to avoid adding overhead function calls.
+
+
+
+
+
+
+    def __le__(self, other: "_BaseVersion") -> bool:
+        if not isinstance(other, _BaseVersion):
+            return NotImplemented
+
+        return self._key <= other._key
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, _BaseVersion):
+            return NotImplemented
+
+        return self._key == other._key
+
+    def __ge__(self, other: "_BaseVersion") -> bool:
+        if not isinstance(other, _BaseVersion):
+            return NotImplemented
+
+        return self._key >= other._key
+
+    def __gt__(self, other: "_BaseVersion") -> bool:
+        if not isinstance(other, _BaseVersion):
+            return NotImplemented
+
+        return self._key > other._key
+
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, _BaseVersion):
+            return NotImplemented
+
+        return self._key != other._key
+
+    def __lt__(self, other: '_BaseVersion') -> bool:
+        """
+        Compare if this version is less than another version.
+
+        This method implements the less-than comparison operator using the ordering
+        defined by the concrete normalized or legacy version class.
+
+        Parameters
+        ----------
+        other : _BaseVersion
+            Another version object to compare against. Must be an instance of _BaseVersion
+            or its subclasses.
+
+        Returns
+        -------
+        bool
+            True if this version is less than the other version, False otherwise.
+            Returns NotImplemented if the other object is not a _BaseVersion instance,
+            which allows Python to try the reverse comparison or raise TypeError.
+
+        Notes
+        -----
+        Concrete version classes may use different normalized representations while
+        preserving their respective ordering rules.
+        """
+        raise NotImplementedError
+
+
+# Deliberately not anchored to the start and end of the string, to make it
+# easier for 3rd party code to reuse
+VERSION_PATTERN = r"""
+    v?
+    (?:
+        (?:(?P<epoch>[0-9]+)!)?                           # epoch
+        (?P<release>[0-9]+(?:\.[0-9]+)*)                  # release segment
+        (?P<pre>                                          # pre-release
+            [-_\.]?
+            (?P<pre_l>(a|b|c|rc|alpha|beta|pre|preview))
+            [-_\.]?
+            (?P<pre_n>[0-9]+)?
+        )?
+        (?P<post>                                         # post release
+            (?:-(?P<post_n1>[0-9]+))
+            |
+            (?:
+                [-_\.]?
+                (?P<post_l>post|rev|r)
+                [-_\.]?
+                (?P<post_n2>[0-9]+)?
+            )
+        )?
+        (?P<dev>                                          # dev release
+            [-_\.]?
+            (?P<dev_l>dev)
+            [-_\.]?
+            (?P<dev_n>[0-9]+)?
+        )?
+    )
+    (?:\+(?P<local>[a-z0-9]+(?:[-_\.][a-z0-9]+)*))?       # local version
+"""
+
+
+class Version(_BaseVersion):
+
+    _regex = re.compile(r"^\s*" + VERSION_PATTERN + r"\s*$", re.VERBOSE | re.IGNORECASE)
+
+    def __init__(self, version: str) -> None:
+
+        # Validate the version and parse it into pieces
+        match = self._regex.search(version)
+        if not match:
+            raise InvalidVersion(f"Invalid version: '{version}'")
+
+        # Store the parsed out pieces of the version
+        self._version = _Version(
+            epoch=int(match.group("epoch")) if match.group("epoch") else 0,
+            release=tuple(int(i) for i in match.group("release").split(".")),
+            pre=_parse_letter_version(match.group("pre_l"), match.group("pre_n")),
+            post=_parse_letter_version(
+                match.group("post_l"), match.group("post_n1") or match.group("post_n2")
+            ),
+            dev=_parse_letter_version(match.group("dev_l"), match.group("dev_n")),
+            local=_parse_local_version(match.group("local")),
+        )
+
+        # Generate a key which will be used for sorting
+        self._key = _cmpkey(
+            self._version.epoch,
+            self._version.release,
+            self._version.pre,
+            self._version.post,
+            self._version.dev,
+            self._version.local,
+        )
+
+    def __repr__(self) -> str:
+        return f"<Version('{self}')>"
+
+    def __str__(self) -> str:
+        parts = []
+
+        # Epoch
+        if self.epoch != 0:
+            parts.append(f"{self.epoch}!")
+
+        # Release segment
+        parts.append(".".join(str(x) for x in self.release))
+
+        # Pre-release
+        if self.pre is not None:
+            parts.append("".join(str(x) for x in self.pre))
+
+        # Post-release
+        if self.post is not None:
+            parts.append(f".post{self.post}")
+
+        # Development release
+        if self.dev is not None:
+            parts.append(f".dev{self.dev}")
+
+        # Local version segment
+        if self.local is not None:
+            parts.append(f"+{self.local}")
+
+        return "".join(parts)
+
+    @property
+    def epoch(self) -> int:
+        _epoch: int = self._version.epoch
+        return _epoch
+
+    @property
+    def release(self) -> Tuple[int, ...]:
+        _release: Tuple[int, ...] = self._version.release
+        return _release
+
+    @property
+    def pre(self) -> Optional[Tuple[str, int]]:
+        _pre: Optional[Tuple[str, int]] = self._version.pre
+        return _pre
+
+    @property
+    def post(self) -> Optional[int]:
+        return self._version.post[1] if self._version.post else None
+
+    @property
+    def dev(self) -> Optional[int]:
+        return self._version.dev[1] if self._version.dev else None
+
+    @property
+    def local(self) -> Optional[str]:
+        if self._version.local:
+            return ".".join(str(x) for x in self._version.local)
+        else:
+            return None
+
+    @property
+    def public(self) -> str:
+        return str(self).split("+", 1)[0]
+
+    @property
+    def base_version(self) -> str:
+        parts = []
+
+        # Epoch
+        if self.epoch != 0:
+            parts.append(f"{self.epoch}!")
+
+        # Release segment
+        parts.append(".".join(str(x) for x in self.release))
+
+        return "".join(parts)
+
+    @property
+    def is_prerelease(self) -> bool:
+        return self.dev is not None or self.pre is not None
+
+    @property
+    def is_postrelease(self) -> bool:
+        return self.post is not None
+
+    @property
+    def is_devrelease(self) -> bool:
+        return self.dev is not None
+
+    @property
+    def major(self) -> int:
+        return self.release[0] if len(self.release) >= 1 else 0
+
+    @property
+    def minor(self) -> int:
+        return self.release[1] if len(self.release) >= 2 else 0
+
+    @property
+    def micro(self) -> int:
+        return self.release[2] if len(self.release) >= 3 else 0
+
+
+def _parse_letter_version(
+    letter: str, number: Union[str, bytes, SupportsInt]
+) -> Optional[Tuple[str, int]]:
+
+    if letter:
+        # We consider there to be an implicit 0 in a pre-release if there is
+        # not a numeral associated with it.
+        if number is None:
+            number = 0
+
+        # We normalize any letters to their lower case form
+        letter = letter.lower()
+
+        # We consider some words to be alternate spellings of other words and
+        # in those cases we want to normalize the spellings to our preferred
+        # spelling.
+        if letter == "alpha":
+            letter = "a"
+        elif letter == "beta":
+            letter = "b"
+        elif letter in ["c", "pre", "preview"]:
+            letter = "rc"
+        elif letter in ["rev", "r"]:
+            letter = "post"
+
+        return letter, int(number)
+    if not letter and number:
+        # We assume if we are given a number, but we are not given a letter
+        # then this is using the implicit post release syntax (e.g. 1.0-1)
+        letter = "post"
+
+        return letter, int(number)
+
+    return None
+
+
+_local_version_separators = re.compile(r"[\._-]")
+
+
+def _parse_local_version(local: str) -> Optional[LocalType]:
+    """
+    Takes a string like abc.1.twelve and turns it into ("abc", 1, "twelve").
+    """
+    if local is not None:
+        return tuple(
+            part.lower() if not part.isdigit() else int(part)
+            for part in _local_version_separators.split(local)
+        )
+    return None
+
+
+def _cmpkey(
+    epoch: int,
+    release: Tuple[int, ...],
+    pre: Optional[Tuple[str, int]],
+    post: Optional[Tuple[str, int]],
+    dev: Optional[Tuple[str, int]],
+    local: Optional[Tuple[SubLocalType]],
+) -> CmpKey:
+
+    # When we compare a release version, we want to compare it with all of the
+    # trailing zeros removed. So we'll use a reverse the list, drop all the now
+    # leading zeros until we come to something non zero, then take the rest
+    # re-reverse it back into the correct order and make it a tuple and use
+    # that for our sorting key.
+    _release = tuple(
+        reversed(list(itertools.dropwhile(lambda x: x == 0, reversed(release))))
+    )
+
+    # We need to "trick" the sorting algorithm to put 1.0.dev0 before 1.0a0.
+    # We'll do this by abusing the pre segment, but we _only_ want to do this
+    # if there is not a pre or a post segment. If we have one of those then
+    # the normal sorting rules will handle this case correctly.
+    if pre is None and post is None and dev is not None:
+        _pre: PrePostDevType = NegativeInfinity
+    # Versions without a pre-release (except as noted above) should sort after
+    # those with one.
+    elif pre is None:
+        _pre = Infinity
+    else:
+        _pre = pre
+
+    # Versions without a post segment should sort before those with one.
+    if post is None:
+        _post: PrePostDevType = NegativeInfinity
+
+    else:
+        _post = post
+
+    # Versions without a development segment should sort after those with one.
+    if dev is None:
+        _dev: PrePostDevType = Infinity
+
+    else:
+        _dev = dev
+
+    if local is None:
+        # Versions without a local segment should sort before those with one.
+        _local: LocalType = NegativeInfinity
+    else:
+        # Versions with a local segment need that segment parsed to implement
+        # the sorting rules in PEP440.
+        # - Alpha numeric segments sort before numeric segments
+        # - Alpha numeric segments sort lexicographically
+        # - Numeric segments sort numerically
+        # - Shorter versions sort before longer versions when the prefixes
+        #   match exactly
+        _local = tuple(
+            (i, "") if isinstance(i, int) else (NegativeInfinity, i) for i in local
+        )
+
+    return epoch, _release, _pre, _post, _dev, _local

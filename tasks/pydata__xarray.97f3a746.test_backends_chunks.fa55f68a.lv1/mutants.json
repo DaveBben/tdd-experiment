@@ -1,0 +1,1006 @@
+{
+ "task": "pydata__xarray.97f3a746.test_backends_chunks.fa55f68a.lv1",
+ "pool": 151,
+ "mutants": [
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 15,
+   "op": "statement",
+   "start": 398,
+   "end": 443,
+   "old": "nd_aligned_chunks: list[tuple[int, ...]] = []",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 131,
+   "op": "return",
+   "start": 6043,
+   "end": 6074,
+   "old": "return tuple(nd_aligned_chunks)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 142,
+   "op": "statement",
+   "start": 6251,
+   "end": 6283,
+   "old": "region_start = region.start or 0",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 144,
+   "op": "statement",
+   "start": 6349,
+   "end": 6410,
+   "old": "chunks_on_region = [chunk_size - (region_start % chunk_size)]",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 153,
+   "op": "return",
+   "start": 6881,
+   "end": 6911,
+   "old": "return tuple(chunks_on_region)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 161,
+   "op": "statement",
+   "start": 7032,
+   "end": 7054,
+   "old": "nd_v_chunks = v.chunks",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 176,
+   "op": "statement",
+   "start": 7369,
+   "end": 7486,
+   "old": "nd_aligned_chunks = align_nd_chunks(\n        nd_v_chunks=nd_v_chunks,\n        nd_backend_chunks=nd_grid_chunks,\n    )",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 180,
+   "op": "statement",
+   "start": 7491,
+   "end": 7553,
+   "old": "v = v.chunk(dict(zip(v.dims, nd_aligned_chunks, strict=True)))",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 181,
+   "op": "return",
+   "start": 7558,
+   "end": 7566,
+   "old": "return v",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 10,
+   "op": "comparison",
+   "start": 224,
+   "end": 266,
+   "old": "len(nd_backend_chunks) != len(nd_v_chunks)",
+   "new": "(len(nd_backend_chunks) == len(nd_v_chunks))",
+   "id": 9
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 11,
+   "op": "statement",
+   "start": 276,
+   "end": 392,
+   "old": "raise ValueError(\n            \"The number of dimensions on the backend and the variable must be the same.\"\n        )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1936,
+   "end": 1969,
+   "old": "fixed_chunk = max(backend_chunks)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 56,
+   "op": "statement",
+   "start": 2306,
+   "end": 2336,
+   "old": "aligned_chunks: list[int] = []",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 61,
+   "op": "arithmetic",
+   "start": 2572,
+   "end": 2620,
+   "old": "t_v_chunks[0] += fixed_chunk - backend_chunks[0]",
+   "new": "t_v_chunks[0] -= fixed_chunk - backend_chunks[0]",
+   "id": 13
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 61,
+   "op": "statement",
+   "start": 2572,
+   "end": 2620,
+   "old": "t_v_chunks[0] += fixed_chunk - backend_chunks[0]",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 62,
+   "op": "arithmetic",
+   "start": 2629,
+   "end": 2679,
+   "old": "t_v_chunks[-1] += fixed_chunk - backend_chunks[-1]",
+   "new": "t_v_chunks[-1] -= fixed_chunk - backend_chunks[-1]",
+   "id": 15
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2945,
+   "end": 2962,
+   "old": "unfilled_size = 0",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 139,
+   "op": "comparison",
+   "start": 6198,
+   "end": 6212,
+   "old": "region is None",
+   "new": "(region is not None)",
+   "id": 17
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 142,
+   "op": "boolean",
+   "start": 6266,
+   "end": 6283,
+   "old": "region.start or 0",
+   "new": "(region.start and 0)",
+   "id": 18
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 145,
+   "op": "comparison",
+   "start": 6418,
+   "end": 6445,
+   "old": "chunks_on_region[0] >= size",
+   "new": "(chunks_on_region[0] > size)",
+   "id": 19
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 149,
+   "op": "return",
+   "start": 6643,
+   "end": 6657,
+   "old": "return (size,)",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 6754,
+   "end": 6800,
+   "old": "(size - chunks_on_region[0]) % chunk_size != 0",
+   "new": "((size - chunks_on_region[0]) % chunk_size == 0)",
+   "id": 21
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 152,
+   "op": "statement",
+   "start": 6810,
+   "end": 6876,
+   "old": "chunks_on_region.append((size - chunks_on_region[0]) % chunk_size)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 162,
+   "op": "boolean",
+   "start": 7062,
+   "end": 7077,
+   "old": "not nd_v_chunks",
+   "new": "(nd_v_chunks)",
+   "id": 23
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 18,
+   "op": "comparison",
+   "start": 603,
+   "end": 639,
+   "old": "sum(backend_chunks) != sum(v_chunks)",
+   "new": "(sum(backend_chunks) == sum(v_chunks))",
+   "id": 24
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 19,
+   "op": "statement",
+   "start": 653,
+   "end": 886,
+   "old": "raise ValueError(\n                \"The number of elements in the backend does not \"\n                \"match the number of elements in the variable. \"\n                \"This inconsistency should never occur at this stage.\"\n            )",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 28,
+   "op": "statement",
+   "start": 1072,
+   "end": 1466,
+   "old": "raise ValueError(\n                f\"This function currently supports aligning chunks \"\n                f\"only when backend chunks are of uniform size, excluding borders. \"\n                f\"If you encounter this error, please report it\u2014this scenario should never occur \"\n                f\"unless there is an internal misuse. \"\n                f\"Backend chunks: {backend_chunks}\"\n            )",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1775,
+   "end": 1783,
+   "old": "continue",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1828,
+   "end": 1862,
+   "old": "nd_aligned_chunks.append(v_chunks)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1875,
+   "end": 1883,
+   "old": "continue",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 61,
+   "op": "arithmetic",
+   "start": 2589,
+   "end": 2620,
+   "old": "fixed_chunk - backend_chunks[0]",
+   "new": "(fixed_chunk + backend_chunks[0])",
+   "id": 30
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 67,
+   "op": "constant",
+   "start": 2961,
+   "end": 2962,
+   "old": "0",
+   "new": "(1)",
+   "id": 31
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 103,
+   "op": "statement",
+   "start": 4669,
+   "end": 4723,
+   "old": "border_size = fixed_chunk - backend_chunks[::order][0]",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 104,
+   "op": "statement",
+   "start": 4736,
+   "end": 4776,
+   "old": "aligned_chunks = aligned_chunks[::order]",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 105,
+   "op": "statement",
+   "start": 4789,
+   "end": 4821,
+   "old": "aligned_chunks[0] -= border_size",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 107,
+   "op": "arithmetic",
+   "start": 4879,
+   "end": 4907,
+   "old": "t_v_chunks[0] -= border_size",
+   "new": "t_v_chunks[0] += border_size",
+   "id": 35
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 142,
+   "op": "constant",
+   "start": 6282,
+   "end": 6283,
+   "old": "0",
+   "new": "(1)",
+   "id": 36
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 144,
+   "op": "arithmetic",
+   "start": 6369,
+   "end": 6409,
+   "old": "chunk_size - (region_start % chunk_size)",
+   "new": "(chunk_size + region_start % chunk_size)",
+   "id": 37
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 150,
+   "op": "arithmetic",
+   "start": 6686,
+   "end": 6745,
+   "old": "[chunk_size] * ((size - chunks_on_region[0]) // chunk_size)",
+   "new": "([chunk_size] / ((size - chunks_on_region[0]) // chunk_size))",
+   "id": 38
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 151,
+   "op": "constant",
+   "start": 6799,
+   "end": 6800,
+   "old": "0",
+   "new": "(1)",
+   "id": 39
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 12,
+   "op": "constant",
+   "start": 306,
+   "end": 382,
+   "old": "\"The number of dimensions on the backend and the variable must be the same.\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 16,
+   "op": "constant",
+   "start": 523,
+   "end": 527,
+   "old": "True",
+   "new": "(False)",
+   "id": 41
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 27,
+   "op": "constant",
+   "start": 1057,
+   "end": 1058,
+   "old": "1",
+   "new": "(2)",
+   "id": 42
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 39,
+   "op": "constant",
+   "start": 1707,
+   "end": 1708,
+   "old": "1",
+   "new": "(2)",
+   "id": 43
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1813,
+   "end": 1814,
+   "old": "1",
+   "new": "(2)",
+   "id": 44
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 97,
+   "op": "statement",
+   "start": 4436,
+   "end": 4552,
+   "old": "unfilled_size = (\n                    fixed_chunk - aligned_chunks[-1] % fixed_chunk\n                ) % fixed_chunk",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 102,
+   "op": "constant",
+   "start": 4653,
+   "end": 4654,
+   "old": "1",
+   "new": "(2)",
+   "id": 46
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 103,
+   "op": "arithmetic",
+   "start": 4683,
+   "end": 4723,
+   "old": "fixed_chunk - backend_chunks[::order][0]",
+   "new": "(fixed_chunk + backend_chunks[::order][0])",
+   "id": 47
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 109,
+   "op": "boolean",
+   "start": 4941,
+   "end": 5091,
+   "old": "len(aligned_chunks) >= 2\n                and aligned_chunks[0] + aligned_chunks[1] <= max_chunk\n                and aligned_chunks[0] != t_v_chunks[0]",
+   "new": "(len(aligned_chunks) >= 2 or aligned_chunks[0] + aligned_chunks[1] <= max_chunk or aligned_chunks[0] != t_v_chunks[0])",
+   "id": 48
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 123,
+   "op": "arithmetic",
+   "start": 5791,
+   "end": 5829,
+   "old": "aligned_chunks[1] += aligned_chunks[0]",
+   "new": "aligned_chunks[1] -= aligned_chunks[0]",
+   "id": 49
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 123,
+   "op": "statement",
+   "start": 5791,
+   "end": 5829,
+   "old": "aligned_chunks[1] += aligned_chunks[0]",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 144,
+   "op": "arithmetic",
+   "start": 6383,
+   "end": 6408,
+   "old": "region_start % chunk_size",
+   "new": "(region_start * chunk_size)",
+   "id": 51
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 150,
+   "op": "arithmetic",
+   "start": 6702,
+   "end": 6744,
+   "old": "(size - chunks_on_region[0]) // chunk_size",
+   "new": "((size - chunks_on_region[0]) / chunk_size)",
+   "id": 52
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 151,
+   "op": "arithmetic",
+   "start": 6755,
+   "end": 6781,
+   "old": "size - chunks_on_region[0]",
+   "new": "(size + chunks_on_region[0])",
+   "id": 53
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 20,
+   "op": "constant",
+   "start": 687,
+   "end": 872,
+   "old": "\"The number of elements in the backend does not \"\n                \"match the number of elements in the variable. \"\n                \"This inconsistency should never occur at this stage.\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 61,
+   "op": "constant",
+   "start": 2618,
+   "end": 2619,
+   "old": "0",
+   "new": "(1)",
+   "id": 55
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 62,
+   "op": "constant",
+   "start": 2641,
+   "end": 2642,
+   "old": "1",
+   "new": "(2)",
+   "id": 56
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 75,
+   "op": "arithmetic",
+   "start": 3360,
+   "end": 3388,
+   "old": "v_chunk + aligned_chunks[-1]",
+   "new": "(v_chunk - aligned_chunks[-1])",
+   "id": 57
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 78,
+   "op": "boolean",
+   "start": 3440,
+   "end": 3457,
+   "old": "not unfilled_size",
+   "new": "(unfilled_size)",
+   "id": 58
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 81,
+   "op": "statement",
+   "start": 3652,
+   "end": 3676,
+   "old": "aligned_chunks.append(0)",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 83,
+   "op": "comparison",
+   "start": 3697,
+   "end": 3720,
+   "old": "ideal_chunk > max_chunk",
+   "new": "(ideal_chunk >= max_chunk)",
+   "id": 60
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 88,
+   "op": "statement",
+   "start": 4027,
+   "end": 4149,
+   "old": "max_increase = (\n                        max_increase - (max_increase - unfilled_size) % fixed_chunk\n                    )",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 91,
+   "op": "arithmetic",
+   "start": 4170,
+   "end": 4204,
+   "old": "aligned_chunks[-1] += max_increase",
+   "new": "aligned_chunks[-1] -= max_increase",
+   "id": 62
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 91,
+   "op": "statement",
+   "start": 4170,
+   "end": 4204,
+   "old": "aligned_chunks[-1] += max_increase",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 94,
+   "op": "statement",
+   "start": 4336,
+   "end": 4368,
+   "old": "aligned_chunks[-1] = ideal_chunk",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 102,
+   "op": "constant",
+   "start": 4650,
+   "end": 4651,
+   "old": "1",
+   "new": "(2)",
+   "id": 65
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 107,
+   "op": "constant",
+   "start": 4890,
+   "end": 4891,
+   "old": "0",
+   "new": "(1)",
+   "id": 66
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 110,
+   "op": "comparison",
+   "start": 4986,
+   "end": 5036,
+   "old": "aligned_chunks[0] + aligned_chunks[1] <= max_chunk",
+   "new": "(aligned_chunks[0] + aligned_chunks[1] < max_chunk)",
+   "id": 67
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 150,
+   "op": "arithmetic",
+   "start": 6703,
+   "end": 6729,
+   "old": "size - chunks_on_region[0]",
+   "new": "(size + chunks_on_region[0])",
+   "id": 68
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 152,
+   "op": "arithmetic",
+   "start": 6835,
+   "end": 6861,
+   "old": "size - chunks_on_region[0]",
+   "new": "(size + chunks_on_region[0])",
+   "id": 69
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 62,
+   "op": "constant",
+   "start": 2677,
+   "end": 2678,
+   "old": "1",
+   "new": "(2)",
+   "id": 70
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 87,
+   "op": "arithmetic",
+   "start": 3976,
+   "end": 4006,
+   "old": "max_chunk - aligned_chunks[-1]",
+   "new": "(max_chunk + aligned_chunks[-1])",
+   "id": 71
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 103,
+   "op": "constant",
+   "start": 4721,
+   "end": 4722,
+   "old": "0",
+   "new": "(1)",
+   "id": 72
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 110,
+   "op": "arithmetic",
+   "start": 4986,
+   "end": 5023,
+   "old": "aligned_chunks[0] + aligned_chunks[1]",
+   "new": "(aligned_chunks[0] - aligned_chunks[1])",
+   "id": 73
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 151,
+   "op": "constant",
+   "start": 6779,
+   "end": 6780,
+   "old": "0",
+   "new": "(1)",
+   "id": 74
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 180,
+   "op": "constant",
+   "start": 7546,
+   "end": 7550,
+   "old": "True",
+   "new": "(False)",
+   "id": 75
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 89,
+   "op": "arithmetic",
+   "start": 4083,
+   "end": 4127,
+   "old": "(max_increase - unfilled_size) % fixed_chunk",
+   "new": "((max_increase - unfilled_size) * fixed_chunk)",
+   "id": 76
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 96,
+   "op": "constant",
+   "start": 4417,
+   "end": 4418,
+   "old": "1",
+   "new": "(2)",
+   "id": 77
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 98,
+   "op": "arithmetic",
+   "start": 4488,
+   "end": 4520,
+   "old": "aligned_chunks[-1] % fixed_chunk",
+   "new": "(aligned_chunks[-1] * fixed_chunk)",
+   "id": 78
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 111,
+   "op": "constant",
+   "start": 5089,
+   "end": 5090,
+   "old": "0",
+   "new": "(1)",
+   "id": 79
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 124,
+   "op": "constant",
+   "start": 5878,
+   "end": 5879,
+   "old": "1",
+   "new": "(2)",
+   "id": 80
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 152,
+   "op": "constant",
+   "start": 6859,
+   "end": 6860,
+   "old": "0",
+   "new": "(1)",
+   "id": 81
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 172,
+   "op": "constant",
+   "start": 7343,
+   "end": 7347,
+   "old": "True",
+   "new": "(False)",
+   "id": 82
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 27,
+   "op": "constant",
+   "start": 1047,
+   "end": 1048,
+   "old": "1",
+   "new": "(2)",
+   "id": 83
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 75,
+   "op": "constant",
+   "start": 3386,
+   "end": 3387,
+   "old": "1",
+   "new": "(2)",
+   "id": 84
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 91,
+   "op": "constant",
+   "start": 4186,
+   "end": 4187,
+   "old": "1",
+   "new": "(2)",
+   "id": 85
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 94,
+   "op": "constant",
+   "start": 4352,
+   "end": 4353,
+   "old": "1",
+   "new": "(2)",
+   "id": 86
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 110,
+   "op": "constant",
+   "start": 5001,
+   "end": 5002,
+   "old": "0",
+   "new": "(1)",
+   "id": 87
+  },
+  {
+   "path": "xarray/backends/chunks.py",
+   "line": 27,
+   "op": "constant",
+   "start": 1050,
+   "end": 1051,
+   "old": "1",
+   "new": "(2)",
+   "id": 88
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2090,
+   "op": "return",
+   "start": 74530,
+   "end": 74542,
+   "old": "return False",
+   "new": "return None",
+   "id": 89
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2080,
+   "op": "comparison",
+   "start": 74192,
+   "end": 74206,
+   "old": "cftime is None",
+   "new": "(cftime is not None)",
+   "id": 90
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2081,
+   "op": "return",
+   "start": 74216,
+   "end": 74228,
+   "old": "return False",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2083,
+   "op": "boolean",
+   "start": 74237,
+   "end": 74284,
+   "old": "array.dtype == np.dtype(\"O\") and array.size > 0",
+   "new": "(array.dtype == np.dtype('O') or array.size > 0)",
+   "id": 92
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2090,
+   "op": "constant",
+   "start": 74537,
+   "end": 74542,
+   "old": "False",
+   "new": "(True)",
+   "id": 93
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2083,
+   "op": "comparison",
+   "start": 74237,
+   "end": 74265,
+   "old": "array.dtype == np.dtype(\"O\")",
+   "new": "(array.dtype != np.dtype('O'))",
+   "id": 94
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2083,
+   "op": "comparison",
+   "start": 74270,
+   "end": 74284,
+   "old": "array.size > 0",
+   "new": "(array.size >= 0)",
+   "id": 95
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2086,
+   "op": "statement",
+   "start": 74385,
+   "end": 74420,
+   "old": "first_idx = BasicIndexer(first_idx)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2083,
+   "op": "constant",
+   "start": 74283,
+   "end": 74284,
+   "old": "0",
+   "new": "(1)",
+   "id": 97
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2083,
+   "op": "constant",
+   "start": 74261,
+   "end": 74264,
+   "old": "\"O\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 2084,
+   "op": "constant",
+   "start": 74307,
+   "end": 74308,
+   "old": "0",
+   "new": "(1)",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_utils.3c9647bf.lv1",
+ "image": "libercoders/featurebench-specs_mlflow-instance_efffa87e@sha256:5a63b594bc99a6dcd876289974979606b276edd49e966020111db3590c40add4",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=20",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 33 passed, 7 warnings in 0.08s ========================"
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 52 passed in 2.02s =============================="
+ },
+ "mutant_pool": 97,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 52 passed in 1.87s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/mlflow/deployments/utils.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/gateway/utils.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

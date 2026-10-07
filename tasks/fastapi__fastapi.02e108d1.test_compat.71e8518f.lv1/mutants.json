@@ -1,0 +1,446 @@
+{
+ "task": "fastapi__fastapi.02e108d1.test_compat.71e8518f.lv1",
+ "pool": 44,
+ "mutants": [
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 352,
+   "op": "return",
+   "start": 10700,
+   "end": 10712,
+   "old": "return False",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 362,
+   "op": "return",
+   "start": 10965,
+   "end": 10977,
+   "old": "return False",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 78,
+   "op": "return",
+   "start": 2496,
+   "end": 2530,
+   "old": "return v1._get_model_config(model)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 347,
+   "op": "return",
+   "start": 10588,
+   "end": 10599,
+   "old": "return True",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 352,
+   "op": "constant",
+   "start": 10707,
+   "end": 10712,
+   "old": "False",
+   "new": "(True)",
+   "id": 4
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 362,
+   "op": "constant",
+   "start": 10972,
+   "end": 10977,
+   "old": "False",
+   "new": "(True)",
+   "id": 5
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 82,
+   "op": "return",
+   "start": 2587,
+   "end": 2621,
+   "old": "return v2._get_model_config(model)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 347,
+   "op": "constant",
+   "start": 10595,
+   "end": 10599,
+   "old": "True",
+   "new": "(False)",
+   "id": 7
+  },
+  {
+   "path": "fastapi/_compat/main.py",
+   "line": 351,
+   "op": "return",
+   "start": 10656,
+   "end": 10695,
+   "old": "return isinstance(value, v2.ModelField)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5180,
+   "end": 5211,
+   "old": "origin = get_origin(annotation)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 166,
+   "op": "return",
+   "start": 5384,
+   "end": 5396,
+   "old": "return False",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 211,
+   "op": "return",
+   "start": 7017,
+   "end": 7029,
+   "old": "return False",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 160,
+   "op": "return",
+   "start": 5164,
+   "end": 5175,
+   "old": "return True",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 162,
+   "op": "boolean",
+   "start": 5219,
+   "end": 5257,
+   "old": "origin is Union or origin is UnionType",
+   "new": "(origin is Union and origin is UnionType)",
+   "id": 13
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 166,
+   "op": "constant",
+   "start": 5391,
+   "end": 5396,
+   "old": "False",
+   "new": "(True)",
+   "id": 14
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 211,
+   "op": "constant",
+   "start": 7024,
+   "end": 7029,
+   "old": "False",
+   "new": "(True)",
+   "id": 15
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 160,
+   "op": "constant",
+   "start": 5171,
+   "end": 5175,
+   "old": "True",
+   "new": "(False)",
+   "id": 16
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 162,
+   "op": "comparison",
+   "start": 5219,
+   "end": 5234,
+   "old": "origin is Union",
+   "new": "(origin is not Union)",
+   "id": 17
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 162,
+   "op": "comparison",
+   "start": 5238,
+   "end": 5257,
+   "old": "origin is UnionType",
+   "new": "(origin is not UnionType)",
+   "id": 18
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 165,
+   "op": "return",
+   "start": 5368,
+   "end": 5379,
+   "old": "return True",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "fastapi/_compat/shared.py",
+   "line": 165,
+   "op": "constant",
+   "start": 5375,
+   "end": 5379,
+   "old": "True",
+   "new": "(False)",
+   "id": 20
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 167,
+   "op": "return",
+   "start": 5588,
+   "end": 5597,
+   "old": "return {}",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 192,
+   "op": "statement",
+   "start": 6411,
+   "end": 6440,
+   "old": "field_info = field.field_info",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 205,
+   "op": "return",
+   "start": 6917,
+   "end": 6928,
+   "old": "return True",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 269,
+   "op": "return",
+   "start": 8836,
+   "end": 8869,
+   "old": "return is_pv1_scalar_field(field)",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 312,
+   "op": "return",
+   "start": 10256,
+   "end": 10294,
+   "old": "return list(model.__fields__.values())",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 193,
+   "op": "boolean",
+   "start": 6448,
+   "end": 6770,
+   "old": "not (\n        field.shape == SHAPE_SINGLETON\n        and not lenient_issubclass(field.type_, BaseModel)\n        and not lenient_issubclass(field.type_, dict)\n        and not shared.field_annotation_is_sequence(field.type_)\n        and not is_dataclass(field.type_)\n        and not isinstance(field_info, params.Body)\n    )",
+   "new": "(field.shape == SHAPE_SINGLETON and (not lenient_issubclass(field.type_, BaseModel)) and (not lenient_issubclass(field.type_, dict)) and (not shared.field_annotation_is_sequence(field.type_)) and (not is_dataclass(field.type_)) and (not isinstance(field_info, params.Body)))",
+   "id": 26
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 201,
+   "op": "return",
+   "start": 6780,
+   "end": 6792,
+   "old": "return False",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 205,
+   "op": "constant",
+   "start": 6924,
+   "end": 6928,
+   "old": "True",
+   "new": "(False)",
+   "id": 28
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 194,
+   "op": "boolean",
+   "start": 6462,
+   "end": 6764,
+   "old": "field.shape == SHAPE_SINGLETON\n        and not lenient_issubclass(field.type_, BaseModel)\n        and not lenient_issubclass(field.type_, dict)\n        and not shared.field_annotation_is_sequence(field.type_)\n        and not is_dataclass(field.type_)\n        and not isinstance(field_info, params.Body)",
+   "new": "(field.shape == SHAPE_SINGLETON or not lenient_issubclass(field.type_, BaseModel) or (not lenient_issubclass(field.type_, dict)) or (not shared.field_annotation_is_sequence(field.type_)) or (not is_dataclass(field.type_)) or (not isinstance(field_info, params.Body)))",
+   "id": 29
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 201,
+   "op": "constant",
+   "start": 6787,
+   "end": 6792,
+   "old": "False",
+   "new": "(True)",
+   "id": 30
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 203,
+   "op": "boolean",
+   "start": 6829,
+   "end": 6886,
+   "old": "not all(is_pv1_scalar_field(f) for f in field.sub_fields)",
+   "new": "(all((is_pv1_scalar_field(f) for f in field.sub_fields)))",
+   "id": 31
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 204,
+   "op": "return",
+   "start": 6900,
+   "end": 6912,
+   "old": "return False",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 194,
+   "op": "comparison",
+   "start": 6462,
+   "end": 6492,
+   "old": "field.shape == SHAPE_SINGLETON",
+   "new": "(field.shape != SHAPE_SINGLETON)",
+   "id": 33
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 195,
+   "op": "boolean",
+   "start": 6505,
+   "end": 6551,
+   "old": "not lenient_issubclass(field.type_, BaseModel)",
+   "new": "(lenient_issubclass(field.type_, BaseModel))",
+   "id": 34
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 196,
+   "op": "boolean",
+   "start": 6564,
+   "end": 6605,
+   "old": "not lenient_issubclass(field.type_, dict)",
+   "new": "(lenient_issubclass(field.type_, dict))",
+   "id": 35
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 197,
+   "op": "boolean",
+   "start": 6618,
+   "end": 6670,
+   "old": "not shared.field_annotation_is_sequence(field.type_)",
+   "new": "(shared.field_annotation_is_sequence(field.type_))",
+   "id": 36
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 198,
+   "op": "boolean",
+   "start": 6683,
+   "end": 6712,
+   "old": "not is_dataclass(field.type_)",
+   "new": "(is_dataclass(field.type_))",
+   "id": 37
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 199,
+   "op": "boolean",
+   "start": 6725,
+   "end": 6764,
+   "old": "not isinstance(field_info, params.Body)",
+   "new": "(isinstance(field_info, params.Body))",
+   "id": 38
+  },
+  {
+   "path": "fastapi/_compat/v1.py",
+   "line": 204,
+   "op": "constant",
+   "start": 6907,
+   "end": 6912,
+   "old": "False",
+   "new": "(True)",
+   "id": 39
+  },
+  {
+   "path": "fastapi/_compat/v2.py",
+   "line": 171,
+   "op": "return",
+   "start": 5337,
+   "end": 5362,
+   "old": "return model.model_config",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "fastapi/_compat/v2.py",
+   "line": 479,
+   "op": "return",
+   "start": 16527,
+   "end": 16596,
+   "old": "return f\"{model.__module__}__{model.__qualname__}\".replace(\".\", \"__\")",
+   "new": "return None",
+   "id": 41
+  },
+  {
+   "path": "fastapi/_compat/v2.py",
+   "line": 479,
+   "op": "constant",
+   "start": 16586,
+   "end": 16589,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "fastapi/_compat/v2.py",
+   "line": 479,
+   "op": "constant",
+   "start": 16591,
+   "end": 16595,
+   "old": "\"__\"",
+   "new": "('XX')",
+   "id": 43
+  }
+ ]
+}

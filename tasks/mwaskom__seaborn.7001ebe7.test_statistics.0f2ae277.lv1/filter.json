@@ -1,0 +1,31 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_statistics.0f2ae277.lv1",
+ "image": "libercoders/featurebench-specs_seaborn-instance_52738fbb@sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 69 passed, 3 skipped in 4.20s ========================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 321 passed, 2 skipped in 26.17s ========================"
+ },
+ "mutant_pool": 161,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 321 passed, 2 skipped in 26.22s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/seaborn/_stats/counting.py": {
+   "lines": 2,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_deprecated_fields.40a2ec54.lv1",
+ "pool": 145,
+ "mutants": [
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 805,
+   "op": "statement",
+   "start": 31640,
+   "end": 31810,
+   "old": "hints = get_function_type_hints(\n        unwrap_wrapped_function(callable_obj),\n        include_keys={'return'},\n        globalns=globalns,\n        localns=localns,\n    )",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 798,
+   "op": "return",
+   "start": 31410,
+   "end": 31429,
+   "old": "return callable_obj",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 801,
+   "op": "statement",
+   "start": 31492,
+   "end": 31549,
+   "old": "call_func = getattr(type(callable_obj), '__call__', None)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 845,
+   "op": "boolean",
+   "start": 33108,
+   "end": 33152,
+   "old": "ismethoddescriptor(f) or isdatadescriptor(f)",
+   "new": "(ismethoddescriptor(f) and isdatadescriptor(f))",
+   "id": 3
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 846,
+   "op": "return",
+   "start": 33162,
+   "end": 33170,
+   "old": "return f",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 858,
+   "op": "return",
+   "start": 33509,
+   "end": 33528,
+   "old": "return signature(f)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 802,
+   "op": "comparison",
+   "start": 31575,
+   "end": 31596,
+   "old": "call_func is not None",
+   "new": "(call_func is None)",
+   "id": 6
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 437,
+   "op": "statement",
+   "start": 19785,
+   "end": 19826,
+   "old": "rebuilt_fields: dict[str, FieldInfo] = {}",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 449,
+   "op": "return",
+   "start": 20331,
+   "end": 20352,
+   "old": "return rebuilt_fields",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "boolean",
+   "start": 29177,
+   "end": 29279,
+   "old": "len(parameters) == 1 and can_be_positional(parameters[0]) and parameters[0].default is Parameter.empty",
+   "new": "(len(parameters) == 1 or can_be_positional(parameters[0]) or parameters[0].default is Parameter.empty)",
+   "id": 9
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 29177,
+   "end": 29197,
+   "old": "len(parameters) == 1",
+   "new": "(len(parameters) != 1)",
+   "id": 10
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 29239,
+   "end": 29279,
+   "old": "parameters[0].default is Parameter.empty",
+   "new": "(parameters[0].default is not Parameter.empty)",
+   "id": 11
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 441,
+   "op": "statement",
+   "start": 19979,
+   "end": 20014,
+   "old": "rebuilt_fields[f_name] = field_info",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 443,
+   "op": "statement",
+   "start": 20049,
+   "end": 20198,
+   "old": "new_field = _recreate_field_info(\n                    field_info, ns_resolver=ns_resolver, typevars_map=typevars_map, lenient=False\n                )",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 447,
+   "op": "statement",
+   "start": 20291,
+   "end": 20325,
+   "old": "rebuilt_fields[f_name] = new_field",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29231,
+   "end": 29232,
+   "old": "0",
+   "new": "(1)",
+   "id": 15
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29250,
+   "end": 29251,
+   "old": "0",
+   "new": "(1)",
+   "id": 16
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 444,
+   "op": "constant",
+   "start": 20175,
+   "end": 20180,
+   "old": "False",
+   "new": "(True)",
+   "id": 17
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 209,
+   "op": "statement",
+   "start": 7355,
+   "end": 7375,
+   "old": "fields = info.fields",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 210,
+   "op": "return",
+   "start": 7380,
+   "end": 7419,
+   "old": "return '*' in fields or field in fields",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 210,
+   "op": "boolean",
+   "start": 7387,
+   "end": 7419,
+   "old": "'*' in fields or field in fields",
+   "new": "('*' in fields and field in fields)",
+   "id": 20
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 375,
+   "op": "return",
+   "start": 13761,
+   "end": 13801,
+   "old": "return self._ns_resolver.types_namespace",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2150,
+   "op": "statement",
+   "start": 99251,
+   "end": 99311,
+   "old": "return_type = replace_types(return_type, self._typevars_map)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2153,
+   "op": "statement",
+   "start": 99487,
+   "end": 99548,
+   "old": "d.info = dataclasses.replace(d.info, return_type=return_type)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2156,
+   "op": "statement",
+   "start": 99681,
+   "end": 99868,
+   "old": "return_type_schema = self._apply_field_serializers(\n            return_type_schema,\n            filter_field_decorator_info_by_field(field_serializers.values(), d.cls_var_name),\n        )",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2161,
+   "op": "statement",
+   "start": 99878,
+   "end": 99968,
+   "old": "pydantic_js_updates, pydantic_js_extra = _extract_json_schema_info_from_field_info(d.info)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2162,
+   "op": "statement",
+   "start": 99977,
+   "end": 100011,
+   "old": "core_metadata: dict[str, Any] = {}",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2163,
+   "op": "statement",
+   "start": 100020,
+   "end": 100235,
+   "old": "update_core_metadata(\n            core_metadata,\n            pydantic_js_updates={'readOnly': True, **(pydantic_js_updates if pydantic_js_updates else {})},\n            pydantic_js_extra=pydantic_js_extra,\n        )",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2168,
+   "op": "return",
+   "start": 100244,
+   "end": 100393,
+   "old": "return core_schema.computed_field(\n            d.cls_var_name, return_schema=return_type_schema, alias=d.info.alias, metadata=core_metadata\n        )",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2133,
+   "op": "comparison",
+   "start": 98279,
+   "end": 98322,
+   "old": "d.info.return_type is not PydanticUndefined",
+   "new": "(d.info.return_type is PydanticUndefined)",
+   "id": 29
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2134,
+   "op": "statement",
+   "start": 98336,
+   "end": 98368,
+   "old": "return_type = d.info.return_type",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2143,
+   "op": "comparison",
+   "start": 98904,
+   "end": 98936,
+   "old": "return_type is PydanticUndefined",
+   "new": "(return_type is not PydanticUndefined)",
+   "id": 31
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2140,
+   "op": "statement",
+   "start": 98685,
+   "end": 98781,
+   "old": "return_type = _decorators.get_callable_return_type(d.func, localns=self._types_namespace.locals)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2142,
+   "op": "statement",
+   "start": 98833,
+   "end": 98892,
+   "old": "raise PydanticUndefinedAnnotation.from_name_error(e) from e",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2145,
+   "op": "constant",
+   "start": 98991,
+   "end": 99171,
+   "old": "'Computed field is missing return type annotation or specifying `return_type`'\n                ' to the `@computed_field` decorator (e.g. `@computed_field(return_type=int | str)`)'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2147,
+   "op": "constant",
+   "start": 99194,
+   "end": 99226,
+   "old": "'model-field-missing-annotation'",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2165,
+   "op": "constant",
+   "start": 100102,
+   "end": 100112,
+   "old": "'readOnly'",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 171,
+   "op": "statement",
+   "start": 6268,
+   "end": 6527,
+   "old": "cls.__pydantic_core_schema__ = MockCoreSchema(  # pyright: ignore[reportAttributeAccessIssue]\n        undefined_type_error_message,\n        code='class-not-fully-defined',\n        attempt_rebuild=attempt_rebuild_fn(lambda c: c.__pydantic_core_schema__),\n    )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 169,
+   "op": "return",
+   "start": 6248,
+   "end": 6262,
+   "old": "return handler",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 165,
+   "op": "comparison",
+   "start": 6100,
+   "end": 6177,
+   "old": "cls.model_rebuild(raise_errors=False, _parent_namespace_depth=5) is not False",
+   "new": "(cls.model_rebuild(raise_errors=False, _parent_namespace_depth=5) is False)",
+   "id": 39
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 166,
+   "op": "return",
+   "start": 6195,
+   "end": 6214,
+   "old": "return attr_fn(cls)",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 173,
+   "op": "constant",
+   "start": 6413,
+   "end": 6438,
+   "old": "'class-not-fully-defined'",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 178,
+   "op": "constant",
+   "start": 6671,
+   "end": 6696,
+   "old": "'class-not-fully-defined'",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 179,
+   "op": "constant",
+   "start": 6717,
+   "end": 6728,
+   "old": "'validator'",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 184,
+   "op": "constant",
+   "start": 6960,
+   "end": 6985,
+   "old": "'class-not-fully-defined'",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 185,
+   "op": "constant",
+   "start": 7006,
+   "end": 7018,
+   "old": "'serializer'",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 165,
+   "op": "constant",
+   "start": 6172,
+   "end": 6177,
+   "old": "False",
+   "new": "(True)",
+   "id": 46
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 206,
+   "op": "constant",
+   "start": 7950,
+   "end": 7955,
+   "old": "False",
+   "new": "(True)",
+   "id": 47
+  },
+  {
+   "path": "pydantic/_internal/_mock_val_ser.py",
+   "line": 206,
+   "op": "constant",
+   "start": 7909,
+   "end": 7914,
+   "old": "False",
+   "new": "(True)",
+   "id": 48
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 739,
+   "op": "statement",
+   "start": 34044,
+   "end": 34066,
+   "old": "self.field_name = name",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 747,
+   "op": "statement",
+   "start": 34364,
+   "end": 34421,
+   "old": "warnings.warn(self.msg, DeprecationWarning, stacklevel=2)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 751,
+   "op": "return",
+   "start": 34541,
+   "end": 34577,
+   "old": "return obj.__dict__[self.field_name]",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 742,
+   "op": "comparison",
+   "start": 34173,
+   "end": 34184,
+   "old": "obj is None",
+   "new": "(obj is not None)",
+   "id": 52
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 745,
+   "op": "statement",
+   "start": 34317,
+   "end": 34354,
+   "old": "raise AttributeError(self.field_name)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 749,
+   "op": "comparison",
+   "start": 34434,
+   "end": 34467,
+   "old": "self.wrapped_property is not None",
+   "new": "(self.wrapped_property is None)",
+   "id": 54
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 750,
+   "op": "return",
+   "start": 34481,
+   "end": 34532,
+   "old": "return self.wrapped_property.__get__(obj, obj_type)",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 744,
+   "op": "return",
+   "start": 34252,
+   "end": 34304,
+   "old": "return self.wrapped_property.__get__(None, obj_type)",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "pydantic/_internal/_model_construction.py",
+   "line": 747,
+   "op": "constant",
+   "start": 34419,
+   "end": 34420,
+   "old": "2",
+   "new": "(3)",
+   "id": 57
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "return",
+   "start": 71428,
+   "end": 71501,
+   "old": "return wrapped_name.startswith('_') and not wrapped_name.startswith('__')",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1566,
+   "op": "statement",
+   "start": 69015,
+   "end": 69099,
+   "old": "title_generator = self.field_title_generator or config_wrapper.field_title_generator",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1609,
+   "op": "statement",
+   "start": 71224,
+   "end": 71278,
+   "old": "wrapped_name = getattr(property_.fget, '__name__', '')",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1803,
+   "op": "statement",
+   "start": 78301,
+   "end": 78351,
+   "old": "unwrapped = _decorators.unwrap_wrapped_function(f)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1812,
+   "op": "statement",
+   "start": 78713,
+   "end": 78747,
+   "old": "f = _decorators.ensure_property(f)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1820,
+   "op": "statement",
+   "start": 78972,
+   "end": 79273,
+   "old": "dec_info = ComputedFieldInfo(\n            f,\n            return_type,\n            alias,\n            alias_priority,\n            title,\n            field_title_generator,\n            description,\n            deprecated,\n            examples,\n            json_schema_extra,\n            repr_,\n        )",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1833,
+   "op": "return",
+   "start": 79282,
+   "end": 79337,
+   "old": "return _decorators.PydanticDescriptorProxy(f, dec_info)",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1838,
+   "op": "return",
+   "start": 79397,
+   "end": 79413,
+   "old": "return dec(func)",
+   "new": "return None",
+   "id": 65
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1566,
+   "op": "boolean",
+   "start": 69033,
+   "end": 69099,
+   "old": "self.field_title_generator or config_wrapper.field_title_generator",
+   "new": "(self.field_title_generator and config_wrapper.field_title_generator)",
+   "id": 66
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1570,
+   "op": "statement",
+   "start": 69283,
+   "end": 69348,
+   "old": "self._apply_alias_generator(config_wrapper.alias_generator, name)",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "boolean",
+   "start": 71468,
+   "end": 71501,
+   "old": "not wrapped_name.startswith('__')",
+   "new": "(wrapped_name.startswith('__'))",
+   "id": 68
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1805,
+   "op": "boolean",
+   "start": 78364,
+   "end": 78405,
+   "old": "description is None and unwrapped.__doc__",
+   "new": "(description is None or unwrapped.__doc__)",
+   "id": 69
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1808,
+   "op": "boolean",
+   "start": 78481,
+   "end": 78540,
+   "old": "deprecated is None and hasattr(unwrapped, '__deprecated__')",
+   "new": "(deprecated is None or hasattr(unwrapped, '__deprecated__'))",
+   "id": 70
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1809,
+   "op": "statement",
+   "start": 78554,
+   "end": 78591,
+   "old": "deprecated = unwrapped.__deprecated__",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1815,
+   "op": "comparison",
+   "start": 78838,
+   "end": 78850,
+   "old": "repr is None",
+   "new": "(repr is not None)",
+   "id": 72
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1567,
+   "op": "comparison",
+   "start": 69111,
+   "end": 69138,
+   "old": "title_generator is not None",
+   "new": "(title_generator is None)",
+   "id": 73
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1609,
+   "op": "constant",
+   "start": 71263,
+   "end": 71273,
+   "old": "'__name__'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "constant",
+   "start": 71459,
+   "end": 71462,
+   "old": "'_'",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1805,
+   "op": "comparison",
+   "start": 78364,
+   "end": 78383,
+   "old": "description is None",
+   "new": "(description is not None)",
+   "id": 76
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1813,
+   "op": "boolean",
+   "start": 78774,
+   "end": 78793,
+   "old": "alias_priority or 2",
+   "new": "(alias_priority and 2)",
+   "id": 77
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1816,
+   "op": "boolean",
+   "start": 78878,
+   "end": 78923,
+   "old": "not _wrapped_property_is_private(property_=f)",
+   "new": "(_wrapped_property_is_private(property_=f))",
+   "id": 78
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1611,
+   "op": "constant",
+   "start": 71391,
+   "end": 71401,
+   "old": "'__name__'",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "constant",
+   "start": 71496,
+   "end": 71500,
+   "old": "'__'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1808,
+   "op": "constant",
+   "start": 78523,
+   "end": 78539,
+   "old": "'__deprecated__'",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 326,
+   "op": "return",
+   "start": 12231,
+   "end": 12359,
+   "old": "return cls(\n            func=decorator.func,\n            json_schema_input_type=decorator.info.json_schema_input_type,\n        )",
+   "new": "return None",
+   "id": 82
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 835,
+   "op": "statement",
+   "start": 29964,
+   "end": 30047,
+   "old": "metadata = {'pydantic_js_annotation_functions': [lambda _c, h: h(original_schema)]}",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 836,
+   "op": "return",
+   "start": 30060,
+   "end": 30308,
+   "old": "return core_schema.any_schema(\n                metadata=metadata,\n                serialization=core_schema.wrap_serializer_function_ser_schema(\n                    function=lambda v, h: h(v), schema=original_schema\n                ),\n            )",
+   "new": "return None",
+   "id": 84
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 833,
+   "op": "statement",
+   "start": 29848,
+   "end": 29901,
+   "old": "warnings.simplefilter('ignore', ArbitraryTypeWarning)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 834,
+   "op": "statement",
+   "start": 29918,
+   "end": 29951,
+   "old": "original_schema = handler(source)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "pydantic/functional_validators.py",
+   "line": 835,
+   "op": "constant",
+   "start": 29976,
+   "end": 30010,
+   "old": "'pydantic_js_annotation_functions'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1502,
+   "op": "return",
+   "start": 66334,
+   "end": 66409,
+   "old": "return [(field['property_name'], True, field) for field in computed_fields]",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2335,
+   "op": "statement",
+   "start": 100936,
+   "end": 100957,
+   "old": "config = self._config",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2347,
+   "op": "return",
+   "start": 101394,
+   "end": 101564,
+   "old": "return pydantic_core.to_jsonable_python(\n            default, timedelta_mode=config.ser_json_timedelta, bytes_mode=config.ser_json_bytes, by_alias=self.by_alias\n        )",
+   "new": "return None",
+   "id": 90
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2859,
+   "op": "return",
+   "start": 123879,
+   "end": 123937,
+   "old": "return _get_ser_schema_for_default_value(schema['schema'])",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2337,
+   "op": "statement",
+   "start": 100983,
+   "end": 101238,
+   "old": "default = (\n                dft\n                if _type_has_config(type(dft))\n                else TypeAdapter(type(dft), config=config.config_dict).dump_python(\n                    dft, by_alias=self.by_alias, mode='json'\n                )\n            )",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 533,
+   "op": "statement",
+   "start": 25849,
+   "end": 25913,
+   "old": "json_schema = {**current_handler(schema_or_field), **js_updates}",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2345,
+   "op": "statement",
+   "start": 101297,
+   "end": 101384,
+   "old": "raise pydantic_core.PydanticSerializationError(f'Unable to encode default value {dft}')",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1502,
+   "op": "constant",
+   "start": 66367,
+   "end": 66371,
+   "old": "True",
+   "new": "(False)",
+   "id": 95
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1592,
+   "op": "constant",
+   "start": 69851,
+   "end": 69866,
+   "old": "'return_schema'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2859,
+   "op": "constant",
+   "start": 123927,
+   "end": 123935,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1502,
+   "op": "constant",
+   "start": 66349,
+   "end": 66364,
+   "old": "'property_name'",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2341,
+   "op": "constant",
+   "start": 101200,
+   "end": 101206,
+   "old": "'json'",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

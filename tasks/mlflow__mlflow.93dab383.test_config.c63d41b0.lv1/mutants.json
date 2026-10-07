@@ -1,0 +1,416 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_config.c63d41b0.lv1",
+ "pool": 41,
+ "mutants": [
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 51,
+   "op": "return",
+   "start": 1337,
+   "end": 1346,
+   "old": "return {}",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 61,
+   "op": "statement",
+   "start": 1606,
+   "end": 1661,
+   "old": "settings_path.parent.mkdir(parents=True, exist_ok=True)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2135,
+   "end": 2177,
+   "old": "config = load_claude_config(settings_path)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 79,
+   "op": "statement",
+   "start": 2182,
+   "end": 2226,
+   "old": "env_vars = config.get(ENVIRONMENT_FIELD, {})",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2231,
+   "end": 2287,
+   "old": "enabled = env_vars.get(MLFLOW_TRACING_ENABLED) == \"true\"",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 82,
+   "op": "return",
+   "start": 2293,
+   "end": 2536,
+   "old": "return TracingStatus(\n        enabled=enabled,\n        tracking_uri=env_vars.get(MLFLOW_TRACKING_URI.name),\n        experiment_id=env_vars.get(MLFLOW_EXPERIMENT_ID.name),\n        experiment_name=env_vars.get(MLFLOW_EXPERIMENT_NAME.name),\n    )",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 101,
+   "op": "statement",
+   "start": 2871,
+   "end": 2898,
+   "old": "value = os.getenv(var_name)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 115,
+   "op": "return",
+   "start": 3282,
+   "end": 3296,
+   "old": "return default",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 132,
+   "op": "statement",
+   "start": 3813,
+   "end": 3855,
+   "old": "config = load_claude_config(settings_path)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 138,
+   "op": "statement",
+   "start": 3969,
+   "end": 4027,
+   "old": "config[ENVIRONMENT_FIELD][MLFLOW_TRACING_ENABLED] = \"true\"",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 152,
+   "op": "statement",
+   "start": 4571,
+   "end": 4612,
+   "old": "save_claude_config(settings_path, config)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 63,
+   "op": "statement",
+   "start": 1728,
+   "end": 1758,
+   "old": "json.dump(config, f, indent=2)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 75,
+   "op": "boolean",
+   "start": 2025,
+   "end": 2051,
+   "old": "not settings_path.exists()",
+   "new": "(settings_path.exists())",
+   "id": 12
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 76,
+   "op": "return",
+   "start": 2061,
+   "end": 2129,
+   "old": "return TracingStatus(enabled=False, reason=\"No configuration found\")",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 80,
+   "op": "comparison",
+   "start": 2241,
+   "end": 2287,
+   "old": "env_vars.get(MLFLOW_TRACING_ENABLED) == \"true\"",
+   "new": "(env_vars.get(MLFLOW_TRACING_ENABLED) != 'true')",
+   "id": 14
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 102,
+   "op": "comparison",
+   "start": 2906,
+   "end": 2923,
+   "old": "value is not None",
+   "new": "(value is None)",
+   "id": 15
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 103,
+   "op": "return",
+   "start": 2933,
+   "end": 2945,
+   "old": "return value",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 107,
+   "op": "statement",
+   "start": 2998,
+   "end": 3043,
+   "old": "settings_path = Path(\".claude/settings.json\")",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 134,
+   "op": "comparison",
+   "start": 3864,
+   "end": 3895,
+   "old": "ENVIRONMENT_FIELD not in config",
+   "new": "(ENVIRONMENT_FIELD in config)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 135,
+   "op": "statement",
+   "start": 3905,
+   "end": 3935,
+   "old": "config[ENVIRONMENT_FIELD] = {}",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 138,
+   "op": "constant",
+   "start": 4021,
+   "end": 4027,
+   "old": "\"true\"",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4081,
+   "end": 4147,
+   "old": "config[ENVIRONMENT_FIELD][MLFLOW_TRACKING_URI.name] = tracking_uri",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 146,
+   "op": "statement",
+   "start": 4246,
+   "end": 4314,
+   "old": "config[ENVIRONMENT_FIELD][MLFLOW_EXPERIMENT_ID.name] = experiment_id",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 147,
+   "op": "statement",
+   "start": 4323,
+   "end": 4387,
+   "old": "config[ENVIRONMENT_FIELD].pop(MLFLOW_EXPERIMENT_NAME.name, None)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 80,
+   "op": "constant",
+   "start": 2281,
+   "end": 2287,
+   "old": "\"true\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 109,
+   "op": "statement",
+   "start": 3091,
+   "end": 3133,
+   "old": "config = load_claude_config(settings_path)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 110,
+   "op": "statement",
+   "start": 3146,
+   "end": 3190,
+   "old": "env_vars = config.get(ENVIRONMENT_FIELD, {})",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 111,
+   "op": "return",
+   "start": 3203,
+   "end": 3241,
+   "old": "return env_vars.get(var_name, default)",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4422,
+   "end": 4494,
+   "old": "config[ENVIRONMENT_FIELD][MLFLOW_EXPERIMENT_NAME.name] = experiment_name",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 150,
+   "op": "statement",
+   "start": 4503,
+   "end": 4565,
+   "old": "config[ENVIRONMENT_FIELD].pop(MLFLOW_EXPERIMENT_ID.name, None)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 48,
+   "op": "return",
+   "start": 1243,
+   "end": 1262,
+   "old": "return json.load(f)",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 50,
+   "op": "return",
+   "start": 1323,
+   "end": 1332,
+   "old": "return {}",
+   "new": "return None",
+   "id": 31
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 61,
+   "op": "constant",
+   "start": 1641,
+   "end": 1645,
+   "old": "True",
+   "new": "(False)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 61,
+   "op": "constant",
+   "start": 1656,
+   "end": 1660,
+   "old": "True",
+   "new": "(False)",
+   "id": 33
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 62,
+   "op": "constant",
+   "start": 1691,
+   "end": 1694,
+   "old": "\"w\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 107,
+   "op": "constant",
+   "start": 3019,
+   "end": 3042,
+   "old": "\".claude/settings.json\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 62,
+   "op": "constant",
+   "start": 1705,
+   "end": 1712,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 63,
+   "op": "constant",
+   "start": 1756,
+   "end": 1757,
+   "old": "2",
+   "new": "(3)",
+   "id": 37
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 76,
+   "op": "constant",
+   "start": 2090,
+   "end": 2095,
+   "old": "False",
+   "new": "(True)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 76,
+   "op": "constant",
+   "start": 2104,
+   "end": 2128,
+   "old": "\"No configuration found\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "mlflow/claude_code/config.py",
+   "line": 47,
+   "op": "constant",
+   "start": 1212,
+   "end": 1219,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 40
+  }
+ ]
+}

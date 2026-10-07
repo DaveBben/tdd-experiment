@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_command_line.039d53a2.lv1",
+ "pool": 207,
+ "mutants": [
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 102,
+   "op": "statement",
+   "start": 3066,
+   "end": 3171,
+   "old": "parser.add_argument(\n        'outputdir', metavar='OUTPUT_DIR', help=__('path to output directory')\n    )",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 114,
+   "op": "statement",
+   "start": 3389,
+   "end": 3445,
+   "old": "group = parser.add_argument_group(__('general options'))",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 123,
+   "op": "statement",
+   "start": 3643,
+   "end": 3931,
+   "old": "group.add_argument(\n        '--jobs',\n        '-j',\n        metavar='N',\n        default=1,\n        type=jobs_argument,\n        dest='jobs',\n        help=__(\n            'run in parallel with N processes, when possible. '\n            \"'auto' uses the number of CPU cores\"\n        ),\n    )",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 135,
+   "op": "statement",
+   "start": 3936,
+   "end": 4133,
+   "old": "group.add_argument(\n        '--write-all',\n        '-a',\n        action='store_true',\n        dest='force_all',\n        help=__('write all files (default: only write new and changed files)'),\n    )",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4138,
+   "end": 4327,
+   "old": "group.add_argument(\n        '--fresh-env',\n        '-E',\n        action='store_true',\n        dest='freshenv',\n        help=__(\"don't use a saved environment, always read all files\"),\n    )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 169,
+   "op": "statement",
+   "start": 4848,
+   "end": 4912,
+   "old": "group = parser.add_argument_group('build configuration options')",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 177,
+   "op": "statement",
+   "start": 5118,
+   "end": 5339,
+   "old": "group.add_argument(\n        '--define',\n        '-D',\n        metavar='setting=value',\n        action='append',\n        dest='define',\n        default=[],\n        help=__('override a setting in configuration file'),\n    )",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 195,
+   "op": "statement",
+   "start": 5568,
+   "end": 5776,
+   "old": "group.add_argument(\n        '--tag',\n        '-t',\n        metavar='TAG',\n        action='append',\n        dest='tags',\n        default=[],\n        help=__('define tag: include \"only\" blocks with TAG'),\n    )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 204,
+   "op": "statement",
+   "start": 5781,
+   "end": 5965,
+   "old": "group.add_argument(\n        '--nitpicky',\n        '-n',\n        action='store_true',\n        dest='nitpicky',\n        help=__('nitpicky mode: warn about all missing references'),\n    )",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 228,
+   "op": "statement",
+   "start": 6409,
+   "end": 6582,
+   "old": "group.add_argument(\n        '--silent',\n        '-Q',\n        action='store_true',\n        dest='really_quiet',\n        help=__('no output at all, not even warnings'),\n    )",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 243,
+   "op": "statement",
+   "start": 6799,
+   "end": 7002,
+   "old": "group.add_argument(\n        '--no-color',\n        '-N',\n        action='store_const',\n        dest='color',\n        const='no',\n        help=__('do not emit colored output (default: auto-detect)'),\n    )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 252,
+   "op": "statement",
+   "start": 7008,
+   "end": 7072,
+   "old": "group = parser.add_argument_group(__('warning control options'))",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 253,
+   "op": "statement",
+   "start": 7077,
+   "end": 7253,
+   "old": "group.add_argument(\n        '--warning-file',\n        '-w',\n        metavar='FILE',\n        dest='warnfile',\n        help=__('write warnings (and errors) to given file'),\n    )",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 267,
+   "op": "statement",
+   "start": 7437,
+   "end": 7516,
+   "old": "group.add_argument('--keep-going', action='store_true', help=argparse.SUPPRESS)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 275,
+   "op": "statement",
+   "start": 7701,
+   "end": 7814,
+   "old": "group.add_argument(\n        '--pdb', '-P', action='store_true', dest='pdb', help=__('run Pdb on exception')\n    )",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 278,
+   "op": "statement",
+   "start": 7819,
+   "end": 7995,
+   "old": "group.add_argument(\n        '--exception-on-warning',\n        action='store_true',\n        dest='exception_on_warning',\n        help=__('raise an exception on warnings'),\n    )",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 288,
+   "op": "return",
+   "start": 8076,
+   "end": 8089,
+   "old": "return parser",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 497,
+   "op": "statement",
+   "start": 14461,
+   "end": 14497,
+   "old": "raise SystemExit(main(sys.argv[1:]))",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 285,
+   "op": "comparison",
+   "start": 8004,
+   "end": 8032,
+   "old": "parser.prog == '__main__.py'",
+   "new": "(parser.prog != '__main__.py')",
+   "id": 18
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 286,
+   "op": "statement",
+   "start": 8042,
+   "end": 8070,
+   "old": "parser.prog = 'sphinx-build'",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 100,
+   "op": "constant",
+   "start": 2975,
+   "end": 2986,
+   "old": "'sourcedir'",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 116,
+   "op": "constant",
+   "start": 3478,
+   "end": 3489,
+   "old": "'--builder'",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 124,
+   "op": "constant",
+   "start": 3671,
+   "end": 3679,
+   "old": "'--jobs'",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 125,
+   "op": "constant",
+   "start": 3689,
+   "end": 3693,
+   "old": "'-j'",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 136,
+   "op": "constant",
+   "start": 3964,
+   "end": 3977,
+   "old": "'--write-all'",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 137,
+   "op": "constant",
+   "start": 3987,
+   "end": 3991,
+   "old": "'-a'",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 143,
+   "op": "constant",
+   "start": 4166,
+   "end": 4179,
+   "old": "'--fresh-env'",
+   "new": "('XX')",
+   "id": 26
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 144,
+   "op": "constant",
+   "start": 4189,
+   "end": 4193,
+   "old": "'-E'",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 153,
+   "op": "constant",
+   "start": 4444,
+   "end": 4448,
+   "old": "'-d'",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 163,
+   "op": "constant",
+   "start": 4694,
+   "end": 4698,
+   "old": "'-c'",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 171,
+   "op": "constant",
+   "start": 4945,
+   "end": 4957,
+   "old": "'--isolated'",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 196,
+   "op": "constant",
+   "start": 5596,
+   "end": 5603,
+   "old": "'--tag'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 197,
+   "op": "constant",
+   "start": 5613,
+   "end": 5617,
+   "old": "'-t'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 205,
+   "op": "constant",
+   "start": 5809,
+   "end": 5821,
+   "old": "'--nitpicky'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 206,
+   "op": "constant",
+   "start": 5831,
+   "end": 5835,
+   "old": "'-n'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 214,
+   "op": "constant",
+   "start": 6067,
+   "end": 6078,
+   "old": "'--verbose'",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 230,
+   "op": "constant",
+   "start": 6457,
+   "end": 6461,
+   "old": "'-Q'",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 236,
+   "op": "constant",
+   "start": 6615,
+   "end": 6624,
+   "old": "'--color'",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 244,
+   "op": "constant",
+   "start": 6827,
+   "end": 6839,
+   "old": "'--no-color'",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 261,
+   "op": "constant",
+   "start": 7286,
+   "end": 7305,
+   "old": "'--fail-on-warning'",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 262,
+   "op": "constant",
+   "start": 7315,
+   "end": 7319,
+   "old": "'-W'",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 267,
+   "op": "constant",
+   "start": 7456,
+   "end": 7470,
+   "old": "'--keep-going'",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 269,
+   "op": "constant",
+   "start": 7549,
+   "end": 7567,
+   "old": "'--show-traceback'",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 270,
+   "op": "constant",
+   "start": 7577,
+   "end": 7581,
+   "old": "'-T'",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 276,
+   "op": "constant",
+   "start": 7738,
+   "end": 7742,
+   "old": "'-P'",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 279,
+   "op": "constant",
+   "start": 7847,
+   "end": 7871,
+   "old": "'--exception-on-warning'",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 285,
+   "op": "constant",
+   "start": 8019,
+   "end": 8032,
+   "old": "'__main__.py'",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 94,
+   "op": "constant",
+   "start": 2844,
+   "end": 2853,
+   "old": "'version'",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 95,
+   "op": "constant",
+   "start": 2868,
+   "end": 2882,
+   "old": "'show_version'",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 118,
+   "op": "constant",
+   "start": 3521,
+   "end": 3530,
+   "old": "'BUILDER'",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 119,
+   "op": "constant",
+   "start": 3545,
+   "end": 3554,
+   "old": "'builder'",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 127,
+   "op": "constant",
+   "start": 3732,
+   "end": 3733,
+   "old": "1",
+   "new": "(2)",
+   "id": 51
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 138,
+   "op": "constant",
+   "start": 4008,
+   "end": 4020,
+   "old": "'store_true'",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 154,
+   "op": "constant",
+   "start": 4466,
+   "end": 4472,
+   "old": "'PATH'",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 164,
+   "op": "constant",
+   "start": 4716,
+   "end": 4722,
+   "old": "'PATH'",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 165,
+   "op": "constant",
+   "start": 4737,
+   "end": 4746,
+   "old": "'confdir'",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 174,
+   "op": "constant",
+   "start": 5015,
+   "end": 5025,
+   "old": "'noconfig'",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 181,
+   "op": "constant",
+   "start": 5220,
+   "end": 5228,
+   "old": "'append'",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 182,
+   "op": "constant",
+   "start": 5243,
+   "end": 5251,
+   "old": "'define'",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 189,
+   "op": "constant",
+   "start": 5419,
+   "end": 5431,
+   "old": "'name=value'",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 198,
+   "op": "constant",
+   "start": 5635,
+   "end": 5640,
+   "old": "'TAG'",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 200,
+   "op": "constant",
+   "start": 5680,
+   "end": 5686,
+   "old": "'tags'",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 208,
+   "op": "constant",
+   "start": 5879,
+   "end": 5889,
+   "old": "'nitpicky'",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 212,
+   "op": "constant",
+   "start": 6008,
+   "end": 6032,
+   "old": "'console output options'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 217,
+   "op": "constant",
+   "start": 6131,
+   "end": 6142,
+   "old": "'verbosity'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 218,
+   "op": "constant",
+   "start": 6160,
+   "end": 6161,
+   "old": "0",
+   "new": "(1)",
+   "id": 65
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 224,
+   "op": "constant",
+   "start": 6298,
+   "end": 6310,
+   "old": "'store_true'",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 238,
+   "op": "constant",
+   "start": 6669,
+   "end": 6676,
+   "old": "'color'",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 239,
+   "op": "constant",
+   "start": 6692,
+   "end": 6697,
+   "old": "'yes'",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 256,
+   "op": "constant",
+   "start": 7153,
+   "end": 7159,
+   "old": "'FILE'",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 257,
+   "op": "constant",
+   "start": 7174,
+   "end": 7184,
+   "old": "'warnfile'",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 272,
+   "op": "constant",
+   "start": 7625,
+   "end": 7636,
+   "old": "'traceback'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 276,
+   "op": "constant",
+   "start": 7751,
+   "end": 7763,
+   "old": "'store_true'",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 280,
+   "op": "constant",
+   "start": 7888,
+   "end": 7900,
+   "old": "'store_true'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 73,
+   "op": "constant",
+   "start": 2026,
+   "end": 2086,
+   "old": "'For more information, visit <https://www.sphinx-doc.org/>.'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 109,
+   "op": "constant",
+   "start": 3266,
+   "end": 3366,
+   "old": "'(optional) a list of specific files to rebuild. '\n            'Ignored if --write-all is specified'",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 131,
+   "op": "constant",
+   "start": 3813,
+   "end": 3914,
+   "old": "'run in parallel with N processes, when possible. '\n            \"'auto' uses the number of CPU cores\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 140,
+   "op": "constant",
+   "start": 4064,
+   "end": 4125,
+   "old": "'write all files (default: only write new and changed files)'",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 175,
+   "op": "constant",
+   "start": 5043,
+   "end": 5105,
+   "old": "'use no configuration file, only use settings from -D options'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 193,
+   "op": "constant",
+   "start": 5521,
+   "end": 5555,
+   "old": "'pass a value into HTML templates'",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 202,
+   "op": "constant",
+   "start": 5724,
+   "end": 5768,
+   "old": "'define tag: include \"only\" blocks with TAG'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 209,
+   "op": "constant",
+   "start": 5907,
+   "end": 5957,
+   "old": "'nitpicky mode: warn about all missing references'",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 219,
+   "op": "constant",
+   "start": 6179,
+   "end": 6217,
+   "old": "'increase verbosity (can be repeated)'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 226,
+   "op": "constant",
+   "start": 6350,
+   "end": 6396,
+   "old": "'no output on stdout, just warnings on stderr'",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 249,
+   "op": "constant",
+   "start": 6943,
+   "end": 6994,
+   "old": "'do not emit colored output (default: auto-detect)'",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 276,
+   "op": "constant",
+   "start": 7785,
+   "end": 7807,
+   "old": "'run Pdb on exception'",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 282,
+   "op": "constant",
+   "start": 7955,
+   "end": 7987,
+   "old": "'raise an exception on warnings'",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "sphinx/cmd/build.py",
+   "line": 497,
+   "op": "constant",
+   "start": 14492,
+   "end": 14493,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 219,
+   "op": "statement",
+   "start": 8250,
+   "end": 8315,
+   "old": "make = Make(source_dir=args[1], build_dir=args[2], opts=args[3:])",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2520,
+   "end": 2556,
+   "old": "self.build_dir = _StrPath(build_dir)",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 198,
+   "op": "statement",
+   "start": 7723,
+   "end": 7926,
+   "old": "args = [\n            '--builder',\n            builder,\n            '--doctree-dir',\n            str(doctreedir),\n            str(self.source_dir),\n            str(self.build_dir_join(builder)),\n        ]",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 210,
+   "op": "comparison",
+   "start": 8027,
+   "end": 8040,
+   "old": "len(args) < 3",
+   "new": "(len(args) <= 3)",
+   "id": 91
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 216,
+   "op": "return",
+   "start": 8209,
+   "end": 8217,
+   "old": "return 1",
+   "new": "return None",
+   "id": 92
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 193,
+   "op": "comparison",
+   "start": 7510,
+   "end": 7540,
+   "old": "paper_size in {'a4', 'letter'}",
+   "new": "(paper_size not in {'a4', 'letter'})",
+   "id": 93
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 196,
+   "op": "statement",
+   "start": 7669,
+   "end": 7713,
+   "old": "doctreedir = self.build_dir_join('doctrees')",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 218,
+   "op": "constant",
+   "start": 8243,
+   "end": 8244,
+   "old": "0",
+   "new": "(1)",
+   "id": 95
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 201,
+   "op": "constant",
+   "start": 7790,
+   "end": 7805,
+   "old": "'--doctree-dir'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 193,
+   "op": "constant",
+   "start": 7525,
+   "end": 7529,
+   "old": "'a4'",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 219,
+   "op": "constant",
+   "start": 8278,
+   "end": 8279,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "sphinx/cmd/make_mode.py",
+   "line": 219,
+   "op": "constant",
+   "start": 8297,
+   "end": 8298,
+   "old": "2",
+   "new": "(3)",
+   "id": 99
+  }
+ ]
+}

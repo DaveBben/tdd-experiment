@@ -1,0 +1,836 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_list_accessor.7ab0b2ea.lv1",
+ "pool": 83,
+ "mutants": [
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 45,
+   "op": "statement",
+   "start": 894,
+   "end": 912,
+   "old": "dtype = data.dtype",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 56,
+   "op": "return",
+   "start": 1402,
+   "end": 1435,
+   "old": "return self._data.array._pa_array",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 115,
+   "op": "statement",
+   "start": 2953,
+   "end": 3005,
+   "old": "value_lengths = pc.list_value_length(self._pa_array)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 116,
+   "op": "return",
+   "start": 3014,
+   "end": 3185,
+   "old": "return Series(\n            value_lengths,\n            dtype=ArrowDtype(value_lengths.type),\n            index=self._data.index,\n            name=self._data.name,\n        )",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 226,
+   "op": "statement",
+   "start": 6189,
+   "end": 6242,
+   "old": "counts = pa.compute.list_value_length(self._pa_array)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 227,
+   "op": "statement",
+   "start": 6251,
+   "end": 6302,
+   "old": "flattened = pa.compute.list_flatten(self._pa_array)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 228,
+   "op": "statement",
+   "start": 6311,
+   "end": 6387,
+   "old": "index = self._data.index.repeat(counts.fill_null(pa.scalar(0, counts.type)))",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 229,
+   "op": "return",
+   "start": 6396,
+   "end": 6548,
+   "old": "return Series(\n            flattened,\n            dtype=ArrowDtype(flattened.type),\n            index=index,\n            name=self._data.name,\n        )",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 924,
+   "end": 976,
+   "old": "not HAS_PYARROW or not isinstance(dtype, ArrowDtype)",
+   "new": "(not HAS_PYARROW and (not isinstance(dtype, ArrowDtype)))",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1071,
+   "end": 1133,
+   "old": "raise AttributeError(self._validation_msg.format(dtype=dtype))",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 50,
+   "op": "boolean",
+   "start": 1146,
+   "end": 1199,
+   "old": "not self._is_valid_pyarrow_dtype(dtype.pyarrow_dtype)",
+   "new": "(self._is_valid_pyarrow_dtype(dtype.pyarrow_dtype))",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1291,
+   "end": 1353,
+   "old": "raise AttributeError(self._validation_msg.format(dtype=dtype))",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 924,
+   "end": 939,
+   "old": "not HAS_PYARROW",
+   "new": "(HAS_PYARROW)",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 943,
+   "end": 976,
+   "old": "not isinstance(dtype, ArrowDtype)",
+   "new": "(isinstance(dtype, ArrowDtype))",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 228,
+   "op": "constant",
+   "start": 6370,
+   "end": 6371,
+   "old": "0",
+   "new": "(1)",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 3220,
+   "op": "return",
+   "start": 117001,
+   "end": 117080,
+   "old": "return [ArrowExtensionArray(arr.slice(i * ncols, ncols)) for i in range(nrows)]",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 229,
+   "op": "return",
+   "start": 6537,
+   "end": 6563,
+   "old": "return dtype.pyarrow_dtype",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 231,
+   "op": "return",
+   "start": 6613,
+   "end": 6625,
+   "old": "return dtype",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 233,
+   "op": "return",
+   "start": 6679,
+   "end": 6720,
+   "old": "return pa.timestamp(dtype.unit, dtype.tz)",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 3220,
+   "op": "arithmetic",
+   "start": 117039,
+   "end": 117048,
+   "old": "i * ncols",
+   "new": "(i / ncols)",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 238,
+   "op": "return",
+   "start": 6846,
+   "end": 6879,
+   "old": "return pa.from_numpy_dtype(dtype)",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 262,
+   "op": "statement",
+   "start": 6558,
+   "end": 6578,
+   "old": "dtype = values.dtype",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 274,
+   "op": "return",
+   "start": 6931,
+   "end": 6944,
+   "old": "return result",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 264,
+   "op": "comparison",
+   "start": 6587,
+   "end": 6611,
+   "old": "dtype.kind in (\"S\", \"U\")",
+   "new": "(dtype.kind not in ('S', 'U'))",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 265,
+   "op": "statement",
+   "start": 6621,
+   "end": 6664,
+   "old": "result = np.zeros(values.shape, dtype=bool)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 267,
+   "op": "comparison",
+   "start": 6686,
+   "end": 6707,
+   "old": "values.ndim in {1, 2}",
+   "new": "(values.ndim not in {1, 2})",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 268,
+   "op": "statement",
+   "start": 6721,
+   "end": 6756,
+   "old": "result = libmissing.isnaobj(values)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 271,
+   "op": "statement",
+   "start": 6832,
+   "end": 6875,
+   "old": "result = libmissing.isnaobj(values.ravel())",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 272,
+   "op": "statement",
+   "start": 6888,
+   "end": 6925,
+   "old": "result = result.reshape(values.shape)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 264,
+   "op": "constant",
+   "start": 6602,
+   "end": 6605,
+   "old": "\"S\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 264,
+   "op": "constant",
+   "start": 6607,
+   "end": 6610,
+   "old": "\"U\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 267,
+   "op": "constant",
+   "start": 6702,
+   "end": 6703,
+   "old": "1",
+   "new": "(2)",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 267,
+   "op": "constant",
+   "start": 6705,
+   "end": 6706,
+   "old": "2",
+   "new": "(3)",
+   "id": 32
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4568,
+   "end": 4605,
+   "old": "diff = set(kwargs) - set(compat_args)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5548,
+   "end": 5568,
+   "old": "kwds = kwargs.copy()",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 166,
+   "op": "statement",
+   "start": 5573,
+   "end": 5624,
+   "old": "_check_for_invalid_keys(fname, kwargs, compat_args)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 167,
+   "op": "statement",
+   "start": 5629,
+   "end": 5680,
+   "old": "_check_for_default_values(fname, kwds, compat_args)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 210,
+   "op": "statement",
+   "start": 7202,
+   "end": 7305,
+   "old": "_check_arg_length(\n        fname, args + tuple(kwargs.values()), max_fname_arg_count, compat_args\n    )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 216,
+   "op": "statement",
+   "start": 7443,
+   "end": 7497,
+   "old": "args_dict = dict(zip(compat_args, args, strict=False))",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 224,
+   "op": "statement",
+   "start": 7677,
+   "end": 7701,
+   "old": "kwargs.update(args_dict)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 225,
+   "op": "statement",
+   "start": 7706,
+   "end": 7749,
+   "old": "validate_kwargs(fname, kwargs, compat_args)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 37,
+   "op": "comparison",
+   "start": 787,
+   "end": 810,
+   "old": "max_fname_arg_count < 0",
+   "new": "(max_fname_arg_count <= 0)",
+   "id": 41
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 38,
+   "op": "statement",
+   "start": 820,
+   "end": 882,
+   "old": "raise ValueError(\"'max_fname_arg_count' must be non-negative\")",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 40,
+   "op": "comparison",
+   "start": 891,
+   "end": 919,
+   "old": "len(args) > len(compat_args)",
+   "new": "(len(args) >= len(compat_args))",
+   "id": 43
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 41,
+   "op": "statement",
+   "start": 929,
+   "end": 983,
+   "old": "max_arg_count = len(compat_args) + max_fname_arg_count",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 42,
+   "op": "statement",
+   "start": 992,
+   "end": 1042,
+   "old": "actual_arg_count = len(args) + max_fname_arg_count",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1051,
+   "end": 1111,
+   "old": "argument = \"argument\" if max_arg_count == 1 else \"arguments\"",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1121,
+   "end": 1256,
+   "old": "raise TypeError(\n            f\"{fname}() takes at most {max_arg_count} {argument} \"\n            f\"({actual_arg_count} given)\"\n        )",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 136,
+   "op": "arithmetic",
+   "start": 4575,
+   "end": 4605,
+   "old": "set(kwargs) - set(compat_args)",
+   "new": "(set(kwargs) + set(compat_args))",
+   "id": 48
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4628,
+   "end": 4654,
+   "old": "bad_arg = next(iter(diff))",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4663,
+   "end": 4739,
+   "old": "raise TypeError(f\"{fname}() got an unexpected keyword argument '{bad_arg}'\")",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 37,
+   "op": "constant",
+   "start": 809,
+   "end": 810,
+   "old": "0",
+   "new": "(1)",
+   "id": 51
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 41,
+   "op": "arithmetic",
+   "start": 945,
+   "end": 983,
+   "old": "len(compat_args) + max_fname_arg_count",
+   "new": "(len(compat_args) - max_fname_arg_count)",
+   "id": 52
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 42,
+   "op": "arithmetic",
+   "start": 1011,
+   "end": 1042,
+   "old": "len(args) + max_fname_arg_count",
+   "new": "(len(args) - max_fname_arg_count)",
+   "id": 53
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 64,
+   "op": "statement",
+   "start": 1789,
+   "end": 1811,
+   "old": "v1 = arg_val_dict[key]",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 65,
+   "op": "statement",
+   "start": 1824,
+   "end": 1845,
+   "old": "v2 = compat_args[key]",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 82,
+   "op": "boolean",
+   "start": 2407,
+   "end": 2416,
+   "old": "not match",
+   "new": "(match)",
+   "id": 56
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2430,
+   "end": 2581,
+   "old": "raise ValueError(\n                f\"the '{key}' parameter is not supported in \"\n                f\"the pandas implementation of {fname}()\"\n            )",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 211,
+   "op": "arithmetic",
+   "start": 7236,
+   "end": 7265,
+   "old": "args + tuple(kwargs.values())",
+   "new": "(args - tuple(kwargs.values()))",
+   "id": 58
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 219,
+   "op": "comparison",
+   "start": 7536,
+   "end": 7549,
+   "old": "key in kwargs",
+   "new": "(key not in kwargs)",
+   "id": 59
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 220,
+   "op": "statement",
+   "start": 7563,
+   "end": 7671,
+   "old": "raise TypeError(\n                f\"{fname}() got multiple values for keyword argument '{key}'\"\n            )",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 38,
+   "op": "constant",
+   "start": 837,
+   "end": 881,
+   "old": "\"'max_fname_arg_count' must be non-negative\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 43,
+   "op": "comparison",
+   "start": 1076,
+   "end": 1094,
+   "old": "max_arg_count == 1",
+   "new": "(max_arg_count != 1)",
+   "id": 62
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1062,
+   "end": 1072,
+   "old": "\"argument\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1100,
+   "end": 1111,
+   "old": "\"arguments\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "boolean",
+   "start": 1968,
+   "end": 2034,
+   "old": "(v1 is not None and v2 is None) or (v1 is None and v2 is not None)",
+   "new": "((v1 is not None and v2 is None) and (v1 is None and v2 is not None))",
+   "id": 65
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2052,
+   "end": 2065,
+   "old": "match = False",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 72,
+   "op": "statement",
+   "start": 2100,
+   "end": 2116,
+   "old": "match = v1 == v2",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 74,
+   "op": "boolean",
+   "start": 2133,
+   "end": 2151,
+   "old": "not is_bool(match)",
+   "new": "(is_bool(match))",
+   "id": 68
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2169,
+   "end": 2213,
+   "old": "raise ValueError(\"'match' is not a boolean\")",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2349,
+   "end": 2394,
+   "old": "match = arg_val_dict[key] is compat_args[key]",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1093,
+   "end": 1094,
+   "old": "1",
+   "new": "(2)",
+   "id": 71
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "boolean",
+   "start": 1969,
+   "end": 1998,
+   "old": "v1 is not None and v2 is None",
+   "new": "(v1 is not None or v2 is None)",
+   "id": 72
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "boolean",
+   "start": 2004,
+   "end": 2033,
+   "old": "v1 is None and v2 is not None",
+   "new": "(v1 is None or v2 is not None)",
+   "id": 73
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2060,
+   "end": 2065,
+   "old": "False",
+   "new": "(True)",
+   "id": 74
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 72,
+   "op": "comparison",
+   "start": 2108,
+   "end": 2116,
+   "old": "v1 == v2",
+   "new": "(v1 != v2)",
+   "id": 75
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 80,
+   "op": "comparison",
+   "start": 2357,
+   "end": 2394,
+   "old": "arg_val_dict[key] is compat_args[key]",
+   "new": "(arg_val_dict[key] is not compat_args[key])",
+   "id": 76
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 216,
+   "op": "constant",
+   "start": 7490,
+   "end": 7495,
+   "old": "False",
+   "new": "(True)",
+   "id": 77
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 1969,
+   "end": 1983,
+   "old": "v1 is not None",
+   "new": "(v1 is None)",
+   "id": 78
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 1988,
+   "end": 1998,
+   "old": "v2 is None",
+   "new": "(v2 is not None)",
+   "id": 79
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 2004,
+   "end": 2014,
+   "old": "v1 is None",
+   "new": "(v1 is not None)",
+   "id": 80
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 2019,
+   "end": 2033,
+   "old": "v2 is not None",
+   "new": "(v2 is None)",
+   "id": 81
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 75,
+   "op": "constant",
+   "start": 2186,
+   "end": 2212,
+   "old": "\"'match' is not a boolean\"",
+   "new": "('XX')",
+   "id": 82
+  }
+ ]
+}

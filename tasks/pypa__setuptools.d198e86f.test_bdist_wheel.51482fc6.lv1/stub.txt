@@ -1,0 +1,3100 @@
+=== setuptools/_distutils/command/build_ext.py
+"""distutils.command.build_ext
+
+Implements the Distutils 'build_ext' command, for building extension
+modules (currently limited to C extensions, should accommodate C++
+extensions ASAP)."""
+
+from __future__ import annotations
+
+import contextlib
+import os
+import re
+import sys
+from collections.abc import Callable
+from distutils._log import log
+from site import USER_BASE
+from typing import ClassVar
+
+from .._modified import newer_group
+from ..ccompiler import show_compilers
+from ..core import Command
+from ..errors import (
+    CCompilerError,
+    CompileError,
+    DistutilsError,
+    DistutilsOptionError,
+    DistutilsPlatformError,
+    DistutilsSetupError,
+)
+from ..extension import Extension
+from ..sysconfig import get_config_h_filename, get_python_version
+from ..util import get_platform, is_freethreaded
+
+# An extension name is just a dot-separated list of Python NAMEs (ie.
+# the same as a fully-qualified module name).
+extension_name_re = re.compile(r'^[a-zA-Z_][a-zA-Z_0-9]*(\.[a-zA-Z_][a-zA-Z_0-9]*)*$')
+
+
+class build_ext(Command):
+    description = "build C/C++ extensions (compile/link to build directory)"
+
+    # XXX thoughts on how to deal with complex command-line options like
+    # these, i.e. how to make it so fancy_getopt can suck them off the
+    # command line and make it look like setup.py defined the appropriate
+    # lists of tuples of what-have-you.
+    #   - each command needs a callback to process its command-line options
+    #   - Command.__init__() needs access to its share of the whole
+    #     command line (must ultimately come from
+    #     Distribution.parse_command_line())
+    #   - it then calls the current command class' option-parsing
+    #     callback to deal with weird options like -D, which have to
+    #     parse the option text and churn out some custom data
+    #     structure
+    #   - that data structure (in this case, a list of 2-tuples)
+    #     will then be present in the command object by the time
+    #     we get to finalize_options() (i.e. the constructor
+    #     takes care of both command-line and client options
+    #     in between initialize_options() and finalize_options())
+
+    sep_by = f" (separated by '{os.pathsep}')"
+    user_options = [
+        ('build-lib=', 'b', "directory for compiled extension modules"),
+        ('build-temp=', 't', "directory for temporary files (build by-products)"),
+        (
+            'plat-name=',
+            'p',
+            "platform name to cross-compile for, if supported "
+            f"[default: {get_platform()}]",
+        ),
+        (
+            'inplace',
+            'i',
+            "ignore build-lib and put compiled extensions into the source "
+            "directory alongside your pure Python modules",
+        ),
+        (
+            'include-dirs=',
+            'I',
+            "list of directories to search for header files" + sep_by,
+        ),
+        ('define=', 'D', "C preprocessor macros to define"),
+        ('undef=', 'U', "C preprocessor macros to undefine"),
+        ('libraries=', 'l', "external C libraries to link with"),
+        (
+            'library-dirs=',
+            'L',
+            "directories to search for external C libraries" + sep_by,
+        ),
+        ('rpath=', 'R', "directories to search for shared C libraries at runtime"),
+        ('link-objects=', 'O', "extra explicit link objects to include in the link"),
+        ('debug', 'g', "compile/link with debugging information"),
+        ('force', 'f', "forcibly build everything (ignore file timestamps)"),
+        ('compiler=', 'c', "specify the compiler type"),
+        ('parallel=', 'j', "number of parallel build jobs"),
+        ('swig-cpp', None, "make SWIG create C++ files (default is C)"),
+        ('swig-opts=', None, "list of SWIG command line options"),
+        ('swig=', None, "path to the SWIG executable"),
+        ('user', None, "add user include, library and rpath"),
+    ]
+
+    boolean_options: ClassVar[list[str]] = [
+        'inplace',
+        'debug',
+        'force',
+        'swig-cpp',
+        'user',
+    ]
+
+    help_options: ClassVar[list[tuple[str, str | None, str, Callable[[], object]]]] = [
+        ('help-compiler', None, "list available compilers", show_compilers),
+    ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_outputs(self):
+        # Sanity check the 'extensions' list -- can't assume this is being
+        # done in the same run as a 'build_extensions()' call (in fact, we
+        # can probably assume that it *isn't*!).
+        self.check_extensions_list(self.extensions)
+
+        # And build the list of output (built) filenames.  Note that this
+        # ignores the 'inplace' flag, and assumes everything goes in the
+        # "build" tree.
+        return [self.get_ext_fullpath(ext.name) for ext in self.extensions]
+
+
+
+
+
+
+
+
+
+    def _build_extensions_parallel(self):
+        workers = self.parallel
+        if self.parallel is True:
+            workers = os.cpu_count()  # may return None
+        try:
+            from concurrent.futures import ThreadPoolExecutor
+        except ImportError:
+            workers = None
+
+        if workers is None:
+            self._build_extensions_serial()
+            return
+
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [
+                executor.submit(self.build_extension, ext) for ext in self.extensions
+            ]
+            for ext, fut in zip(self.extensions, futures):
+                with self._filter_build_errors(ext):
+                    fut.result()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def find_swig(self):
+        """Return the name of the SWIG executable.  On Unix, this is
+        just "swig" -- it should be in the PATH.  Tries a bit harder on
+        Windows.
+        """
+        if os.name == "posix":
+            return "swig"
+        elif os.name == "nt":
+            # Look for SWIG in its standard installation directory on
+            # Windows (or so I presume!).  If we find it there, great;
+            # if not, act like Unix and assume it's in the PATH.
+            for vers in ("1.3", "1.2", "1.1"):
+                fn = os.path.join(f"c:\\swig{vers}", "swig.exe")
+                if os.path.isfile(fn):
+                    return fn
+            else:
+                return "swig.exe"
+        else:
+            raise DistutilsPlatformError(
+                f"I don't know how to find (much less run) SWIG on platform '{os.name}'"
+            )
+
+    def initialize_options(self):
+        """
+        Initialize all command options to their default values.
+
+        This method sets up the initial state of all build_ext command options before
+        they are processed from command-line arguments or configuration files. All
+        options are set to None or appropriate default values (False for boolean options).
+
+        The following attributes are initialized:
+
+        Build Configuration:
+            - extensions: List of Extension objects to build (set to None)
+            - build_lib: Directory for compiled extension modules (set to None)
+            - build_temp: Directory for temporary build files (set to None)
+            - plat_name: Target platform name for cross-compilation (set to None)
+            - inplace: Whether to build extensions in-place (set to False)
+            - package: Package name prefix for extensions (set to None)
+
+        Compilation Options:
+            - include_dirs: List of header file search directories (set to None)
+            - define: C preprocessor macros to define (set to None)
+            - undef: C preprocessor macros to undefine (set to None)
+            - debug: Whether to compile with debugging information (set to None)
+            - force: Whether to force rebuilding of all files (set to None)
+            - compiler: Compiler type to use (set to None)
+            - parallel: Number of parallel build jobs (set to None)
+
+        Linking Options:
+            - libraries: External C libraries to link with (set to None)
+            - library_dirs: Library search directories (set to None)
+            - rpath: Runtime library search paths (set to None)
+            - link_objects: Extra objects to include in linking (set to None)
+
+        SWIG Options:
+            - swig: Path to SWIG executable (set to None)
+            - swig_cpp: Whether SWIG should generate C++ files (set to None)
+            - swig_opts: Additional SWIG command-line options (set to None)
+
+        User Options:
+            - user: Whether to add user directories to search paths (set to None)
+
+        Notes:
+            This method is called automatically by the distutils framework before
+            finalize_options() and should not be called directly by user code.
+            The actual values for these options will be determined later during
+            the finalize_options() phase from command-line arguments, configuration
+            files, and other build commands.
+        """
+        raise NotImplementedError
+
+    # -- Name generators -----------------------------------------------
+    # (extension names, filenames, whatever)
+
+=== setuptools/_distutils/command/build_scripts.py
+"""distutils.command.build_scripts
+
+Implements the Distutils 'build_scripts' command."""
+
+import os
+import re
+import tokenize
+from distutils._log import log
+from stat import ST_MODE
+from typing import ClassVar
+
+from .._modified import newer
+from ..core import Command
+from ..util import convert_path
+
+shebang_pattern = re.compile('^#!.*python[0-9.]*([ \t].*)?$')
+"""
+Pattern matching a Python interpreter indicated in first line of a script.
+"""
+
+# for Setuptools compatibility
+first_line_re = shebang_pattern
+
+
+class build_scripts(Command):
+    description = "\"build\" scripts (copy and fixup #! line)"
+
+    user_options: ClassVar[list[tuple[str, str, str]]] = [
+        ('build-dir=', 'd', "directory to \"build\" (copy) to"),
+        ('force', 'f', "forcibly build everything (ignore file timestamps"),
+        ('executable=', 'e', "specify final destination interpreter path"),
+    ]
+
+    boolean_options: ClassVar[list[str]] = ['force']
+
+
+
+
+
+
+
+    def finalize_options(self):
+        self.set_undefined_options(
+            'build',
+            ('build_scripts', 'build_dir'),
+            ('force', 'force'),
+            ('executable', 'executable'),
+        )
+        self.scripts = self.distribution.scripts
+
+    def get_source_files(self):
+        return self.scripts
+
+    def run(self):
+        if not self.scripts:
+            return
+        self.copy_scripts()
+
+    def copy_scripts(self):
+        """
+        Copy each script listed in ``self.scripts``.
+
+        If a script is marked as a Python script (first line matches
+        'shebang_pattern', i.e. starts with ``#!`` and contains
+        "python"), then adjust in the copy the first line to refer to
+        the current Python interpreter.
+        """
+        self.mkpath(self.build_dir)
+        outfiles = []
+        updated_files = []
+        for script in self.scripts:
+            self._copy_script(script, outfiles, updated_files)
+
+        self._change_modes(outfiles)
+
+        return outfiles, updated_files
+
+    def _copy_script(self, script, outfiles, updated_files):
+        shebang_match = None
+        script = convert_path(script)
+        outfile = os.path.join(self.build_dir, os.path.basename(script))
+        outfiles.append(outfile)
+
+        if not self.force and not newer(script, outfile):
+            log.debug("not copying %s (up-to-date)", script)
+            return
+
+        # Always open the file, but ignore failures in dry-run mode
+        # in order to attempt to copy directly.
+        try:
+            f = tokenize.open(script)
+        except OSError:
+            if not self.dry_run:
+                raise
+            f = None
+        else:
+            first_line = f.readline()
+            if not first_line:
+                self.warn(f"{script} is an empty file (skipping)")
+                return
+
+            shebang_match = shebang_pattern.match(first_line)
+
+        updated_files.append(outfile)
+        if shebang_match:
+            log.info("copying and adjusting %s -> %s", script, self.build_dir)
+            if not self.dry_run:
+                post_interp = shebang_match.group(1) or ''
+                shebang = "#!" + self.executable + post_interp + "\n"
+                self._validate_shebang(shebang, f.encoding)
+                with open(outfile, "w", encoding=f.encoding) as outf:
+                    outf.write(shebang)
+                    outf.writelines(f.readlines())
+            if f:
+                f.close()
+        else:
+            if f:
+                f.close()
+            self.copy_file(script, outfile)
+
+    def _change_modes(self, outfiles):
+        if os.name != 'posix':
+            return
+
+        for file in outfiles:
+            self._change_mode(file)
+
+    def _change_mode(self, file):
+        if self.dry_run:
+            log.info("changing mode of %s", file)
+            return
+
+        oldmode = os.stat(file)[ST_MODE] & 0o7777
+        newmode = (oldmode | 0o555) & 0o7777
+        if newmode != oldmode:
+            log.info("changing mode of %s from %o to %o", file, oldmode, newmode)
+            os.chmod(file, newmode)
+
+    @staticmethod
+    def _validate_shebang(shebang, encoding):
+        # Python parser starts to read a script using UTF-8 until
+        # it gets a #coding:xxx cookie. The shebang has to be the
+        # first line of a file, the #coding:xxx cookie cannot be
+        # written before. So the shebang has to be encodable to
+        # UTF-8.
+        try:
+            shebang.encode('utf-8')
+        except UnicodeEncodeError:
+            raise ValueError(f"The shebang ({shebang!r}) is not encodable to utf-8")
+
+        # If the script is encoded to a custom encoding (use a
+        # #coding:xxx cookie), the shebang has to be encodable to
+        # the script encoding too.
+        try:
+            shebang.encode(encoding)
+        except UnicodeEncodeError:
+            raise ValueError(
+                f"The shebang ({shebang!r}) is not encodable "
+                f"to the script encoding ({encoding})"
+            )
+
+    def initialize_options(self):
+        """
+        Initialize all command options to their default values.
+
+        This method sets up the initial state of the build_scripts command by
+        initializing all configurable options to None. These options will be
+        properly configured later during the finalize_options() phase.
+
+        The following instance attributes are initialized:
+        - build_dir: Directory where scripts will be copied to during build
+        - scripts: List of script files to be processed  
+        - force: Flag to force rebuilding regardless of file timestamps
+        - executable: Path to the Python interpreter for shebang line replacement
+
+        Notes:
+            This method is part of the distutils Command interface and is called
+            automatically during command setup. All options are set to None initially
+            and will receive their actual values from the build command or distribution
+            configuration in finalize_options().
+        """
+        raise NotImplementedError
+
+=== setuptools/_distutils/command/install_data.py
+"""distutils.command.install_data
+
+Implements the Distutils 'install_data' command, for installing
+platform-independent data files."""
+
+# contributed by Bastian Kleineidam
+
+from __future__ import annotations
+
+import functools
+import os
+from collections.abc import Iterable
+from typing import ClassVar
+
+from ..core import Command
+from ..util import convert_path
+
+
+class install_data(Command):
+    description = "install data files"
+
+    user_options = [
+        (
+            'install-dir=',
+            'd',
+            "base directory for installing data files [default: installation base dir]",
+        ),
+        ('root=', None, "install everything relative to this alternate root directory"),
+        ('force', 'f', "force installation (overwrite existing files)"),
+    ]
+
+    boolean_options: ClassVar[list[str]] = ['force']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @_copy.register(str)
+    @_copy.register(os.PathLike)
+    def _(self, f: str | os.PathLike):
+        # it's a simple file, so copy it
+        f = convert_path(f)
+        if self.warn_dir:
+            self.warn(
+                "setup script did not provide a directory for "
+                f"'{f}' -- installing right in '{self.install_dir}'"
+            )
+        (out, _) = self.copy_file(f, self.install_dir)
+        self.outfiles.append(out)
+
+    def get_inputs(self):
+        return self.data_files or []
+
+    def get_outputs(self):
+        return self.outfiles
+
+    def initialize_options(self):
+        """
+        Initialize all command options to their default values.
+
+        This method sets up the initial state of the install_data command by resetting
+        all instance attributes to their default values. It is called during the command
+        initialization phase before option parsing and finalization.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            - Sets install_dir to None (will be determined during option finalization)
+            - Initializes outfiles as an empty list to track installed files
+            - Sets root to None (no alternate root directory by default)
+            - Sets force to False (no forced overwriting by default)
+            - Retrieves data_files from the distribution object
+            - Sets warn_dir to True to enable directory warnings during installation
+            - This method is part of the distutils Command interface and is automatically
+              called by the distutils framework
+        """
+        raise NotImplementedError
+
+=== setuptools/_distutils/command/install_headers.py
+"""distutils.command.install_headers
+
+Implements the Distutils 'install_headers' command, to install C/C++ header
+files to the Python include directory."""
+
+from typing import ClassVar
+
+from ..core import Command
+
+
+# XXX force is never used
+class install_headers(Command):
+    description = "install C/C++ header files"
+
+    user_options: ClassVar[list[tuple[str, str, str]]] = [
+        ('install-dir=', 'd', "directory to install header files to"),
+        ('force', 'f', "force installation (overwrite existing files)"),
+    ]
+
+    boolean_options: ClassVar[list[str]] = ['force']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_inputs(self):
+        return self.distribution.headers or []
+
+    def get_outputs(self):
+        return self.outfiles
+
+    def initialize_options(self):
+        """
+        Initialize the command's options to their default values.
+
+        This method sets up the initial state of the install_headers command by
+        initializing all configurable options to their default values. It is called
+        during the command setup phase before option finalization.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            This method initializes three instance attributes:
+            - install_dir: Set to None, will be configured during finalization
+            - force: Set to False, controls whether to overwrite existing files
+            - outfiles: Set to empty list, will store paths of installed files
+
+            The actual values for install_dir and force will be determined later
+            during the finalize_options() phase, typically inheriting from the
+            parent 'install' command.
+        """
+        raise NotImplementedError
+
+=== setuptools/_distutils/command/install_lib.py
+"""distutils.command.install_lib
+
+Implements the Distutils 'install_lib' command
+(install all Python modules)."""
+
+from __future__ import annotations
+
+import importlib.util
+import os
+import sys
+from typing import Any, ClassVar
+
+from ..core import Command
+from ..errors import DistutilsOptionError
+
+# Extension for Python source files.
+PYTHON_SOURCE_EXTENSION = ".py"
+
+
+class install_lib(Command):
+    description = "install all Python modules (extensions and pure Python)"
+
+    # The byte-compilation options are a tad confusing.  Here are the
+    # possible scenarios:
+    #   1) no compilation at all (--no-compile --no-optimize)
+    #   2) compile .pyc only (--compile --no-optimize; default)
+    #   3) compile .pyc and "opt-1" .pyc (--compile --optimize)
+    #   4) compile "opt-1" .pyc only (--no-compile --optimize)
+    #   5) compile .pyc and "opt-2" .pyc (--compile --optimize-more)
+    #   6) compile "opt-2" .pyc only (--no-compile --optimize-more)
+    #
+    # The UI for this is two options, 'compile' and 'optimize'.
+    # 'compile' is strictly boolean, and only decides whether to
+    # generate .pyc files.  'optimize' is three-way (0, 1, or 2), and
+    # decides both whether to generate .pyc files and what level of
+    # optimization to use.
+
+    user_options = [
+        ('install-dir=', 'd', "directory to install to"),
+        ('build-dir=', 'b', "build directory (where to install from)"),
+        ('force', 'f', "force installation (overwrite existing files)"),
+        ('compile', 'c', "compile .py to .pyc [default]"),
+        ('no-compile', None, "don't compile .py files"),
+        (
+            'optimize=',
+            'O',
+            "also compile with optimization: -O1 for \"python -O\", "
+            "-O2 for \"python -OO\", and -O0 to disable [default: -O0]",
+        ),
+        ('skip-build', None, "skip the build steps"),
+    ]
+
+    boolean_options: ClassVar[list[str]] = ['force', 'compile', 'skip-build']
+    negative_opt: ClassVar[dict[str, str]] = {'no-compile': 'compile'}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def run(self) -> None:
+        # Make sure we have built everything we need first
+        self.build()
+
+        # Install everything: simply dump the entire contents of the build
+        # directory to the installation directory (that's the beauty of
+        # having a build directory!)
+        outfiles = self.install()
+
+        # (Optionally) compile .py to .pyc
+        if outfiles is not None and self.distribution.has_pure_modules():
+            self.byte_compile(outfiles)
+
+    # -- Top-level worker functions ------------------------------------
+    # (called from 'run()')
+
+
+
+
+
+
+
+
+    # Any: https://typing.readthedocs.io/en/latest/guides/writing_stubs.html#the-any-trick
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # -- Utility methods -----------------------------------------------
+
+    def _mutate_outputs(self, has_any, build_cmd, cmd_option, output_dir):
+        if not has_any:
+            return []
+
+        build_cmd = self.get_finalized_command(build_cmd)
+        build_files = build_cmd.get_outputs()
+        build_dir = getattr(build_cmd, cmd_option)
+
+        prefix_len = len(build_dir) + len(os.sep)
+        outputs = [os.path.join(output_dir, file[prefix_len:]) for file in build_files]
+
+        return outputs
+
+    def _bytecode_filenames(self, py_filenames):
+        bytecode_files = []
+        for py_file in py_filenames:
+            # Since build_py handles package data installation, the
+            # list of outputs can contain more than just .py files.
+            # Make sure we only report bytecode for the .py files.
+            ext = os.path.splitext(os.path.normcase(py_file))[1]
+            if ext != PYTHON_SOURCE_EXTENSION:
+                continue
+            if self.compile:
+                bytecode_files.append(
+                    importlib.util.cache_from_source(py_file, optimization='')
+                )
+            if self.optimize > 0:
+                bytecode_files.append(
+                    importlib.util.cache_from_source(
+                        py_file, optimization=self.optimize
+                    )
+                )
+
+        return bytecode_files
+
+    # -- External interface --------------------------------------------
+    # (called by outsiders)
+
+    def get_outputs(self):
+        """Return the list of files that would be installed if this command
+        were actually run.  Not affected by the "dry-run" flag or whether
+        modules have actually been built yet.
+        """
+        pure_outputs = self._mutate_outputs(
+            self.distribution.has_pure_modules(),
+            'build_py',
+            'build_lib',
+            self.install_dir,
+        )
+        if self.compile:
+            bytecode_outputs = self._bytecode_filenames(pure_outputs)
+        else:
+            bytecode_outputs = []
+
+        ext_outputs = self._mutate_outputs(
+            self.distribution.has_ext_modules(),
+            'build_ext',
+            'build_lib',
+            self.install_dir,
+        )
+
+        return pure_outputs + bytecode_outputs + ext_outputs
+
+    def get_inputs(self):
+        """Get the list of files that are input to this command, ie. the
+        files that get installed as they are named in the build tree.
+        The files in this list correspond one-to-one to the output
+        filenames returned by 'get_outputs()'.
+        """
+        inputs = []
+
+        if self.distribution.has_pure_modules():
+            build_py = self.get_finalized_command('build_py')
+            inputs.extend(build_py.get_outputs())
+
+        if self.distribution.has_ext_modules():
+            build_ext = self.get_finalized_command('build_ext')
+            inputs.extend(build_ext.get_outputs())
+
+        return inputs
+
+    def initialize_options(self):
+        """
+        Initialize all command options to their default values.
+
+        This method sets up the initial state of the install_lib command by initializing
+        all option attributes to None or False. These options control various aspects
+        of the library installation process including directories, compilation settings,
+        and build behavior.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            - All options are set to None or False initially and will be properly
+              configured later in finalize_options() method
+            - The install_dir and build_dir will be determined by the parent 'install'
+              command during option finalization
+            - Boolean options (force, compile, optimize, skip_build) start as None/False
+              and get their final values from command-line arguments or parent commands
+            - This method is part of the distutils Command interface and is called
+              automatically during command setup
+        """
+        raise NotImplementedError
+
+=== setuptools/command/bdist_wheel.py
+"""
+Create a wheel (.whl) distribution.
+
+A wheel is a built archive format.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+import shutil
+import struct
+import sys
+import sysconfig
+import warnings
+from collections.abc import Iterable, Sequence
+from email.generator import BytesGenerator
+from glob import iglob
+from typing import Literal, cast
+from zipfile import ZIP_DEFLATED, ZIP_STORED
+
+from packaging import tags, version as _packaging_version
+from wheel.wheelfile import WheelFile
+
+from .. import Command, __version__, _shutil
+from .._core_metadata import _safe_license_file
+
+from ..warnings import SetuptoolsDeprecationWarning
+from .egg_info import egg_info as egg_info_cls
+
+from distutils import log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+setuptools_major_version = int(__version__.split(".")[0])
+
+PY_LIMITED_API_PATTERN = r"cp3\d"
+
+
+def _is_32bit_interpreter() -> bool:
+    return struct.calcsize("P") == 4
+
+
+def python_tag() -> str:
+    return f"py{sys.version_info.major}"
+
+
+def get_platform(archive_root: str | None) -> str:
+    """Return our platform name 'win32', 'linux_x86_64'"""
+    result = sysconfig.get_platform()
+    if result.startswith("macosx") and archive_root is not None:  # pragma: no cover
+        from wheel.macosx_libfile import calculate_macosx_platform_tag
+
+        result = calculate_macosx_platform_tag(archive_root, result)
+    elif _is_32bit_interpreter():
+        if result == "linux-x86_64":
+            # pip pull request #3497
+            result = "linux-i686"
+        elif result == "linux-aarch64":
+            # packaging pull request #234
+            # TODO armv8l, packaging pull request #690 => this did not land
+            # in pip/packaging yet
+            result = "linux-armv7l"
+
+    return result.replace("-", "_")
+
+
+def get_flag(
+    var: str, fallback: bool, expected: bool = True, warn: bool = True
+) -> bool:
+    """Use a fallback value for determining SOABI flags if the needed config
+    var is unset or unavailable."""
+    val = sysconfig.get_config_var(var)
+    if val is None:
+        if warn:
+            warnings.warn(
+                f"Config variable '{var}' is unset, Python ABI tag may be incorrect",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        return fallback
+    return val == expected
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class bdist_wheel(Command):
+    description = "create a wheel distribution"
+
+    supported_compressions = {
+        "stored": ZIP_STORED,
+        "deflated": ZIP_DEFLATED,
+    }
+
+    user_options = [
+        ("bdist-dir=", "b", "temporary directory for creating the distribution"),
+        (
+            "plat-name=",
+            "p",
+            "platform name to embed in generated filenames "
+            f"[default: {get_platform(None)}]",
+        ),
+        (
+            "keep-temp",
+            "k",
+            "keep the pseudo-installation tree around after "
+            "creating the distribution archive",
+        ),
+        ("dist-dir=", "d", "directory to put final built distributions in"),
+        ("skip-build", None, "skip rebuilding everything (for testing/debugging)"),
+        (
+            "relative",
+            None,
+            "build the archive using relative paths [default: false]",
+        ),
+        (
+            "owner=",
+            "u",
+            "Owner name used when creating a tar file [default: current user]",
+        ),
+        (
+            "group=",
+            "g",
+            "Group name used when creating a tar file [default: current group]",
+        ),
+        ("universal", None, "*DEPRECATED* make a universal wheel [default: false]"),
+        (
+            "compression=",
+            None,
+            f"zipfile compression (one of: {', '.join(supported_compressions)}) [default: 'deflated']",
+        ),
+        (
+            "python-tag=",
+            None,
+            f"Python implementation compatibility tag [default: '{python_tag()}']",
+        ),
+        (
+            "build-number=",
+            None,
+            "Build number for this particular version. "
+            "As specified in PEP-0427, this must start with a digit. "
+            "[default: None]",
+        ),
+        (
+            "py-limited-api=",
+            None,
+            "Python tag (cp32|cp33|cpNN) for abi3 wheel tag [default: false]",
+        ),
+        (
+            "dist-info-dir=",
+            None,
+            "directory where a pre-generated dist-info can be found (e.g. as a "
+            "result of calling the PEP517 'prepare_metadata_for_build_wheel' "
+            "method)",
+        ),
+    ]
+
+    boolean_options = ["keep-temp", "skip-build", "relative", "universal"]
+
+    def initialize_options(self) -> None:
+        self.bdist_dir: str | None = None
+        self.data_dir = ""
+        self.plat_name: str | None = None
+        self.plat_tag: str | None = None
+        self.format = "zip"
+        self.keep_temp = False
+        self.dist_dir: str | None = None
+        self.dist_info_dir = None
+        self.egginfo_dir: str | None = None
+        self.root_is_pure: bool | None = None
+        self.skip_build = False
+        self.relative = False
+        self.owner = None
+        self.group = None
+        self.universal = False
+        self.compression: str | int = "deflated"
+        self.python_tag = python_tag()
+        self.build_number: str | None = None
+        self.py_limited_api: str | Literal[False] = False
+        self.plat_name_supplied = False
+
+    def finalize_options(self) -> None:
+        if not self.bdist_dir:
+            bdist_base = self.get_finalized_command("bdist").bdist_base
+            self.bdist_dir = os.path.join(bdist_base, "wheel")
+
+        if self.dist_info_dir is None:
+            egg_info = cast(egg_info_cls, self.distribution.get_command_obj("egg_info"))
+            egg_info.ensure_finalized()  # needed for correct `wheel_dist_name`
+
+        self.data_dir = self.wheel_dist_name + ".data"
+        self.plat_name_supplied = bool(self.plat_name)
+
+        need_options = ("dist_dir", "plat_name", "skip_build")
+
+        self.set_undefined_options("bdist", *zip(need_options, need_options))
+
+        self.root_is_pure = not (
+            self.distribution.has_ext_modules() or self.distribution.has_c_libraries()
+        )
+
+        self._validate_py_limited_api()
+
+        # Support legacy [wheel] section for setting universal
+        wheel = self.distribution.get_option_dict("wheel")
+        if "universal" in wheel:  # pragma: no cover
+            # please don't define this in your global configs
+            log.warn("The [wheel] section is deprecated. Use [bdist_wheel] instead.")
+            val = wheel["universal"][1].strip()
+            if val.lower() in ("1", "true", "yes"):
+                self.universal = True
+
+        if self.universal:
+            SetuptoolsDeprecationWarning.emit(
+                "bdist_wheel.universal is deprecated",
+                """
+                With Python 2.7 end-of-life, support for building universal wheels
+                (i.e., wheels that support both Python 2 and Python 3)
+                is being obviated.
+                Please discontinue using this option, or if you still need it,
+                file an issue with pypa/setuptools describing your use case.
+                """,
+                due_date=(2025, 8, 30),  # Introduced in 2024-08-30
+            )
+
+        if self.build_number is not None and not self.build_number[:1].isdigit():
+            raise ValueError("Build tag (build-number) must start with a digit.")
+
+    def _validate_py_limited_api(self) -> None:
+        if not self.py_limited_api:
+            return
+
+        if not re.match(PY_LIMITED_API_PATTERN, self.py_limited_api):
+            raise ValueError(f"py-limited-api must match '{PY_LIMITED_API_PATTERN}'")
+
+        if sysconfig.get_config_var("Py_GIL_DISABLED"):
+            raise ValueError(
+                f"`py_limited_api={self.py_limited_api!r}` not supported. "
+                "`Py_LIMITED_API` is currently incompatible with "
+                "`Py_GIL_DISABLED`. "
+                "See https://github.com/python/cpython/issues/111506."
+            )
+
+    @property
+    def wheel_dist_name(self) -> str:
+        """Return distribution full name with - replaced with _"""
+        components = [
+            safer_name(self.distribution.get_name()),
+            safer_version(self.distribution.get_version()),
+        ]
+        if self.build_number:
+            components.append(self.build_number)
+        return "-".join(components)
+
+    def get_tag(self) -> tuple[str, str, str]:
+        # bdist sets self.plat_name if unset, we should only use it for purepy
+        # wheels if the user supplied it.
+        if self.plat_name_supplied and self.plat_name:
+            plat_name = self.plat_name
+        elif self.root_is_pure:
+            plat_name = "any"
+        else:
+            # macosx contains system version in platform name so need special handle
+            if self.plat_name and not self.plat_name.startswith("macosx"):
+                plat_name = self.plat_name
+            else:
+                # on macosx always limit the platform name to comply with any
+                # c-extension modules in bdist_dir, since the user can specify
+                # a higher MACOSX_DEPLOYMENT_TARGET via tools like CMake
+
+                # on other platforms, and on macosx if there are no c-extension
+                # modules, use the default platform name.
+                plat_name = get_platform(self.bdist_dir)
+
+            if _is_32bit_interpreter():
+                if plat_name in ("linux-x86_64", "linux_x86_64"):
+                    plat_name = "linux_i686"
+                if plat_name in ("linux-aarch64", "linux_aarch64"):
+                    # TODO armv8l, packaging pull request #690 => this did not land
+                    # in pip/packaging yet
+                    plat_name = "linux_armv7l"
+
+        plat_name = (
+            plat_name.lower().replace("-", "_").replace(".", "_").replace(" ", "_")
+        )
+
+        if self.root_is_pure:
+            if self.universal:
+                impl = "py2.py3"
+            else:
+                impl = self.python_tag
+            tag = (impl, "none", plat_name)
+        else:
+            impl_name = tags.interpreter_name()
+            impl_ver = tags.interpreter_version()
+            impl = impl_name + impl_ver
+            # We don't work on CPython 3.1, 3.0.
+            if self.py_limited_api and (impl_name + impl_ver).startswith("cp3"):
+                impl = self.py_limited_api
+                abi_tag = "abi3"
+            else:
+                abi_tag = str(get_abi_tag()).lower()
+            tag = (impl, abi_tag, plat_name)
+            # issue gh-374: allow overriding plat_name
+            supported_tags = [
+                (t.interpreter, t.abi, plat_name) for t in tags.sys_tags()
+            ]
+            assert tag in supported_tags, (
+                f"would build wheel with unsupported tag {tag}"
+            )
+        return tag
+
+    def run(self):
+        build_scripts = self.reinitialize_command("build_scripts")
+        build_scripts.executable = "python"
+        build_scripts.force = True
+
+        build_ext = self.reinitialize_command("build_ext")
+        build_ext.inplace = False
+
+        if not self.skip_build:
+            self.run_command("build")
+
+        install = self.reinitialize_command("install", reinit_subcommands=True)
+        install.root = self.bdist_dir
+        install.compile = False
+        install.skip_build = self.skip_build
+        install.warn_dir = False
+
+        # A wheel without setuptools scripts is more cross-platform.
+        # Use the (undocumented) `no_ep` option to setuptools'
+        # install_scripts command to avoid creating entry point scripts.
+        install_scripts = self.reinitialize_command("install_scripts")
+        install_scripts.no_ep = True
+
+        # Use a custom scheme for the archive, because we have to decide
+        # at installation time which scheme to use.
+        for key in ("headers", "scripts", "data", "purelib", "platlib"):
+            setattr(install, "install_" + key, os.path.join(self.data_dir, key))
+
+        basedir_observed = ""
+
+        if os.name == "nt":
+            # win32 barfs if any of these are ''; could be '.'?
+            # (distutils.command.install:change_roots bug)
+            basedir_observed = os.path.normpath(os.path.join(self.data_dir, ".."))
+            self.install_libbase = self.install_lib = basedir_observed
+
+        setattr(
+            install,
+            "install_purelib" if self.root_is_pure else "install_platlib",
+            basedir_observed,
+        )
+
+        log.info(f"installing to {self.bdist_dir}")
+
+        self.run_command("install")
+
+        impl_tag, abi_tag, plat_tag = self.get_tag()
+        archive_basename = f"{self.wheel_dist_name}-{impl_tag}-{abi_tag}-{plat_tag}"
+        if not self.relative:
+            archive_root = self.bdist_dir
+        else:
+            archive_root = os.path.join(
+                self.bdist_dir, self._ensure_relative(install.install_base)
+            )
+
+        self.set_undefined_options("install_egg_info", ("target", "egginfo_dir"))
+        distinfo_dirname = (
+            f"{safer_name(self.distribution.get_name())}-"
+            f"{safer_version(self.distribution.get_version())}.dist-info"
+        )
+        distinfo_dir = os.path.join(self.bdist_dir, distinfo_dirname)
+        if self.dist_info_dir:
+            # Use the given dist-info directly.
+            log.debug(f"reusing {self.dist_info_dir}")
+            shutil.copytree(self.dist_info_dir, distinfo_dir)
+            # Egg info is still generated, so remove it now to avoid it getting
+            # copied into the wheel.
+            _shutil.rmtree(self.egginfo_dir)
+        else:
+            # Convert the generated egg-info into dist-info.
+            self.egg2dist(self.egginfo_dir, distinfo_dir)
+
+        self.write_wheelfile(distinfo_dir)
+
+        # Make the archive
+        if not os.path.exists(self.dist_dir):
+            os.makedirs(self.dist_dir)
+
+        wheel_path = os.path.join(self.dist_dir, archive_basename + ".whl")
+        with WheelFile(wheel_path, "w", self._zip_compression()) as wf:
+            wf.write_files(archive_root)
+
+        # Add to 'Distribution.dist_files' so that the "upload" command works
+        getattr(self.distribution, "dist_files", []).append((
+            "bdist_wheel",
+            f"{sys.version_info.major}.{sys.version_info.minor}",
+            wheel_path,
+        ))
+
+        if not self.keep_temp:
+            log.info(f"removing {self.bdist_dir}")
+            if not self.dry_run:
+                _shutil.rmtree(self.bdist_dir)
+
+    def write_wheelfile(
+        self, wheelfile_base: str, generator: str = f"setuptools ({__version__})"
+    ) -> None:
+        from email.message import Message
+
+        msg = Message()
+        msg["Wheel-Version"] = "1.0"  # of the spec
+        msg["Generator"] = generator
+        msg["Root-Is-Purelib"] = str(self.root_is_pure).lower()
+        if self.build_number is not None:
+            msg["Build"] = self.build_number
+
+        # Doesn't work for bdist_wininst
+        impl_tag, abi_tag, plat_tag = self.get_tag()
+        for impl in impl_tag.split("."):
+            for abi in abi_tag.split("."):
+                for plat in plat_tag.split("."):
+                    msg["Tag"] = "-".join((impl, abi, plat))
+
+        wheelfile_path = os.path.join(wheelfile_base, "WHEEL")
+        log.info(f"creating {wheelfile_path}")
+        with open(wheelfile_path, "wb") as f:
+            BytesGenerator(f, maxheaderlen=0).flatten(msg)
+
+    def _ensure_relative(self, path: str) -> str:
+        # copied from dir_util, deleted
+        drive, path = os.path.splitdrive(path)
+        if path[0:1] == os.sep:
+            path = drive + path[1:]
+        return path
+
+    @property
+    def license_paths(self) -> Iterable[str]:
+        if setuptools_major_version >= 57:
+            # Setuptools has resolved any patterns to actual file names
+            return self.distribution.metadata.license_files or ()
+
+        files = set[str]()
+        metadata = self.distribution.get_option_dict("metadata")
+        if setuptools_major_version >= 42:
+            # Setuptools recognizes the license_files option but does not do globbing
+            patterns = cast(Sequence[str], self.distribution.metadata.license_files)
+        else:
+            # Prior to those, wheel is entirely responsible for handling license files
+            if "license_files" in metadata:
+                patterns = metadata["license_files"][1].split()
+            else:
+                patterns = ()
+
+        if "license_file" in metadata:
+            warnings.warn(
+                'The "license_file" option is deprecated. Use "license_files" instead.',
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            files.add(metadata["license_file"][1])
+
+        if not files and not patterns and not isinstance(patterns, list):
+            patterns = ("LICEN[CS]E*", "COPYING*", "NOTICE*", "AUTHORS*")
+
+        for pattern in patterns:
+            for path in iglob(pattern):
+                if path.endswith("~"):
+                    log.debug(
+                        f'ignoring license file "{path}" as it looks like a backup'
+                    )
+                    continue
+
+                if path not in files and os.path.isfile(path):
+                    log.info(
+                        f'adding license file "{path}" (matched pattern "{pattern}")'
+                    )
+                    files.add(path)
+
+        return files
+
+    def egg2dist(self, egginfo_path: str, distinfo_path: str) -> None:
+        """Convert an .egg-info directory into a .dist-info directory"""
+
+        def adios(p: str) -> None:
+            """Appropriately delete directory, file or link."""
+            if os.path.exists(p) and not os.path.islink(p) and os.path.isdir(p):
+                _shutil.rmtree(p)
+            elif os.path.exists(p):
+                os.unlink(p)
+
+        adios(distinfo_path)
+
+        if not os.path.exists(egginfo_path):
+            # There is no egg-info. This is probably because the egg-info
+            # file/directory is not named matching the distribution name used
+            # to name the archive file. Check for this case and report
+            # accordingly.
+            import glob
+
+            pat = os.path.join(os.path.dirname(egginfo_path), "*.egg-info")
+            possible = glob.glob(pat)
+            err = f"Egg metadata expected at {egginfo_path} but not found"
+            if possible:
+                alt = os.path.basename(possible[0])
+                err += f" ({alt} found - possible misnamed archive file?)"
+
+            raise ValueError(err)
+
+        # .egg-info is a directory
+        pkginfo_path = os.path.join(egginfo_path, "PKG-INFO")
+
+        # ignore common egg metadata that is useless to wheel
+        shutil.copytree(
+            egginfo_path,
+            distinfo_path,
+            ignore=lambda x, y: {
+                "PKG-INFO",
+                "requires.txt",
+                "SOURCES.txt",
+                "not-zip-safe",
+            },
+        )
+
+        # delete dependency_links if it is only whitespace
+        dependency_links_path = os.path.join(distinfo_path, "dependency_links.txt")
+        with open(dependency_links_path, encoding="utf-8") as dependency_links_file:
+            dependency_links = dependency_links_file.read().strip()
+        if not dependency_links:
+            adios(dependency_links_path)
+
+        metadata_path = os.path.join(distinfo_path, "METADATA")
+        shutil.copy(pkginfo_path, metadata_path)
+
+        licenses_folder_path = os.path.join(distinfo_path, "licenses")
+        for license_path in self.license_paths:
+            safe_path = _safe_license_file(license_path)
+            dist_info_license_path = os.path.join(licenses_folder_path, safe_path)
+            os.makedirs(os.path.dirname(dist_info_license_path), exist_ok=True)
+            shutil.copy(license_path, dist_info_license_path)
+
+        adios(egginfo_path)
+
+    def _zip_compression(self) -> int:
+        if (
+            isinstance(self.compression, int)
+            and self.compression in self.supported_compressions.values()
+        ):
+            return self.compression
+
+        compression = self.supported_compressions.get(str(self.compression))
+        if compression is not None:
+            return compression
+
+        raise ValueError(f"Unsupported compression: {self.compression!r}")
+
+
+def get_abi_tag() -> str | None:
+    """
+    Return the ABI tag based on SOABI (if available) or emulate SOABI (PyPy2).
+
+    The ABI (Application Binary Interface) tag is used in wheel filenames to indicate
+    compatibility with specific Python implementations and their binary interfaces.
+    This function determines the appropriate ABI tag by examining the system's SOABI
+    (Shared Object ABI) configuration or by constructing one based on the Python
+    implementation details.
+
+    Returns:
+        str | None: The ABI tag string for the current Python implementation, or None
+            if no appropriate ABI tag can be determined. The tag format varies by
+            implementation:
+            - CPython: "cp" + version + optional debug flag (e.g., "cp39", "cp39d")
+            - PyPy: implementation name + version with underscores (e.g., "pypy36_pp73")
+            - GraalPy: implementation details with underscores replacing dots and hyphens
+            - Other implementations: SOABI with dots and hyphens replaced by underscores
+
+    Notes:
+        - For CPython on debug builds, a "d" suffix is appended to indicate debug mode
+        - The function handles different SOABI formats across platforms (Windows vs non-Windows)
+        - For PyPy and GraalPy, special parsing of SOABI components is performed
+        - If SOABI is unavailable for CPython or PyPy implementations, the function
+          attempts to construct an appropriate tag using available system information
+        - The function may issue warnings if certain configuration variables are unset
+    """
+    raise NotImplementedError
+
+=== setuptools/command/build_ext.py
+from __future__ import annotations
+
+import itertools
+import operator
+import os
+import sys
+import textwrap
+from collections.abc import Iterator
+from importlib.machinery import EXTENSION_SUFFIXES
+from importlib.util import cache_from_source as _compiled_file_name
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+from setuptools.dist import Distribution
+from setuptools.errors import BaseError
+from setuptools.extension import Extension, Library
+
+from distutils import log
+
+
+
+if TYPE_CHECKING:
+    # Cython not installed on CI tests, causing _build_ext to be `Any`
+    from distutils.command.build_ext import build_ext as _build_ext
+else:
+    try:
+        # Attempt to use Cython for building extensions, if available
+        from Cython.Distutils.build_ext import build_ext as _build_ext
+
+        # Additionally, assert that the compiler module will load
+        # also. Ref #1229.
+        __import__('Cython.Compiler.Main')
+    except ImportError:
+        from distutils.command.build_ext import build_ext as _build_ext
+
+# make sure _config_vars is initialized
+get_config_var("LDSHARED")
+# Not publicly exposed in typeshed distutils stubs, but this is done on purpose
+# See https://github.com/pypa/setuptools/pull/4228#issuecomment-1959856400
+from distutils.sysconfig import _config_vars as _CONFIG_VARS  # noqa: E402
+
+
+def _customize_compiler_for_shlib(compiler):
+    if sys.platform == "darwin":
+        # building .dylib requires additional compiler flags on OSX; here we
+        # temporarily substitute the pyconfig.h variables so that distutils'
+        # 'customize_compiler' uses them before we build the shared libraries.
+        tmp = _CONFIG_VARS.copy()
+        try:
+            # XXX Help!  I don't have any idea whether these are right...
+            _CONFIG_VARS['LDSHARED'] = (
+                "gcc -Wl,-x -dynamiclib -undefined dynamic_lookup"
+            )
+            _CONFIG_VARS['CCSHARED'] = " -dynamiclib"
+            _CONFIG_VARS['SO'] = ".dylib"
+            customize_compiler(compiler)
+        finally:
+            _CONFIG_VARS.clear()
+            _CONFIG_VARS.update(tmp)
+    else:
+        customize_compiler(compiler)
+
+
+have_rtld = False
+use_stubs = False
+libtype = 'shared'
+
+if sys.platform == "darwin":
+    use_stubs = True
+elif os.name != 'nt':
+    try:
+        import dl  # type: ignore[import-not-found] # https://github.com/python/mypy/issues/13002
+
+        use_stubs = have_rtld = hasattr(dl, 'RTLD_NOW')
+    except ImportError:
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+class build_ext(_build_ext):
+    distribution: Distribution  # override distutils.dist.Distribution with setuptools.dist.Distribution
+    editable_mode = False
+    inplace = False
+
+
+
+
+
+
+
+
+
+    def _get_inplace_equivalent(self, build_py, ext: Extension) -> tuple[str, str]:
+        fullname = self.get_ext_fullname(ext.name)
+        filename = self.get_ext_filename(fullname)
+        modpath = fullname.split('.')
+        package = '.'.join(modpath[:-1])
+        package_dir = build_py.get_package_dir(package)
+        inplace_file = os.path.join(package_dir, os.path.basename(filename))
+        regular_file = os.path.join(self.build_lib, filename)
+        return (inplace_file, regular_file)
+
+    def copy_extensions_to_source(self) -> None:
+        build_py = self.get_finalized_command('build_py')
+        for ext in self.extensions:
+            inplace_file, regular_file = self._get_inplace_equivalent(build_py, ext)
+
+            # Always copy, even if source is older than destination, to ensure
+            # that the right extensions for the current Python/platform are
+            # used.
+            if os.path.exists(regular_file) or not ext.optional:
+                self.copy_file(regular_file, inplace_file, level=self.verbose)
+
+            if ext._needs_stub:
+                inplace_stub = self._get_equivalent_stub(ext, inplace_file)
+                self._write_stub_file(inplace_stub, ext, compile=True)
+                # Always compile stub and remove the original (leave the cache behind)
+                # (this behaviour was observed in previous iterations of the code)
+
+    def _get_equivalent_stub(self, ext: Extension, output_file: str) -> str:
+        dir_ = os.path.dirname(output_file)
+        _, _, name = ext.name.rpartition(".")
+        return f"{os.path.join(dir_, name)}.py"
+
+    def _get_output_mapping(self) -> Iterator[tuple[str, str]]:
+        if not self.inplace:
+            return
+
+        build_py = self.get_finalized_command('build_py')
+        opt = self.get_finalized_command('install_lib').optimize or ""
+
+        for ext in self.extensions:
+            inplace_file, regular_file = self._get_inplace_equivalent(build_py, ext)
+            yield (regular_file, inplace_file)
+
+            if ext._needs_stub:
+                # This version of `build_ext` always builds artifacts in another dir,
+                # when "inplace=True" is given it just copies them back.
+                # This is done in the `copy_extensions_to_source` function, which
+                # always compile stub files via `_compile_and_remove_stub`.
+                # At the end of the process, a `.pyc` stub file is created without the
+                # corresponding `.py`.
+
+                inplace_stub = self._get_equivalent_stub(ext, inplace_file)
+                regular_stub = self._get_equivalent_stub(ext, regular_file)
+                inplace_cache = _compiled_file_name(inplace_stub, optimization=opt)
+                output_cache = _compiled_file_name(regular_stub, optimization=opt)
+                yield (output_cache, inplace_cache)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def setup_shlib_compiler(self) -> None:
+        compiler = self.shlib_compiler = new_compiler(
+            compiler=self.compiler, dry_run=self.dry_run, force=self.force
+        )
+        _customize_compiler_for_shlib(compiler)
+
+        if self.include_dirs is not None:
+            compiler.set_include_dirs(self.include_dirs)
+        if self.define is not None:
+            # 'define' option is a list of (name,value) tuples
+            for name, value in self.define:
+                compiler.define_macro(name, value)
+        if self.undef is not None:
+            for macro in self.undef:
+                compiler.undefine_macro(macro)
+        if self.libraries is not None:
+            compiler.set_libraries(self.libraries)
+        if self.library_dirs is not None:
+            compiler.set_library_dirs(self.library_dirs)
+        if self.rpath is not None:
+            compiler.set_runtime_library_dirs(self.rpath)
+        if self.link_objects is not None:
+            compiler.set_link_objects(self.link_objects)
+
+        # hack so distutils' build_extension() builds a library instead
+        compiler.link_shared_object = link_shared_object.__get__(compiler)  # type: ignore[method-assign]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def links_to_dynamic(self, ext):
+        """Return true if 'ext' links to a dynamic lib in the same package"""
+        # XXX this should check to ensure the lib is actually being built
+        # XXX as dynamic, and not just using a locally-found version or a
+        # XXX static-compiled version
+        libnames = dict.fromkeys([lib._full_name for lib in self.shlibs])
+        pkg = '.'.join(ext._full_name.split('.')[:-1] + [''])
+        return any(pkg + libname in libnames for libname in ext.libraries)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_outputs(self) -> list[str]:
+        if self.inplace:
+            return list(self.get_output_mapping().keys())
+        return sorted(_build_ext.get_outputs(self) + self.__get_stubs_outputs())
+
+    def get_output_mapping(self) -> dict[str, str]:
+        """See :class:`setuptools.commands.build.SubCommand`"""
+        mapping = self._get_output_mapping()
+        return dict(sorted(mapping, key=operator.itemgetter(0)))
+
+    def __get_stubs_outputs(self):
+        # assemble the base name for each extension that needs a stub
+        ns_ext_bases = (
+            os.path.join(self.build_lib, *ext._full_name.split('.'))
+            for ext in self.extensions
+            if ext._needs_stub
+        )
+        # pair each base with the extension
+        pairs = itertools.product(ns_ext_bases, self.__get_output_extensions())
+        return list(base + fnext for base, fnext in pairs)
+
+    def __get_output_extensions(self):
+        yield '.py'
+        yield '.pyc'
+        if self.get_finalized_command('build_py').optimize:
+            yield '.pyo'
+
+    def write_stub(self, output_dir, ext, compile=False) -> None:
+        stub_file = os.path.join(output_dir, *ext._full_name.split('.')) + '.py'
+        self._write_stub_file(stub_file, ext, compile)
+
+    def _write_stub_file(self, stub_file: str, ext: Extension, compile=False):
+        log.info("writing stub loader for %s to %s", ext._full_name, stub_file)
+        if compile and os.path.exists(stub_file):
+            raise BaseError(stub_file + " already exists! Please delete.")
+        if not self.dry_run:
+            with open(stub_file, 'w', encoding="utf-8") as f:
+                content = (
+                    textwrap.dedent(f"""
+                    def __bootstrap__():
+                       global __bootstrap__, __file__, __loader__
+                       import sys, os, importlib.resources as irs, importlib.util
+                    #rtld   import dl
+                       with irs.files(__name__).joinpath(
+                         {os.path.basename(ext._file_name)!r}) as __file__:
+                          del __bootstrap__
+                          if '__loader__' in globals():
+                              del __loader__
+                    #rtld      old_flags = sys.getdlopenflags()
+                          old_dir = os.getcwd()
+                          try:
+                            os.chdir(os.path.dirname(__file__))
+                    #rtld        sys.setdlopenflags(dl.RTLD_NOW)
+                            spec = importlib.util.spec_from_file_location(
+                                       __name__, __file__)
+                            mod = importlib.util.module_from_spec(spec)
+                            spec.loader.exec_module(mod)
+                          finally:
+                    #rtld        sys.setdlopenflags(old_flags)
+                            os.chdir(old_dir)
+                    __bootstrap__()
+                    """)
+                    .lstrip()
+                    .replace('#rtld', '#rtld' * (not have_rtld))
+                )
+                f.write(content)
+        if compile:
+            self._compile_and_remove_stub(stub_file)
+
+    def _compile_and_remove_stub(self, stub_file: str):
+        from distutils.util import byte_compile
+
+        byte_compile([stub_file], optimize=0, force=True, dry_run=self.dry_run)
+        optimize = self.get_finalized_command('install_lib').optimize
+        if optimize > 0:
+            byte_compile(
+                [stub_file],
+                optimize=optimize,
+                force=True,
+                dry_run=self.dry_run,
+            )
+        if os.path.exists(stub_file) and not self.dry_run:
+            os.unlink(stub_file)
+
+    def initialize_options(self):
+        """
+        Initialize all options for the build_ext command to their default values.
+
+        This method sets up the initial state of the setuptools build_ext command,
+        including inherited options and setuptools-specific attributes.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            This method initializes the following setuptools-specific attributes:
+            - shlib_compiler: Set to None, will later hold a compiler instance for building shared libraries
+            - shlibs: Set to empty list, will contain Library extensions that need shared library compilation
+            - ext_map: Set to empty dict, will map extension full names to Extension objects for quick lookup
+            - editable_mode: Set to False, controls whether extensions are built in editable/development mode
+
+            This method should be called automatically by the distutils command framework and
+            typically does not need to be called directly by user code.
+        """
+        raise NotImplementedError
+
+
+if use_stubs or os.name == 'nt':
+    # Build shared libraries
+    #
+    def link_shared_object(
+        self,
+        objects,
+        output_libname,
+        output_dir=None,
+        libraries=None,
+        library_dirs=None,
+        runtime_library_dirs=None,
+        export_symbols=None,
+        debug: bool = False,
+        extra_preargs=None,
+        extra_postargs=None,
+        build_temp=None,
+        target_lang=None,
+    ) -> None:
+        self.link(
+            self.SHARED_LIBRARY,
+            objects,
+            output_libname,
+            output_dir,
+            libraries,
+            library_dirs,
+            runtime_library_dirs,
+            export_symbols,
+            debug,
+            extra_preargs,
+            extra_postargs,
+            build_temp,
+            target_lang,
+        )
+
+else:
+    # Build static libraries everywhere else
+    libtype = 'static'
+
+    def link_shared_object(
+        self,
+        objects,
+        output_libname,
+        output_dir=None,
+        libraries=None,
+        library_dirs=None,
+        runtime_library_dirs=None,
+        export_symbols=None,
+        debug: bool = False,
+        extra_preargs=None,
+        extra_postargs=None,
+        build_temp=None,
+        target_lang=None,
+    ) -> None:
+        # XXX we need to either disallow these attrs on Library instances,
+        # or warn/abort here if set, or something...
+        # libraries=None, library_dirs=None, runtime_library_dirs=None,
+        # export_symbols=None, extra_preargs=None, extra_postargs=None,
+        # build_temp=None
+
+        assert output_dir is None  # distutils build_ext doesn't pass this
+        output_dir, filename = os.path.split(output_libname)
+        basename, _ext = os.path.splitext(filename)
+        if self.library_filename("x").startswith('lib'):
+            # strip 'lib' prefix; this is kludgy if some platform uses
+            # a different prefix
+            basename = basename[3:]
+
+        self.create_static_lib(objects, basename, output_dir, debug, target_lang)
+
+=== setuptools/command/install_egg_info.py
+import os
+
+from setuptools import Command, namespaces
+from setuptools.archive_util import unpack_archive
+
+
+
+from distutils import dir_util, log
+
+
+class install_egg_info(namespaces.Installer, Command):
+    """Install an .egg-info directory for the package"""
+
+    description = "Install an .egg-info directory for the package"
+
+    user_options = [
+        ('install-dir=', 'd', "directory to install to"),
+    ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_outputs(self):
+        return self.outputs
+
+    def initialize_options(self):
+        """
+        Initialize command options to their default values.
+
+        This method is called during the command setup phase to set all command options
+        to their initial default state before any configuration or command-line arguments
+        are processed.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            - Sets install_dir to None, which will be properly configured later in finalize_options()
+            - This is part of the distutils command initialization protocol
+            - The actual installation directory will be determined from the 'install_lib' command
+              during the finalize_options() phase
+        """
+        raise NotImplementedError
+
+=== setuptools/config/pyprojecttoml.py
+"""
+Load setuptools configuration from ``pyproject.toml`` files.
+
+**PRIVATE MODULE**: API reserved for setuptools internal usage only.
+
+To read project metadata, consider using
+``build.util.project_wheel_metadata`` (https://pypi.org/project/build/).
+For simple scenarios, you can also try parsing the file directly
+with the help of ``tomllib`` or ``tomli``.
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+from collections.abc import Mapping
+from contextlib import contextmanager
+from functools import partial
+from types import TracebackType
+from typing import TYPE_CHECKING, Any, Callable
+
+from .._path import StrPath
+from ..errors import FileError, InvalidConfigError
+from ..warnings import SetuptoolsWarning
+from . import expand as _expand
+from ._apply_pyprojecttoml import _PREVIOUSLY_DEFINED, _MissingDynamic
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from setuptools.dist import Distribution
+
+_logger = logging.getLogger(__name__)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class _ConfigExpander:
+    def __init__(
+        self,
+        config: dict,
+        root_dir: StrPath | None = None,
+        ignore_option_errors: bool = False,
+        dist: Distribution | None = None,
+    ) -> None:
+        self.config = config
+        self.root_dir = root_dir or os.getcwd()
+        self.project_cfg = config.get("project", {})
+        self.dynamic = self.project_cfg.get("dynamic", [])
+        self.setuptools_cfg = config.get("tool", {}).get("setuptools", {})
+        self.dynamic_cfg = self.setuptools_cfg.get("dynamic", {})
+        self.ignore_option_errors = ignore_option_errors
+        self._dist = dist
+        self._referenced_files = set[str]()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _ensure_previously_set(self, dist: Distribution, field: str):
+        previous = _PREVIOUSLY_DEFINED[field](dist)
+        if previous is None and not self.ignore_option_errors:
+            msg = (
+                f"No configuration found for dynamic {field!r}.\n"
+                "Some dynamic fields need to be specified via `tool.setuptools.dynamic`"
+                "\nothers must be specified via the equivalent attribute in `setup.py`."
+            )
+            raise InvalidConfigError(msg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _parse_requirements_list(value):
+    return [
+        line
+        for line in value.splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class _EnsurePackagesDiscovered(_expand.EnsurePackagesDiscovered):
+    def __init__(
+        self, distribution: Distribution, project_cfg: dict, setuptools_cfg: dict
+    ) -> None:
+        super().__init__(distribution)
+        self._project_cfg = project_cfg
+        self._setuptools_cfg = setuptools_cfg
+
+    def __enter__(self) -> Self:
+        """When entering the context, the values of ``packages``, ``py_modules`` and
+        ``package_dir`` that are missing in ``dist`` are copied from ``setuptools_cfg``.
+        """
+        dist, cfg = self._dist, self._setuptools_cfg
+        package_dir: dict[str, str] = cfg.setdefault("package-dir", {})
+        package_dir.update(dist.package_dir or {})
+        dist.package_dir = package_dir  # needs to be the same object
+
+        dist.set_defaults._ignore_ext_modules()  # pyproject.toml-specific behaviour
+
+        # Set `name`, `py_modules` and `packages` in dist to short-circuit
+        # auto-discovery, but avoid overwriting empty lists purposefully set by users.
+        if dist.metadata.name is None:
+            dist.metadata.name = self._project_cfg.get("name")
+        if dist.py_modules is None:
+            dist.py_modules = cfg.get("py-modules")
+        if dist.packages is None:
+            dist.packages = cfg.get("packages")
+
+        return super().__enter__()
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        """When exiting the context, if values of ``packages``, ``py_modules`` and
+        ``package_dir`` are missing in ``setuptools_cfg``, copy from ``dist``.
+        """
+        # If anything was discovered set them back, so they count in the final config.
+        self._setuptools_cfg.setdefault("packages", self._dist.packages)
+        self._setuptools_cfg.setdefault("py-modules", self._dist.py_modules)
+        return super().__exit__(exc_type, exc_value, traceback)
+
+
+class _ExperimentalConfiguration(SetuptoolsWarning):
+    _SUMMARY = (
+        "`{subject}` in `pyproject.toml` is still *experimental* "
+        "and likely to change in future releases."
+    )
+
+
+class _ToolsTypoInMetadata(SetuptoolsWarning):
+    _SUMMARY = (
+        "Ignoring [tools.setuptools] in pyproject.toml, did you mean [tool.setuptools]?"
+    )
+
+
+def apply_configuration(dist: Distribution, filepath: StrPath, ignore_option_errors: bool = False) -> Distribution:
+    """
+    Apply the configuration from a ``pyproject.toml`` file into an existing
+    distribution object.
+
+    This function reads and processes a pyproject.toml configuration file, validates it,
+    expands any dynamic fields or directives, and applies the resulting configuration
+    to the provided Distribution object.
+
+    Parameters
+    ----------
+    dist : Distribution
+        The setuptools Distribution object to which the configuration will be applied.
+        This object will be modified in-place with the settings from the pyproject.toml file.
+
+    filepath : StrPath
+        Path to the pyproject.toml configuration file. Can be a string or path-like object.
+        The file must exist and contain valid TOML format with setuptools configuration.
+
+    ignore_option_errors : bool, optional
+        Whether to silently ignore options whose values could not be resolved due to
+        exceptions in directives (such as file:, attr:, etc.). If False (default),
+        exceptions are propagated as expected. If True, errors are logged but do not
+        stop processing.
+
+    Returns
+    -------
+    Distribution
+        The same Distribution object that was passed in, now updated with the
+        configuration from the pyproject.toml file.
+
+    Raises
+    ------
+    FileError
+        If the specified configuration file does not exist.
+    ValueError
+        If the pyproject.toml file contains invalid configuration that fails validation.
+    InvalidConfigError
+        If required dynamic fields are missing or improperly configured.
+
+    Notes
+    -----
+    The function modifies the Distribution object in-place and also returns it for
+    convenience. Dynamic fields like version, readme, dependencies, and entry-points
+    are automatically resolved from their sources (files, attributes, etc.) during
+    this process.
+    """
+    raise NotImplementedError

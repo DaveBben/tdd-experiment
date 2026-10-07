@@ -1,0 +1,296 @@
+=== mlflow/data/dataset.py
+import json
+from abc import abstractmethod
+from typing import Any
+
+from mlflow.data.dataset_source import DatasetSource
+from mlflow.entities import Dataset as DatasetEntity
+
+
+class Dataset:
+    """
+    Represents a dataset for use with MLflow Tracking, including the name, digest (hash),
+    schema, and profile of the dataset as well as source information (e.g. the S3 bucket or
+    managed Delta table from which the dataset was derived). Most datasets expose features
+    and targets for training and evaluation as well.
+    """
+
+
+
+
+
+
+
+
+
+
+
+    @abstractmethod
+    def _compute_digest(self) -> str:
+        """Computes a digest for the dataset. Called if the user doesn't supply
+        a digest when constructing the dataset.
+
+        Returns:
+            A string digest for the dataset. We recommend a maximum digest length
+            of 10 characters with an ideal length of 8 characters.
+
+        """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def to_json(self) -> str:
+        """
+        Obtains a JSON string representation of the :py:class:`Dataset
+        <mlflow.data.dataset.Dataset>`.
+
+        Returns:
+            A JSON string representation of the :py:class:`Dataset <mlflow.data.dataset.Dataset>`.
+        """
+
+        return json.dumps(self.to_dict())
+
+    def _get_source_type(self) -> str:
+        """Returns the type of the dataset's underlying source."""
+
+        return self.source._get_source_type()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def source(self) -> DatasetSource:
+        """
+        Information about the dataset's source, represented as an instance of
+        :py:class:`DatasetSource <mlflow.data.dataset_source.DatasetSource>`. For example, this
+        may be the S3 location or the name of the managed Delta Table from which the dataset
+        was derived.
+        """
+        return self._source
+
+    @property
+    @abstractmethod
+    def profile(self) -> Any | None:
+        """
+        Optional summary statistics for the dataset, such as the number of rows in a table, the
+        mean / median / std of each table column, etc.
+        """
+
+    @property
+    @abstractmethod
+    def schema(self) -> Any | None:
+        """
+        Optional dataset schema, such as an instance of :py:class:`mlflow.types.Schema` representing
+        the features and targets of the dataset.
+        """
+
+    def _to_mlflow_entity(self) -> DatasetEntity:
+        """
+        Returns:
+            A `mlflow.entities.Dataset` instance representing the dataset.
+        """
+        dataset_dict = self.to_dict()
+        return DatasetEntity(
+            name=dataset_dict["name"],
+            digest=dataset_dict["digest"],
+            source_type=dataset_dict["source_type"],
+            source=dataset_dict["source"],
+            schema=dataset_dict.get("schema"),
+            profile=dataset_dict.get("profile"),
+        )
+
+    def __init__(self, source: DatasetSource, name: str | None = None, digest: str | None = None):
+        """Initialize a dataset with its source and optional identity metadata.
+
+        If ``digest`` is falsy (including None or an empty string), compute it with the subclass's
+        ``_compute_digest()``. Subclasses should call this constructor only after initializing the
+        state needed for that computation. If ``name`` is None, ``name`` falls back to ``"dataset"``.
+        """
+        raise NotImplementedError
+
+    def to_dict(self) -> dict[str, str]:
+        """Return the base dataset configuration with ``name``, ``digest``, serialized ``source``, and ``source_type`` entries."""
+        raise NotImplementedError
+
+    @property
+    def digest(self) -> str:
+        """
+        A compact hash or fingerprint of the dataset, e.g. ``"498c7496"``.
+
+        This property returns the stored dataset fingerprint. It is computed during initialization
+        when the supplied digest is falsy; the base class does not guarantee collision-free uniqueness.
+
+        Returns:
+            str: A string digest representing the dataset fingerprint. The digest is typically
+                 8-10 characters long and serves as a compact identifier.
+
+        Notes:
+            - The digest is computed once during dataset initialization and then returned unchanged
+            - If a falsy digest is provided during construction, it is computed using the
+              dataset's ``_compute_digest()`` method
+            - Digests can be used to compare separately constructed or logged dataset snapshots;
+              the stored value is not recomputed when source state later mutates
+        """
+        raise NotImplementedError
+
+    @property
+    def name(self) -> str:
+        """
+        The name of the dataset, e.g. ``"iris_data"``, ``"myschema.mycatalog.mytable@v1"``, etc.
+
+        This property returns the dataset's name if one was provided during initialization,
+        otherwise returns the default name ``"dataset"``.
+
+        Returns:
+            str: The name of the dataset. If no name was specified during dataset creation,
+                 returns the default value ``"dataset"``.
+
+        Note:
+            The name is typically used for identification and logging purposes in MLflow
+            tracking. It should be descriptive enough to distinguish this dataset from
+            others in your MLflow experiments.
+        """
+        raise NotImplementedError
+
+=== mlflow/data/dataset_source.py
+import json
+from abc import abstractmethod
+from typing import Any
+
+
+class DatasetSource:
+    """
+    Represents the source of a dataset used in MLflow Tracking, providing information such as
+    cloud storage location, delta table name / version, etc.
+    """
+
+    @staticmethod
+    @abstractmethod
+    def _get_source_type() -> str:
+        """Obtains a string representing the source type of the dataset.
+
+        Returns:
+            A string representing the source type of the dataset, e.g. "s3", "delta_table", ...
+
+        """
+
+    @abstractmethod
+    def load(self) -> Any:
+        """
+        Loads files / objects referred to by the DatasetSource. For example, depending on the type
+        of :py:class:`DatasetSource <mlflow.data.dataset_source.DatasetSource>`, this may download
+        source CSV files from S3 to the local filesystem, load a source Delta Table as a Spark
+        DataFrame, etc.
+
+        Returns:
+            The downloaded source, e.g. a local filesystem path, a Spark DataFrame, etc.
+
+        """
+
+    @staticmethod
+    @abstractmethod
+    def _can_resolve(raw_source: Any) -> bool:
+        """Determines whether this type of DatasetSource can be resolved from a specified raw source
+        object. For example, an S3DatasetSource can be resolved from an S3 URI like
+        "s3://mybucket/path/to/iris/data" but not from an Azure Blob Storage URI like
+        "wasbs:/account@host.blob.core.windows.net".
+
+        Args:
+            raw_source: The raw source, e.g. a string like "s3://mybucket/path/to/iris/data".
+
+        Returns:
+            True if this DatasetSource can resolve the raw source, False otherwise.
+
+        """
+
+    @classmethod
+    @abstractmethod
+    def _resolve(cls, raw_source: Any) -> "DatasetSource":
+        """Constructs an instance of the DatasetSource from a raw source object, such as a
+        string URI like "s3://mybucket/path/to/iris/data" or a delta table identifier
+        like "my.delta.table@2".
+
+        Args:
+            raw_source: The raw source, e.g. a string like "s3://mybucket/path/to/iris/data".
+
+        Returns:
+            A DatasetSource instance derived from the raw_source.
+
+        """
+
+    @abstractmethod
+    def to_dict(self) -> dict[str, Any]:
+        """Obtains a JSON-compatible dictionary representation of the DatasetSource.
+
+        Returns:
+            A JSON-compatible dictionary representation of the DatasetSource.
+
+        """
+
+
+
+
+
+
+
+
+
+
+
+
+    @classmethod
+    @abstractmethod
+    def from_dict(cls, source_dict: dict[Any, Any]) -> "DatasetSource":
+        """Constructs an instance of the DatasetSource from a dictionary representation.
+
+        Args:
+            source_dict: A dictionary representation of the DatasetSource.
+
+        Returns:
+            A DatasetSource instance.
+
+        """
+
+    @classmethod
+    def from_json(cls, source_json: str) -> "DatasetSource":
+        """Constructs an instance of the DatasetSource from a JSON string representation.
+
+        Args:
+            source_json: A JSON string representation of the DatasetSource.
+
+        Returns:
+            A DatasetSource instance.
+
+        """
+        return cls.from_dict(json.loads(source_json))
+
+    def to_json(self) -> str:
+        """Serialize this source's ``to_dict()`` representation as a JSON string."""
+        raise NotImplementedError

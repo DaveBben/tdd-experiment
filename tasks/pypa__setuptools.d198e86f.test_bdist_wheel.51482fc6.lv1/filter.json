@@ -1,0 +1,165 @@
+{
+ "task": "pypa__setuptools.d198e86f.test_bdist_wheel.51482fc6.lv1",
+ "image": "libercoders/featurebench-specs_setuptools-instance_732b794d@sha256:f3d9abad25bc0f3c32208d33115df07ee6af2d34e00de8e0a004e1af127072a2",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 30 passed in 4.46s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 148 passed in 3.71s =============================="
+ },
+ "mutant_pool": 2003,
+ "stub_compiles": true,
+ "stub_imports": false,
+ "stub_p2p": {
+  "exit": 1,
+  "failing": [
+   "setuptools/tests/config/test_setupcfg.py::TestMetadata::test_invalid_options_previously_deprecated[Invalid"
+  ],
+  "summary": "======================== 2 failed, 145 passed in 3.71s ========================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/command/_framework_compat.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/command/build_ext.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/compilers/C/base.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/dist.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/spawn.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_distutils/sysconfig.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_normalization.py": {
+   "lines": 2,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_vendor/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/command/bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/config/_apply_pyprojecttoml.py": {
+   "lines": 3,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/config/pyprojecttoml.py": {
+   "lines": 8,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/_distutils/command/_framework_compat.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/config/_apply_pyprojecttoml.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/config/pyprojecttoml.py": {
+   "lines": 4,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/wheel/bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-68.2.2-py311h06a4308_0/lib/python3.11/site-packages/setuptools/_distutils/command/_framework_compat.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-68.2.2-py311h06a4308_0/lib/python3.11/site-packages/setuptools/config/_apply_pyprojecttoml.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-68.2.2-py311h06a4308_0/lib/python3.11/site-packages/setuptools/config/pyprojecttoml.py": {
+   "lines": 4,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/command/_framework_compat.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/command/build_ext.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/compilers/C/base.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/dist.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/spawn.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_distutils/sysconfig.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_normalization.py": {
+   "lines": 2,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_vendor/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/command/bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/config/_apply_pyprojecttoml.py": {
+   "lines": 3,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/config/pyprojecttoml.py": {
+   "lines": 8,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/wheel-0.41.2-py311h06a4308_0/lib/python3.11/site-packages/wheel/bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/wheel-0.45.1-pyhd8ed1ab_1/site-packages/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/testbed/setuptools/_vendor/wheel/_bdist_wheel.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

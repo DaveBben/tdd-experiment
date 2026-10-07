@@ -1,0 +1,1006 @@
+{
+ "task": "pypa__setuptools.d198e86f.test_bdist_wheel.51482fc6.lv1",
+ "pool": 2003,
+ "mutants": [
+  {
+   "path": "setuptools/_core_metadata.py",
+   "line": 127,
+   "op": "statement",
+   "start": 4305,
+   "end": 4337,
+   "old": "val = val.strip().split('\\n')[0]",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "setuptools/_distutils/cmd.py",
+   "line": 350,
+   "op": "return",
+   "start": 14882,
+   "end": 14956,
+   "old": "return self.distribution.reinitialize_command(command, reinit_subcommands)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "setuptools/_distutils/cmd.py",
+   "line": 265,
+   "op": "statement",
+   "start": 11170,
+   "end": 11211,
+   "old": "ok = all(isinstance(v, str) for v in val)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "setuptools/_distutils/command/_framework_compat.py",
+   "line": 18,
+   "op": "comparison",
+   "start": 289,
+   "end": 324,
+   "old": "(3, 9) < sys.version_info < (3, 10)",
+   "new": "((3, 9) <= sys.version_info < (3, 10))",
+   "id": 3
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 134,
+   "op": "statement",
+   "start": 4890,
+   "end": 4910,
+   "old": "self.parallel = None",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 642,
+   "op": "statement",
+   "start": 25373,
+   "end": 25401,
+   "old": "swig_cmd = [swig, \"-python\"]",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 690,
+   "op": "statement",
+   "start": 27183,
+   "end": 27228,
+   "old": "filename = self.get_ext_filename(modpath[-1])",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 175,
+   "op": "comparison",
+   "start": 6212,
+   "end": 6232,
+   "old": "self.package is None",
+   "new": "(self.package is not None)",
+   "id": 7
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 192,
+   "op": "statement",
+   "start": 6957,
+   "end": 7023,
+   "old": "self.include_dirs.append(os.path.join(sys.exec_prefix, 'include'))",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 206,
+   "op": "statement",
+   "start": 7595,
+   "end": 7614,
+   "old": "self.libraries = []",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 277,
+   "op": "statement",
+   "start": 10800,
+   "end": 10834,
+   "old": "self.undef = self.undef.split(',')",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 286,
+   "op": "statement",
+   "start": 11083,
+   "end": 11132,
+   "old": "user_include = os.path.join(USER_BASE, \"include\")",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 320,
+   "op": "statement",
+   "start": 12588,
+   "end": 12641,
+   "old": "build_clib = self.get_finalized_command('build_clib')",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 630,
+   "op": "statement",
+   "start": 24944,
+   "end": 24982,
+   "old": "(base, ext) = os.path.splitext(source)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 769,
+   "op": "boolean",
+   "start": 30571,
+   "end": 30613,
+   "old": "sys.platform == \"win32\" and not is_mingw()",
+   "new": "(sys.platform == 'win32' or not is_mingw())",
+   "id": 14
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 406,
+   "op": "statement",
+   "start": 16447,
+   "end": 16619,
+   "old": "raise DistutilsSetupError(\n                    \"first element of each tuple in 'ext_modules' \"\n                    \"must be the extension name (a string)\"\n                )",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 755,
+   "op": "comparison",
+   "start": 29829,
+   "end": 29844,
+   "old": "len(parts) >= 2",
+   "new": "(len(parts) > 2)",
+   "id": 16
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 170,
+   "op": "constant",
+   "start": 6093,
+   "end": 6100,
+   "old": "'force'",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 286,
+   "op": "constant",
+   "start": 11122,
+   "end": 11131,
+   "old": "\"include\"",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 390,
+   "op": "comparison",
+   "start": 15863,
+   "end": 15876,
+   "old": "len(ext) != 2",
+   "new": "(len(ext) == 2)",
+   "id": 19
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 505,
+   "op": "statement",
+   "start": 20322,
+   "end": 20334,
+   "old": "fut.result()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 810,
+   "op": "arithmetic",
+   "start": 32641,
+   "end": 32679,
+   "old": "ext.libraries + ['python' + ldversion]",
+   "new": "(ext.libraries - ['python' + ldversion])",
+   "id": 21
+  },
+  {
+   "path": "setuptools/_distutils/command/build_ext.py",
+   "line": 451,
+   "op": "constant",
+   "start": 18332,
+   "end": 18333,
+   "old": "1",
+   "new": "(2)",
+   "id": 22
+  },
+  {
+   "path": "setuptools/_distutils/command/install.py",
+   "line": 127,
+   "op": "return",
+   "start": 3644,
+   "end": 3659,
+   "old": "return 'Python'",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "setuptools/_distutils/command/install.py",
+   "line": 125,
+   "op": "constant",
+   "start": 3619,
+   "end": 3625,
+   "old": "'PyPy'",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "setuptools/_distutils/command/install_data.py",
+   "line": 37,
+   "op": "statement",
+   "start": 945,
+   "end": 961,
+   "old": "self.root = None",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "setuptools/_distutils/command/install_data.py",
+   "line": 63,
+   "op": "statement",
+   "start": 1799,
+   "end": 1815,
+   "old": "self.mkpath(dir)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "setuptools/_distutils/command/install_data.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1402,
+   "end": 1415,
+   "old": "self._copy(f)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "setuptools/_distutils/command/install_data.py",
+   "line": 73,
+   "op": "statement",
+   "start": 2181,
+   "end": 2206,
+   "old": "data = convert_path(data)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "setuptools/_distutils/command/install_headers.py",
+   "line": 37,
+   "op": "statement",
+   "start": 978,
+   "end": 1007,
+   "old": "self.mkpath(self.install_dir)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "setuptools/_distutils/command/install_lib.py",
+   "line": 60,
+   "op": "constant",
+   "start": 2206,
+   "end": 2211,
+   "old": "False",
+   "new": "(True)",
+   "id": 30
+  },
+  {
+   "path": "setuptools/_distutils/command/install_lib.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2609,
+   "end": 2618,
+   "old": "'install'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 393,
+   "op": "statement",
+   "start": 16072,
+   "end": 16082,
+   "old": "build = {}",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 526,
+   "op": "return",
+   "start": 21521,
+   "end": 21575,
+   "old": "return (libraries, library_dirs, runtime_library_dirs)",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 559,
+   "op": "return",
+   "start": 22735,
+   "end": 22746,
+   "old": "return lang",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 1285,
+   "op": "statement",
+   "start": 50092,
+   "end": 50162,
+   "old": "(module_name, class_name, long_description) = compiler_class[compiler]",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 538,
+   "op": "statement",
+   "start": 21945,
+   "end": 21986,
+   "old": "newer = newer_group(objects, output_file)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 1338,
+   "op": "boolean",
+   "start": 52520,
+   "end": 52569,
+   "old": "isinstance(macro, tuple) and 1 <= len(macro) <= 2",
+   "new": "(isinstance(macro, tuple) or 1 <= len(macro) <= 2)",
+   "id": 37
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 405,
+   "op": "constant",
+   "start": 16492,
+   "end": 16496,
+   "old": "'-c'",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 442,
+   "op": "boolean",
+   "start": 18029,
+   "end": 18052,
+   "old": "self.include_dirs or []",
+   "new": "(self.include_dirs and [])",
+   "id": 39
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/base.py",
+   "line": 523,
+   "op": "constant",
+   "start": 21433,
+   "end": 21497,
+   "old": "\"'runtime_library_dirs' (if supplied) must be a list of strings\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/unix.py",
+   "line": 214,
+   "op": "statement",
+   "start": 7629,
+   "end": 7709,
+   "old": "compiler_so_cxx = compiler_fixup(self.compiler_so_cxx, cc_args + extra_postargs)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/unix.py",
+   "line": 422,
+   "op": "return",
+   "start": 16506,
+   "end": 16530,
+   "old": "return next(found, None)",
+   "new": "return None",
+   "id": 42
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/unix.py",
+   "line": 217,
+   "op": "statement",
+   "start": 7790,
+   "end": 7901,
+   "old": "self.spawn(\n                    compiler_so_cxx + cc_args + [src, '-o', obj] + extra_postargs\n                )",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "setuptools/_distutils/compilers/C/unix.py",
+   "line": 216,
+   "op": "constant",
+   "start": 7767,
+   "end": 7772,
+   "old": "'c++'",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "setuptools/_distutils/dist.py",
+   "line": 982,
+   "op": "statement",
+   "start": 41312,
+   "end": 41347,
+   "old": "self.have_run[command_name] = False",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "setuptools/_distutils/dist.py",
+   "line": 1021,
+   "op": "statement",
+   "start": 42851,
+   "end": 42864,
+   "old": "cmd_obj.run()",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "setuptools/_distutils/dist.py",
+   "line": 976,
+   "op": "statement",
+   "start": 41129,
+   "end": 41170,
+   "old": "command_name = command.get_command_name()",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "setuptools/_distutils/dist.py",
+   "line": 979,
+   "op": "return",
+   "start": 41218,
+   "end": 41232,
+   "old": "return command",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "setuptools/_distutils/extension.py",
+   "line": 135,
+   "op": "boolean",
+   "start": 6108,
+   "end": 6134,
+   "old": "runtime_library_dirs or []",
+   "new": "(runtime_library_dirs and [])",
+   "id": 49
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 587,
+   "op": "return",
+   "start": 19385,
+   "end": 19419,
+   "old": "return get_config_vars().get(name)",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 174,
+   "op": "boolean",
+   "start": 5257,
+   "end": 5273,
+   "old": "not python_build",
+   "new": "(python_build)",
+   "id": 51
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 347,
+   "op": "statement",
+   "start": 11127,
+   "end": 11168,
+   "old": "cflags = os.environ.get('CFLAGS', cflags)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 351,
+   "op": "statement",
+   "start": 11331,
+   "end": 11359,
+   "old": "cpp = _add_flags(cpp, 'CPP')",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 137,
+   "op": "comparison",
+   "start": 4082,
+   "end": 4100,
+   "old": "prefix is not None",
+   "new": "(prefix is None)",
+   "id": 54
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 290,
+   "op": "constant",
+   "start": 9455,
+   "end": 9463,
+   "old": "\"darwin\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 586,
+   "op": "constant",
+   "start": 19378,
+   "end": 19379,
+   "old": "2",
+   "new": "(3)",
+   "id": 56
+  },
+  {
+   "path": "setuptools/_distutils/sysconfig.py",
+   "line": 202,
+   "op": "constant",
+   "start": 6202,
+   "end": 6208,
+   "old": "'CONF'",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 199,
+   "op": "statement",
+   "start": 6361,
+   "end": 6386,
+   "old": "lookup = dict(os.environ)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 259,
+   "op": "comparison",
+   "start": 8416,
+   "end": 8437,
+   "old": "_wordchars_re is None",
+   "new": "(_wordchars_re is not None)",
+   "id": 59
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 156,
+   "op": "comparison",
+   "start": 4756,
+   "end": 4771,
+   "old": "os.name == 'nt'",
+   "new": "(os.name != 'nt')",
+   "id": 60
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 284,
+   "op": "arithmetic",
+   "start": 9077,
+   "end": 9084,
+   "old": "end + 1",
+   "new": "(end - 1)",
+   "id": 61
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 288,
+   "op": "statement",
+   "start": 9176,
+   "end": 9204,
+   "old": "m = _squote_re.match(s, end)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 347,
+   "op": "constant",
+   "start": 10931,
+   "end": 10934,
+   "old": "'n'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 347,
+   "op": "constant",
+   "start": 10947,
+   "end": 10954,
+   "old": "'false'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "setuptools/_distutils/util.py",
+   "line": 287,
+   "op": "constant",
+   "start": 9125,
+   "end": 9128,
+   "old": "\"'\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "setuptools/_normalization.py",
+   "line": 138,
+   "op": "return",
+   "start": 4175,
+   "end": 4506,
+   "old": "return (\n        # Per https://packaging.python.org/en/latest/specifications/name-normalization/#name-normalization\n        re.sub(r\"[-_.]+\", \"-\", safe_name(value))\n        .lower()\n        # Per https://packaging.python.org/en/latest/specifications/binary-distribution-format/#escaping-and-unicode\n        .replace(\"-\", \"_\")\n    )",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "setuptools/_normalization.py",
+   "line": 179,
+   "op": "statement",
+   "start": 5713,
+   "end": 5788,
+   "old": "_canonicalize_license_expression = _missing_canonicalize_license_expression",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "setuptools/_path.py",
+   "line": 19,
+   "op": "statement",
+   "start": 473,
+   "end": 504,
+   "old": "dirname = os.path.dirname(path)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "setuptools/command/bdist_wheel.py",
+   "line": 100,
+   "op": "boolean",
+   "start": 2880,
+   "end": 2945,
+   "old": "not soabi and impl in (\"cp\", \"pp\") and hasattr(sys, \"maxunicode\")",
+   "new": "(not soabi or impl in ('cp', 'pp') or hasattr(sys, 'maxunicode'))",
+   "id": 69
+  },
+  {
+   "path": "setuptools/command/bdist_wheel.py",
+   "line": 100,
+   "op": "comparison",
+   "start": 2894,
+   "end": 2914,
+   "old": "impl in (\"cp\", \"pp\")",
+   "new": "(impl not in ('cp', 'pp'))",
+   "id": 70
+  },
+  {
+   "path": "setuptools/command/bdist_wheel.py",
+   "line": 124,
+   "op": "constant",
+   "start": 3859,
+   "end": 3862,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "setuptools/command/build_ext.py",
+   "line": 208,
+   "op": "statement",
+   "start": 8307,
+   "end": 8350,
+   "old": "self.ext_map[fullname.split('.')[-1]] = ext",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "setuptools/command/build_ext.py",
+   "line": 166,
+   "op": "boolean",
+   "start": 6573,
+   "end": 6604,
+   "old": "not isinstance(ext_suffix, str)",
+   "new": "(isinstance(ext_suffix, str))",
+   "id": 73
+  },
+  {
+   "path": "setuptools/command/build_ext.py",
+   "line": 308,
+   "op": "statement",
+   "start": 12483,
+   "end": 12509,
+   "old": "skip(dep, \"doesn't exist\")",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "setuptools/command/build_ext.py",
+   "line": 306,
+   "op": "constant",
+   "start": 12433,
+   "end": 12437,
+   "old": "True",
+   "new": "(False)",
+   "id": 75
+  },
+  {
+   "path": "setuptools/command/egg_info.py",
+   "line": 714,
+   "op": "statement",
+   "start": 25712,
+   "end": 25733,
+   "old": "egg += f\"-{platform}\"",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "setuptools/command/install_egg_info.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1953,
+   "end": 1992,
+   "old": "log.debug(\"Copying %s to %s\", src, dst)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "setuptools/command/install_egg_info.py",
+   "line": 24,
+   "op": "constant",
+   "start": 607,
+   "end": 620,
+   "old": "'install_dir'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "setuptools/command/install_lib.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4033,
+   "end": 4070,
+   "old": "unpack_directory(infile, outfile, pf)",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "setuptools/command/install_lib.py",
+   "line": 80,
+   "op": "constant",
+   "start": 2574,
+   "end": 2587,
+   "old": "'__init__.py'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "setuptools/command/install_lib.py",
+   "line": 123,
+   "op": "return",
+   "start": 3886,
+   "end": 3898,
+   "old": "return False",
+   "new": "return None",
+   "id": 81
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 88,
+   "op": "statement",
+   "start": 2785,
+   "end": 2842,
+   "old": "tool_table = config.get(\"tool\", {}).get(\"setuptools\", {})",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 133,
+   "op": "boolean",
+   "start": 4692,
+   "end": 4740,
+   "old": "not (field in project_table or field in dynamic)",
+   "new": "(field in project_table or field in dynamic)",
+   "id": 83
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 142,
+   "op": "constant",
+   "start": 5076,
+   "end": 5079,
+   "old": "\"_\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 316,
+   "op": "statement",
+   "start": 11361,
+   "end": 11404,
+   "old": "cmd_opts[cmd][key] = (str(filename), value)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 93,
+   "op": "constant",
+   "start": 2948,
+   "end": 2963,
+   "old": "\"license-files\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "setuptools/config/_apply_pyprojecttoml.py",
+   "line": 102,
+   "op": "constant",
+   "start": 3374,
+   "end": 3507,
+   "old": "\"'tool.setuptools.license-files' is deprecated in favor of \"\n            \"'project.license-files' (available on setuptools>=77.0.0).\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 108,
+   "op": "boolean",
+   "start": 3705,
+   "end": 3730,
+   "old": "load_file(filepath) or {}",
+   "new": "(load_file(filepath) and {})",
+   "id": 88
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 139,
+   "op": "statement",
+   "start": 5140,
+   "end": 5217,
+   "old": "subset = {\"project\": project_table, \"tool\": {\"setuptools\": setuptools_table}}",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 355,
+   "op": "statement",
+   "start": 14172,
+   "end": 14214,
+   "old": "_set_scripts(\"gui-scripts\", \"gui_scripts\")",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 224,
+   "op": "boolean",
+   "start": 8454,
+   "end": 8509,
+   "old": "packages is None or isinstance(packages, (list, tuple))",
+   "new": "(packages is None and isinstance(packages, (list, tuple)))",
+   "id": 91
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 229,
+   "op": "statement",
+   "start": 8614,
+   "end": 8646,
+   "old": "find[\"root_dir\"] = self.root_dir",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 322,
+   "op": "comparison",
+   "start": 12843,
+   "end": 12866,
+   "old": "\"readme\" in dynamic_cfg",
+   "new": "('readme' not in dynamic_cfg)",
+   "id": 93
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 360,
+   "op": "comparison",
+   "start": 14307,
+   "end": 14336,
+   "old": "\"classifiers\" in self.dynamic",
+   "new": "('classifiers' not in self.dynamic)",
+   "id": 94
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 294,
+   "op": "return",
+   "start": 11633,
+   "end": 11699,
+   "old": "return _expand.read_attr(directive[\"attr\"], package_dir, root_dir)",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 120,
+   "op": "constant",
+   "start": 4248,
+   "end": 4266,
+   "old": "\"[tool.distutils]\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "setuptools/config/pyprojecttoml.py",
+   "line": 326,
+   "op": "constant",
+   "start": 13067,
+   "end": 13075,
+   "old": "\"readme\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "setuptools/dist.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4925,
+   "end": 5152,
+   "old": "raise DistutilsSetupError(\n            \"'extras_require' must be a dictionary whose values are \"\n            \"strings or lists of strings containing valid project/version \"\n            \"requirement specifiers.\"\n        ) from e",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "setuptools/namespaces.py",
+   "line": 20,
+   "op": "statement",
+   "start": 382,
+   "end": 417,
+   "old": "log.info(\"Installing %s\", filename)",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

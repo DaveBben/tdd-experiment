@@ -1,0 +1,151 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_line.25304a8b.lv1",
+ "image": "libercoders/featurebench-specs_seaborn-instance_52738fbb@sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 29 passed in 3.06s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 199 passed in 3.67s =============================="
+ },
+ "mutant_pool": 191,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 199 passed in 3.70s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/numpy/_utils/_pep440.py": {
+   "lines": 9,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/torch/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.10/site-packages/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/numpy/_utils/_pep440.py": {
+   "lines": 9,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pandas/util/version/__init__.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/torch/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/pkg_resources/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/lib/python3.11/site-packages/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/packaging-23.1-py311h06a4308_0/lib/python3.11/site-packages/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/pip-23.3.1-py311h06a4308_0/lib/python3.11/site-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/pip-25.3-pyh8b19718_0/site-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-68.2.2-py311h06a4308_0/lib/python3.11/site-packages/pkg_resources/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-68.2.2-py311h06a4308_0/lib/python3.11/site-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/setuptools-80.9.0-pyhff2d567_0/site-packages/setuptools/_vendor/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/wheel-0.41.2-py311h06a4308_0/lib/python3.11/site-packages/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/opt/miniconda3/pkgs/wheel-0.45.1-pyhd8ed1ab_1/site-packages/wheel/vendored/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/usr/lib/python3/dist-packages/pip/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/usr/lib/python3/dist-packages/pkg_resources/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  },
+  "/usr/lib/python3/dist-packages/setuptools/_vendor/packaging/version.py": {
+   "lines": 18,
+   "tracked": false
+  }
+ },
+ "keep": false
+}

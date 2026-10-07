@@ -1,0 +1,1006 @@
+{
+ "task": "mesonbuild__meson.f5d81d07.cargotests.8e49c2d0.lv1",
+ "pool": 197,
+ "mutants": [
+  {
+   "path": "mesonbuild/cargo/cfg.py",
+   "line": 215,
+   "op": "statement",
+   "start": 5337,
+   "end": 5375,
+   "old": "ast_i: _LEX_STREAM_AH = lookahead(ast)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mesonbuild/cargo/cfg.py",
+   "line": 235,
+   "op": "return",
+   "start": 5995,
+   "end": 6036,
+   "old": "return _eval_cfg(parse(lexer(raw)), cfgs)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1286,
+   "end": 1386,
+   "old": "basename = package_name[:-len(suffix)] if suffix and package_name.endswith(suffix) else package_name",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 797,
+   "op": "statement",
+   "start": 35801,
+   "end": 35835,
+   "old": "parts = urllib.parse.urlparse(url)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 800,
+   "op": "statement",
+   "start": 35954,
+   "end": 35985,
+   "old": "branch = branch or query_branch",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 808,
+   "op": "return",
+   "start": 36278,
+   "end": 36309,
+   "old": "return url, revision, directory",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 796,
+   "op": "statement",
+   "start": 35783,
+   "end": 35796,
+   "old": "url = url[4:]",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 804,
+   "op": "statement",
+   "start": 36114,
+   "end": 36140,
+   "old": "directory = directory[:-4]",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 806,
+   "op": "statement",
+   "start": 36164,
+   "end": 36189,
+   "old": "directory += f'-{branch}'",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 819,
+   "op": "statement",
+   "start": 36722,
+   "end": 36767,
+   "old": "raw_cargolock = T.cast('raw.CargoLock', toml)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 820,
+   "op": "statement",
+   "start": 36776,
+   "end": 36821,
+   "old": "cargolock = CargoLock.from_raw(raw_cargolock)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 821,
+   "op": "statement",
+   "start": 36830,
+   "end": 36872,
+   "old": "wraps: T.Dict[str, PackageDefinition] = {}",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 795,
+   "op": "constant",
+   "start": 35766,
+   "end": 35772,
+   "old": "'git+'",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 803,
+   "op": "constant",
+   "start": 36097,
+   "end": 36103,
+   "old": "'.git'",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 799,
+   "op": "constant",
+   "start": 35918,
+   "end": 35919,
+   "old": "0",
+   "new": "(1)",
+   "id": 14
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 819,
+   "op": "constant",
+   "start": 36745,
+   "end": 36760,
+   "old": "'raw.CargoLock'",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 824,
+   "op": "comparison",
+   "start": 37019,
+   "end": 37041,
+   "old": "package.source is None",
+   "new": "(package.source is not None)",
+   "id": 16
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 796,
+   "op": "constant",
+   "start": 35793,
+   "end": 35794,
+   "old": "4",
+   "new": "(5)",
+   "id": 17
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 799,
+   "op": "constant",
+   "start": 35908,
+   "end": 35916,
+   "old": "'branch'",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 827,
+   "op": "comparison",
+   "start": 37159,
+   "end": 37232,
+   "old": "package.source == 'registry+https://github.com/rust-lang/crates.io-index'",
+   "new": "(package.source != 'registry+https://github.com/rust-lang/crates.io-index')",
+   "id": 19
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 828,
+   "op": "statement",
+   "start": 37250,
+   "end": 37277,
+   "old": "checksum = package.checksum",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 831,
+   "op": "statement",
+   "start": 37446,
+   "end": 37528,
+   "old": "url = f'https://crates.io/api/v1/crates/{package.name}/{package.version}/download'",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 832,
+   "op": "statement",
+   "start": 37545,
+   "end": 37592,
+   "old": "directory = f'{package.name}-{package.version}'",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 827,
+   "op": "constant",
+   "start": 37177,
+   "end": 37232,
+   "old": "'registry+https://github.com/rust-lang/crates.io-index'",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 833,
+   "op": "comparison",
+   "start": 37612,
+   "end": 37634,
+   "old": "directory not in wraps",
+   "new": "(directory in wraps)",
+   "id": 24
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 834,
+   "op": "statement",
+   "start": 37656,
+   "end": 38017,
+   "old": "wraps[directory] = PackageDefinition.from_values(meson_depname, subproject_dir, 'file', {\n                        'directory': directory,\n                        'source_url': url,\n                        'source_filename': f'{directory}.tar.gz',\n                        'source_hash': checksum,\n                        'method': 'cargo',\n                    })",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 843,
+   "op": "statement",
+   "start": 38151,
+   "end": 38208,
+   "old": "url, revision, directory = _parse_git_url(package.source)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 852,
+   "op": "statement",
+   "start": 38604,
+   "end": 38675,
+   "old": "mlog.warning(f'Unsupported source URL in {filename}: {package.source}')",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 842,
+   "op": "constant",
+   "start": 38126,
+   "end": 38132,
+   "old": "'git+'",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 844,
+   "op": "comparison",
+   "start": 38228,
+   "end": 38250,
+   "old": "directory not in wraps",
+   "new": "(directory in wraps)",
+   "id": 29
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 835,
+   "op": "constant",
+   "start": 37770,
+   "end": 37781,
+   "old": "'directory'",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 837,
+   "op": "constant",
+   "start": 37861,
+   "end": 37878,
+   "old": "'source_filename'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 839,
+   "op": "constant",
+   "start": 37986,
+   "end": 37993,
+   "old": "'cargo'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 846,
+   "op": "constant",
+   "start": 38381,
+   "end": 38386,
+   "old": "'url'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "mesonbuild/cargo/interpreter.py",
+   "line": 848,
+   "op": "constant",
+   "start": 38463,
+   "end": 38471,
+   "old": "'method'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 472,
+   "op": "return",
+   "start": 16886,
+   "end": 16897,
+   "old": "return args",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 509,
+   "op": "return",
+   "start": 18283,
+   "end": 18391,
+   "old": "return {k: SystemDependency.from_raw(k, v) for k, v in self.package.metadata.get('system-deps', {}).items()}",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 562,
+   "op": "return",
+   "start": 21284,
+   "end": 21335,
+   "old": "return {\n            'lints': self.lints,\n        }",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 589,
+   "op": "return",
+   "start": 22054,
+   "end": 22086,
+   "old": "return version.api(self.version)",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 457,
+   "op": "constant",
+   "start": 16381,
+   "end": 16387,
+   "old": "\"deny\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 458,
+   "op": "constant",
+   "start": 16408,
+   "end": 16412,
+   "old": "\"-D\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 459,
+   "op": "comparison",
+   "start": 16426,
+   "end": 16447,
+   "old": "self.level == \"allow\"",
+   "new": "(self.level != 'allow')",
+   "id": 41
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 460,
+   "op": "statement",
+   "start": 16461,
+   "end": 16472,
+   "old": "flag = \"-A\"",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 462,
+   "op": "statement",
+   "start": 16520,
+   "end": 16531,
+   "old": "flag = \"-W\"",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 462,
+   "op": "constant",
+   "start": 16527,
+   "end": 16531,
+   "old": "\"-W\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 464,
+   "op": "statement",
+   "start": 16581,
+   "end": 16592,
+   "old": "flag = \"-F\"",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16830,
+   "end": 16843,
+   "old": "'--check-cfg'",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 463,
+   "op": "constant",
+   "start": 16559,
+   "end": 16567,
+   "old": "\"forbid\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 464,
+   "op": "constant",
+   "start": 16588,
+   "end": 16592,
+   "old": "\"-F\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mesonbuild/cargo/manifest.py",
+   "line": 509,
+   "op": "constant",
+   "start": 18364,
+   "end": 18377,
+   "old": "'system-deps'",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 49,
+   "op": "return",
+   "start": 1516,
+   "end": 1557,
+   "old": "return T.cast('T.Dict[str, object]', raw)",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1410,
+   "end": 1431,
+   "old": "raw = json.loads(out)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1143,
+   "end": 1236,
+   "old": "raise TomlImplementationMissing('Could not find an implementation of tomllib, nor toml2json')",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 43,
+   "op": "comparison",
+   "start": 1305,
+   "end": 1322,
+   "old": "p.returncode != 0",
+   "new": "(p.returncode == 0)",
+   "id": 53
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1336,
+   "end": 1400,
+   "old": "raise MesonException('toml2json failed to decode output\\n', err)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 36,
+   "op": "constant",
+   "start": 1045,
+   "end": 1049,
+   "old": "'rb'",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "mesonbuild/cargo/toml.py",
+   "line": 40,
+   "op": "constant",
+   "start": 1175,
+   "end": 1235,
+   "old": "'Could not find an implementation of tomllib, nor toml2json'",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 14,
+   "op": "statement",
+   "start": 283,
+   "end": 308,
+   "old": "vers = version.split('.')",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 19,
+   "op": "return",
+   "start": 439,
+   "end": 449,
+   "old": "return '0'",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 29,
+   "op": "statement",
+   "start": 735,
+   "end": 764,
+   "old": "cargo_ver = cargo_ver.strip()",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 32,
+   "op": "statement",
+   "start": 809,
+   "end": 863,
+   "old": "cargo_vers = [c.strip() for c in cargo_ver.split(',')]",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 14,
+   "op": "constant",
+   "start": 304,
+   "end": 307,
+   "old": "'.'",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 15,
+   "op": "constant",
+   "start": 332,
+   "end": 333,
+   "old": "0",
+   "new": "(1)",
+   "id": 62
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 17,
+   "op": "boolean",
+   "start": 367,
+   "end": 403,
+   "old": "len(vers) >= 2 and int(vers[1]) != 0",
+   "new": "(len(vers) >= 2 or int(vers[1]) != 0)",
+   "id": 63
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 17,
+   "op": "comparison",
+   "start": 367,
+   "end": 381,
+   "old": "len(vers) >= 2",
+   "new": "(len(vers) > 2)",
+   "id": 64
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 17,
+   "op": "comparison",
+   "start": 386,
+   "end": 403,
+   "old": "int(vers[1]) != 0",
+   "new": "(int(vers[1]) == 0)",
+   "id": 65
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1481,
+   "end": 1503,
+   "old": "v = ver[1:].split('.')",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 17,
+   "op": "constant",
+   "start": 402,
+   "end": 403,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 32,
+   "op": "constant",
+   "start": 858,
+   "end": 861,
+   "old": "','",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 39,
+   "op": "constant",
+   "start": 1096,
+   "end": 1099,
+   "old": "'<'",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1592,
+   "end": 1633,
+   "old": "out.append(f'< {v[0]}.{int(v[1]) + 1}.0')",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 87,
+   "op": "statement",
+   "start": 3489,
+   "end": 3510,
+   "old": "vers = ver.split('.')",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 88,
+   "op": "statement",
+   "start": 3523,
+   "end": 3545,
+   "old": "min_: T.List[str] = []",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 90,
+   "op": "statement",
+   "start": 3593,
+   "end": 3607,
+   "old": "bumped = False",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 47,
+   "op": "constant",
+   "start": 1499,
+   "end": 1502,
+   "old": "'.'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1573,
+   "end": 1574,
+   "old": "3",
+   "new": "(4)",
+   "id": 75
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 51,
+   "op": "comparison",
+   "start": 1651,
+   "end": 1662,
+   "old": "len(v) == 2",
+   "new": "(len(v) != 2)",
+   "id": 76
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1680,
+   "end": 1719,
+   "old": "out.append(f'< {v[0]}.{int(v[1]) + 1}')",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1754,
+   "end": 1786,
+   "old": "out.append(f'< {int(v[0]) + 1}')",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 56,
+   "op": "constant",
+   "start": 1801,
+   "end": 1804,
+   "old": "'*'",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 62,
+   "op": "comparison",
+   "start": 2108,
+   "end": 2119,
+   "old": "len(v) == 2",
+   "new": "(len(v) != 2)",
+   "id": 80
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 90,
+   "op": "constant",
+   "start": 3602,
+   "end": 3607,
+   "old": "False",
+   "new": "(True)",
+   "id": 81
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 17,
+   "op": "constant",
+   "start": 395,
+   "end": 396,
+   "old": "1",
+   "new": "(2)",
+   "id": 82
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 65,
+   "op": "statement",
+   "start": 2223,
+   "end": 2255,
+   "old": "out.append(f'< {int(v[0]) + 1}')",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 92,
+   "op": "boolean",
+   "start": 3655,
+   "end": 3679,
+   "old": "v_ != '0' and not bumped",
+   "new": "(v_ != '0' or not bumped)",
+   "id": 84
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 93,
+   "op": "statement",
+   "start": 3701,
+   "end": 3716,
+   "old": "min_.append(v_)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3737,
+   "end": 3766,
+   "old": "max_.append(str(int(v_) + 1))",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 95,
+   "op": "statement",
+   "start": 3787,
+   "end": 3800,
+   "old": "bumped = True",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 64,
+   "op": "constant",
+   "start": 2204,
+   "end": 2205,
+   "old": "1",
+   "new": "(2)",
+   "id": 88
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 98,
+   "op": "boolean",
+   "start": 3882,
+   "end": 3892,
+   "old": "not bumped",
+   "new": "(bumped)",
+   "id": 89
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 99,
+   "op": "statement",
+   "start": 3918,
+   "end": 3934,
+   "old": "max_.append('0')",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 102,
+   "op": "constant",
+   "start": 4018,
+   "end": 4021,
+   "old": "'0'",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 104,
+   "op": "constant",
+   "start": 4112,
+   "end": 4115,
+   "old": "'0'",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 71,
+   "op": "constant",
+   "start": 2505,
+   "end": 2506,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3661,
+   "end": 3664,
+   "old": "'0'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 105,
+   "op": "constant",
+   "start": 4145,
+   "end": 4151,
+   "old": "'< {}'",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mesonbuild/cargo/version.py",
+   "line": 105,
+   "op": "constant",
+   "start": 4159,
+   "end": 4162,
+   "old": "'.'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mesonbuild/wrap/wrap.py",
+   "line": 346,
+   "op": "statement",
+   "start": 14509,
+   "end": 14540,
+   "old": "self.provided_deps[name] = None",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "mesonbuild/wrap/wrap.py",
+   "line": 980,
+   "op": "statement",
+   "start": 44993,
+   "end": 45047,
+   "old": "shutil.copy2(src_file, dst_dir, follow_symlinks=False)",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "mesonbuild/wrap/wrap.py",
+   "line": 980,
+   "op": "constant",
+   "start": 45041,
+   "end": 45046,
+   "old": "False",
+   "new": "(True)",
+   "id": 99
+  }
+ ]
+}

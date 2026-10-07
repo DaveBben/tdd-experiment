@@ -1,0 +1,39 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_sample.5d2ba03e.lv1",
+ "image": "libercoders/featurebench-specs_pandas-instance_15f634a6@sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 14 passed in 0.08s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 95 passed in 1.04s =============================="
+ },
+ "mutant_pool": 205,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 95 passed in 1.05s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/pandas/core/generic.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/pandas/tests/frame/methods/test_sample.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/pandas/tests/test_common.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

@@ -1,0 +1,31 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_ext_napoleon_docstring.50dabe1f.lv1",
+ "image": "libercoders/featurebench-specs_sphinx-instance_6191afb1@sha256:15b434473e16386e33c864d8b7f4a3bddb9c5585961758c0ed0f06b51b3f0268",
+ "test_cmd": "pytest -rA --tb=short --color=no -k 'not test_noindex' --timeout=120",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 51 passed, 1 deselected in 0.85s ======================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 20 passed in 0.81s =============================="
+ },
+ "mutant_pool": 1063,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 20 passed in 1.07s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/sphinx/writers/latex.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

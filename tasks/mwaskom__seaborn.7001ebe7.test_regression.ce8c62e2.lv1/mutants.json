@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_regression.ce8c62e2.lv1",
+ "pool": 501,
+ "mutants": [
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5637,
+   "end": 5686,
+   "old": "title = self._hue_var if title is None else title",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 166,
+   "op": "statement",
+   "start": 5695,
+   "end": 5745,
+   "old": "title_size = mpl.rcParams[\"legend.title_fontsize\"]",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 232,
+   "op": "statement",
+   "start": 8115,
+   "end": 8124,
+   "old": "data = {}",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 903,
+   "op": "return",
+   "start": 33175,
+   "end": 33186,
+   "old": "return self",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 155,
+   "op": "comparison",
+   "start": 5207,
+   "end": 5226,
+   "old": "legend_data is None",
+   "new": "(legend_data is not None)",
+   "id": 4
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 157,
+   "op": "comparison",
+   "start": 5283,
+   "end": 5302,
+   "old": "label_order is None",
+   "new": "(label_order is not None)",
+   "id": 5
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 188,
+   "op": "statement",
+   "start": 6371,
+   "end": 6395,
+   "old": "self._legend = figlegend",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 195,
+   "op": "statement",
+   "start": 6624,
+   "end": 6650,
+   "old": "_draw_figure(self._figure)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 198,
+   "op": "statement",
+   "start": 6743,
+   "end": 6812,
+   "old": "legend_width = figlegend.get_window_extent().width / self._figure.dpi",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 199,
+   "op": "statement",
+   "start": 6825,
+   "end": 6879,
+   "old": "fig_width, fig_height = self._figure.get_size_inches()",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7228,
+   "end": 7284,
+   "old": "space_needed = legend_width / (fig_width + legend_width)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 223,
+   "op": "statement",
+   "start": 7877,
+   "end": 7895,
+   "old": "self._legend = leg",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 666,
+   "op": "statement",
+   "start": 24091,
+   "end": 24153,
+   "old": "col_masks = [data[self._col_var] == n for n in self.col_names]",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 805,
+   "op": "statement",
+   "start": 29660,
+   "end": 29721,
+   "old": "modify_state = not str(func.__module__).startswith(\"seaborn\")",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 840,
+   "op": "return",
+   "start": 30964,
+   "end": 30979,
+   "old": "return kw_color",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 852,
+   "op": "statement",
+   "start": 31389,
+   "end": 31403,
+   "old": "plot_args = []",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 875,
+   "op": "statement",
+   "start": 32168,
+   "end": 32179,
+   "old": "plt.sca(ax)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 899,
+   "op": "statement",
+   "start": 33033,
+   "end": 33063,
+   "old": "ax.set_xlabel(label, **kwargs)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 907,
+   "op": "comparison",
+   "start": 33329,
+   "end": 33342,
+   "old": "label is None",
+   "new": "(label is not None)",
+   "id": 18
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1121,
+   "op": "comparison",
+   "start": 41615,
+   "end": 41637,
+   "old": "self._col_wrap is None",
+   "new": "(self._col_wrap is not None)",
+   "id": 19
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1148,
+   "op": "statement",
+   "start": 42486,
+   "end": 42495,
+   "old": "axes = []",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1157,
+   "op": "return",
+   "start": 42853,
+   "end": 42887,
+   "old": "return np.array(axes, object).flat",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 198,
+   "op": "arithmetic",
+   "start": 6758,
+   "end": 6812,
+   "old": "figlegend.get_window_extent().width / self._figure.dpi",
+   "new": "(figlegend.get_window_extent().width // self._figure.dpi)",
+   "id": 22
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 207,
+   "op": "arithmetic",
+   "start": 7243,
+   "end": 7284,
+   "old": "legend_width / (fig_width + legend_width)",
+   "new": "(legend_width * (fig_width + legend_width))",
+   "id": 23
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 236,
+   "op": "comparison",
+   "start": 8268,
+   "end": 8290,
+   "old": "ax.legend_ is not None",
+   "new": "(ax.legend_ is None)",
+   "id": 24
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 805,
+   "op": "boolean",
+   "start": 29675,
+   "end": 29721,
+   "old": "not str(func.__module__).startswith(\"seaborn\")",
+   "new": "(str(func.__module__).startswith('seaborn'))",
+   "id": 25
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 821,
+   "op": "statement",
+   "start": 30325,
+   "end": 30353,
+   "old": "data_ijk = data_ijk.dropna()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 851,
+   "op": "statement",
+   "start": 31354,
+   "end": 31376,
+   "old": "plot_kwargs[key] = val",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 902,
+   "op": "statement",
+   "start": 33149,
+   "end": 33166,
+   "old": "ax.set_xlabel(\"\")",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1149,
+   "op": "arithmetic",
+   "start": 42518,
+   "end": 42558,
+   "old": "self._nrow * self._ncol - self._n_facets",
+   "new": "(self._nrow * self._ncol + self._n_facets)",
+   "id": 29
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 163,
+   "op": "constant",
+   "start": 5548,
+   "end": 5549,
+   "old": "0",
+   "new": "(1)",
+   "id": 30
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 219,
+   "op": "constant",
+   "start": 7734,
+   "end": 7739,
+   "old": "\"loc\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 219,
+   "op": "constant",
+   "start": 7741,
+   "end": 7747,
+   "old": "\"best\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 849,
+   "op": "constant",
+   "start": 31274,
+   "end": 31281,
+   "old": "\"style\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1156,
+   "op": "statement",
+   "start": 42825,
+   "end": 42840,
+   "old": "axes.append(ax)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 662,
+   "op": "constant",
+   "start": 23978,
+   "end": 23982,
+   "old": "True",
+   "new": "(False)",
+   "id": 35
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 668,
+   "op": "constant",
+   "start": 24203,
+   "end": 24207,
+   "old": "True",
+   "new": "(False)",
+   "id": 36
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 805,
+   "op": "constant",
+   "start": 29711,
+   "end": 29720,
+   "old": "\"seaborn\"",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1126,
+   "op": "arithmetic",
+   "start": 41785,
+   "end": 41799,
+   "old": "i % self._ncol",
+   "new": "(i * self._ncol)",
+   "id": 38
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 1153,
+   "op": "constant",
+   "start": 42746,
+   "end": 42747,
+   "old": "1",
+   "new": "(2)",
+   "id": 39
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 85,
+   "op": "statement",
+   "start": 2813,
+   "end": 2825,
+   "old": "self.ci = ci",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2883,
+   "end": 2903,
+   "old": "self.n_boot = n_boot",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3088,
+   "end": 3108,
+   "old": "self.robust = robust",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 100,
+   "op": "statement",
+   "start": 3268,
+   "end": 3286,
+   "old": "self.label = label",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 244,
+   "op": "statement",
+   "start": 8463,
+   "end": 8513,
+   "old": "X, y = np.c_[np.ones(len(self.x)), self.x], self.y",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 255,
+   "op": "statement",
+   "start": 8925,
+   "end": 8960,
+   "old": "yhat_boots = grid.dot(beta_boots).T",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 315,
+   "op": "statement",
+   "start": 11288,
+   "end": 11334,
+   "old": "grid = np.c_[np.ones(len(grid)), np.log(grid)]",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 331,
+   "op": "return",
+   "start": 11872,
+   "end": 11895,
+   "old": "return yhat, yhat_boots",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 345,
+   "op": "return",
+   "start": 12341,
+   "end": 12362,
+   "old": "return x_binned, bins",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 352,
+   "op": "statement",
+   "start": 12537,
+   "end": 12549,
+   "old": "b = np.c_[b]",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 399,
+   "op": "statement",
+   "start": 14250,
+   "end": 14305,
+   "old": "line_markers = [\"1\", \"2\", \"3\", \"4\", \"+\", \"x\", \"|\", \"_\"]",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 642,
+   "op": "statement",
+   "start": 24438,
+   "end": 24469,
+   "old": "ax.autoscale_view(scaley=False)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 62,
+   "op": "statement",
+   "start": 1904,
+   "end": 1928,
+   "old": "val = getattr(self, var)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 78,
+   "op": "constant",
+   "start": 2533,
+   "end": 2538,
+   "old": "False",
+   "new": "(True)",
+   "id": 53
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 115,
+   "op": "comparison",
+   "start": 3863,
+   "end": 3889,
+   "old": "self.x_partial is not None",
+   "new": "(self.x_partial is None)",
+   "id": 54
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 121,
+   "op": "comparison",
+   "start": 4144,
+   "end": 4162,
+   "old": "x_bins is not None",
+   "new": "(x_bins is None)",
+   "id": 55
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 143,
+   "op": "statement",
+   "start": 4855,
+   "end": 4909,
+   "old": "x = self.x + np.random.uniform(-x_j, x_j, len(self.x))",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 322,
+   "op": "comparison",
+   "start": 11515,
+   "end": 11530,
+   "old": "self.ci is None",
+   "new": "(self.ci is not None)",
+   "id": 57
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 365,
+   "op": "comparison",
+   "start": 13018,
+   "end": 13036,
+   "old": "self.color is None",
+   "new": "(self.color is not None)",
+   "id": 58
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 370,
+   "op": "statement",
+   "start": 13166,
+   "end": 13184,
+   "old": "color = self.color",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 388,
+   "op": "statement",
+   "start": 13737,
+   "end": 13763,
+   "old": "ax.set_xlabel(self.x.name)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 411,
+   "op": "statement",
+   "start": 14759,
+   "end": 14782,
+   "old": "ax.scatter(x, y, **kws)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 420,
+   "op": "statement",
+   "start": 15073,
+   "end": 15105,
+   "old": "xs, ys, cis = self.estimate_data",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 439,
+   "op": "boolean",
+   "start": 15771,
+   "end": 15788,
+   "old": "not self.truncate",
+   "new": "(self.truncate)",
+   "id": 63
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1411,
+   "end": 1438,
+   "old": "vector = np.squeeze(vector)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 130,
+   "op": "constant",
+   "start": 4509,
+   "end": 4514,
+   "old": "False",
+   "new": "(True)",
+   "id": 65
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 168,
+   "op": "comparison",
+   "start": 5572,
+   "end": 5589,
+   "old": "self.x_ci is None",
+   "new": "(self.x_ci is not None)",
+   "id": 66
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 169,
+   "op": "statement",
+   "start": 5607,
+   "end": 5623,
+   "old": "cis.append(None)",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 184,
+   "op": "statement",
+   "start": 6272,
+   "end": 6287,
+   "old": "cis.append(_ci)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 190,
+   "op": "constant",
+   "start": 6475,
+   "end": 6483,
+   "old": "\"robust\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 377,
+   "op": "constant",
+   "start": 13472,
+   "end": 13479,
+   "old": "\"color\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 387,
+   "op": "constant",
+   "start": 13716,
+   "end": 13722,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 399,
+   "op": "constant",
+   "start": 14276,
+   "end": 14279,
+   "old": "\"3\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 399,
+   "op": "constant",
+   "start": 14291,
+   "end": 14294,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 399,
+   "op": "constant",
+   "start": 14296,
+   "end": 14299,
+   "old": "\"|\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 402,
+   "op": "statement",
+   "start": 14425,
+   "end": 14461,
+   "old": "lw = mpl.rcParams[\"lines.linewidth\"]",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 404,
+   "op": "statement",
+   "start": 14496,
+   "end": 14538,
+   "old": "lw = mpl.rcParams[\"lines.markeredgewidth\"]",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 415,
+   "op": "comparison",
+   "start": 14888,
+   "end": 14902,
+   "old": "\"alpha\" in kws",
+   "new": "('alpha' not in kws)",
+   "id": 77
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 434,
+   "op": "constant",
+   "start": 15572,
+   "end": 15576,
+   "old": "\"lw\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 49,
+   "op": "comparison",
+   "start": 1373,
+   "end": 1393,
+   "old": "vector.shape != (1,)",
+   "new": "(vector.shape == (1,))",
+   "id": 79
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1497,
+   "end": 1524,
+   "old": "\"regplot inputs must be 1d\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 60,
+   "op": "constant",
+   "start": 1864,
+   "end": 1865,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 122,
+   "op": "comparison",
+   "start": 4206,
+   "end": 4225,
+   "old": "x_estimator is None",
+   "new": "(x_estimator is not None)",
+   "id": 82
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 173,
+   "op": "statement",
+   "start": 5729,
+   "end": 5744,
+   "old": "sd = np.std(_y)",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 209,
+   "op": "constant",
+   "start": 7224,
+   "end": 7227,
+   "old": "100",
+   "new": "(101)",
+   "id": 84
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 221,
+   "op": "statement",
+   "start": 7703,
+   "end": 7712,
+   "old": "ci = None",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 405,
+   "op": "constant",
+   "start": 14566,
+   "end": 14578,
+   "old": "\"linewidths\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 407,
+   "op": "comparison",
+   "start": 14638,
+   "end": 14663,
+   "old": "kws['color'].shape[1] < 4",
+   "new": "(kws['color'].shape[1] <= 4)",
+   "id": 87
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 423,
+   "op": "statement",
+   "start": 15222,
+   "end": 15251,
+   "old": "ax.plot([x, x], ci, **ci_kws)",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 642,
+   "op": "constant",
+   "start": 24463,
+   "end": 24468,
+   "old": "False",
+   "new": "(True)",
+   "id": 89
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 337,
+   "op": "constant",
+   "start": 12106,
+   "end": 12109,
+   "old": "100",
+   "new": "(101)",
+   "id": 90
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 337,
+   "op": "constant",
+   "start": 12121,
+   "end": 12122,
+   "old": "1",
+   "new": "(2)",
+   "id": 91
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 414,
+   "op": "constant",
+   "start": 14863,
+   "end": 14870,
+   "old": "\"color\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 416,
+   "op": "constant",
+   "start": 14942,
+   "end": 14949,
+   "old": "\"alpha\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1390,
+   "end": 1391,
+   "old": "1",
+   "new": "(2)",
+   "id": 94
+  },
+  {
+   "path": "seaborn/regression.py",
+   "line": 407,
+   "op": "constant",
+   "start": 14657,
+   "end": 14658,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 489,
+   "op": "arithmetic",
+   "start": 15710,
+   "end": 15724,
+   "old": "50 - which / 2",
+   "new": "(50 + which / 2)",
+   "id": 96
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 489,
+   "op": "arithmetic",
+   "start": 15715,
+   "end": 15724,
+   "old": "which / 2",
+   "new": "(which * 2)",
+   "id": 97
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 489,
+   "op": "arithmetic",
+   "start": 15731,
+   "end": 15740,
+   "old": "which / 2",
+   "new": "(which * 2)",
+   "id": 98
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 489,
+   "op": "constant",
+   "start": 15723,
+   "end": 15724,
+   "old": "2",
+   "new": "(3)",
+   "id": 99
+  }
+ ]
+}

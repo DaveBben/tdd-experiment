@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_domain_c.4068b9e8.lv1",
+ "pool": 408,
+ "mutants": [
+  {
+   "path": "sphinx/domains/c/_ast.py",
+   "line": 1917,
+   "op": "comparison",
+   "start": 63636,
+   "end": 63665,
+   "old": "self._newest_id_cache is None",
+   "new": "(self._newest_id_cache is not None)",
+   "id": 0
+  },
+  {
+   "path": "sphinx/domains/c/_ast.py",
+   "line": 1968,
+   "op": "constant",
+   "start": 65867,
+   "end": 65870,
+   "old": "';'",
+   "new": "('XX')",
+   "id": 1
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1001,
+   "op": "return",
+   "start": 37874,
+   "end": 37902,
+   "old": "return ASTMacro(ident, args)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1004,
+   "op": "statement",
+   "start": 37954,
+   "end": 37986,
+   "old": "name = self._parse_nested_name()",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1019,
+   "op": "statement",
+   "start": 38407,
+   "end": 38418,
+   "old": "init = None",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1028,
+   "op": "statement",
+   "start": 38789,
+   "end": 38813,
+   "old": "object_type = objectType",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 975,
+   "op": "constant",
+   "start": 36668,
+   "end": 36669,
+   "old": "1",
+   "new": "(2)",
+   "id": 6
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1023,
+   "op": "statement",
+   "start": 38545,
+   "end": 38599,
+   "old": "init_val = self._parse_expression_fallback([], parser)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1024,
+   "op": "statement",
+   "start": 38612,
+   "end": 38643,
+   "old": "init = ASTInitializer(init_val)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1057,
+   "op": "comparison",
+   "start": 39584,
+   "end": 39607,
+   "old": "object_type == 'member'",
+   "new": "(object_type != 'member')",
+   "id": 9
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1098,
+   "op": "statement",
+   "start": 41155,
+   "end": 41169,
+   "old": "self.skip_ws()",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1099,
+   "op": "statement",
+   "start": 41182,
+   "end": 41199,
+   "old": "self.assert_end()",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 972,
+   "op": "constant",
+   "start": 36591,
+   "end": 36594,
+   "old": "')'",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 997,
+   "op": "statement",
+   "start": 37707,
+   "end": 37715,
+   "old": "continue",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1079,
+   "op": "constant",
+   "start": 40526,
+   "end": 40531,
+   "old": "False",
+   "new": "(True)",
+   "id": 14
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 977,
+   "op": "constant",
+   "start": 36730,
+   "end": 36735,
+   "old": "'...'",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 981,
+   "op": "statement",
+   "start": 36894,
+   "end": 36952,
+   "old": "self.fail('Expected \")\" after \"...\" in macro parameters.')",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 993,
+   "op": "statement",
+   "start": 37518,
+   "end": 37576,
+   "old": "self.fail('Expected \")\" after \"...\" in macro parameters.')",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 996,
+   "op": "constant",
+   "start": 37685,
+   "end": 37688,
+   "old": "','",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 998,
+   "op": "constant",
+   "start": 37755,
+   "end": 37758,
+   "old": "')'",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1031,
+   "op": "constant",
+   "start": 38897,
+   "end": 38907,
+   "old": "'function'",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1033,
+   "op": "constant",
+   "start": 38943,
+   "end": 38950,
+   "old": "'macro'",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1035,
+   "op": "constant",
+   "start": 38986,
+   "end": 38993,
+   "old": "'union'",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1046,
+   "op": "constant",
+   "start": 39291,
+   "end": 39299,
+   "old": "'struct'",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1062,
+   "op": "statement",
+   "start": 39852,
+   "end": 39885,
+   "old": "declaration = self._parse_macro()",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1058,
+   "op": "constant",
+   "start": 39680,
+   "end": 39688,
+   "old": "'member'",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1064,
+   "op": "statement",
+   "start": 39936,
+   "end": 39970,
+   "old": "declaration = self._parse_struct()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1108,
+   "op": "statement",
+   "start": 41526,
+   "end": 41642,
+   "old": "errs = [\n                    (ex_expr, 'If expression'),\n                    (ex_type, 'If type'),\n                ]",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1107,
+   "op": "constant",
+   "start": 41470,
+   "end": 41509,
+   "old": "'Error when parsing (type) expression.'",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1069,
+   "op": "comparison",
+   "start": 40148,
+   "end": 40175,
+   "old": "object_type == 'enumerator'",
+   "new": "(object_type != 'enumerator')",
+   "id": 29
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1070,
+   "op": "statement",
+   "start": 40189,
+   "end": 40227,
+   "old": "declaration = self._parse_enumerator()",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1110,
+   "op": "constant",
+   "start": 41613,
+   "end": 41622,
+   "old": "'If type'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "sphinx/domains/c/_parser.py",
+   "line": 1072,
+   "op": "constant",
+   "start": 40313,
+   "end": 40317,
+   "old": "True",
+   "new": "(False)",
+   "id": 32
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 173,
+   "op": "statement",
+   "start": 5399,
+   "end": 5421,
+   "old": "self.docname = docname",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 381,
+   "op": "statement",
+   "start": 13258,
+   "end": 13512,
+   "old": "lookup_result = self._symbol_lookup(\n            nested_name,\n            on_missing_qualified_symbol,\n            ancestor_lookup_type=None,\n            match_self=False,\n            recurse_in_anon=False,\n            search_in_siblings=False,\n        )",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 391,
+   "op": "statement",
+   "start": 13624,
+   "end": 13661,
+   "old": "symbols = list(lookup_result.symbols)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 426,
+   "op": "statement",
+   "start": 14985,
+   "end": 14999,
+   "old": "with_decl = []",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 599,
+   "op": "return",
+   "start": 22168,
+   "end": 22178,
+   "old": "return res",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 611,
+   "op": "statement",
+   "start": 22562,
+   "end": 22626,
+   "old": "res = self._add_symbols(nested_name, declaration, docname, line)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 167,
+   "op": "comparison",
+   "start": 5189,
+   "end": 5206,
+   "old": "self.line is None",
+   "new": "(self.line is not None)",
+   "id": 39
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 280,
+   "op": "statement",
+   "start": 9399,
+   "end": 9426,
+   "old": "Symbol.debug_print('self:')",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 321,
+   "op": "statement",
+   "start": 11150,
+   "end": 11172,
+   "old": "parent_symbol = symbol",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 358,
+   "op": "statement",
+   "start": 12387,
+   "end": 12422,
+   "old": "Symbol.debug_print('_add_symbols:')",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 362,
+   "op": "statement",
+   "start": 12588,
+   "end": 12637,
+   "old": "Symbol.debug_print(f'location: {docname}:{line}')",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 373,
+   "op": "return",
+   "start": 13062,
+   "end": 13248,
+   "old": "return Symbol(\n                parent=parent_symbol,\n                ident=ident,\n                declaration=None,\n                docname=None,\n                line=None,\n            )",
+   "new": "return None",
+   "id": 44
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 400,
+   "op": "statement",
+   "start": 14100,
+   "end": 14326,
+   "old": "symbol = Symbol(\n                parent=lookup_result.parent_symbol,\n                ident=lookup_result.ident,\n                declaration=declaration,\n                docname=docname,\n                line=line,\n            )",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 415,
+   "op": "arithmetic",
+   "start": 14641,
+   "end": 14665,
+   "old": "Symbol.debug_indent -= 1",
+   "new": "Symbol.debug_indent += 1",
+   "id": 46
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 415,
+   "op": "statement",
+   "start": 14641,
+   "end": 14665,
+   "old": "Symbol.debug_indent -= 1",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 417,
+   "op": "boolean",
+   "start": 14678,
+   "end": 14693,
+   "old": "not declaration",
+   "new": "(declaration)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 449,
+   "op": "comparison",
+   "start": 16041,
+   "end": 16060,
+   "old": "len(with_decl) == 0",
+   "new": "(len(with_decl) != 0)",
+   "id": 49
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 464,
+   "op": "statement",
+   "start": 16543,
+   "end": 16580,
+   "old": "cand_id = declaration.get_newest_id()",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 499,
+   "op": "statement",
+   "start": 18174,
+   "end": 18193,
+   "old": "symbol = no_decl[0]",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 506,
+   "op": "return",
+   "start": 18462,
+   "end": 18475,
+   "old": "return symbol",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 594,
+   "op": "statement",
+   "start": 21935,
+   "end": 21959,
+   "old": "Symbol.debug_indent += 1",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 605,
+   "op": "statement",
+   "start": 22333,
+   "end": 22357,
+   "old": "Symbol.debug_indent += 1",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 608,
+   "op": "comparison",
+   "start": 22463,
+   "end": 22482,
+   "old": "docname is not None",
+   "new": "(docname is None)",
+   "id": 55
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 609,
+   "op": "comparison",
+   "start": 22498,
+   "end": 22514,
+   "old": "line is not None",
+   "new": "(line is None)",
+   "id": 56
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 279,
+   "op": "constant",
+   "start": 9385,
+   "end": 9386,
+   "old": "1",
+   "new": "(2)",
+   "id": 57
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 313,
+   "op": "comparison",
+   "start": 10781,
+   "end": 10820,
+   "old": "name in parent_symbol._children_by_name",
+   "new": "(name not in parent_symbol._children_by_name)",
+   "id": 58
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 314,
+   "op": "statement",
+   "start": 10838,
+   "end": 10884,
+   "old": "symbol = parent_symbol._children_by_name[name]",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 316,
+   "op": "statement",
+   "start": 10919,
+   "end": 10977,
+   "old": "symbol = on_missing_qualified_symbol(parent_symbol, ident)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 333,
+   "op": "boolean",
+   "start": 11543,
+   "end": 11553,
+   "old": "not symbol",
+   "new": "(symbol)",
+   "id": 61
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 340,
+   "op": "constant",
+   "start": 11835,
+   "end": 11836,
+   "old": "2",
+   "new": "(3)",
+   "id": 62
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 359,
+   "op": "constant",
+   "start": 12458,
+   "end": 12459,
+   "old": "1",
+   "new": "(2)",
+   "id": 63
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 394,
+   "op": "statement",
+   "start": 13744,
+   "end": 13798,
+   "old": "Symbol.debug_print('_add_symbols, result, no symbol:')",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 449,
+   "op": "constant",
+   "start": 16059,
+   "end": 16060,
+   "old": "0",
+   "new": "(1)",
+   "id": 65
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 476,
+   "op": "constant",
+   "start": 17171,
+   "end": 17172,
+   "old": "0",
+   "new": "(1)",
+   "id": 66
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 478,
+   "op": "statement",
+   "start": 17226,
+   "end": 17377,
+   "old": "Symbol.debug_print(\n                    'no match, no empty, cand_sybmol is not None?:',\n                    cand_symbol is not None,\n                )",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 483,
+   "op": "comparison",
+   "start": 17434,
+   "end": 17457,
+   "old": "cand_symbol is not None",
+   "new": "(cand_symbol is None)",
+   "id": 68
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 493,
+   "op": "arithmetic",
+   "start": 17856,
+   "end": 17880,
+   "old": "Symbol.debug_indent -= 2",
+   "new": "Symbol.debug_indent += 2",
+   "id": 69
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 594,
+   "op": "constant",
+   "start": 21958,
+   "end": 21959,
+   "old": "1",
+   "new": "(2)",
+   "id": 70
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 605,
+   "op": "constant",
+   "start": 22356,
+   "end": 22357,
+   "old": "1",
+   "new": "(2)",
+   "id": 71
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 613,
+   "op": "constant",
+   "start": 22694,
+   "end": 22695,
+   "old": "1",
+   "new": "(2)",
+   "id": 72
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 284,
+   "op": "constant",
+   "start": 9692,
+   "end": 9715,
+   "old": "'match_self:          '",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 336,
+   "op": "statement",
+   "start": 11702,
+   "end": 11740,
+   "old": "symbol = child._children_by_name[name]",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 368,
+   "op": "constant",
+   "start": 12832,
+   "end": 12833,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 385,
+   "op": "constant",
+   "start": 13423,
+   "end": 13428,
+   "old": "False",
+   "new": "(True)",
+   "id": 76
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 386,
+   "op": "constant",
+   "start": 13458,
+   "end": 13463,
+   "old": "False",
+   "new": "(True)",
+   "id": 77
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 387,
+   "op": "constant",
+   "start": 13496,
+   "end": 13501,
+   "old": "False",
+   "new": "(True)",
+   "id": 78
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 395,
+   "op": "constant",
+   "start": 13838,
+   "end": 13839,
+   "old": "1",
+   "new": "(2)",
+   "id": 79
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 414,
+   "op": "constant",
+   "start": 14596,
+   "end": 14613,
+   "old": "'number symbols:'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 434,
+   "op": "statement",
+   "start": 15225,
+   "end": 15244,
+   "old": "with_decl.append(s)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 436,
+   "op": "constant",
+   "start": 15308,
+   "end": 15321,
+   "old": "'#no_decl:  '",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 457,
+   "op": "comparison",
+   "start": 16306,
+   "end": 16325,
+   "old": "len(with_decl) <= 1",
+   "new": "(len(with_decl) < 1)",
+   "id": 83
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 311,
+   "op": "constant",
+   "start": 10732,
+   "end": 10733,
+   "old": "1",
+   "new": "(2)",
+   "id": 84
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 319,
+   "op": "arithmetic",
+   "start": 11081,
+   "end": 11105,
+   "old": "Symbol.debug_indent -= 2",
+   "new": "Symbol.debug_indent += 2",
+   "id": 85
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 326,
+   "op": "arithmetic",
+   "start": 11329,
+   "end": 11352,
+   "old": "Symbol.debug_indent + 1",
+   "new": "(Symbol.debug_indent - 1)",
+   "id": 86
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 371,
+   "op": "constant",
+   "start": 12991,
+   "end": 13000,
+   "old": "'ident: '",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 394,
+   "op": "constant",
+   "start": 13763,
+   "end": 13797,
+   "old": "'_add_symbols, result, no symbol:'",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 396,
+   "op": "constant",
+   "start": 13875,
+   "end": 13890,
+   "old": "'ident:       '",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 419,
+   "op": "constant",
+   "start": 14766,
+   "end": 14782,
+   "old": "'no declaration'",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 457,
+   "op": "constant",
+   "start": 16324,
+   "end": 16325,
+   "old": "1",
+   "new": "(2)",
+   "id": 91
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 479,
+   "op": "constant",
+   "start": 17266,
+   "end": 17313,
+   "old": "'no match, no empty, cand_sybmol is not None?:'",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 480,
+   "op": "comparison",
+   "start": 17335,
+   "end": 17358,
+   "old": "cand_symbol is not None",
+   "new": "(cand_symbol is None)",
+   "id": 93
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 490,
+   "op": "constant",
+   "start": 17707,
+   "end": 17775,
+   "old": "'no match, but fill an empty declaration, cand_sybmol is not None?:'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 326,
+   "op": "constant",
+   "start": 11368,
+   "end": 11373,
+   "old": "False",
+   "new": "(True)",
+   "id": 95
+  },
+  {
+   "path": "sphinx/domains/c/_symbol.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16849,
+   "end": 16859,
+   "old": "'old_id: '",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sphinx/util/docfields.py",
+   "line": 135,
+   "op": "return",
+   "start": 4539,
+   "end": 4685,
+   "old": "return [\n            self.make_xref(\n                rolename, domain, target, innernode, contnode, env, inliner, location\n            )\n        ]",
+   "new": "return None",
+   "id": 97
+  },
+  {
+   "path": "sphinx/util/docutils.py",
+   "line": 693,
+   "op": "boolean",
+   "start": 22451,
+   "end": 22466,
+   "old": "source and line",
+   "new": "(source or line)",
+   "id": 98
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 364,
+   "op": "statement",
+   "start": 12940,
+   "end": 12967,
+   "old": "msg = 'node line not found'",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

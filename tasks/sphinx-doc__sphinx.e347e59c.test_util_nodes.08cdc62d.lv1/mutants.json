@@ -1,0 +1,906 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_util_nodes.08cdc62d.lv1",
+ "pool": 90,
+ "mutants": [
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 783,
+   "op": "statement",
+   "start": 26627,
+   "end": 26661,
+   "old": "nodes.Element.deepcopy = _deepcopy",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 319,
+   "op": "return",
+   "start": 11389,
+   "end": 11427,
+   "old": "return text.replace('\\n', ' ').strip()",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 356,
+   "op": "statement",
+   "start": 12744,
+   "end": 12773,
+   "old": "msg = 'node source not found'",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 357,
+   "op": "statement",
+   "start": 12778,
+   "end": 12799,
+   "old": "raise ValueError(msg)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 425,
+   "op": "statement",
+   "start": 14866,
+   "end": 14903,
+   "old": "match = explicit_title_re.match(text)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 428,
+   "op": "return",
+   "start": 14974,
+   "end": 14998,
+   "old": "return False, text, text",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 554,
+   "op": "statement",
+   "start": 19384,
+   "end": 19433,
+   "old": "id = string.translate(_non_id_translate_digraphs)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 555,
+   "op": "statement",
+   "start": 19438,
+   "end": 19474,
+   "old": "id = id.translate(_non_id_translate)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 558,
+   "op": "statement",
+   "start": 19583,
+   "end": 19663,
+   "old": "id = unicodedata.normalize('NFKD', id).encode('ascii', 'ignore').decode('ascii')",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 560,
+   "op": "statement",
+   "start": 19722,
+   "end": 19771,
+   "old": "id = _non_id_chars.sub('-', ' '.join(id.split()))",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 561,
+   "op": "statement",
+   "start": 19776,
+   "end": 19808,
+   "old": "id = _non_id_at_ends.sub('', id)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 562,
+   "op": "return",
+   "start": 19813,
+   "end": 19827,
+   "old": "return str(id)",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 618,
+   "op": "statement",
+   "start": 21460,
+   "end": 21474,
+   "old": "node_id = None",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 638,
+   "op": "return",
+   "start": 22053,
+   "end": 22067,
+   "old": "return node_id",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 295,
+   "op": "comparison",
+   "start": 10231,
+   "end": 10243,
+   "old": "'\\\\' in text",
+   "new": "('\\\\' not in text)",
+   "id": 14
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 299,
+   "op": "statement",
+   "start": 10452,
+   "end": 10471,
+   "old": "buffer = StringIO()",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 318,
+   "op": "statement",
+   "start": 11360,
+   "end": 11384,
+   "old": "text = buffer.getvalue()",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 356,
+   "op": "constant",
+   "start": 12750,
+   "end": 12773,
+   "old": "'node source not found'",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 427,
+   "op": "return",
+   "start": 14926,
+   "end": 14969,
+   "old": "return True, match.group(1), match.group(2)",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 620,
+   "op": "statement",
+   "start": 21498,
+   "end": 21523,
+   "old": "idformat = prefix + '-%s'",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 622,
+   "op": "statement",
+   "start": 21542,
+   "end": 21597,
+   "old": "idformat = (document.settings.id_prefix or 'id') + '%s'",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 625,
+   "op": "boolean",
+   "start": 21646,
+   "end": 21661,
+   "old": "prefix and term",
+   "new": "(prefix or term)",
+   "id": 21
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 626,
+   "op": "statement",
+   "start": 21671,
+   "end": 21706,
+   "old": "node_id = _make_id(idformat % term)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 635,
+   "op": "boolean",
+   "start": 21950,
+   "end": 21992,
+   "old": "node_id is None or node_id in document.ids",
+   "new": "(node_id is None and node_id in document.ids)",
+   "id": 23
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 636,
+   "op": "statement",
+   "start": 22002,
+   "end": 22047,
+   "old": "node_id = idformat % env.new_serialno(prefix)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 295,
+   "op": "constant",
+   "start": 10231,
+   "end": 10235,
+   "old": "'\\\\'",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 301,
+   "op": "statement",
+   "start": 10536,
+   "end": 10573,
+   "old": "split = line.rsplit('\\\\', maxsplit=1)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 328,
+   "op": "statement",
+   "start": 11790,
+   "end": 11798,
+   "old": "continue",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 330,
+   "op": "statement",
+   "start": 11860,
+   "end": 11880,
+   "old": "msg = node.rawsource",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 349,
+   "op": "statement",
+   "start": 12560,
+   "end": 12575,
+   "old": "yield node, msg",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 355,
+   "op": "return",
+   "start": 12720,
+   "end": 12739,
+   "old": "return pnode.source",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 428,
+   "op": "constant",
+   "start": 14981,
+   "end": 14986,
+   "old": "False",
+   "new": "(True)",
+   "id": 31
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 558,
+   "op": "constant",
+   "start": 19655,
+   "end": 19662,
+   "old": "'ascii'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 560,
+   "op": "constant",
+   "start": 19745,
+   "end": 19748,
+   "old": "'-'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 620,
+   "op": "arithmetic",
+   "start": 21509,
+   "end": 21523,
+   "old": "prefix + '-%s'",
+   "new": "(prefix - '-%s')",
+   "id": 34
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 622,
+   "op": "arithmetic",
+   "start": 21553,
+   "end": 21597,
+   "old": "(document.settings.id_prefix or 'id') + '%s'",
+   "new": "((document.settings.id_prefix or 'id') - '%s')",
+   "id": 35
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 627,
+   "op": "comparison",
+   "start": 21718,
+   "end": 21735,
+   "old": "node_id == prefix",
+   "new": "(node_id != prefix)",
+   "id": 36
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 629,
+   "op": "statement",
+   "start": 21805,
+   "end": 21819,
+   "old": "node_id = None",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 631,
+   "op": "statement",
+   "start": 21843,
+   "end": 21867,
+   "old": "node_id = _make_id(term)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 635,
+   "op": "comparison",
+   "start": 21950,
+   "end": 21965,
+   "old": "node_id is None",
+   "new": "(node_id is not None)",
+   "id": 39
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 635,
+   "op": "comparison",
+   "start": 21969,
+   "end": 21992,
+   "old": "node_id in document.ids",
+   "new": "(node_id not in document.ids)",
+   "id": 40
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 636,
+   "op": "arithmetic",
+   "start": 22012,
+   "end": 22047,
+   "old": "idformat % env.new_serialno(prefix)",
+   "new": "(idformat * env.new_serialno(prefix))",
+   "id": 41
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 302,
+   "op": "comparison",
+   "start": 10589,
+   "end": 10604,
+   "old": "len(split) == 2",
+   "new": "(len(split) != 2)",
+   "id": 42
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 303,
+   "op": "statement",
+   "start": 10622,
+   "end": 10644,
+   "old": "prefix, suffix = split",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 317,
+   "op": "statement",
+   "start": 11333,
+   "end": 11351,
+   "old": "buffer.write(line)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 327,
+   "op": "statement",
+   "start": 11740,
+   "end": 11755,
+   "old": "yield node, msg",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 331,
+   "op": "boolean",
+   "start": 11896,
+   "end": 11903,
+   "old": "not msg",
+   "new": "(msg)",
+   "id": 46
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 332,
+   "op": "statement",
+   "start": 11921,
+   "end": 11940,
+   "old": "msg = node.astext()",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 427,
+   "op": "constant",
+   "start": 14933,
+   "end": 14937,
+   "old": "True",
+   "new": "(False)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 620,
+   "op": "constant",
+   "start": 21518,
+   "end": 21523,
+   "old": "'-%s'",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 622,
+   "op": "boolean",
+   "start": 21554,
+   "end": 21589,
+   "old": "document.settings.id_prefix or 'id'",
+   "new": "(document.settings.id_prefix and 'id')",
+   "id": 50
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 622,
+   "op": "constant",
+   "start": 21593,
+   "end": 21597,
+   "old": "'%s'",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 626,
+   "op": "arithmetic",
+   "start": 21690,
+   "end": 21705,
+   "old": "idformat % term",
+   "new": "(idformat * term)",
+   "id": 52
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 632,
+   "op": "boolean",
+   "start": 21879,
+   "end": 21890,
+   "old": "not node_id",
+   "new": "(node_id)",
+   "id": 53
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 633,
+   "op": "statement",
+   "start": 21904,
+   "end": 21918,
+   "old": "node_id = None",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 300,
+   "op": "constant",
+   "start": 10517,
+   "end": 10521,
+   "old": "True",
+   "new": "(False)",
+   "id": 55
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 301,
+   "op": "constant",
+   "start": 10556,
+   "end": 10560,
+   "old": "'\\\\'",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 302,
+   "op": "constant",
+   "start": 10603,
+   "end": 10604,
+   "old": "2",
+   "new": "(3)",
+   "id": 57
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 308,
+   "op": "statement",
+   "start": 10933,
+   "end": 10967,
+   "old": "buffer.write(prefix.rstrip(' \\t'))",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 309,
+   "op": "statement",
+   "start": 10988,
+   "end": 11022,
+   "old": "buffer.write(suffix.lstrip(' \\t'))",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 319,
+   "op": "constant",
+   "start": 11409,
+   "end": 11413,
+   "old": "'\\n'",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 319,
+   "op": "constant",
+   "start": 11415,
+   "end": 11418,
+   "old": "' '",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 335,
+   "op": "statement",
+   "start": 12033,
+   "end": 12056,
+   "old": "yield node, node['alt']",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 337,
+   "op": "statement",
+   "start": 12114,
+   "end": 12163,
+   "old": "image_uri = node.get('original_uri', node['uri'])",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 338,
+   "op": "statement",
+   "start": 12180,
+   "end": 12211,
+   "old": "msg = f'.. image:: {image_uri}'",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 340,
+   "op": "statement",
+   "start": 12246,
+   "end": 12254,
+   "old": "msg = ''",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 342,
+   "op": "statement",
+   "start": 12310,
+   "end": 12331,
+   "old": "msg = node['content']",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 344,
+   "op": "statement",
+   "start": 12358,
+   "end": 12379,
+   "old": "text = node.rawsource",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 345,
+   "op": "statement",
+   "start": 12422,
+   "end": 12458,
+   "old": "msg = _clean_extracted_message(text)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 427,
+   "op": "constant",
+   "start": 14951,
+   "end": 14952,
+   "old": "1",
+   "new": "(2)",
+   "id": 69
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 427,
+   "op": "constant",
+   "start": 14967,
+   "end": 14968,
+   "old": "2",
+   "new": "(3)",
+   "id": 70
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 558,
+   "op": "constant",
+   "start": 19629,
+   "end": 19636,
+   "old": "'ascii'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 558,
+   "op": "constant",
+   "start": 19638,
+   "end": 19646,
+   "old": "'ignore'",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 560,
+   "op": "constant",
+   "start": 19750,
+   "end": 19753,
+   "old": "' '",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 622,
+   "op": "constant",
+   "start": 21585,
+   "end": 21589,
+   "old": "'id'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 301,
+   "op": "constant",
+   "start": 10571,
+   "end": 10572,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 304,
+   "op": "constant",
+   "start": 10673,
+   "end": 10686,
+   "old": "r'^[ \\t]*\\s$'",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 310,
+   "op": "boolean",
+   "start": 11044,
+   "end": 11054,
+   "old": "not suffix",
+   "new": "(suffix)",
+   "id": 77
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 312,
+   "op": "statement",
+   "start": 11139,
+   "end": 11173,
+   "old": "buffer.write(prefix.rstrip(' \\t'))",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 315,
+   "op": "statement",
+   "start": 11280,
+   "end": 11298,
+   "old": "buffer.write(line)",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 334,
+   "op": "constant",
+   "start": 12009,
+   "end": 12014,
+   "old": "'alt'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 336,
+   "op": "constant",
+   "start": 12081,
+   "end": 12095,
+   "old": "'translatable'",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 337,
+   "op": "constant",
+   "start": 12135,
+   "end": 12149,
+   "old": "'original_uri'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 342,
+   "op": "constant",
+   "start": 12321,
+   "end": 12330,
+   "old": "'content'",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 558,
+   "op": "constant",
+   "start": 19610,
+   "end": 19616,
+   "old": "'NFKD'",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 308,
+   "op": "constant",
+   "start": 10960,
+   "end": 10965,
+   "old": "' \\t'",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 309,
+   "op": "constant",
+   "start": 11015,
+   "end": 11020,
+   "old": "' \\t'",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 337,
+   "op": "constant",
+   "start": 12156,
+   "end": 12161,
+   "old": "'uri'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 312,
+   "op": "constant",
+   "start": 11166,
+   "end": 11171,
+   "old": "' \\t'",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 335,
+   "op": "constant",
+   "start": 12050,
+   "end": 12055,
+   "old": "'alt'",
+   "new": "('XX')",
+   "id": 89
+  }
+ ]
+}

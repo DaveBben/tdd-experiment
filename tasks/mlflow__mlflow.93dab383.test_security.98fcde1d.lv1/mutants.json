@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_security.98fcde1d.lv1",
+ "pool": 102,
+ "mutants": [
+  {
+   "path": "mlflow/server/security.py",
+   "line": 30,
+   "op": "return",
+   "start": 773,
+   "end": 839,
+   "old": "return get_allowed_hosts_from_env() or get_default_allowed_hosts()",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 35,
+   "op": "return",
+   "start": 959,
+   "end": 1002,
+   "old": "return get_allowed_origins_from_env() or []",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1405,
+   "end": 1444,
+   "old": "allowed_origins = get_allowed_origins()",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1449,
+   "end": 1484,
+   "old": "allowed_hosts = get_allowed_hosts()",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 55,
+   "op": "statement",
+   "start": 1489,
+   "end": 1542,
+   "old": "x_frame_options = MLFLOW_SERVER_X_FRAME_OPTIONS.get()",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 30,
+   "op": "boolean",
+   "start": 780,
+   "end": 839,
+   "old": "get_allowed_hosts_from_env() or get_default_allowed_hosts()",
+   "new": "(get_allowed_hosts_from_env() and get_default_allowed_hosts())",
+   "id": 5
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 35,
+   "op": "boolean",
+   "start": 966,
+   "end": 1002,
+   "old": "get_allowed_origins_from_env() or []",
+   "new": "(get_allowed_origins_from_env() and [])",
+   "id": 6
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 50,
+   "op": "comparison",
+   "start": 1326,
+   "end": 1383,
+   "old": "MLFLOW_SERVER_DISABLE_SECURITY_MIDDLEWARE.get() == \"true\"",
+   "new": "(MLFLOW_SERVER_DISABLE_SECURITY_MIDDLEWARE.get() != 'true')",
+   "id": 7
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 57,
+   "op": "boolean",
+   "start": 1551,
+   "end": 1593,
+   "old": "allowed_origins and \"*\" in allowed_origins",
+   "new": "(allowed_origins or '*' in allowed_origins)",
+   "id": 8
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 58,
+   "op": "statement",
+   "start": 1603,
+   "end": 1676,
+   "old": "CORS(app, resources={r\"/*\": {\"origins\": \"*\"}}, supports_credentials=True)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1695,
+   "end": 1761,
+   "old": "cors_origins = (allowed_origins or []) + LOCALHOST_ORIGIN_PATTERNS",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 61,
+   "op": "statement",
+   "start": 1770,
+   "end": 1973,
+   "old": "CORS(\n            app,\n            resources={r\"/*\": {\"origins\": cors_origins}},\n            supports_credentials=True,\n            methods=[\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\", \"PATCH\"],\n        )",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 68,
+   "op": "boolean",
+   "start": 1982,
+   "end": 2024,
+   "old": "allowed_hosts and \"*\" not in allowed_hosts",
+   "new": "(allowed_hosts or '*' not in allowed_hosts)",
+   "id": 12
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 82,
+   "op": "boolean",
+   "start": 2515,
+   "end": 2563,
+   "old": "not (allowed_origins and \"*\" in allowed_origins)",
+   "new": "(allowed_origins and '*' in allowed_origins)",
+   "id": 13
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 99,
+   "op": "statement",
+   "start": 3192,
+   "end": 3246,
+   "old": "response.headers[\"X-Content-Type-Options\"] = \"nosniff\"",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 102,
+   "op": "statement",
+   "start": 3352,
+   "end": 3425,
+   "old": "is_notebook_renderer = request.path.startswith(TRACE_RENDERER_ASSET_PATH)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 115,
+   "op": "return",
+   "start": 3849,
+   "end": 3864,
+   "old": "return response",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1377,
+   "end": 1383,
+   "old": "\"true\"",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 57,
+   "op": "comparison",
+   "start": 1571,
+   "end": 1593,
+   "old": "\"*\" in allowed_origins",
+   "new": "('*' not in allowed_origins)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 60,
+   "op": "arithmetic",
+   "start": 1710,
+   "end": 1761,
+   "old": "(allowed_origins or []) + LOCALHOST_ORIGIN_PATTERNS",
+   "new": "((allowed_origins or []) - LOCALHOST_ORIGIN_PATTERNS)",
+   "id": 19
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 68,
+   "op": "comparison",
+   "start": 2000,
+   "end": 2024,
+   "old": "\"*\" not in allowed_hosts",
+   "new": "('*' in allowed_hosts)",
+   "id": 20
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 82,
+   "op": "boolean",
+   "start": 2520,
+   "end": 2562,
+   "old": "allowed_origins and \"*\" in allowed_origins",
+   "new": "(allowed_origins or '*' in allowed_origins)",
+   "id": 21
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 89,
+   "op": "statement",
+   "start": 2733,
+   "end": 2771,
+   "old": "origin = request.headers.get(\"Origin\")",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 99,
+   "op": "constant",
+   "start": 3237,
+   "end": 3246,
+   "old": "\"nosniff\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 104,
+   "op": "boolean",
+   "start": 3438,
+   "end": 3520,
+   "old": "x_frame_options and x_frame_options.upper() != \"NONE\" and not is_notebook_renderer",
+   "new": "(x_frame_options or x_frame_options.upper() != 'NONE' or (not is_notebook_renderer))",
+   "id": 24
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 105,
+   "op": "statement",
+   "start": 3534,
+   "end": 3595,
+   "old": "response.headers[\"X-Frame-Options\"] = x_frame_options.upper()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 108,
+   "op": "boolean",
+   "start": 3622,
+   "end": 3739,
+   "old": "request.method == \"OPTIONS\"\n            and response.status_code == 200\n            and is_api_endpoint(request.path)",
+   "new": "(request.method == 'OPTIONS' or response.status_code == 200 or is_api_endpoint(request.path))",
+   "id": 26
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 112,
+   "op": "statement",
+   "start": 3763,
+   "end": 3807,
+   "old": "response.status_code = HTTPStatus.NO_CONTENT",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 113,
+   "op": "statement",
+   "start": 3820,
+   "end": 3839,
+   "old": "response.data = b\"\"",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 57,
+   "op": "constant",
+   "start": 1571,
+   "end": 1574,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 60,
+   "op": "boolean",
+   "start": 1711,
+   "end": 1732,
+   "old": "allowed_origins or []",
+   "new": "(allowed_origins and [])",
+   "id": 30
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 68,
+   "op": "constant",
+   "start": 2000,
+   "end": 2003,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 72,
+   "op": "comparison",
+   "start": 2099,
+   "end": 2131,
+   "old": "request.path in HEALTH_ENDPOINTS",
+   "new": "(request.path not in HEALTH_ENDPOINTS)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 75,
+   "op": "boolean",
+   "start": 2177,
+   "end": 2255,
+   "old": "not is_allowed_host_header(allowed_hosts, host := request.headers.get(\"Host\"))",
+   "new": "(is_allowed_host_header(allowed_hosts, (host := request.headers.get('Host'))))",
+   "id": 33
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 76,
+   "op": "statement",
+   "start": 2273,
+   "end": 2342,
+   "old": "_logger.warning(f\"Rejected request with invalid Host header: {host}\")",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 77,
+   "op": "return",
+   "start": 2359,
+   "end": 2482,
+   "old": "return Response(\n                    INVALID_HOST_MSG, status=HTTPStatus.FORBIDDEN, mimetype=\"text/plain\"\n                )",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 82,
+   "op": "comparison",
+   "start": 2540,
+   "end": 2562,
+   "old": "\"*\" in allowed_origins",
+   "new": "('*' not in allowed_origins)",
+   "id": 36
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 86,
+   "op": "boolean",
+   "start": 2657,
+   "end": 2690,
+   "old": "not is_api_endpoint(request.path)",
+   "new": "(is_api_endpoint(request.path))",
+   "id": 37
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 91,
+   "op": "statement",
+   "start": 2871,
+   "end": 2933,
+   "old": "_logger.warning(f\"Blocked cross-origin request from {origin}\")",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 92,
+   "op": "return",
+   "start": 2950,
+   "end": 3073,
+   "old": "return Response(\n                    CORS_BLOCKED_MSG, status=HTTPStatus.FORBIDDEN, mimetype=\"text/plain\"\n                )",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 99,
+   "op": "constant",
+   "start": 3209,
+   "end": 3233,
+   "old": "\"X-Content-Type-Options\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 104,
+   "op": "comparison",
+   "start": 3458,
+   "end": 3491,
+   "old": "x_frame_options.upper() != \"NONE\"",
+   "new": "(x_frame_options.upper() == 'NONE')",
+   "id": 41
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 104,
+   "op": "boolean",
+   "start": 3496,
+   "end": 3520,
+   "old": "not is_notebook_renderer",
+   "new": "(is_notebook_renderer)",
+   "id": 42
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 108,
+   "op": "comparison",
+   "start": 3622,
+   "end": 3649,
+   "old": "request.method == \"OPTIONS\"",
+   "new": "(request.method != 'OPTIONS')",
+   "id": 43
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 109,
+   "op": "comparison",
+   "start": 3666,
+   "end": 3693,
+   "old": "response.status_code == 200",
+   "new": "(response.status_code != 200)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 58,
+   "op": "constant",
+   "start": 1671,
+   "end": 1675,
+   "old": "True",
+   "new": "(False)",
+   "id": 45
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 64,
+   "op": "constant",
+   "start": 1884,
+   "end": 1888,
+   "old": "True",
+   "new": "(False)",
+   "id": 46
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 82,
+   "op": "constant",
+   "start": 2540,
+   "end": 2543,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2762,
+   "end": 2770,
+   "old": "\"Origin\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3485,
+   "end": 3491,
+   "old": "\"NONE\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3551,
+   "end": 3568,
+   "old": "\"X-Frame-Options\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 108,
+   "op": "constant",
+   "start": 3640,
+   "end": 3649,
+   "old": "\"OPTIONS\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 109,
+   "op": "constant",
+   "start": 3690,
+   "end": 3693,
+   "old": "200",
+   "new": "(201)",
+   "id": 52
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 58,
+   "op": "constant",
+   "start": 1624,
+   "end": 1629,
+   "old": "r\"/*\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 63,
+   "op": "constant",
+   "start": 1816,
+   "end": 1821,
+   "old": "r\"/*\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1911,
+   "end": 1916,
+   "old": "\"GET\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1918,
+   "end": 1924,
+   "old": "\"POST\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1926,
+   "end": 1931,
+   "old": "\"PUT\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1943,
+   "end": 1952,
+   "old": "\"OPTIONS\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 65,
+   "op": "constant",
+   "start": 1954,
+   "end": 1961,
+   "old": "\"PATCH\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 58,
+   "op": "constant",
+   "start": 1632,
+   "end": 1641,
+   "old": "\"origins\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 58,
+   "op": "constant",
+   "start": 1643,
+   "end": 1646,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 63,
+   "op": "constant",
+   "start": 1824,
+   "end": 1833,
+   "old": "\"origins\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 78,
+   "op": "constant",
+   "start": 2452,
+   "end": 2464,
+   "old": "\"text/plain\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3043,
+   "end": 3055,
+   "old": "\"text/plain\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/server/security.py",
+   "line": 75,
+   "op": "constant",
+   "start": 2247,
+   "end": 2253,
+   "old": "\"Host\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 50,
+   "op": "return",
+   "start": 1371,
+   "end": 1396,
+   "old": "return LOCALHOST_VARIANTS",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 69,
+   "op": "return",
+   "start": 2044,
+   "end": 2219,
+   "old": "return [\n        \"192.168.*\",\n        \"10.*\",\n        *[f\"172.{i}.*\" for i in range(PRIVATE_172_RANGE_START, PRIVATE_172_RANGE_END)],\n        \"fc00:*\",\n        \"fd00:*\",\n    ]",
+   "new": "return None",
+   "id": 67
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 125,
+   "op": "return",
+   "start": 3725,
+   "end": 3795,
+   "old": "return path.startswith(API_PATH_PREFIX) and path not in TEST_ENDPOINTS",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 137,
+   "op": "return",
+   "start": 4082,
+   "end": 4214,
+   "old": "return any(\n        fnmatch.fnmatch(host, allowed) if \"*\" in allowed else host == allowed\n        for allowed in allowed_hosts\n    )",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 145,
+   "op": "statement",
+   "start": 4313,
+   "end": 4332,
+   "old": "wildcard_hosts = []",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 81,
+   "op": "return",
+   "start": 2402,
+   "end": 2464,
+   "old": "return [host.strip() for host in allowed_hosts_env.split(\",\")]",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 88,
+   "op": "return",
+   "start": 2681,
+   "end": 2749,
+   "old": "return [origin.strip() for origin in allowed_origins_env.split(\",\")]",
+   "new": "return None",
+   "id": 72
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 125,
+   "op": "boolean",
+   "start": 3732,
+   "end": 3795,
+   "old": "path.startswith(API_PATH_PREFIX) and path not in TEST_ENDPOINTS",
+   "new": "(path.startswith(API_PATH_PREFIX) or path not in TEST_ENDPOINTS)",
+   "id": 73
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 130,
+   "op": "boolean",
+   "start": 3942,
+   "end": 3950,
+   "old": "not host",
+   "new": "(host)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 131,
+   "op": "return",
+   "start": 3960,
+   "end": 3972,
+   "old": "return False",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 134,
+   "op": "comparison",
+   "start": 4035,
+   "end": 4055,
+   "old": "\"*\" in allowed_hosts",
+   "new": "('*' not in allowed_hosts)",
+   "id": 76
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 135,
+   "op": "return",
+   "start": 4065,
+   "end": 4076,
+   "old": "return True",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 154,
+   "op": "arithmetic",
+   "start": 4637,
+   "end": 4707,
+   "old": "get_localhost_addresses() + wildcard_hosts + get_private_ip_patterns()",
+   "new": "(get_localhost_addresses() + wildcard_hosts - get_private_ip_patterns())",
+   "id": 78
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2061,
+   "end": 2072,
+   "old": "\"192.168.*\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 71,
+   "op": "constant",
+   "start": 2082,
+   "end": 2088,
+   "old": "\"10.*\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 73,
+   "op": "constant",
+   "start": 2186,
+   "end": 2194,
+   "old": "\"fc00:*\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 74,
+   "op": "constant",
+   "start": 2204,
+   "end": 2212,
+   "old": "\"fd00:*\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 125,
+   "op": "comparison",
+   "start": 3769,
+   "end": 3795,
+   "old": "path not in TEST_ENDPOINTS",
+   "new": "(path in TEST_ENDPOINTS)",
+   "id": 83
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 131,
+   "op": "constant",
+   "start": 3967,
+   "end": 3972,
+   "old": "False",
+   "new": "(True)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 134,
+   "op": "constant",
+   "start": 4035,
+   "end": 4038,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 135,
+   "op": "constant",
+   "start": 4072,
+   "end": 4076,
+   "old": "True",
+   "new": "(False)",
+   "id": 86
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4476,
+   "end": 4513,
+   "old": "escaped = host.replace(\"[\", \"[[]\", 1)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 150,
+   "op": "statement",
+   "start": 4526,
+   "end": 4563,
+   "old": "wildcard_hosts.append(f\"{escaped}:*\")",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 152,
+   "op": "statement",
+   "start": 4590,
+   "end": 4624,
+   "old": "wildcard_hosts.append(f\"{host}:*\")",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 154,
+   "op": "arithmetic",
+   "start": 4637,
+   "end": 4679,
+   "old": "get_localhost_addresses() + wildcard_hosts",
+   "new": "(get_localhost_addresses() - wildcard_hosts)",
+   "id": 90
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 147,
+   "op": "constant",
+   "start": 4403,
+   "end": 4406,
+   "old": "\"[\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 138,
+   "op": "comparison",
+   "start": 4136,
+   "end": 4150,
+   "old": "\"*\" in allowed",
+   "new": "('*' not in allowed)",
+   "id": 92
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 138,
+   "op": "comparison",
+   "start": 4156,
+   "end": 4171,
+   "old": "host == allowed",
+   "new": "(host != allowed)",
+   "id": 93
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 149,
+   "op": "constant",
+   "start": 4499,
+   "end": 4502,
+   "old": "\"[\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 149,
+   "op": "constant",
+   "start": 4504,
+   "end": 4509,
+   "old": "\"[[]\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 149,
+   "op": "constant",
+   "start": 4511,
+   "end": 4512,
+   "old": "1",
+   "new": "(2)",
+   "id": 96
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 81,
+   "op": "constant",
+   "start": 2459,
+   "end": 2462,
+   "old": "\",\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 88,
+   "op": "constant",
+   "start": 2744,
+   "end": 2747,
+   "old": "\",\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/server/security_utils.py",
+   "line": 138,
+   "op": "constant",
+   "start": 4136,
+   "end": 4139,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

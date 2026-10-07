@@ -1,0 +1,1006 @@
+{
+ "task": "sympy__sympy.c1097516.test_runtests_pytest.71d43c5f.lv1",
+ "pool": 102,
+ "mutants": [
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 175,
+   "op": "statement",
+   "start": 6140,
+   "end": 6168,
+   "old": "valid_testpaths_default = []",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 181,
+   "op": "statement",
+   "start": 6383,
+   "end": 6403,
+   "old": "candidate_paths = []",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 216,
+   "op": "return",
+   "start": 7761,
+   "end": 7772,
+   "old": "return args",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 242,
+   "op": "statement",
+   "start": 8687,
+   "end": 8747,
+   "old": "absolute_path = str(pathlib.Path(sympy_dir(), partial_path))",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 243,
+   "op": "return",
+   "start": 8752,
+   "end": 8772,
+   "old": "return absolute_path",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 461,
+   "op": "statement",
+   "start": 17775,
+   "end": 17800,
+   "old": "raise NotImplementedError",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 120,
+   "op": "statement",
+   "start": 3721,
+   "end": 3752,
+   "old": "partial_path_file_patterns = []",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4622,
+   "end": 4634,
+   "old": "matches = []",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 151,
+   "op": "return",
+   "start": 5271,
+   "end": 5285,
+   "old": "return matches",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 154,
+   "op": "statement",
+   "start": 5341,
+   "end": 5370,
+   "old": "path = pathlib.Path(filepath)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 161,
+   "op": "return",
+   "start": 5573,
+   "end": 5584,
+   "old": "return True",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 164,
+   "op": "statement",
+   "start": 5652,
+   "end": 5664,
+   "old": "matches = []",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5673,
+   "end": 5732,
+   "old": "source = pathlib.Path(filepath).read_text(encoding='utf-8')",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 173,
+   "op": "return",
+   "start": 6120,
+   "end": 6134,
+   "old": "return matches",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 177,
+   "op": "statement",
+   "start": 6216,
+   "end": 6271,
+   "old": "absolute_testpath = pathlib.Path(sympy_dir(), testpath)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 183,
+   "op": "statement",
+   "start": 6426,
+   "end": 6441,
+   "old": "full_paths = []",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 184,
+   "op": "statement",
+   "start": 6450,
+   "end": 6468,
+   "old": "partial_paths = []",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 190,
+   "op": "statement",
+   "start": 6681,
+   "end": 6739,
+   "old": "matched_paths = find_paths_matching_partial(partial_paths)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 191,
+   "op": "statement",
+   "start": 6748,
+   "end": 6782,
+   "old": "candidate_paths.extend(full_paths)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 192,
+   "op": "statement",
+   "start": 6791,
+   "end": 6828,
+   "old": "candidate_paths.extend(matched_paths)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 194,
+   "op": "statement",
+   "start": 6847,
+   "end": 6894,
+   "old": "candidate_paths.extend(valid_testpaths_default)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 196,
+   "op": "boolean",
+   "start": 6903,
+   "end": 6942,
+   "old": "keywords is not None and keywords != ()",
+   "new": "(keywords is not None or keywords != ())",
+   "id": 21
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 197,
+   "op": "statement",
+   "start": 6952,
+   "end": 6964,
+   "old": "matches = []",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 212,
+   "op": "statement",
+   "start": 7688,
+   "end": 7708,
+   "old": "args.extend(matches)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 214,
+   "op": "statement",
+   "start": 7727,
+   "end": 7755,
+   "old": "args.extend(candidate_paths)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 233,
+   "op": "return",
+   "start": 8366,
+   "end": 8419,
+   "old": "return pathlib.Path(partial_path).parts[0] == 'sympy'",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 235,
+   "op": "boolean",
+   "start": 8428,
+   "end": 8467,
+   "old": "not is_valid_partial_path(partial_path)",
+   "new": "(is_valid_partial_path(partial_path))",
+   "id": 26
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 236,
+   "op": "statement",
+   "start": 8477,
+   "end": 8651,
+   "old": "msg = (\n            f'Partial path {dir(partial_path)} is invalid, partial paths are '\n            f'expected to be defined with the `sympy` directory as the root.'\n        )",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 155,
+   "op": "boolean",
+   "start": 5382,
+   "end": 5400,
+   "old": "not path.is_file()",
+   "new": "(path.is_file())",
+   "id": 28
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 156,
+   "op": "return",
+   "start": 5414,
+   "end": 5426,
+   "old": "return False",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 157,
+   "op": "boolean",
+   "start": 5438,
+   "end": 5476,
+   "old": "not path.parts[-1].startswith('test_')",
+   "new": "(path.parts[-1].startswith('test_'))",
+   "id": 30
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 158,
+   "op": "return",
+   "start": 5490,
+   "end": 5502,
+   "old": "return False",
+   "new": "return None",
+   "id": 31
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 159,
+   "op": "boolean",
+   "start": 5514,
+   "end": 5538,
+   "old": "not path.suffix == '.py'",
+   "new": "(path.suffix == '.py')",
+   "id": 32
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 160,
+   "op": "return",
+   "start": 5552,
+   "end": 5564,
+   "old": "return False",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 161,
+   "op": "constant",
+   "start": 5580,
+   "end": 5584,
+   "old": "True",
+   "new": "(False)",
+   "id": 34
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 179,
+   "op": "statement",
+   "start": 6323,
+   "end": 6377,
+   "old": "valid_testpaths_default.append(str(absolute_testpath))",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 196,
+   "op": "comparison",
+   "start": 6903,
+   "end": 6923,
+   "old": "keywords is not None",
+   "new": "(keywords is None)",
+   "id": 36
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 196,
+   "op": "comparison",
+   "start": 6928,
+   "end": 6942,
+   "old": "keywords != ()",
+   "new": "(keywords == ())",
+   "id": 37
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 233,
+   "op": "comparison",
+   "start": 8373,
+   "end": 8419,
+   "old": "pathlib.Path(partial_path).parts[0] == 'sympy'",
+   "new": "(pathlib.Path(partial_path).parts[0] != 'sympy')",
+   "id": 38
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 122,
+   "op": "comparison",
+   "start": 3811,
+   "end": 3833,
+   "old": "len(partial_path) >= 4",
+   "new": "(len(partial_path) > 4)",
+   "id": 39
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 123,
+   "op": "statement",
+   "start": 3851,
+   "end": 3895,
+   "old": "has_test_prefix = partial_path[:4] == 'test'",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 124,
+   "op": "statement",
+   "start": 3912,
+   "end": 3954,
+   "old": "has_py_suffix = partial_path[-3:] == '.py'",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 131,
+   "op": "boolean",
+   "start": 4206,
+   "end": 4239,
+   "old": "has_test_prefix and has_py_suffix",
+   "new": "(has_test_prefix or has_py_suffix)",
+   "id": 42
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 132,
+   "op": "statement",
+   "start": 4257,
+   "end": 4304,
+   "old": "partial_path_file_patterns.append(partial_path)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4770,
+   "end": 4825,
+   "old": "zipped = zip(partial_paths, partial_path_file_patterns)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5421,
+   "end": 5426,
+   "old": "False",
+   "new": "(True)",
+   "id": 45
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 158,
+   "op": "constant",
+   "start": 5497,
+   "end": 5502,
+   "old": "False",
+   "new": "(True)",
+   "id": 46
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 159,
+   "op": "comparison",
+   "start": 5518,
+   "end": 5538,
+   "old": "path.suffix == '.py'",
+   "new": "(path.suffix != '.py')",
+   "id": 47
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 160,
+   "op": "constant",
+   "start": 5559,
+   "end": 5564,
+   "old": "False",
+   "new": "(True)",
+   "id": 48
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 187,
+   "op": "statement",
+   "start": 6556,
+   "end": 6611,
+   "old": "full_paths.append(str(pathlib.Path(sympy_dir(), path)))",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 189,
+   "op": "statement",
+   "start": 6646,
+   "end": 6672,
+   "old": "partial_paths.append(path)",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 200,
+   "op": "statement",
+   "start": 7054,
+   "end": 7113,
+   "old": "test_matches = find_tests_matching_keywords(keywords, path)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 233,
+   "op": "constant",
+   "start": 8412,
+   "end": 8419,
+   "old": "'sympy'",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 122,
+   "op": "constant",
+   "start": 3832,
+   "end": 3833,
+   "old": "4",
+   "new": "(5)",
+   "id": 53
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 123,
+   "op": "comparison",
+   "start": 3869,
+   "end": 3895,
+   "old": "partial_path[:4] == 'test'",
+   "new": "(partial_path[:4] != 'test')",
+   "id": 54
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 124,
+   "op": "comparison",
+   "start": 3928,
+   "end": 3954,
+   "old": "partial_path[-3:] == '.py'",
+   "new": "(partial_path[-3:] != '.py')",
+   "id": 55
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 125,
+   "op": "comparison",
+   "start": 3972,
+   "end": 3994,
+   "old": "len(partial_path) >= 3",
+   "new": "(len(partial_path) > 3)",
+   "id": 56
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4012,
+   "end": 4035,
+   "old": "has_test_prefix = False",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 127,
+   "op": "statement",
+   "start": 4052,
+   "end": 4094,
+   "old": "has_py_suffix = partial_path[-3:] == '.py'",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4129,
+   "end": 4152,
+   "old": "has_test_prefix = False",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 130,
+   "op": "statement",
+   "start": 4169,
+   "end": 4190,
+   "old": "has_py_suffix = False",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 134,
+   "op": "statement",
+   "start": 4355,
+   "end": 4411,
+   "old": "partial_path_file_patterns.append(f'{partial_path}*.py')",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 157,
+   "op": "constant",
+   "start": 5468,
+   "end": 5475,
+   "old": "'test_'",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 159,
+   "op": "constant",
+   "start": 5533,
+   "end": 5538,
+   "old": "'.py'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 165,
+   "op": "constant",
+   "start": 5724,
+   "end": 5731,
+   "old": "'utf-8'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 167,
+   "op": "constant",
+   "start": 5814,
+   "end": 5820,
+   "old": "'def '",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 233,
+   "op": "constant",
+   "start": 8406,
+   "end": 8407,
+   "old": "0",
+   "new": "(1)",
+   "id": 66
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 123,
+   "op": "constant",
+   "start": 3889,
+   "end": 3895,
+   "old": "'test'",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 124,
+   "op": "constant",
+   "start": 3949,
+   "end": 3954,
+   "old": "'.py'",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 125,
+   "op": "constant",
+   "start": 3993,
+   "end": 3994,
+   "old": "3",
+   "new": "(4)",
+   "id": 69
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 126,
+   "op": "constant",
+   "start": 4030,
+   "end": 4035,
+   "old": "False",
+   "new": "(True)",
+   "id": 70
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 127,
+   "op": "comparison",
+   "start": 4068,
+   "end": 4094,
+   "old": "partial_path[-3:] == '.py'",
+   "new": "(partial_path[-3:] != '.py')",
+   "id": 71
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 129,
+   "op": "constant",
+   "start": 4147,
+   "end": 4152,
+   "old": "False",
+   "new": "(True)",
+   "id": 72
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 130,
+   "op": "constant",
+   "start": 4185,
+   "end": 4190,
+   "old": "False",
+   "new": "(True)",
+   "id": 73
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4460,
+   "end": 4517,
+   "old": "partial_path_file_patterns.append(f'test*{partial_path}')",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 138,
+   "op": "statement",
+   "start": 4552,
+   "end": 4613,
+   "old": "partial_path_file_patterns.append(f'test*{partial_path}*.py')",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 141,
+   "op": "constant",
+   "start": 4747,
+   "end": 4751,
+   "old": "True",
+   "new": "(False)",
+   "id": 76
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 145,
+   "op": "statement",
+   "start": 4974,
+   "end": 5013,
+   "old": "matches.append(str(pathlib.Path(path)))",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5038,
+   "end": 5050,
+   "old": "dirs[:] = []",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 169,
+   "op": "comparison",
+   "start": 5882,
+   "end": 5917,
+   "old": "line.lower().find(kw.lower()) != -1",
+   "new": "(line.lower().find(kw.lower()) == -1)",
+   "id": 79
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 170,
+   "op": "statement",
+   "start": 5943,
+   "end": 5987,
+   "old": "test_name = line.split(' ')[1].split('(')[0]",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 171,
+   "op": "statement",
+   "start": 6012,
+   "end": 6056,
+   "old": "full_test_path = filepath + '::' + test_name",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 172,
+   "op": "statement",
+   "start": 6081,
+   "end": 6111,
+   "old": "matches.append(full_test_path)",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 205,
+   "op": "statement",
+   "start": 7312,
+   "end": 7365,
+   "old": "absolute_filepath = str(pathlib.Path(root, filename))",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 127,
+   "op": "constant",
+   "start": 4089,
+   "end": 4094,
+   "old": "'.py'",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 171,
+   "op": "arithmetic",
+   "start": 6029,
+   "end": 6056,
+   "old": "filepath + '::' + test_name",
+   "new": "(filepath + '::' - test_name)",
+   "id": 85
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7455,
+   "end": 7622,
+   "old": "test_matches = find_tests_matching_keywords(\n                                keywords,\n                                absolute_filepath,\n                            )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 211,
+   "op": "statement",
+   "start": 7651,
+   "end": 7679,
+   "old": "matches.extend(test_matches)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 123,
+   "op": "constant",
+   "start": 3883,
+   "end": 3884,
+   "old": "4",
+   "new": "(5)",
+   "id": 88
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 150,
+   "op": "statement",
+   "start": 5217,
+   "end": 5262,
+   "old": "matches.append(str(pathlib.Path(path, file)))",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 157,
+   "op": "constant",
+   "start": 5454,
+   "end": 5455,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 169,
+   "op": "constant",
+   "start": 5916,
+   "end": 5917,
+   "old": "1",
+   "new": "(2)",
+   "id": 91
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5985,
+   "end": 5986,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 171,
+   "op": "arithmetic",
+   "start": 6029,
+   "end": 6044,
+   "old": "filepath + '::'",
+   "new": "(filepath - '::')",
+   "id": 93
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 124,
+   "op": "constant",
+   "start": 3942,
+   "end": 3943,
+   "old": "3",
+   "new": "(4)",
+   "id": 94
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5980,
+   "end": 5983,
+   "old": "'('",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 171,
+   "op": "constant",
+   "start": 6040,
+   "end": 6044,
+   "old": "'::'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 127,
+   "op": "constant",
+   "start": 4082,
+   "end": 4083,
+   "old": "3",
+   "new": "(4)",
+   "id": 97
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5971,
+   "end": 5972,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "sympy/testing/runtests_pytest.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5966,
+   "end": 5969,
+   "old": "' '",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

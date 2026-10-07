@@ -1,0 +1,1006 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_experimental_arguments_schema.00dc2dd4.lv1",
+ "pool": 171,
+ "mutants": [
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 147,
+   "op": "boolean",
+   "start": 5571,
+   "end": 5779,
+   "old": "field_info.alias_priority is None\n        or field_info.alias_priority <= 1\n        or field_info.alias is None\n        or field_info.validation_alias is None\n        or field_info.serialization_alias is None",
+   "new": "(field_info.alias_priority is None and field_info.alias_priority <= 1 and (field_info.alias is None) and (field_info.validation_alias is None) and (field_info.serialization_alias is None))",
+   "id": 0
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 148,
+   "op": "comparison",
+   "start": 5616,
+   "end": 5646,
+   "old": "field_info.alias_priority <= 1",
+   "new": "(field_info.alias_priority < 1)",
+   "id": 1
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 149,
+   "op": "comparison",
+   "start": 5658,
+   "end": 5682,
+   "old": "field_info.alias is None",
+   "new": "(field_info.alias is not None)",
+   "id": 2
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 150,
+   "op": "comparison",
+   "start": 5694,
+   "end": 5729,
+   "old": "field_info.validation_alias is None",
+   "new": "(field_info.validation_alias is not None)",
+   "id": 3
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 5741,
+   "end": 5779,
+   "old": "field_info.serialization_alias is None",
+   "new": "(field_info.serialization_alias is not None)",
+   "id": 4
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 165,
+   "op": "boolean",
+   "start": 6466,
+   "end": 6533,
+   "old": "field_info.alias_priority is None or field_info.alias_priority <= 1",
+   "new": "(field_info.alias_priority is None and field_info.alias_priority <= 1)",
+   "id": 5
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 169,
+   "op": "comparison",
+   "start": 6668,
+   "end": 6698,
+   "old": "field_info.alias_priority == 1",
+   "new": "(field_info.alias_priority != 1)",
+   "id": 6
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 170,
+   "op": "statement",
+   "start": 6712,
+   "end": 6791,
+   "old": "field_info.serialization_alias = get_first_not_none(serialization_alias, alias)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 175,
+   "op": "comparison",
+   "start": 7026,
+   "end": 7050,
+   "old": "field_info.alias is None",
+   "new": "(field_info.alias is not None)",
+   "id": 8
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 178,
+   "op": "statement",
+   "start": 7152,
+   "end": 7231,
+   "old": "field_info.serialization_alias = get_first_not_none(serialization_alias, alias)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 180,
+   "op": "statement",
+   "start": 7292,
+   "end": 7365,
+   "old": "field_info.validation_alias = get_first_not_none(validation_alias, alias)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 29177,
+   "end": 29197,
+   "old": "len(parameters) == 1",
+   "new": "(len(parameters) != 1)",
+   "id": 11
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 29239,
+   "end": 29279,
+   "old": "parameters[0].default is Parameter.empty",
+   "new": "(parameters[0].default is not Parameter.empty)",
+   "id": 12
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 165,
+   "op": "comparison",
+   "start": 6466,
+   "end": 6499,
+   "old": "field_info.alias_priority is None",
+   "new": "(field_info.alias_priority is not None)",
+   "id": 13
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 165,
+   "op": "comparison",
+   "start": 6503,
+   "end": 6533,
+   "old": "field_info.alias_priority <= 1",
+   "new": "(field_info.alias_priority < 1)",
+   "id": 14
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 169,
+   "op": "constant",
+   "start": 6697,
+   "end": 6698,
+   "old": "1",
+   "new": "(2)",
+   "id": 15
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29196,
+   "end": 29197,
+   "old": "1",
+   "new": "(2)",
+   "id": 16
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 159,
+   "op": "boolean",
+   "start": 6123,
+   "end": 6149,
+   "old": "not isinstance(alias, str)",
+   "new": "(isinstance(alias, str))",
+   "id": 17
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 160,
+   "op": "statement",
+   "start": 6167,
+   "end": 6259,
+   "old": "raise TypeError(f'alias_generator {alias_generator} must return str, not {alias.__class__}')",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1627,
+   "op": "statement",
+   "start": 73742,
+   "end": 73780,
+   "old": "FieldInfo = import_cached_field_info()",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1633,
+   "op": "statement",
+   "start": 74009,
+   "end": 74068,
+   "old": "update_field_from_config(self._config_wrapper, name, field)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1969,
+   "op": "statement",
+   "start": 90619,
+   "end": 90915,
+   "old": "mode_lookup: dict[_ParameterKind, Literal['positional_only', 'positional_or_keyword', 'keyword_only']] = {\n            Parameter.POSITIONAL_ONLY: 'positional_only',\n            Parameter.POSITIONAL_OR_KEYWORD: 'positional_or_keyword',\n            Parameter.KEYWORD_ONLY: 'keyword_only',\n        }",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1977,
+   "op": "statement",
+   "start": 91009,
+   "end": 91105,
+   "old": "type_hints = _typing_extra.get_function_type_hints(function, globalns=globalns, localns=localns)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1979,
+   "op": "statement",
+   "start": 91115,
+   "end": 91172,
+   "old": "arguments_list: list[core_schema.ArgumentsParameter] = []",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1980,
+   "op": "statement",
+   "start": 91181,
+   "end": 91234,
+   "old": "var_args_schema: core_schema.CoreSchema | None = None",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1981,
+   "op": "statement",
+   "start": 91243,
+   "end": 91298,
+   "old": "var_kwargs_schema: core_schema.CoreSchema | None = None",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1982,
+   "op": "statement",
+   "start": 91307,
+   "end": 91363,
+   "old": "var_kwargs_mode: core_schema.VarKwargsMode | None = None",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2052,
+   "op": "statement",
+   "start": 94642,
+   "end": 94667,
+   "old": "sig = signature(function)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2056,
+   "op": "statement",
+   "start": 94832,
+   "end": 94892,
+   "old": "parameters_list: list[core_schema.ArgumentsV3Parameter] = []",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1629,
+   "op": "comparison",
+   "start": 73793,
+   "end": 73819,
+   "old": "default is Parameter.empty",
+   "new": "(default is not Parameter.empty)",
+   "id": 29
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1632,
+   "op": "statement",
+   "start": 73921,
+   "end": 74000,
+   "old": "field = FieldInfo.from_annotated_attribute(annotation, default, _source=source)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1645,
+   "op": "boolean",
+   "start": 74563,
+   "end": 74586,
+   "old": "not field.is_required()",
+   "new": "(field.is_required())",
+   "id": 31
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1646,
+   "op": "statement",
+   "start": 74600,
+   "end": 74636,
+   "old": "schema = wrap_default(field, schema)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1995,
+   "op": "statement",
+   "start": 91779,
+   "end": 91819,
+   "old": "parameter_mode = mode_lookup.get(p.kind)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2069,
+   "op": "statement",
+   "start": 95316,
+   "end": 95356,
+   "old": "parameter_mode = mode_lookup.get(p.kind)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2097,
+   "op": "statement",
+   "start": 96852,
+   "end": 97058,
+   "old": "parameters_list.append(\n                self._generate_parameter_v3_schema(\n                    name, annotation, AnnotationSource.FUNCTION, parameter_mode, default=p.default\n                )\n            )",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1970,
+   "op": "constant",
+   "start": 90765,
+   "end": 90782,
+   "old": "'positional_only'",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1971,
+   "op": "constant",
+   "start": 90829,
+   "end": 90852,
+   "old": "'positional_or_keyword'",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1972,
+   "op": "constant",
+   "start": 90890,
+   "end": 90904,
+   "old": "'keyword_only'",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1990,
+   "op": "comparison",
+   "start": 91601,
+   "end": 91632,
+   "old": "parameters_callback is not None",
+   "new": "(parameters_callback is None)",
+   "id": 39
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1991,
+   "op": "statement",
+   "start": 91650,
+   "end": 91699,
+   "old": "result = parameters_callback(i, name, annotation)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1996,
+   "op": "comparison",
+   "start": 91835,
+   "end": 91861,
+   "old": "parameter_mode is not None",
+   "new": "(parameter_mode is None)",
+   "id": 41
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2000,
+   "op": "statement",
+   "start": 92050,
+   "end": 92083,
+   "old": "arguments_list.append(arg_schema)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2047,
+   "op": "constant",
+   "start": 94496,
+   "end": 94519,
+   "old": "'positional_or_keyword'",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2059,
+   "op": "comparison",
+   "start": 94972,
+   "end": 95003,
+   "old": "parameters_callback is not None",
+   "new": "(parameters_callback is None)",
+   "id": 44
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2060,
+   "op": "statement",
+   "start": 95021,
+   "end": 95072,
+   "old": "result = parameters_callback(i, name, p.annotation)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2064,
+   "op": "comparison",
+   "start": 95155,
+   "end": 95186,
+   "old": "p.annotation is Parameter.empty",
+   "new": "(p.annotation is not Parameter.empty)",
+   "id": 46
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2067,
+   "op": "statement",
+   "start": 95273,
+   "end": 95302,
+   "old": "annotation = type_hints[name]",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2070,
+   "op": "comparison",
+   "start": 95372,
+   "end": 95394,
+   "old": "parameter_mode is None",
+   "new": "(parameter_mode is not None)",
+   "id": 48
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1993,
+   "op": "statement",
+   "start": 91757,
+   "end": 91765,
+   "old": "continue",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2001,
+   "op": "comparison",
+   "start": 92101,
+   "end": 92135,
+   "old": "p.kind == Parameter.VAR_POSITIONAL",
+   "new": "(p.kind != Parameter.VAR_POSITIONAL)",
+   "id": 50
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2006,
+   "op": "statement",
+   "start": 92302,
+   "end": 92353,
+   "old": "unpack_type = _typing_extra.unpack_type(annotation)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2061,
+   "op": "comparison",
+   "start": 95092,
+   "end": 95108,
+   "old": "result == 'skip'",
+   "new": "(result != 'skip')",
+   "id": 52
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2062,
+   "op": "statement",
+   "start": 95130,
+   "end": 95138,
+   "old": "continue",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2071,
+   "op": "comparison",
+   "start": 95419,
+   "end": 95450,
+   "old": "p.kind == Parameter.VAR_KEYWORD",
+   "new": "(p.kind != Parameter.VAR_KEYWORD)",
+   "id": 54
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2075,
+   "op": "statement",
+   "start": 95592,
+   "end": 95639,
+   "old": "origin = get_origin(unpack_type) or unpack_type",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2081,
+   "op": "statement",
+   "start": 95941,
+   "end": 96097,
+   "old": "non_pos_only_param_names = {\n                        name for name, p in sig.parameters.items() if p.kind != Parameter.POSITIONAL_ONLY\n                    }",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2093,
+   "op": "statement",
+   "start": 96734,
+   "end": 96758,
+   "old": "annotation = unpack_type",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1992,
+   "op": "constant",
+   "start": 91729,
+   "end": 91735,
+   "old": "'skip'",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2004,
+   "op": "comparison",
+   "start": 92245,
+   "end": 92276,
+   "old": "p.kind == Parameter.VAR_KEYWORD",
+   "new": "(p.kind != Parameter.VAR_KEYWORD)",
+   "id": 59
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2007,
+   "op": "comparison",
+   "start": 92373,
+   "end": 92396,
+   "old": "unpack_type is not None",
+   "new": "(unpack_type is None)",
+   "id": 60
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2014,
+   "op": "statement",
+   "start": 92767,
+   "end": 92923,
+   "old": "non_pos_only_param_names = {\n                        name for name, p in sig.parameters.items() if p.kind != Parameter.POSITIONAL_ONLY\n                    }",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2017,
+   "op": "statement",
+   "start": 92944,
+   "end": 93026,
+   "old": "overlapping_params = non_pos_only_param_names.intersection(origin.__annotations__)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2029,
+   "op": "statement",
+   "start": 93675,
+   "end": 93702,
+   "old": "var_kwargs_mode = 'uniform'",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2030,
+   "op": "statement",
+   "start": 93723,
+   "end": 93775,
+   "old": "var_kwargs_schema = self.generate_schema(annotation)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2075,
+   "op": "boolean",
+   "start": 95601,
+   "end": 95639,
+   "old": "get_origin(unpack_type) or unpack_type",
+   "new": "(get_origin(unpack_type) and unpack_type)",
+   "id": 65
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2077,
+   "op": "statement",
+   "start": 95713,
+   "end": 95920,
+   "old": "raise PydanticUserError(\n                            f'Expected a `TypedDict` class inside `Unpack[...]`, got {unpack_type!r}',\n                            code='unpack-typed-dict',\n                        )",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2095,
+   "op": "constant",
+   "start": 96818,
+   "end": 96838,
+   "old": "'var_kwargs_uniform'",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2008,
+   "op": "boolean",
+   "start": 92427,
+   "end": 92465,
+   "old": "get_origin(unpack_type) or unpack_type",
+   "new": "(get_origin(unpack_type) and unpack_type)",
+   "id": 68
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2010,
+   "op": "statement",
+   "start": 92539,
+   "end": 92746,
+   "old": "raise PydanticUserError(\n                            f'Expected a `TypedDict` class inside `Unpack[...]`, got {unpack_type!r}',\n                            code='unpack-typed-dict',\n                        )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2019,
+   "op": "statement",
+   "start": 93094,
+   "end": 93469,
+   "old": "raise PydanticUserError(\n                            f'Typed dictionary {origin.__name__!r} overlaps with parameter'\n                            f'{\"s\" if len(overlapping_params) >= 2 else \"\"} '\n                            f'{\", \".join(repr(p) for p in sorted(overlapping_params))}',\n                            code='overlapping-unpack-typed-dict',\n                        )",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2082,
+   "op": "comparison",
+   "start": 96040,
+   "end": 96075,
+   "old": "p.kind != Parameter.POSITIONAL_ONLY",
+   "new": "(p.kind == Parameter.POSITIONAL_ONLY)",
+   "id": 71
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2015,
+   "op": "comparison",
+   "start": 92866,
+   "end": 92901,
+   "old": "p.kind != Parameter.POSITIONAL_ONLY",
+   "new": "(p.kind == Parameter.POSITIONAL_ONLY)",
+   "id": 72
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2079,
+   "op": "constant",
+   "start": 95874,
+   "end": 95893,
+   "old": "'unpack-typed-dict'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2090,
+   "op": "constant",
+   "start": 96585,
+   "end": 96616,
+   "old": "'overlapping-unpack-typed-dict'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2012,
+   "op": "constant",
+   "start": 92700,
+   "end": 92719,
+   "old": "'unpack-typed-dict'",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2023,
+   "op": "constant",
+   "start": 93411,
+   "end": 93442,
+   "old": "'overlapping-unpack-typed-dict'",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 128,
+   "op": "statement",
+   "start": 4800,
+   "end": 4875,
+   "old": "type_params: tuple[_TypeVarLike, ...] = getattr(obj, '__type_params__', ())",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 135,
+   "op": "statement",
+   "start": 5218,
+   "end": 5274,
+   "old": "locals_list.append({t.__name__: t for t in type_params})",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 138,
+   "op": "statement",
+   "start": 5336,
+   "end": 5368,
+   "old": "globalns = get_module_ns_of(obj)",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 140,
+   "op": "return",
+   "start": 5374,
+   "end": 5440,
+   "old": "return NamespacesTuple(globalns, LazyLocalNamespace(*locals_list))",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 120,
+   "op": "comparison",
+   "start": 4382,
+   "end": 4410,
+   "old": "parent_namespace is not None",
+   "new": "(parent_namespace is None)",
+   "id": 81
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 129,
+   "op": "comparison",
+   "start": 4883,
+   "end": 4911,
+   "old": "parent_namespace is not None",
+   "new": "(parent_namespace is None)",
+   "id": 82
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 133,
+   "op": "arithmetic",
+   "start": 5154,
+   "end": 5212,
+   "old": "type_params += parent_namespace.get('__type_params__', ())",
+   "new": "type_params -= parent_namespace.get('__type_params__', ())",
+   "id": 83
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4853,
+   "end": 4870,
+   "old": "'__type_params__'",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 293,
+   "op": "statement",
+   "start": 12835,
+   "end": 12877,
+   "old": "self.__dict__.pop('types_namespace', None)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 133,
+   "op": "constant",
+   "start": 5190,
+   "end": 5207,
+   "old": "'__type_params__'",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "pydantic/_internal/_namespace_utils.py",
+   "line": 293,
+   "op": "constant",
+   "start": 12853,
+   "end": 12870,
+   "old": "'types_namespace'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "pydantic/_internal/_typing_extra.py",
+   "line": 64,
+   "op": "return",
+   "start": 1949,
+   "end": 2025,
+   "old": "return get_args(tp)[0] if typing_objects.is_unpack(get_origin(tp)) else None",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "pydantic/_internal/_typing_extra.py",
+   "line": 64,
+   "op": "constant",
+   "start": 1969,
+   "end": 1970,
+   "old": "0",
+   "new": "(1)",
+   "id": 89
+  },
+  {
+   "path": "pydantic/_internal/_utils.py",
+   "line": 377,
+   "op": "return",
+   "start": 13137,
+   "end": 13169,
+   "old": "return a if a is not None else b",
+   "new": "return None",
+   "id": 90
+  },
+  {
+   "path": "pydantic/_internal/_utils.py",
+   "line": 446,
+   "op": "return",
+   "start": 15866,
+   "end": 15911,
+   "old": "return self.fget.__get__(instance, objtype)()",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 116,
+   "op": "statement",
+   "start": 3903,
+   "end": 3915,
+   "old": "alias = None",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 132,
+   "op": "statement",
+   "start": 4662,
+   "end": 4765,
+   "old": "validation_alias = self._generate_alias('validation_alias', (str, AliasChoices, AliasPath), field_name)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 133,
+   "op": "statement",
+   "start": 4774,
+   "end": 4859,
+   "old": "serialization_alias = self._generate_alias('serialization_alias', (str,), field_name)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 135,
+   "op": "return",
+   "start": 4869,
+   "end": 4920,
+   "old": "return alias, validation_alias, serialization_alias",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 119,
+   "op": "boolean",
+   "start": 4036,
+   "end": 4082,
+   "old": "alias and not isinstance(alias, allowed_types)",
+   "new": "(alias or not isinstance(alias, allowed_types))",
+   "id": 96
+  },
+  {
+   "path": "pydantic/aliases.py",
+   "line": 132,
+   "op": "constant",
+   "start": 4702,
+   "end": 4720,
+   "old": "'validation_alias'",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "pydantic/experimental/arguments_schema.py",
+   "line": 35,
+   "op": "statement",
+   "start": 1333,
+   "end": 1534,
+   "old": "generate_schema = _generate_schema.GenerateSchema(\n        _config.ConfigWrapper(config),\n        ns_resolver=_namespace_utils.NsResolver(namespaces_tuple=_namespace_utils.ns_for_function(func)),\n    )",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "pydantic/experimental/arguments_schema.py",
+   "line": 40,
+   "op": "comparison",
+   "start": 1543,
+   "end": 1569,
+   "old": "schema_type == 'arguments'",
+   "new": "(schema_type != 'arguments')",
+   "id": 99
+  }
+ ]
+}

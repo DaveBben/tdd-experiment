@@ -1,0 +1,30 @@
+{
+ "task": "mesonbuild__meson.f5d81d07.cargotests.8e49c2d0.lv1",
+ "image": "libercoders/featurebench-specs_meson-instance_80dbfb11@sha256:fa8e46b573d2153376c6e089996712d3aa67c3cb8b8569ec232e7a4b7934ec24",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 16 passed in 0.29s =============================="
+ },
+ "gold_p2p": {
+  "exit": 1,
+  "failing": [
+   "unittests/failuretests.py::FailureTests::test_dependency"
+  ],
+  "summary": "============= 1 failed, 102 passed, 2 skipped in 67.61s (0:01:07) =============="
+ },
+ "mutant_pool": 197,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 1,
+  "failing": [
+   "unittests/failuretests.py::FailureTests::test_dependency"
+  ],
+  "summary": "============= 1 failed, 102 passed, 2 skipped in 67.72s (0:01:07) =============="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": false
+}

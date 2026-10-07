@@ -1,0 +1,2554 @@
+=== astropy/uncertainty/core.py
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Distribution class and associated machinery.
+"""
+
+import builtins
+
+import numpy as np
+
+from astropy import stats
+from astropy import units as u
+from astropy.utils.compat.numpycompat import NUMPY_LT_2_0
+
+if NUMPY_LT_2_0:
+    from numpy.core.multiarray import normalize_axis_index
+    from numpy.lib.function_base import _parse_gufunc_signature
+    from numpy.lib.stride_tricks import DummyArray
+else:
+    from numpy.lib._function_base_impl import _parse_gufunc_signature
+    from numpy.lib._stride_tricks_impl import DummyArray
+    from numpy.lib.array_utils import normalize_axis_index
+
+
+from .function_helpers import FUNCTION_HELPERS
+
+__all__ = ["Distribution"]
+
+
+# we set this by hand because the symbolic expression (below) requires scipy
+# SMAD_SCALE_FACTOR = 1 / scipy.stats.norm.ppf(0.75)
+SMAD_SCALE_FACTOR = 1.48260221850560203193936104071326553821563720703125
+
+
+class Distribution:
+    """A scalar value or array values with associated uncertainty distribution.
+
+    This object will take its exact type from whatever the ``samples``
+    argument is. In general this is expected to be ``NdarrayDistribution`` for
+    |ndarray| input, and, e.g., ``QuantityDistribution`` for a subclass such
+    as |Quantity|. But anything compatible with `numpy.asanyarray` is possible
+    (generally producing ``NdarrayDistribution``).
+
+    See also: https://docs.astropy.org/en/stable/uncertainty/
+
+    Parameters
+    ----------
+    samples : array-like
+        The distribution, with sampling along the *trailing* axis. If 1D, the sole
+        dimension is used as the sampling axis (i.e., it is a scalar distribution).
+        If an |ndarray| or subclass, the data will not be copied unless it is not
+        possible to take a view (generally, only when the strides of the last axis
+        are negative).
+
+    """
+
+    _generated_subclasses = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def distribution(self):
+        return self["samples"]["sample"]
+
+    @property
+    def dtype(self):
+        return super().dtype["samples"].base["sample"]
+
+    @dtype.setter
+    def dtype(self, dtype):
+        dtype = self._get_distribution_dtype(
+            dtype, self.n_samples, itemsize=super().dtype["samples"].base.itemsize
+        )
+        super(Distribution, self.__class__).dtype.__set__(self, dtype)
+
+    def astype(self, dtype, *args, **kwargs):
+        dtype = self._get_distribution_dtype(dtype, self.n_samples)
+        return super().astype(dtype, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _not_implemented_or_raise(self, function, types):
+        # Our function helper or dispatcher found that the function does not
+        # work with Distribution.  In principle, there may be another class that
+        # knows what to do with us, for which we should return NotImplemented.
+        # But if there is ndarray (or a non-Distribution subclass of it) around,
+        # it quite likely coerces, so we should just break.
+        if any(
+            issubclass(t, np.ndarray) and not issubclass(t, Distribution) for t in types
+        ):
+            raise TypeError(
+                f"the Distribution implementation cannot handle {function} "
+                "with the given arguments."
+            ) from None
+        else:
+            return NotImplemented
+
+    # Override __eq__ and __ne__ to pass on directly to the ufunc since
+    # otherwise comparisons with non-distributions do not work (but
+    # deferring if other defines __array_ufunc__ = None -- see
+    # numpy/core/src/common/binop_override.h for the logic; we assume we
+    # will never deal with __array_priority__ any more).  Note: there is no
+    # problem for other comparisons, since for those, structured arrays are
+    # not treated differently in numpy/core/src/multiarray/arrayobject.c.
+    def __eq__(self, other):
+        if getattr(other, "__array_ufunc__", False) is None:
+            return NotImplemented
+        return np.equal(self, other)
+
+    def __ne__(self, other):
+        if getattr(other, "__array_ufunc__", False) is None:
+            return NotImplemented
+        return np.not_equal(self, other)
+
+
+
+
+
+
+
+
+    def pdf_mean(self, dtype=None, out=None):
+        """
+        The mean of this distribution.
+
+        Arguments are as for `numpy.mean`.
+        """
+        return self.distribution.mean(axis=-1, dtype=dtype, out=out)
+
+    def pdf_std(self, dtype=None, out=None, ddof=0):
+        """
+        The standard deviation of this distribution.
+
+        Arguments are as for `numpy.std`.
+        """
+        return self.distribution.std(axis=-1, dtype=dtype, out=out, ddof=ddof)
+
+    def pdf_var(self, dtype=None, out=None, ddof=0):
+        """
+        The variance of this distribution.
+
+        Arguments are as for `numpy.var`.
+        """
+        return self.distribution.var(axis=-1, dtype=dtype, out=out, ddof=ddof)
+
+    def pdf_median(self, out=None):
+        """
+        The median of this distribution.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+        """
+        return np.median(self.distribution, axis=-1, out=out)
+
+    def pdf_mad(self, out=None):
+        """
+        The median absolute deviation of this distribution.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+        """
+        median = self.pdf_median(out=out)
+        absdiff = np.abs(self - median)
+        return np.median(
+            absdiff.distribution, axis=-1, out=median, overwrite_input=True
+        )
+
+    def pdf_smad(self, out=None):
+        """
+        The median absolute deviation of this distribution rescaled to match the
+        standard deviation for a normal distribution.
+
+        Parameters
+        ----------
+        out : array, optional
+            Alternative output array in which to place the result. It must
+            have the same shape and buffer length as the expected output,
+            but the type (of the output) will be cast if necessary.
+        """
+        result = self.pdf_mad(out=out)
+        result *= SMAD_SCALE_FACTOR
+        return result
+
+    def pdf_percentiles(self, percentile, **kwargs):
+        """
+        Compute percentiles of this Distribution.
+
+        Parameters
+        ----------
+        percentile : float or array of float or `~astropy.units.Quantity`
+            The desired percentiles of the distribution (i.e., on [0,100]).
+            `~astropy.units.Quantity` will be converted to percent, meaning
+            that a ``dimensionless_unscaled`` `~astropy.units.Quantity` will
+            be interpreted as a quantile.
+
+        Additional keywords are passed into `numpy.percentile`.
+
+        Returns
+        -------
+        percentiles : `~astropy.units.Quantity` ['dimensionless']
+            The ``fracs`` percentiles of this distribution.
+        """
+        percentile = u.Quantity(percentile, u.percent).value
+        percs = np.percentile(self.distribution, percentile, axis=-1, **kwargs)
+        # numpy.percentile strips units for unclear reasons, so we have to make
+        # a new object with units
+        if hasattr(self.distribution, "_new_view"):
+            return self.distribution._new_view(percs)
+        else:
+            return percs
+
+    def pdf_histogram(self, **kwargs):
+        """
+        Compute histogram over the samples in the distribution.
+
+        Parameters
+        ----------
+        All keyword arguments are passed into `astropy.stats.histogram`. Note
+        That some of these options may not be valid for some multidimensional
+        distributions.
+
+        Returns
+        -------
+        hist : array
+            The values of the histogram. Trailing dimension is the histogram
+            dimension.
+        bin_edges : array of dtype float
+            Return the bin edges ``(length(hist)+1)``. Trailing dimension is the
+            bin histogram dimension.
+        """
+        distr = self.distribution
+        raveled_distr = distr.reshape(distr.size // distr.shape[-1], distr.shape[-1])
+
+        nhists = []
+        bin_edges = []
+        for d in raveled_distr:
+            nhist, bin_edge = stats.histogram(d, **kwargs)
+            nhists.append(nhist)
+            bin_edges.append(bin_edge)
+
+        nhists = np.array(nhists)
+        nh_shape = self.shape + (nhists.size // self.size,)
+        bin_edges = np.array(bin_edges)
+        be_shape = self.shape + (bin_edges.size // self.size,)
+        return nhists.reshape(nh_shape), bin_edges.reshape(be_shape)
+
+    def __array_function__(self, function, types, args, kwargs):
+        """
+        Implement the `__array_function__` protocol for Distribution objects.
+
+        This method enables numpy functions to work with Distribution objects by
+        delegating to appropriate function helpers or falling back to the parent
+        class implementation. It handles the conversion of Distribution inputs to
+        their underlying distribution arrays and wraps results back into Distribution
+        objects when appropriate.
+
+        Parameters
+        ----------
+        function : callable
+            The numpy function that was called (e.g., np.mean, np.sum, etc.).
+        types : tuple of type
+            A tuple of the unique argument types from the original numpy function call.
+        args : tuple
+            Positional arguments passed to the numpy function.
+        kwargs : dict
+            Keyword arguments passed to the numpy function.
+
+        Returns
+        -------
+        result : Distribution, array-like, or NotImplemented
+            The result of applying the numpy function to the Distribution. If the
+            function is supported and produces array output, returns a new Distribution
+            object. For unsupported functions or when other types should handle the
+            operation, returns NotImplemented. Scalar results are returned as-is
+            without Distribution wrapping.
+
+        Notes
+        -----
+        Supported functions operate on sample arrays and wrap shaped array results back
+        into Distributions while preserving tuple/list result structure and explicit
+        Distribution outputs. Functions without special Distribution handling defer to
+        the parent array-function protocol.
+
+        If the function cannot be handled and there are non-Distribution ndarray
+        subclasses in the argument types, a TypeError is raised. Otherwise,
+        NotImplemented is returned to allow other classes to handle the operation.
+        """
+        raise NotImplementedError
+
+    def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
+        """
+        Handle NumPy universal functions (ufuncs) applied to Distribution objects.
+
+        This method is called when a NumPy ufunc is applied to a Distribution instance,
+        allowing the Distribution class to control how the operation is performed on
+        the underlying sample data while preserving the distribution structure.
+
+        Parameters
+        ----------
+        ufunc : numpy.ufunc
+            The universal function object that is being applied.
+        method : str
+            String indicating how the ufunc was called. Can be '__call__' for normal
+            ufunc calls, 'reduce' for reduction operations, 'accumulate' for 
+            accumulation operations, or 'reduceat' for reduceat operations.
+        *inputs : array_like
+            Input arguments to the ufunc. Distribution objects will have their
+            sample data extracted, while non-Distribution inputs will be broadcast
+            appropriately by adding a new axis for sample dimensions.
+        **kwargs : dict
+            Keyword arguments passed to the ufunc, including:
+            - out : array_like, optional
+                Output array(s) for the result. If Distribution objects are provided,
+                their sample data will be used.
+            - axis : int or tuple of int, optional
+                Axis or axes along which the operation is performed for reduction
+                operations.
+            - keepdims : bool, optional
+                Whether to keep reduced dimensions in the output.
+
+        Returns
+        -------
+        result : Distribution or array_like
+            The result of applying the ufunc to the distribution samples. For most
+            operations, this will be a new Distribution object containing the
+            transformed samples. For operations that reduce the sample dimension
+            or produce scalar outputs, the result may be a regular array.
+
+        Notes
+        -----
+        - For reduction operations (reduce, accumulate, reduceat), if no axis is
+          specified, the operation is applied over all axes of the distribution
+          shape (excluding the sample axis).
+        - For generalized universal functions (gufuncs) with signatures, the sample
+          axis is moved to the appropriate position based on the signature and axis
+          parameter before applying the operation.
+        - Non-Distribution inputs are automatically broadcast with Distribution
+          inputs by adding a sample axis where needed.
+        - The 'axes' keyword argument is not currently supported for gufuncs and
+          will raise NotImplementedError.
+
+        Raises
+        ------
+        NotImplementedError
+            If the ufunc is a gufunc called with the 'axes' keyword argument,
+            which is not yet supported.
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def _get_distribution_cls(cls, samples_cls):
+        """
+        Get or create a Distribution subclass for the given samples class.
+
+        This class method returns a stable Distribution subclass compatible with the
+        type of the input samples.
+
+        Parameters
+        ----------
+        samples_cls : type
+            The class type of the samples array (e.g., numpy.ndarray, astropy.units.Quantity).
+            This determines what kind of Distribution subclass should be created or retrieved.
+
+        Returns
+        -------
+        distribution_cls : type
+            A Distribution subclass that preserves the supported behavior and metadata
+            of `samples_cls`, or NdarrayDistribution when no specialized array behavior
+            can be identified.
+
+        Notes
+        -----
+        - If `samples_cls` is already a Distribution subclass, it is returned directly.
+        - Repeated requests for the same supported sample class return the same class.
+        - Subclasses of a supported array class retain the closest compatible Distribution
+          behavior; unrecognized non-array inputs fall back to NdarrayDistribution.
+
+        Raises
+        ------
+        RuntimeError
+            If the registered Distribution base for a sample class has an invalid layout.
+        """
+        raise NotImplementedError
+
+    @property
+    def n_samples(self):
+        """
+        The number of samples of this distribution.
+
+        This property returns the size of the sampling dimension, which is always the
+        trailing axis of the distribution array. For a scalar distribution, this
+        represents the number of samples used to characterize the uncertainty. For
+        array distributions, each element has the same number of samples.
+
+        Returns
+        -------
+        int
+            The number of samples in the distribution. This corresponds to the length
+            of the last axis of the underlying distribution array.
+
+        Notes
+        -----
+        This value is fixed when the Distribution is created and cannot be modified
+        after initialization.
+
+        For distributions created from 1D arrays, the entire array length becomes
+        the number of samples. For higher-dimensional input arrays, only the last
+        axis is used for sampling while earlier axes represent the shape of the
+        distributed quantity.
+        """
+        raise NotImplementedError
+
+
+class ScalarDistribution(Distribution, np.void):
+    """Scalar distribution.
+
+    This class mostly exists to make `~numpy.array2print` possible for
+    all subclasses.  It is a scalar element, still with n_samples samples.
+    """
+
+
+class ArrayDistribution(Distribution, np.ndarray):
+    # This includes the important override of view and __getitem__
+    # which are needed for all ndarray subclass Distributions, but not
+    # for the scalar one.
+    _samples_cls = np.ndarray
+
+    # Override view so that we stay a Distribution version of the new type.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def __getitem__(self, item):
+        if isinstance(item, str):
+            # "samples" should always get back to the samples class.
+            if item == "samples":
+                return self.distribution
+            else:
+                # Hard to get this right directly, so instead get item from the
+                # distribution, and create a new instance.  We move the sample axis to
+                # the end to ensure the order is right for possible subarrays.
+                return Distribution(np.moveaxis(self.distribution[item], self.ndim, -1))
+
+        if isinstance(item, Distribution):
+            # Required for in-place operations like dist[dist < 0] += 360.
+            return self.distribution[item.distribution]
+
+        result = super().__getitem__(item)
+        if isinstance(result, np.void):
+            return result.view((ScalarDistribution, result.dtype))
+        else:
+            return result
+
+    def __setitem__(self, item, value):
+        if isinstance(item, Distribution):
+            # Support operations like dist[dist < 0] = 0.
+            self.distribution[item.distribution] = value
+            return
+
+        if isinstance(item, str):
+            if item == "samples":
+                self.distribution[()] = value
+                return
+
+            # Get a view of this item (non-trivial; see above).
+            self = self[item]
+            item = ()
+
+        if not isinstance(value, Distribution):
+            # If value is not already a Distribution, first make it an array
+            # to help interpret possible structured dtype, and then turn it
+            # into a Distribution with n_samples=1 (which will broadcast).
+            value = np.asanyarray(value, dtype=self.dtype)
+            value = Distribution(value[..., np.newaxis])
+
+        super().__setitem__(item, value)
+
+    @property
+    def distribution(self):
+        """
+        Get the underlying distribution array from the ArrayDistribution.
+
+        This property provides access to the raw sample data that represents the
+        uncertainty distribution. The returned array has the sample axis as the
+        last dimension, where each sample along this axis represents one possible
+        value from the distribution.
+
+        Returns
+        -------
+        distribution : array-like
+            The distribution samples as an array of the same type as the original
+            samples class (e.g., ndarray, Quantity). The shape is the same as the
+            ArrayDistribution shape plus one additional trailing dimension for the
+            samples. The last axis contains the individual samples that make up
+            the uncertainty distribution.
+
+        Notes
+        -----
+        The returned data shares sample storage where a view is possible and preserves
+        sample-array subclass metadata such as Quantity units.
+        """
+        raise NotImplementedError
+
+    def view(self, dtype = None, type = None):
+        """
+        New view of array with the same data.
+
+        Like `~numpy.ndarray.view` except that the result will always be a new
+        `~astropy.uncertainty.Distribution` instance.  If the requested
+        ``type`` is a `~astropy.uncertainty.Distribution`, then no change in
+        ``dtype`` is allowed.
+
+        Parameters
+        ----------
+        dtype : data-type or ndarray sub-class, optional
+            Data-type descriptor of the returned view, e.g., float32 or int16.
+            The default, None, results in the view having the same data-type
+            as the original array. This argument can also be specified as an
+            ndarray sub-class, which then specifies the type of the returned
+            object (this is equivalent to setting the ``type`` parameter).
+        type : type, optional
+            Type of the returned view, either a subclass of ndarray or a
+            Distribution subclass. By default, the same type as the calling
+            array is returned.
+
+        Returns
+        -------
+        view : Distribution
+            A new Distribution instance that shares the same data as the original
+            array but with the specified dtype and/or type. The returned object
+            will always be a Distribution subclass appropriate for the requested
+            type.
+
+        Raises
+        ------
+        ValueError
+            If the requested dtype cannot represent a compatible view of the sample layout.
+
+        Notes
+        -----
+        Views remain Distribution instances of the requested compatible array type,
+        and the logical sample axis remains trailing after a dtype reinterpretation.
+        An already compatible Distribution storage dtype may be viewed directly;
+        incompatible reinterpretations raise ValueError.
+        """
+        raise NotImplementedError
+
+
+class _DistributionRepr:
+    def __repr__(self):
+        reprarr = repr(self.distribution)
+        if reprarr.endswith(">"):
+            firstspace = reprarr.find(" ")
+            reprarr = reprarr[firstspace + 1 : -1]  # :-1] removes the ending '>'
+            return (
+                f"<{self.__class__.__name__} {reprarr} with n_samples={self.n_samples}>"
+            )
+        else:  # numpy array-like
+            firstparen = reprarr.find("(")
+            reprarr = reprarr[firstparen:]
+            return f"{self.__class__.__name__}{reprarr} with n_samples={self.n_samples}"
+
+    def __str__(self):
+        distrstr = str(self.distribution)
+        toadd = f" with n_samples={self.n_samples}"
+        return distrstr + toadd
+
+    def _repr_latex_(self):
+        if hasattr(self.distribution, "_repr_latex_"):
+            superlatex = self.distribution._repr_latex_()
+            toadd = rf", \; n_{{\rm samp}}={self.n_samples}"
+            return superlatex[:-1] + toadd + superlatex[-1]
+        else:
+            return None
+
+
+class NdarrayDistribution(_DistributionRepr, ArrayDistribution):
+    pass
+
+
+# Ensure our base NdarrayDistribution is known.
+Distribution._generated_subclasses[np.ndarray] = NdarrayDistribution
+
+=== astropy/units/quantity_helper/function_helpers.py
+# Licensed under a 3-clause BSD style license. See LICENSE.rst except
+# for parts explicitly labelled as being (largely) copies of numpy
+# implementations; for those, see licenses/NUMPY_LICENSE.rst.
+"""Helpers for overriding numpy functions.
+
+We override numpy functions in `~astropy.units.Quantity.__array_function__`.
+In this module, the numpy functions are split in four groups, each of
+which has an associated `set` or `dict`:
+
+1. SUBCLASS_SAFE_FUNCTIONS (set), if the numpy implementation
+   supports Quantity; we pass on to ndarray.__array_function__.
+2. FUNCTION_HELPERS (dict), if the numpy implementation is usable
+   after converting quantities to arrays with suitable units,
+   and possibly setting units on the result.
+3. DISPATCHED_FUNCTIONS (dict), if the function makes sense but
+   requires a Quantity-specific implementation
+4. UNSUPPORTED_FUNCTIONS (set), if the function does not make sense.
+
+For the FUNCTION_HELPERS `dict`, the value is a function that does the
+unit conversion.  It should take the same arguments as the numpy
+function would (though one can use ``*args`` and ``**kwargs``) and
+return a tuple of ``args, kwargs, unit, out``, where ``args`` and
+``kwargs`` will be will be passed on to the numpy implementation,
+``unit`` is a possible unit of the result (`None` if it should not be
+converted to Quantity), and ``out`` is a possible output Quantity passed
+in, which will be filled in-place.
+
+For the DISPATCHED_FUNCTIONS `dict`, the value is a function that
+implements the numpy functionality for Quantity input. It should
+return a tuple of ``result, unit, out``, where ``result`` is generally
+a plain array with the result, and ``unit`` and ``out`` are as above.
+If unit is `None`, result gets returned directly, so one can also
+return a Quantity directly using ``quantity_result, None, None``.
+
+"""
+
+import functools
+import operator
+
+import numpy as np
+from numpy.lib import recfunctions as rfn
+
+from astropy.units.core import dimensionless_unscaled
+from astropy.units.errors import UnitConversionError, UnitsError, UnitTypeError
+from astropy.utils.compat import (
+    COPY_IF_NEEDED,
+    NUMPY_LT_2_0,
+    NUMPY_LT_2_1,
+    NUMPY_LT_2_2,
+    NUMPY_LT_2_4,
+)
+
+if NUMPY_LT_2_0:
+    import numpy.core as np_core
+else:
+    import numpy._core as np_core
+
+# In 1.17, overrides are enabled by default, but it is still possible to
+# turn them off using an environment variable.  We use getattr since it
+# is planned to remove that possibility in later numpy versions.
+ARRAY_FUNCTION_ENABLED = getattr(np_core.overrides, "ENABLE_ARRAY_FUNCTION", True)
+SUBCLASS_SAFE_FUNCTIONS = set()
+"""Functions with implementations supporting subclasses like Quantity."""
+FUNCTION_HELPERS = {}
+"""Functions with implementations usable with proper unit conversion."""
+DISPATCHED_FUNCTIONS = {}
+"""Functions for which we provide our own implementation."""
+
+if NUMPY_LT_2_2:
+    # in numpy 2.2 these are auto detected by numpy itself
+    # xref https://github.com/numpy/numpy/issues/27451
+    SUPPORTED_NEP35_FUNCTIONS = {
+        np.arange,
+        np.empty, np.ones, np.zeros, np.full,
+        np.array, np.asarray, np.asanyarray, np.ascontiguousarray, np.asfortranarray,
+        np.frombuffer, np.fromfile, np.fromfunction, np.fromiter, np.fromstring,
+        np.require, np.identity, np.eye, np.tri, np.genfromtxt, np.loadtxt,
+    }  # fmt: skip
+    """Functions that support a 'like' keyword argument and dispatch on it (NEP 35)"""
+else:
+    # When our minimum becomes numpy>=2.2, this can be removed, here and in the tests
+    SUPPORTED_NEP35_FUNCTIONS = set()
+
+"""Functions that support a 'like' keyword argument and dispatch on it (NEP 35)"""
+UNSUPPORTED_FUNCTIONS = set()
+"""Functions that cannot sensibly be used with quantities."""
+SUBCLASS_SAFE_FUNCTIONS |= {
+    np.shape, np.size, np.ndim,
+    np.reshape, np.ravel, np.moveaxis, np.rollaxis, np.swapaxes,
+    np.transpose, np.atleast_1d, np.atleast_2d, np.atleast_3d,
+    np.expand_dims, np.squeeze, np.broadcast_to, np.broadcast_arrays,
+    np.flip, np.fliplr, np.flipud, np.rot90,
+    np.argmin, np.argmax, np.argsort, np.lexsort, np.searchsorted,
+    np.nonzero, np.argwhere, np.flatnonzero,
+    np.diag_indices_from, np.triu_indices_from, np.tril_indices_from,
+    np.real, np.imag, np.diagonal, np.diagflat, np.empty_like,
+    np.compress, np.extract, np.delete, np.trim_zeros, np.roll, np.take,
+    np.put, np.fill_diagonal, np.tile, np.repeat,
+    np.split, np.array_split, np.hsplit, np.vsplit, np.dsplit,
+    np.stack, np.column_stack, np.hstack, np.vstack, np.dstack,
+    np.max, np.min, np.amax, np.amin, np.ptp, np.sum, np.cumsum,
+    np.prod, np.cumprod,
+    np.round, np.around,
+    np.fix, np.angle, np.i0, np.clip,
+    np.isposinf, np.isneginf, np.isreal, np.iscomplex,
+    np.average, np.mean, np.std, np.var, np.trace,
+    np.nanmax, np.nanmin, np.nanargmin, np.nanargmax, np.nanmean,
+    np.nansum, np.nancumsum, np.nanprod, np.nancumprod,
+    np.einsum_path, np.linspace,
+    np.sort, np.partition, np.meshgrid,
+    np.common_type, np.result_type, np.can_cast, np.min_scalar_type,
+    np.iscomplexobj, np.isrealobj,
+    np.shares_memory, np.may_share_memory,
+    np.apply_along_axis, np.take_along_axis, np.put_along_axis,
+    np.linalg.cond, np.linalg.multi_dot,
+}  # fmt: skip
+
+SUBCLASS_SAFE_FUNCTIONS |= {np.median}
+
+if NUMPY_LT_2_0:
+    # functions (re)moved in numpy 2.0; alias for np.round in NUMPY_LT_1_25
+    SUBCLASS_SAFE_FUNCTIONS |= {
+        np.msort,
+        np.round_,  # noqa: NPY003, NPY201
+        np.trapz,  # noqa: NPY201
+        np.product,  # noqa: NPY003, NPY201
+        np.cumproduct,  # noqa: NPY003, NPY201
+    }
+if not NUMPY_LT_2_0:
+    # Array-API compatible versions (matrix axes always at end).
+    SUBCLASS_SAFE_FUNCTIONS |= {
+        np.matrix_transpose, np.linalg.matrix_transpose,
+        np.linalg.diagonal, np.linalg.trace,
+        np.linalg.matrix_norm, np.linalg.vector_norm, np.linalg.vecdot,
+    }  # fmt: skip
+
+    # these work out of the box (and are tested), because they
+    # delegate to other, already wrapped functions from the np namespace
+    SUBCLASS_SAFE_FUNCTIONS |= {
+        np.linalg.cross, np.linalg.svdvals, np.linalg.tensordot, np.linalg.matmul,
+        np.unique_all, np.unique_counts, np.unique_inverse, np.unique_values,
+        np.astype,
+    }  # fmt: skip
+
+    # trapz was renamed to trapezoid
+    SUBCLASS_SAFE_FUNCTIONS |= {np.trapezoid}
+if not NUMPY_LT_2_1:
+    SUBCLASS_SAFE_FUNCTIONS |= {np.unstack, np.cumulative_prod, np.cumulative_sum}
+
+# Implemented as methods on Quantity:
+# np.ediff1d is from setops, but we support it anyway; the others
+# currently return NotImplementedError.
+# TODO: move latter to UNSUPPORTED? Would raise TypeError instead.
+SUBCLASS_SAFE_FUNCTIONS |= {np.ediff1d}
+UNSUPPORTED_FUNCTIONS |= {
+    np.packbits, np.unpackbits, np.unravel_index,
+    np.ravel_multi_index, np.ix_, np.cov, np.corrcoef,
+    np.busday_count, np.busday_offset, np.datetime_as_string,
+    np.is_busday, np.all, np.any,
+}  # fmt: skip
+
+if NUMPY_LT_2_0:
+    UNSUPPORTED_FUNCTIONS |= {  # removed in numpy 2.0
+        np.sometrue, np.alltrue,  # noqa: NPY003, NPY201
+    }  # fmt: skip
+
+# Could be supported if we had a natural logarithm unit.
+UNSUPPORTED_FUNCTIONS |= {np.linalg.slogdet}
+TBD_FUNCTIONS = {
+    rfn.drop_fields, rfn.rename_fields, rfn.append_fields, rfn.join_by,
+    rfn.apply_along_fields, rfn.assign_fields_by_name,
+    rfn.find_duplicates, rfn.recursive_fill_fields, rfn.require_fields,
+    rfn.repack_fields, rfn.stack_arrays,
+}  # fmt: skip
+UNSUPPORTED_FUNCTIONS |= TBD_FUNCTIONS
+IGNORED_FUNCTIONS = {
+    # I/O - useless for Quantity, since no way to store the unit.
+    np.save, np.savez, np.savetxt, np.savez_compressed,
+    # Polynomials
+    np.poly, np.polyadd, np.polyder, np.polydiv, np.polyfit, np.polyint,
+    np.polymul, np.polysub, np.polyval, np.roots, np.vander,
+    # functions taking record arrays (which are deprecated)
+    rfn.rec_append_fields, rfn.rec_drop_fields, rfn.rec_join,
+}  # fmt: skip
+UNSUPPORTED_FUNCTIONS |= IGNORED_FUNCTIONS
+
+
+class FunctionAssigner:
+    def __init__(self, assignments):
+        self.assignments = assignments
+
+    def __call__(self, f=None, helps=None, module=np):
+        """Add a helper to a numpy function.
+
+        Normally used as a decorator.
+
+        If ``helps`` is given, it should be the numpy function helped (or an
+        iterable of numpy functions helped).
+
+        If ``helps`` is not given, it is assumed the function helped is the
+        numpy function with the same name as the decorated function.
+        """
+        if f is not None:
+            if helps is None:
+                helps = getattr(module, f.__name__)
+            if not np.iterable(helps):
+                helps = (helps,)
+            for h in helps:
+                self.assignments[h] = f
+            return f
+        elif helps is not None or module is not np:
+            return functools.partial(self.__call__, helps=helps, module=module)
+        else:  # pragma: no cover
+            raise ValueError("function_helper requires at least one argument.")
+
+
+function_helper = FunctionAssigner(FUNCTION_HELPERS)
+
+dispatched_function = FunctionAssigner(DISPATCHED_FUNCTIONS)
+
+
+@function_helper(
+    helps={
+        np.copy, np.real_if_close, np.sort_complex, np.resize,
+        np.fft.fft, np.fft.ifft, np.fft.rfft, np.fft.irfft,
+        np.fft.fft2, np.fft.ifft2, np.fft.rfft2, np.fft.irfft2,
+        np.fft.fftn, np.fft.ifftn, np.fft.rfftn, np.fft.irfftn,
+        np.fft.hfft, np.fft.ihfft,
+        np.linalg.eigvals, np.linalg.eigvalsh,
+    } | ({np.asfarray} if NUMPY_LT_2_0 else set())  # noqa: NPY201
+)  # fmt: skip
+def invariant_a_helper(a, *args, **kwargs):
+    return (a.view(np.ndarray),) + args, kwargs, a.unit, None
+
+
+@function_helper(helps={np.tril, np.triu})
+def invariant_m_helper(m, *args, **kwargs):
+    return (m.view(np.ndarray),) + args, kwargs, m.unit, None
+
+
+@function_helper(helps={np.fft.fftshift, np.fft.ifftshift})
+def invariant_x_helper(x, *args, **kwargs):
+    return (x.view(np.ndarray),) + args, kwargs, x.unit, None
+
+
+# Note that ones_like does *not* work by default since if one creates an empty
+# array with a unit, one cannot just fill it with unity.  Indeed, in this
+# respect, it is a bit of an odd function for Quantity. On the other hand, it
+# matches the idea that a unit is the same as the quantity with that unit and
+# value of 1. Also, it used to work without __array_function__.
+# zeros_like does work by default for regular quantities, because numpy first
+# creates an empty array with the unit and then fills it with 0 (which can have
+# any unit), but for structured dtype this fails (0 cannot have an arbitrary
+# structured unit), so we include it here too.
+@function_helper(helps={np.ones_like, np.zeros_like})
+def like_helper(a, *args, **kwargs):
+    subok = args[2] if len(args) > 2 else kwargs.pop("subok", True)
+    unit = a.unit if subok else None
+    return (a.view(np.ndarray),) + args, kwargs, unit, None
+
+
+def _quantity_out_as_array(out):
+    from astropy.units import Quantity
+
+    if isinstance(out, Quantity):
+        return out.view(np.ndarray)
+    else:
+        # TODO: for an ndarray output, one could in principle
+        # try converting the input to dimensionless.
+        raise NotImplementedError
+
+
+# nanvar is safe for Quantity and was previously in SUBCLASS_FUNCTIONS, but it
+# is not safe for Angle, since the resulting unit is inconsistent with being
+# an Angle. By using FUNCTION_HELPERS, the unit gets passed through
+# _result_as_quantity, which will correctly drop to Quantity.
+# A side effect would be that np.nanstd then also produces Quantity; this
+# is avoided by it being helped below.
+@function_helper
+def nanvar(a, axis=None, dtype=None, out=None, ddof=0, keepdims=np._NoValue, **kwargs):
+    a = _as_quantity(a)
+    out_array = None if out is None else _quantity_out_as_array(out)
+    return (
+        (a.view(np.ndarray), axis, dtype, out_array, ddof, keepdims),
+        kwargs,
+        a.unit**2,
+        out,
+    )
+
+
+@function_helper
+def nanstd(a, axis=None, dtype=None, out=None, ddof=0, keepdims=np._NoValue, **kwargs):
+    a = _as_quantity(a)
+    out_array = None if out is None else _quantity_out_as_array(out)
+    return (
+        (a.view(np.ndarray), axis, dtype, out_array, ddof, keepdims),
+        kwargs,
+        a.unit,
+        out,
+    )
+
+
+@function_helper
+def sinc(x):
+    from astropy.units.si import radian
+
+    try:
+        x = x.to_value(radian)
+    except UnitsError:
+        raise UnitTypeError(
+            "Can only apply 'sinc' function to quantities with angle units"
+        )
+    return (x,), {}, dimensionless_unscaled, None
+
+
+@dispatched_function
+def unwrap(p, discont=None, axis=-1, *, period=2 * np.pi):
+    from astropy.units.si import radian
+
+    if discont is None:
+        discont = np.pi << radian
+
+    if period == 2 * np.pi:
+        period <<= radian
+
+    p, discont, period = _as_quantities(p, discont, period)
+    result = np.unwrap.__wrapped__(
+        p.to_value(radian),
+        discont.to_value(radian),
+        axis=axis,
+        period=period.to_value(radian),
+    )
+    result = radian.to(p.unit, result)
+    return result, p.unit, None
+
+
+@function_helper
+def argpartition(a, *args, **kwargs):
+    return (a.view(np.ndarray),) + args, kwargs, None, None
+
+
+@function_helper
+def full_like(a, fill_value, *args, **kwargs):
+    unit = a.unit if kwargs.get("subok", True) else None
+    return (a.view(np.ndarray), a._to_own_unit(fill_value)) + args, kwargs, unit, None
+
+
+def putmask_impl(a, /, mask, values):
+    from astropy.units import Quantity
+
+    if isinstance(a, Quantity):
+        return (a.view(np.ndarray), mask, a._to_own_unit(values)), {}, a.unit, None
+    elif isinstance(values, Quantity):
+        return (a, mask, values.to_value(dimensionless_unscaled)), {}, None, None
+    else:
+        raise NotImplementedError
+
+
+if not NUMPY_LT_2_4:
+
+    @function_helper
+    def putmask(a, /, mask, values):
+        return putmask_impl(a, mask=mask, values=values)
+else:
+
+    @function_helper
+    def putmask(a, mask, values):
+        return putmask_impl(a, mask=mask, values=values)
+
+
+@function_helper
+def place(arr, mask, vals):
+    from astropy.units import Quantity
+
+    if isinstance(arr, Quantity):
+        return (arr.view(np.ndarray), mask, arr._to_own_unit(vals)), {}, arr.unit, None
+    elif isinstance(vals, Quantity):
+        return (arr, mask, vals.to_value(dimensionless_unscaled)), {}, None, None
+    else:
+        raise NotImplementedError
+
+
+@function_helper
+def copyto(dst, src, *args, **kwargs):
+    from astropy.units import Quantity
+
+    if isinstance(dst, Quantity):
+        return (dst.view(np.ndarray), dst._to_own_unit(src)) + args, kwargs, None, None
+    elif isinstance(src, Quantity):
+        return (dst, src.to_value(dimensionless_unscaled)) + args, kwargs, None, None
+    else:
+        raise NotImplementedError
+
+
+@function_helper
+def nan_to_num(x, copy=True, nan=0.0, posinf=None, neginf=None):
+    nan = x._to_own_unit(nan)
+    if posinf is not None:
+        posinf = x._to_own_unit(posinf)
+    if neginf is not None:
+        neginf = x._to_own_unit(neginf)
+    return (
+        (x.view(np.ndarray),),
+        dict(copy=True, nan=nan, posinf=posinf, neginf=neginf),
+        x.unit,
+        None,
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _as_quantities(*args):
+    """Convert arguments to Quantity (or raise NotImplentedError)."""
+    from astropy.units import Quantity
+
+    try:
+        # Note: this should keep the dtype the same
+        return tuple(
+            Quantity(a, copy=COPY_IF_NEEDED, subok=True, dtype=None) for a in args
+        )
+    except Exception:
+        # If we cannot convert to Quantity, we should just bail.
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if NUMPY_LT_2_4:
+
+    @function_helper
+    def concatenate(arrays, axis=0, out=None, **kwargs):
+        # TODO: make this smarter by creating an appropriately shaped
+        # empty output array and just filling it.
+        arrays, kwargs, unit, out = _iterable_helper(
+            *arrays, out=out, axis=axis, **kwargs
+        )
+        return (arrays,), kwargs, unit, out
+else:
+    pass
+
+
+
+
+
+
+
+
+
+
+def _block(arrays, max_depth, result_ndim, depth=0):
+    # Block by concatenation, copied from np._core.shape_base,
+    # but ensuring that we call regular concatenate.
+    if depth < max_depth:
+        arrs = [_block(arr, max_depth, result_ndim, depth + 1) for arr in arrays]
+        # The one difference with the numpy code.
+        return np.concatenate(arrs, axis=-(max_depth - depth))
+    else:
+        return np_core.shape_base._atleast_nd(arrays, result_ndim)
+
+
+UNIT_FROM_LIKE_ARG = object()
+
+if NUMPY_LT_2_0:
+
+    @function_helper
+    def arange(*args, start=None, stop=None, step=None, dtype=None):
+        return arange_impl(*args, start=start, stop=stop, step=step, dtype=dtype)
+else:
+
+    @function_helper
+    def arange(*args, start=None, stop=None, step=None, dtype=None, device=None):
+        return arange_impl(
+            *args, start=start, stop=stop, step=step, dtype=dtype, device=device
+        )
+
+
+def arange_impl(*args, start=None, stop=None, step=None, dtype=None, **kwargs):
+    # NumPy is supposed to validate the input parameters before this dispatched
+    # function is reached. Nevertheless, we'll sprinkle a few rundundant
+    # sanity checks in the form of `assert` statements.
+    # As they are not part of the business logic, it is fine if they are
+    # compiled-away (e.g. the Python interpreter runs with -O)
+    assert len(args) <= 4
+
+    # bind positional arguments to their meaningful names
+    # following the (complex) logic of np.arange
+    match args:
+        case (pos1,):
+            assert stop is None or start is None
+            if stop is None:
+                stop = pos1
+            elif start is None:
+                start = pos1
+        case start, stop, *rest:
+            if start is not None and stop is None:
+                start, stop = stop, start
+            match rest:
+                # rebind step and dtype if possible
+                case (step,):
+                    pass
+                case step, dtype:
+                    pass
+
+    # as the only required argument, we want stop to set the unit of the output
+    # so it's important that it comes first in the qty_kwargs
+    qty_kwargs = {
+        k: v
+        for k, v in (("stop", stop), ("start", start), ("step", step))
+        if v is not None
+    }
+    out_unit = getattr(stop, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is UNIT_FROM_LIKE_ARG:
+        if hasattr(start, "unit") or hasattr(step, "unit"):
+            raise TypeError(
+                "stop without a unit cannot be combined with start or step with a unit."
+            )
+        kwargs.update(qty_kwargs)
+    else:
+        # Convert possible start, step to stop units.
+        new_values, _ = _quantities2arrays(*qty_kwargs.values())
+        kwargs.update(zip(qty_kwargs.keys(), new_values))
+
+    kwargs["dtype"] = dtype
+    return (), kwargs, out_unit, None
+
+
+if NUMPY_LT_2_0:
+
+    @function_helper(helps={np.empty, np.ones, np.zeros})
+    def creation_helper(shape, dtype=None, order="C"):
+        return (shape, dtype, order), {}, UNIT_FROM_LIKE_ARG, None
+else:
+
+    @function_helper(helps={np.empty, np.ones, np.zeros})
+    def creation_helper(shape, dtype=None, order="C", *, device=None):
+        return (shape, dtype, order), {"device": device}, UNIT_FROM_LIKE_ARG, None
+
+
+if NUMPY_LT_2_0:
+
+    @function_helper
+    def full(shape, fill_value, dtype=None, order="C"):
+        return full_impl(shape, fill_value, dtype, order)
+else:
+
+    @function_helper
+    def full(shape, fill_value, dtype=None, order="C", *, device=None):
+        return full_impl(shape, fill_value, dtype, order, device=device)
+
+
+def full_impl(shape, fill_value, *args, **kwargs):
+    out_unit = getattr(fill_value, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        fill_value = _as_quantity(fill_value).value
+    return (shape, fill_value) + args, kwargs, out_unit, None
+
+
+@function_helper
+def require(a, dtype=None, requirements=None):
+    out_unit = getattr(a, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        a = _as_quantity(a).value
+    return (a, dtype, requirements), {}, out_unit, None
+
+
+if not NUMPY_LT_2_4:
+
+    @function_helper
+    def array(
+        object, dtype=None, *, copy=True, order="K", subok=False, ndmin=0, ndmax=0
+    ):
+        return array_impl(
+            object,
+            dtype=dtype,
+            copy=copy,
+            order=order,
+            subok=subok,
+            ndmin=ndmin,
+            ndmax=ndmax,
+        )
+else:
+
+    @function_helper
+    def array(object, dtype=None, *, copy=True, order="K", subok=False, ndmin=0):
+        return array_impl(
+            object, dtype=dtype, copy=copy, order=order, subok=subok, ndmin=ndmin
+        )
+
+
+def array_impl(object, *, dtype, copy, order, subok, ndmin, ndmax=0):
+    out_unit = getattr(object, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        object = _as_quantity(object).value
+    kwargs = {"copy": copy, "order": order, "subok": subok, "ndmin": ndmin}
+    if not NUMPY_LT_2_4:
+        kwargs |= {"ndmax": ndmax}
+    return (object, dtype), kwargs, out_unit, None
+
+
+if NUMPY_LT_2_0:
+    asarray_impl_1_helps = {np.asarray, np.asanyarray}
+    asarray_impl_2_helps = {}
+elif NUMPY_LT_2_1:
+    asarray_impl_1_helps = {np.asanyarray}
+    asarray_impl_2_helps = {np.asarray}
+else:
+    asarray_impl_1_helps = {}
+    asarray_impl_2_helps = {np.asarray, np.asanyarray}
+
+
+@function_helper(helps=asarray_impl_1_helps)
+def asarray_impl_1(a, dtype=None, order=None):
+    out_unit = getattr(a, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        a = _as_quantity(a).value
+    return (a, dtype, order), {}, out_unit, None
+
+
+@function_helper(helps=asarray_impl_2_helps)
+def asarray_impl_2(a, dtype=None, order=None, *, device=None, copy=None):
+    out_unit = getattr(a, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        a = _as_quantity(a).value
+    return (a, dtype, order), {"device": device, "copy": copy}, out_unit, None
+
+
+@function_helper(helps={np.ascontiguousarray, np.asfortranarray})
+def aslayoutarray_helper(a, dtype=None):
+    out_unit = getattr(a, "unit", UNIT_FROM_LIKE_ARG)
+    if out_unit is not UNIT_FROM_LIKE_ARG:
+        a = _as_quantity(a).value
+    return (a, dtype), {}, out_unit, None
+
+
+@function_helper
+def fromfunction(function, shape, *, dtype=float, **kwargs):
+    zero_arg = np.zeros(len(shape), dtype)
+    try:
+        out_unit = function(*zero_arg).unit
+    except Exception:
+        out_unit = UNIT_FROM_LIKE_ARG
+    return (function, shape), {"dtype": dtype, **kwargs}, out_unit, None
+
+
+@function_helper(helps={
+        np.frombuffer, np.fromfile, np.fromiter, np.fromstring,
+        np.identity, np.eye, np.tri,
+        np.genfromtxt, np.loadtxt,
+    }
+)  # fmt: skip
+def generic_like_array_function_helper(*args, **kwargs):
+    return args, kwargs, UNIT_FROM_LIKE_ARG, None
+
+
+@dispatched_function
+def block(arrays):
+    # We need to override block since the numpy implementation can take two
+    # different paths, one for concatenation, one for creating a large empty
+    # result array in which parts are set.  Each assumes array input and
+    # cannot be used directly.  Since it would be very costly to inspect all
+    # arrays and then turn them back into a nested list, we just copy here the
+    # first implementation, np.core.shape_base._block, which is the easiest to
+    # adjust while making sure that both units and class are properly kept.
+    (arrays, list_ndim, result_ndim, final_size) = np_core.shape_base._block_setup(
+        arrays
+    )
+    result = _block(arrays, list_ndim, result_ndim)
+    if list_ndim == 0:
+        result = result.copy()
+    return result, None, None
+
+
+@function_helper
+def choose(a, choices, out=None, mode="raise"):
+    choices, kwargs, unit, out = _iterable_helper(*choices, out=out, mode=mode)
+    return (a, choices), kwargs, unit, out
+
+
+@function_helper
+def select(condlist, choicelist, default=0):
+    choicelist, kwargs, unit, out = _iterable_helper(*choicelist)
+    if default != 0:
+        default = (1 * unit)._to_own_unit(default)
+    return (condlist, choicelist, default), kwargs, unit, out
+
+
+@dispatched_function
+def piecewise(x, condlist, funclist, *args, **kw):
+    from astropy.units import Quantity
+
+    # Copied implementation from numpy.lib._function_base_impl.piecewise,
+    # taking care of units of function outputs.
+    n2 = len(funclist)
+    # undocumented: single condition is promoted to a list of one condition
+    if np.isscalar(condlist) or (
+        not isinstance(condlist[0], (list, np.ndarray)) and x.ndim != 0
+    ):
+        condlist = [condlist]
+
+    if any(isinstance(c, Quantity) for c in condlist):
+        raise NotImplementedError
+
+    condlist = np.array(condlist, dtype=bool)
+    n = len(condlist)
+
+    if n == n2 - 1:  # compute the "otherwise" condition.
+        condelse = ~np.any(condlist, axis=0, keepdims=True)
+        condlist = np.concatenate([condlist, condelse], axis=0)
+        n += 1
+    elif n != n2:
+        raise ValueError(
+            f"with {n} condition(s), either {n} or {n + 1} functions are expected"
+        )
+
+    y = np.zeros(x.shape, x.dtype)
+    where = []
+    what = []
+    for k in range(n):
+        item = funclist[k]
+        if not callable(item):
+            where.append(condlist[k])
+            what.append(item)
+        else:
+            vals = x[condlist[k]]
+            if vals.size > 0:
+                where.append(condlist[k])
+                what.append(item(vals, *args, **kw))
+
+    what, unit = _quantities2arrays(*what)
+    for item, value in zip(where, what):
+        y[item] = value
+
+    return y, unit, None
+
+
+@function_helper
+def append(arr, values, *args, **kwargs):
+    arrays, unit = _quantities2arrays(arr, values, unit_from_first=True)
+    return arrays + args, kwargs, unit, None
+
+
+@function_helper
+def insert(arr, obj, values, *args, **kwargs):
+    from astropy.units import Quantity
+
+    if isinstance(obj, Quantity):
+        raise NotImplementedError
+
+    (arr, values), unit = _quantities2arrays(arr, values, unit_from_first=True)
+    return (arr, obj, values) + args, kwargs, unit, None
+
+
+@function_helper
+def pad(array, pad_width, mode="constant", **kwargs):
+    # pad dispatches only on array, so that must be a Quantity.
+    for key in "constant_values", "end_values":
+        value = kwargs.pop(key, None)
+        if value is None:
+            continue
+        if not isinstance(value, tuple):
+            value = (value,)
+
+        new_value = []
+        for v in value:
+            new_value.append(
+                tuple(array._to_own_unit(_v) for _v in v)
+                if isinstance(v, tuple)
+                else array._to_own_unit(v)
+            )
+        kwargs[key] = new_value
+
+    return (array.view(np.ndarray), pad_width, mode), kwargs, array.unit, None
+
+
+@function_helper
+def where(condition, /, *args):
+    from astropy.units import Quantity
+
+    if isinstance(condition, Quantity) or len(args) != 2:
+        raise NotImplementedError
+
+    args, unit = _quantities2arrays(*args)
+    return (condition,) + args, {}, unit, None
+
+
+@function_helper(helps=({np.quantile, np.nanquantile}))
+def quantile(a, q, *args, _q_unit=dimensionless_unscaled, **kwargs):
+    if len(args) >= 2:
+        out = args[1]
+        args = args[:1] + args[2:]
+    else:
+        out = kwargs.pop("out", None)
+
+    from astropy.units import Quantity
+
+    if isinstance(q, Quantity):
+        q = q.to_value(_q_unit)
+
+    (a,), kwargs, unit, out = _iterable_helper(a, out=out, **kwargs)
+
+    return (a, q) + args, kwargs, unit, out
+
+
+@function_helper(helps={np.percentile, np.nanpercentile})
+def percentile(a, q, *args, **kwargs):
+    from astropy.units import percent
+
+    return quantile(a, q, *args, _q_unit=percent, **kwargs)
+
+
+@function_helper
+def nanmedian(a, axis=None, out=None, overwrite_input=False, keepdims=np._NoValue):
+    return _iterable_helper(
+        a, axis=axis, out=out, overwrite_input=overwrite_input, keepdims=keepdims
+    )
+
+
+@function_helper
+def count_nonzero(a, *args, **kwargs):
+    return (a.value,) + args, kwargs, None, None
+
+
+@function_helper(helps={np.isclose, np.allclose})
+def close(a, b, rtol=1e-05, atol=1e-08, *args, **kwargs):
+    from astropy.units import Quantity
+
+    (a, b), unit = _quantities2arrays(a, b, unit_from_first=True)
+    # Allow number without a unit as having the unit.
+    atol = Quantity(atol, unit).value
+
+    return (a, b, rtol, atol) + args, kwargs, None, None
+
+
+@dispatched_function
+def array_equal(a1, a2, equal_nan=False):
+    try:
+        args, unit = _quantities2arrays(a1, a2)
+    except UnitConversionError:
+        return False, None, None
+    return np.array_equal(*args, equal_nan=equal_nan), None, None
+
+
+@dispatched_function
+def array_equiv(a1, a2):
+    try:
+        args, unit = _quantities2arrays(a1, a2)
+    except UnitConversionError:
+        return False, None, None
+    return np.array_equiv(*args), None, None
+
+
+@function_helper(helps={np.dot, np.outer})
+def dot_like(a, b, out=None):
+    from astropy.units import Quantity
+
+    a, b = _as_quantities(a, b)
+    unit = a.unit * b.unit
+    if out is not None:
+        if not isinstance(out, Quantity):
+            raise NotImplementedError
+        return tuple(x.view(np.ndarray) for x in (a, b, out)), {}, unit, out
+    else:
+        return (a.view(np.ndarray), b.view(np.ndarray)), {}, unit, None
+
+
+@function_helper(
+    helps={
+        np.cross,
+        np.kron,
+        np.tensordot,
+    }
+)
+def cross_like_a_b(a, b, *args, **kwargs):
+    a, b = _as_quantities(a, b)
+    unit = a.unit * b.unit
+    return (a.view(np.ndarray), b.view(np.ndarray)) + args, kwargs, unit, None
+
+
+@function_helper(helps={np.inner, np.vdot})
+def cross_like_a_b_posonly(a, b, /):
+    a, b = _as_quantities(a, b)
+    unit = a.unit * b.unit
+    return (a.view(np.ndarray), b.view(np.ndarray)), {}, unit, None
+
+
+@function_helper(helps={np.correlate, np.convolve})
+def cross_like_a_v(a, v, *args, **kwargs):
+    a, v = _as_quantities(a, v)
+    unit = a.unit * v.unit
+    return (a.view(np.ndarray), v.view(np.ndarray)) + args, kwargs, unit, None
+
+
+@function_helper
+def einsum(*operands, out=None, **kwargs):
+    subscripts, *operands = operands
+
+    if not isinstance(subscripts, str):
+        raise ValueError('only "subscripts" string mode supported for einsum.')
+
+    if out is not None:
+        kwargs["out"] = _quantity_out_as_array(out)
+
+    qs = _as_quantities(*operands)
+    unit = functools.reduce(operator.mul, (q.unit for q in qs), dimensionless_unscaled)
+    arrays = tuple(q.view(np.ndarray) for q in qs)
+    return (subscripts,) + arrays, kwargs, unit, out
+
+
+@function_helper
+def bincount(x, /, weights=None, minlength=0):
+    from astropy.units import Quantity
+
+    if isinstance(x, Quantity):
+        raise NotImplementedError
+    return (x, weights.value, minlength), {}, weights.unit, None
+
+
+@function_helper
+def digitize(x, bins, *args, **kwargs):
+    arrays, unit = _quantities2arrays(x, bins, unit_from_first=True)
+    return arrays + args, kwargs, None, None
+
+
+def _check_bins(bins, unit):
+    from astropy.units import Quantity
+
+    check = _as_quantity(bins)
+    if check.ndim > 0:
+        return check.to_value(unit)
+    elif isinstance(bins, Quantity):
+        # bins should be an integer (or at least definitely not a Quantity).
+        raise NotImplementedError
+    else:
+        return bins
+
+
+def _check_range(range, unit):
+    range = _as_quantity(range)
+    range = range.to_value(unit)
+    return range
+
+
+@function_helper
+def histogram_bin_edges(a, bins=10, range=None, weights=None):
+    # weights is currently unused
+    a = _as_quantity(a)
+    if not isinstance(bins, str):
+        bins = _check_bins(bins, a.unit)
+
+    if range is not None:
+        range = _check_range(range, a.unit)
+
+    return (a.value, bins, range, weights), {}, a.unit, None
+
+
+@function_helper
+def histogram(a, bins=10, range=None, density=None, weights=None):
+    if weights is not None:
+        weights = _as_quantity(weights)
+        unit = weights.unit
+        weights = weights.value
+    else:
+        unit = None
+
+    a = _as_quantity(a)
+    if not isinstance(bins, str):
+        bins = _check_bins(bins, a.unit)
+
+    if range is not None:
+        range = _check_range(range, a.unit)
+
+    if density:
+        unit = (unit or 1) / a.unit
+
+    return (
+        (a.value, bins, range),
+        {"weights": weights, "density": density},
+        (unit, a.unit),
+        None,
+    )
+
+
+@function_helper
+def histogram2d(x, y, bins=10, range=None, density=None, weights=None):
+    from astropy.units import Quantity
+
+    if weights is not None:
+        weights = _as_quantity(weights)
+        unit = weights.unit
+        weights = weights.value
+    else:
+        unit = None
+
+    x, y = _as_quantities(x, y)
+    try:
+        n = len(bins)
+    except TypeError:
+        # bins should be an integer (or at least definitely not a Quantity).
+        if isinstance(bins, Quantity):
+            raise NotImplementedError
+
+    else:
+        if n == 1:
+            raise NotImplementedError
+        elif n == 2 and not isinstance(bins, Quantity):
+            bins = [_check_bins(b, unit) for (b, unit) in zip(bins, (x.unit, y.unit))]
+        else:
+            bins = _check_bins(bins, x.unit)
+            y = y.to(x.unit)
+
+    if range is not None:
+        range = tuple(
+            _check_range(r, unit) for (r, unit) in zip(range, (x.unit, y.unit))
+        )
+
+    if density:
+        unit = (unit or 1) / x.unit / y.unit
+
+    return (
+        (x.value, y.value, bins, range),
+        {"weights": weights, "density": density},
+        (unit, x.unit, y.unit),
+        None,
+    )
+
+
+@function_helper
+def histogramdd(sample, bins=10, range=None, density=None, weights=None):
+    if weights is not None:
+        weights = _as_quantity(weights)
+        unit = weights.unit
+        weights = weights.value
+    else:
+        unit = None
+
+    try:
+        # Sample is an ND-array.
+        _, D = sample.shape
+    except (AttributeError, ValueError):
+        # Sample is a sequence of 1D arrays.
+        sample = _as_quantities(*sample)
+        sample_units = [s.unit for s in sample]
+        sample = [s.value for s in sample]
+        D = len(sample)
+    else:
+        sample = _as_quantity(sample)
+        sample_units = [sample.unit] * D
+
+    try:
+        M = len(bins)
+    except TypeError:
+        # bins should be an integer
+        from astropy.units import Quantity
+
+        if isinstance(bins, Quantity):
+            raise NotImplementedError
+    else:
+        if M != D:
+            raise ValueError(
+                "The dimension of bins must be equal to the dimension of the  sample x."
+            )
+        bins = [_check_bins(b, unit) for (b, unit) in zip(bins, sample_units)]
+
+    if range is not None:
+        range = tuple(_check_range(r, unit) for (r, unit) in zip(range, sample_units))
+
+    if density:
+        unit = functools.reduce(operator.truediv, sample_units, (unit or 1))
+
+    return (
+        (sample, bins, range),
+        {"weights": weights, "density": density},
+        (unit, sample_units),
+        None,
+    )
+
+
+@function_helper
+def diff(a, n=1, axis=-1, prepend=np._NoValue, append=np._NoValue):
+    a = _as_quantity(a)
+    if prepend is not np._NoValue:
+        prepend = _as_quantity(prepend).to_value(a.unit)
+    if append is not np._NoValue:
+        append = _as_quantity(append).to_value(a.unit)
+    return (a.value, n, axis, prepend, append), {}, a.unit, None
+
+
+@function_helper
+def gradient(f, *varargs, **kwargs):
+    f = _as_quantity(f)
+    axis = kwargs.get("axis")
+    if axis is None:
+        n_axis = f.ndim
+    elif isinstance(axis, tuple):
+        n_axis = len(axis)
+    else:
+        n_axis = 1
+
+    if varargs:
+        varargs = _as_quantities(*varargs)
+        if len(varargs) == 1 and n_axis > 1:
+            varargs = varargs * n_axis
+
+    if varargs:
+        units = [f.unit / q.unit for q in varargs]
+        varargs = tuple(q.value for q in varargs)
+    else:
+        units = [f.unit] * n_axis
+
+    if len(units) == 1:
+        units = units[0]
+
+    return (f.value,) + varargs, kwargs, units, None
+
+
+@function_helper
+def logspace(start, stop, *args, **kwargs):
+    from astropy.units import LogQuantity, dex
+
+    if not isinstance(start, LogQuantity) or not isinstance(stop, LogQuantity):
+        raise NotImplementedError
+
+    # Get unit from end point as for linspace.
+    stop = stop.to(dex(stop.unit.physical_unit))
+    start = start.to(stop.unit)
+    unit = stop.unit.physical_unit
+    return (start.value, stop.value) + args, kwargs, unit, None
+
+
+@function_helper
+def geomspace(start, stop, *args, **kwargs):
+    # Get unit from end point as for linspace.
+    (stop, start), unit = _quantities2arrays(stop, start)
+    return (start, stop) + args, kwargs, unit, None
+
+
+@function_helper
+def interp(x, xp, fp, *args, **kwargs):
+    from astropy.units import Quantity
+
+    (x, xp), _ = _quantities2arrays(x, xp)
+    if isinstance(fp, Quantity):
+        unit = fp.unit
+        fp = fp.value
+    else:
+        unit = None
+
+    return (x, xp, fp) + args, kwargs, unit, None
+
+
+@function_helper
+def unique(
+    ar,
+    return_index=False,
+    return_inverse=False,
+    return_counts=False,
+    axis=None,
+    *,
+    equal_nan=True,
+    **kwargs,
+):
+    # having **kwargs allows to support sorted (for not NUMPY_LT_2_3) without
+    # introducing it pre-maturely in older supported numpy versions
+    unit = ar.unit
+    n_index = sum(bool(i) for i in (return_index, return_inverse, return_counts))
+    if n_index:
+        unit = [unit] + n_index * [None]
+
+    return (
+        (ar.value, return_index, return_inverse, return_counts, axis),
+        kwargs | {"equal_nan": equal_nan},
+        unit,
+        None,
+    )
+
+
+@function_helper
+def intersect1d(ar1, ar2, assume_unique=False, return_indices=False):
+    (ar1, ar2), unit = _quantities2arrays(ar1, ar2)
+    if return_indices:
+        unit = [unit, None, None]
+    return (ar1, ar2, assume_unique, return_indices), {}, unit, None
+
+
+@function_helper(helps=(np.setxor1d, np.union1d, np.setdiff1d))
+def twosetop(ar1, ar2, *args, **kwargs):
+    (ar1, ar2), unit = _quantities2arrays(ar1, ar2)
+    return (ar1, ar2) + args, kwargs, unit, None
+
+
+@function_helper
+def isin(element, test_elements, *args, **kwargs):
+    # This tests whether element is in test_elements, so we should change the unit of
+    # element to that of test_elements.
+    (ar1, ar2), unit = _quantities2arrays(element, test_elements)
+    return (ar1, ar2) + args, kwargs, None, None
+
+
+if NUMPY_LT_2_4:
+    # np.in1d deprecated in not NUMPY_LT_2_0, removed in not NUMPY_LT_24
+    @function_helper
+    def in1d(ar1, ar2, *args, **kwargs):
+        # This tests whether ar1 is in ar2, so we should change the unit of
+        # ar1 to that of ar2.
+        (ar2, ar1), unit = _quantities2arrays(ar2, ar1)
+        return (ar1, ar2) + args, kwargs, None, None
+
+
+@dispatched_function
+def apply_over_axes(func, a, axes):
+    # Copied straight from numpy/lib/shape_base, just to omit its
+    # val = asarray(a); if only it had been asanyarray, or just not there
+    # since a is assumed to an an array in the next line...
+    # Which is what we do here - we can only get here if it is a Quantity.
+    val = a
+    N = a.ndim
+    if np.array(axes).ndim == 0:
+        axes = (axes,)
+    for axis in axes:
+        if axis < 0:
+            axis = N + axis
+        args = (val, axis)
+        res = func(*args)
+        if res.ndim == val.ndim:
+            val = res
+        else:
+            res = np.expand_dims(res, axis)
+            if res.ndim == val.ndim:
+                val = res
+            else:
+                raise ValueError(
+                    "function is not returning an array of the correct shape"
+                )
+    # Returning unit is None to signal nothing should happen to
+    # the output.
+    return val, None, None
+
+
+@dispatched_function
+def array_repr(arr, *args, **kwargs):
+    # TODO: The addition of "unit='...'" doesn't worry about line
+    # length.  Could copy & adapt _array_repr_implementation from
+    # numpy.core.arrayprint.py
+    cls_name = arr.__class__.__name__
+    fake_name = "_" * len(cls_name)
+    fake_cls = type(fake_name, (np.ndarray,), {})
+    no_unit = np.array_repr(arr.view(fake_cls), *args, **kwargs).replace(
+        fake_name, cls_name
+    )
+    unit_part = f"unit='{arr.unit}'"
+    pre, dtype, post = no_unit.rpartition("dtype")
+    if dtype:
+        return f"{pre}{unit_part}, {dtype}{post}", None, None
+    else:
+        return f"{no_unit[:-1]}, {unit_part})", None, None
+
+
+@dispatched_function
+def array_str(a, *args, **kwargs):
+    # TODO: The addition of the unit doesn't worry about line length.
+    # Could copy & adapt _array_repr_implementation from
+    # numpy.core.arrayprint.py
+    no_unit = np.array_str(a.value, *args, **kwargs)
+    return no_unit + a._unitstr, None, None
+
+
+@function_helper
+def array2string(a, *args, **kwargs):
+    # array2string breaks on quantities as it tries to turn individual
+    # items into float, which works only for dimensionless.  Since the
+    # defaults would not keep any unit anyway, this is rather pointless -
+    # we're better off just passing on the array view.  However, one can
+    # also work around this by passing on a formatter (as is done in Angle).
+    # So, we do nothing if the formatter argument is present and has the
+    # relevant formatter for our dtype.
+    import inspect
+
+    sig = inspect.signature(np.array2string)
+    formatter_arg_pos = list(sig.parameters).index("formatter") - 1
+    formatter = (
+        args[formatter_arg_pos]
+        if len(args) >= formatter_arg_pos
+        else kwargs.get("formatter")
+    )
+
+    if formatter is None:
+        a = a.value
+    else:
+        # See whether it covers our dtype.
+        if NUMPY_LT_2_0:
+            from numpy.core.arrayprint import _get_format_function, _make_options_dict
+        else:
+            from numpy._core.arrayprint import _get_format_function, _make_options_dict
+
+        with np.printoptions(formatter=formatter) as options:
+            options = _make_options_dict(**options)
+            try:
+                ff = _get_format_function(a.value, **options)
+            except Exception:
+                # Shouldn't happen, but possibly we're just not being smart
+                # enough, so let's pass things on as is.
+                pass
+            else:
+                # If the selected format function is that of numpy, we know
+                # things will fail if we pass in the Quantity, so use .value.
+                if "numpy" in ff.__module__:
+                    a = a.value
+
+    return (a,) + args, kwargs, None, None
+
+
+@function_helper
+def diag(v, *args, **kwargs):
+    # Function works for *getting* the diagonal, but not *setting*.
+    # So, override always.
+    return (v.value,) + args, kwargs, v.unit, None
+
+
+@function_helper(module=np.linalg)
+def svd(a, full_matrices=True, compute_uv=True, hermitian=False):
+    unit = a.unit
+    if compute_uv:
+        unit = (None, unit, None)
+
+    return ((a.view(np.ndarray), full_matrices, compute_uv, hermitian), {}, unit, None)
+
+
+def _interpret_tol(tol, unit):
+    from astropy.units import Quantity
+
+    return Quantity(tol, unit).value
+
+
+@function_helper(module=np.linalg)
+def matrix_rank(A, tol=None, *args, **kwargs):
+    if tol is not None:
+        tol = _interpret_tol(tol, A.unit)
+
+    return (A.view(np.ndarray), tol) + args, kwargs, None, None
+
+
+@function_helper(helps={np.linalg.inv, np.linalg.tensorinv})
+def inv(a, *args, **kwargs):
+    return (a.view(np.ndarray),) + args, kwargs, 1 / a.unit, None
+
+
+if NUMPY_LT_2_0:
+
+    @function_helper(module=np.linalg)
+    def pinv(a, rcond=1e-15, *args, **kwargs):
+        rcond = _interpret_tol(rcond, a.unit)
+
+        return (a.view(np.ndarray), rcond) + args, kwargs, 1 / a.unit, None
+
+else:
+
+    @function_helper(module=np.linalg)
+    def pinv(a, rcond=None, hermitian=False, *, rtol=np._NoValue):
+        if rcond is not None:
+            rcond = _interpret_tol(rcond, a.unit)
+        if rtol is not np._NoValue and rtol is not None:
+            rtol = _interpret_tol(rtol, a.unit)
+
+        return (
+            (a.view(np.ndarray),),
+            dict(rcond=rcond, hermitian=hermitian, rtol=rtol),
+            1 / a.unit,
+            None,
+        )
+
+
+@function_helper(module=np.linalg)
+def det(a):
+    return (a.view(np.ndarray),), {}, a.unit ** a.shape[-1], None
+
+
+@function_helper(helps={np.linalg.solve, np.linalg.tensorsolve})
+def solve(a, b, *args, **kwargs):
+    a, b = _as_quantities(a, b)
+
+    return (
+        (a.view(np.ndarray), b.view(np.ndarray)) + args,
+        kwargs,
+        b.unit / a.unit,
+        None,
+    )
+
+
+@function_helper(module=np.linalg)
+def lstsq(a, b, rcond="warn" if NUMPY_LT_2_0 else None):
+    a, b = _as_quantities(a, b)
+
+    if rcond not in (None, "warn", -1):
+        rcond = _interpret_tol(rcond, a.unit)
+
+    return (
+        (a.view(np.ndarray), b.view(np.ndarray), rcond),
+        {},
+        (b.unit / a.unit, b.unit**2, None, a.unit),
+        None,
+    )
+
+
+@function_helper(module=np.linalg)
+def norm(x, ord=None, *args, **kwargs):
+    if ord == 0:
+        from astropy.units import dimensionless_unscaled
+
+        unit = dimensionless_unscaled
+    else:
+        unit = x.unit
+    return (x.view(np.ndarray), ord) + args, kwargs, unit, None
+
+
+@function_helper(module=np.linalg)
+def matrix_power(a, n):
+    return (a.value, n), {}, a.unit**n, None
+
+
+if NUMPY_LT_2_0:
+
+    @function_helper(module=np.linalg)
+    def cholesky(a):
+        return (a.value,), {}, a.unit**0.5, None
+
+else:
+
+    @function_helper(module=np.linalg)
+    def cholesky(a, /, *, upper=False):
+        return (a.value,), {"upper": upper}, a.unit**0.5, None
+
+
+@function_helper(module=np.linalg)
+def qr(a, mode="reduced"):
+    if mode.startswith("e"):
+        units = None
+    elif mode == "r":
+        units = a.unit
+    else:
+        from astropy.units import dimensionless_unscaled
+
+        units = (dimensionless_unscaled, a.unit)
+
+    return (a.value, mode), {}, units, None
+
+
+@function_helper(helps={np.linalg.eig, np.linalg.eigh})
+def eig(a, *args, **kwargs):
+    from astropy.units import dimensionless_unscaled
+
+    return (a.value,) + args, kwargs, (a.unit, dimensionless_unscaled), None
+
+
+if not NUMPY_LT_2_0:
+    # these functions were added in numpy 2.0
+
+    @function_helper(module=np.linalg)
+    def outer(x1, x2, /):
+        # maybe this one can be marked as subclass-safe in the near future ?
+        # see https://github.com/numpy/numpy/pull/25101#discussion_r1419879122
+        x1, x2 = _as_quantities(x1, x2)
+        return (x1.view(np.ndarray), x2.view(np.ndarray)), {}, x1.unit * x2.unit, None
+
+
+# ======================= np.lib.recfunctions =======================
+
+
+@function_helper(module=np.lib.recfunctions)
+def structured_to_unstructured(arr, *args, **kwargs):
+    """
+    Convert a structured quantity to an unstructured one.
+    This only works if all the units are compatible.
+
+    """
+    from astropy.units import StructuredUnit
+
+    target_unit = arr.unit.values()[0]
+
+    def replace_unit(x):
+        if isinstance(x, StructuredUnit):
+            return x._recursively_apply(replace_unit)
+        else:
+            return target_unit
+
+    to_unit = arr.unit._recursively_apply(replace_unit)
+    return (arr.to_value(to_unit),) + args, kwargs, target_unit, None
+
+
+def _build_structured_unit(dtype, unit):
+    """Build structured unit from dtype.
+
+    Parameters
+    ----------
+    dtype : `numpy.dtype`
+    unit : `astropy.units.Unit`
+
+    Returns
+    -------
+    `astropy.units.Unit` or tuple
+    """
+    if dtype.fields is None:
+        return unit
+
+    return tuple(_build_structured_unit(v[0], unit) for v in dtype.fields.values())
+
+
+@function_helper(module=np.lib.recfunctions)
+def unstructured_to_structured(arr, dtype=None, *args, **kwargs):
+    from astropy.units import StructuredUnit
+
+    target_unit = StructuredUnit(_build_structured_unit(dtype, arr.unit))
+
+    return (arr.to_value(arr.unit), dtype) + args, kwargs, target_unit, None
+
+
+def _izip_units_flat(iterable):
+    """Returns an iterator of collapsing any nested unit structure.
+
+    Parameters
+    ----------
+    iterable : Iterable[StructuredUnit | Unit] or StructuredUnit
+        A structured unit or iterable thereof.
+
+    Yields
+    ------
+    unit
+    """
+    from astropy.units import StructuredUnit
+
+    # Make Structured unit (pass-through if it is already).
+    units = StructuredUnit(iterable)
+
+    # Yield from structured unit.
+    for v in units.values():
+        if isinstance(v, StructuredUnit):
+            yield from _izip_units_flat(v)
+        else:
+            yield v
+
+
+@function_helper(helps=rfn.merge_arrays)
+def merge_arrays(
+    seqarrays,
+    fill_value=-1,
+    flatten=False,
+    usemask=False,
+    asrecarray=False,
+):
+    """Merge structured Quantities field by field.
+
+    Like :func:`numpy.lib.recfunctions.merge_arrays`. Note that ``usemask`` and
+    ``asrecarray`` are not supported at this time and will raise a ValueError if
+    not `False`.
+    """
+    from astropy.units import Quantity, StructuredUnit
+
+    if asrecarray:
+        # TODO? implement if Quantity ever supports rec.array
+        raise ValueError("asrecarray=True is not supported.")
+    if usemask:
+        # TODO: use MaskedQuantity for this case
+        raise ValueError("usemask=True is not supported.")
+
+    # Do we have a single Quantity as input?
+    if isinstance(seqarrays, Quantity):
+        seqarrays = (seqarrays,)
+
+    # Note: this also converts ndarray -> Quantity[dimensionless]
+    seqarrays = _as_quantities(*seqarrays)
+    arrays = tuple(q.value for q in seqarrays)
+    units = tuple(q.unit for q in seqarrays)
+
+    if flatten:
+        unit = StructuredUnit(tuple(_izip_units_flat(units)))
+    elif len(arrays) == 1:
+        unit = StructuredUnit(units[0])
+    else:
+        unit = StructuredUnit(units)
+
+    return (
+        (arrays,),
+        dict(
+            fill_value=fill_value,
+            flatten=flatten,
+            usemask=usemask,
+            asrecarray=asrecarray,
+        ),
+        unit,
+        None,
+    )

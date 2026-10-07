@@ -1,0 +1,2276 @@
+=== seaborn/regression.py
+"""Plotting functions for linear models (broadly construed)."""
+import copy
+from textwrap import dedent
+import warnings
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+try:
+    import statsmodels
+    assert statsmodels
+    _has_statsmodels = True
+except ImportError:
+    _has_statsmodels = False
+
+from . import utils
+from . import algorithms as algo
+from .axisgrid import FacetGrid, _facet_docs
+
+
+__all__ = ["lmplot", "regplot", "residplot"]
+
+
+class _LinearPlotter:
+    """Base class for plotting relational data in tidy format.
+
+    To get anything useful done you'll have to inherit from this, but setup
+    code that can be abstracted out should be put here.
+
+    """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def plot(self, ax):
+        raise NotImplementedError
+
+    def dropna(self, *vars):
+        """
+        Remove observations with missing data from specified variables.
+
+        This method filters out rows where any of the specified variables contain
+        missing (NaN or None) values. The filtering is applied in-place by updating
+        the instance attributes for each variable.
+
+        Parameters
+        ----------
+        *vars : str
+            Variable names corresponding to instance attributes to check for missing
+            data. Only variables that are not None will be included in the missing
+            data check.
+
+        Returns
+        -------
+        None
+            This method modifies the instance attributes in-place and does not return
+            any value.
+
+        Notes
+        -----
+        - Missingness is evaluated consistently across all supplied variables
+        - Only variables that exist as non-None attributes are considered for filtering
+        - All specified variables are updated simultaneously based on the same boolean mask
+        - This ensures that observations are removed consistently across all variables
+        - The original shape and order of non-missing observations is preserved
+
+        Examples
+        --------
+        After calling dropna("x", "y"), any rows where either x or y had missing
+        values will be removed from both variables, maintaining alignment between
+        the datasets.
+        """
+        raise NotImplementedError
+
+    def establish_variables(self, data, **kws):
+        """
+        Extract and validate variables from data or use them directly.
+
+        This method processes the input variables, handling both string column names
+        (when data is provided) and direct array-like inputs. It performs validation
+        and stores the processed variables as instance attributes.
+
+        Parameters
+        ----------
+        data : pandas.DataFrame or None
+            The input DataFrame containing the data. Required when any of the
+            variables in **kws are specified as string column names.
+        **kws : dict
+            Variable assignments where keys are variable names and values can be:
+            - str: Column name in the data DataFrame
+            - array-like: Direct numeric data (list, numpy array, etc.)
+            - None: No data for this variable
+
+        Raises
+        ------
+        ValueError
+            If string variable names are provided but data is None, or if any
+            input variable has more than one dimension after squeezing.
+
+        Notes
+        -----
+        - All variables are stored as instance attributes
+        - List inputs are converted to numpy arrays; other non-string inputs are
+          used directly, and non-singleton shapes are squeezed
+        - Single-element arrays with shape (1,) are preserved as-is
+        - This method is typically called during plotter initialization to set up
+          the x, y, and other plotting variables
+
+        Examples
+        --------
+        With DataFrame and column names:
+            plotter.establish_variables(df, x='height', y='weight')
+
+        With direct arrays:
+            plotter.establish_variables(None, x=[1, 2, 3], y=[4, 5, 6])
+
+        Mixed usage:
+            plotter.establish_variables(df, x='height', y=[4, 5, 6])
+        """
+        raise NotImplementedError
+
+
+class _RegressionPlotter(_LinearPlotter):
+    """Plotter for numeric independent variables with regression model.
+
+    This does the computations and drawing for the `regplot` function, and
+    is thus also used indirectly by `lmplot`.
+    """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def fit_poly(self, grid, order):
+        """Regression using numpy polyfit for higher-order trends."""
+        def reg_func(_x, _y):
+            return np.polyval(np.polyfit(_x, _y, order), grid)
+
+        x, y = self.x, self.y
+        yhat = reg_func(x, y)
+        if self.ci is None:
+            return yhat, None
+
+        yhat_boots = algo.bootstrap(x, y,
+                                    func=reg_func,
+                                    n_boot=self.n_boot,
+                                    units=self.units,
+                                    seed=self.seed)
+        return yhat, yhat_boots
+
+    def fit_statsmodels(self, grid, model, **kwargs):
+        """More general regression function using statsmodels objects."""
+        import statsmodels.tools.sm_exceptions as sme
+        X, y = np.c_[np.ones(len(self.x)), self.x], self.y
+        grid = np.c_[np.ones(len(grid)), grid]
+
+        def reg_func(_x, _y):
+            err_classes = (sme.PerfectSeparationError,)
+            try:
+                with warnings.catch_warnings():
+                    if hasattr(sme, "PerfectSeparationWarning"):
+                        # statsmodels>=0.14.0
+                        warnings.simplefilter("error", sme.PerfectSeparationWarning)
+                        err_classes = (*err_classes, sme.PerfectSeparationWarning)
+                    yhat = model(_y, _x, **kwargs).fit().predict(grid)
+            except err_classes:
+                yhat = np.empty(len(grid))
+                yhat.fill(np.nan)
+            return yhat
+
+        yhat = reg_func(X, y)
+        if self.ci is None:
+            return yhat, None
+
+        yhat_boots = algo.bootstrap(X, y,
+                                    func=reg_func,
+                                    n_boot=self.n_boot,
+                                    units=self.units,
+                                    seed=self.seed)
+        return yhat, yhat_boots
+
+    def fit_lowess(self):
+        """Fit a locally-weighted regression, which returns its own grid."""
+        from statsmodels.nonparametric.smoothers_lowess import lowess
+        grid, yhat = lowess(self.y, self.x).T
+        return grid, yhat
+
+    def __init__(self, x, y, data = None, x_estimator = None, x_bins = None, x_ci = 'ci', scatter = True, fit_reg = True, ci = 95, n_boot = 1000, units = None, seed = None, order = 1, logistic = False, lowess = False, robust = False, logx = False, x_partial = None, y_partial = None, truncate = False, dropna = True, x_jitter = None, y_jitter = None, color = None, label = None):
+        """
+        Initialize a regression plotter for numeric independent variables with regression model.
+
+        This constructor sets up all the parameters and data preprocessing needed for creating
+        regression plots with scatter points and fitted regression lines. It handles data
+        validation, variable extraction, missing value removal, and various regression options.
+
+        Parameters
+        ----------
+        x : string, array-like, or Series
+            The independent variable data. If string, should be a column name in `data`.
+        y : string, array-like, or Series  
+            The dependent variable data. If string, should be a column name in `data`.
+        data : DataFrame, optional
+            Input data structure. Required if `x` and `y` are specified as strings.
+        x_estimator : callable, optional
+            Function to apply to each unique value of `x` for point estimates.
+            Useful when `x` is discrete. If provided, confidence intervals will be computed.
+        x_bins : int or array-like, optional
+            Bin the `x` variable into discrete bins. Can be number of bins or bin positions.
+            When used, implies `x_estimator` defaults to `numpy.mean`.
+        x_ci : "ci", "sd", int in [0, 100], or None, optional
+            Size of confidence interval for discrete `x` values. If "ci", uses `ci` parameter.
+            If "sd", shows standard deviation instead of bootstrap CI.
+        scatter : bool, default True
+            Whether to draw a scatterplot with the underlying observations.
+        fit_reg : bool, default True
+            Whether to estimate and plot a regression model.
+        ci : int in [0, 100] or None, default 95
+            Size of confidence interval for regression estimate. Uses bootstrap estimation.
+            Set to None to skip confidence interval computation.
+        n_boot : int, default 1000
+            Number of bootstrap resamples for confidence interval estimation.
+        units : string or array-like, optional
+            Sampling units for multilevel bootstrap when observations are nested.
+        seed : int, numpy.random.Generator, or numpy.random.RandomState, optional
+            Seed for reproducible bootstrapping.
+        order : int, default 1
+            Order of polynomial regression. Values greater than 1 fit a least-squares
+            polynomial of the requested degree.
+        logistic : bool, default False
+            Fit logistic regression model. Assumes `y` is binary. Requires statsmodels.
+        lowess : bool, default False
+            Fit locally weighted regression (LOWESS). Requires statsmodels.
+        robust : bool, default False
+            Fit robust regression to de-weight outliers. Requires statsmodels.
+        logx : bool, default False
+            Fit regression of form y ~ log(x). Requires `x` > 0.
+        x_partial : string or array-like, optional
+            Confounding variables to regress out of `x` before plotting.
+        y_partial : string or array-like, optional
+            Confounding variables to regress out of `y` before plotting.
+        truncate : bool, default False
+            Whether to bound regression line by data limits (True) or axis limits (False).
+        dropna : bool, default True
+            Whether to remove observations with missing data.
+        x_jitter : float, optional
+            Amount of uniform random noise to add to `x` for visualization only.
+        y_jitter : float, optional
+            Amount of uniform random noise to add to `y` for visualization only.
+        color : matplotlib color, optional
+            Color for all plot elements.
+        label : string, optional
+            Label for legend.
+
+        Raises
+        ------
+        ValueError
+            If mutually exclusive regression options are specified (order > 1, logistic,
+            robust, lowess, logx), or if named variables are used without providing `data`,
+            or if input arrays are not 1-dimensional.
+        Notes
+        -----
+        The regression options (order > 1, logistic, robust, lowess, logx) are mutually
+        exclusive. Only one can be specified at a time.
+
+        When `x_bins` is provided, the scatterplot shows binned data but the regression
+        is still fit to the original unbinned data.
+
+        Confidence intervals are computed using bootstrap resampling, which can be
+        computationally intensive for large datasets.
+        """
+        raise NotImplementedError
+
+    def bin_predictor(self, bins):
+        """
+        Discretize a predictor by assigning value to closest bin.
+
+        This method bins the predictor variable (x) by either creating evenly-spaced percentile bins
+        or using provided bin centers. Each original x value is then replaced with the value of the
+        closest bin center.
+
+        Parameters
+        ----------
+        bins : int or array-like
+            If int, the number of evenly-spaced percentile bins to create. The method will
+            compute percentiles from 0 to 100 and create bins + 2 total divisions, excluding
+            the endpoints (0th and 100th percentiles).
+            If array-like, the explicit positions of the bin centers to use.
+
+        Returns
+        -------
+        x_binned : numpy.ndarray
+            Array of the same length as self.x where each original value has been replaced
+            with the value of its closest bin center.
+        bins : numpy.ndarray
+            Array containing the bin center values used for discretization.
+
+        Notes
+        -----
+        This method is typically used when you want to create discrete groups from a continuous
+        predictor variable for visualization purposes. The binning affects how the scatterplot
+        is drawn but does not change the underlying regression fitting, which still uses the
+        original continuous data.
+
+        When bins is an integer, the method creates bins based on percentiles of the data
+        distribution rather than evenly-spaced values, which ensures roughly equal numbers
+        of observations in each bin.
+
+        The assignment to bins is done by finding the minimum absolute distance between each
+        x value and all bin centers.
+        """
+        raise NotImplementedError
+
+    @property
+    def estimate_data(self):
+        """
+        Data with a point estimate and CI for each discrete x value.
+
+        This property computes point estimates and confidence intervals for the y variable
+        at each unique value of the discrete x variable. It is primarily used when an
+        x_estimator function has been specified to aggregate y values within discrete
+        x bins.
+
+        Returns
+        -------
+        tuple of (vals, points, cis)
+            vals : list
+                Sorted unique values from the discrete x variable.
+            points : list
+                Point estimates of y for each unique x value, computed using the
+                x_estimator function.
+            cis : list
+                Confidence intervals for each point estimate. Each element is either
+                a tuple of (lower, upper) bounds or None if x_ci is None.
+
+        Notes
+        -----
+        The confidence intervals are computed differently based on the x_ci parameter:
+        - If x_ci is None, no confidence intervals are computed (cis contains None values)
+        - If x_ci is "sd", confidence intervals are computed as estimate ± standard deviation
+        - For numeric x_ci values, bootstrap resampling is used with the specified confidence level
+        - Bootstrap resampling respects the units parameter if provided for multilevel sampling
+
+        The point estimates are computed by applying the x_estimator function to all y values
+        corresponding to each unique x value. This is useful for visualizing trends in
+        discrete or binned continuous variables.
+        """
+        raise NotImplementedError
+
+    def fit_fast(self, grid):
+        """
+        Low-level regression and prediction using linear algebra.
+
+        This method fits a minimum-norm least-squares line of the form
+        y = β₀ + β₁x and generates predictions on the provided grid points.
+
+        Parameters
+        ----------
+        grid : array-like
+            Array of x-values where predictions should be made. These values define
+            the points along the x-axis where the fitted regression line will be
+            evaluated.
+
+        Returns
+        -------
+        yhat : ndarray
+            Predicted y-values corresponding to the input grid points based on the
+            fitted linear regression model.
+        yhat_boots : ndarray or None
+            Bootstrap samples of predictions if confidence intervals are requested
+            (self.ci is not None). Shape is (n_boot, len(grid)). Returns None if
+            self.ci is None, indicating no confidence interval computation is needed.
+
+        Notes
+        -----
+        The least-squares solution includes an intercept and remains defined for singular
+        or rank-deficient inputs by selecting the minimum-norm coefficient solution.
+
+        When confidence intervals are requested, bootstrap resampling respects any
+        specified units for hierarchical resampling structure.
+
+        The method assumes a simple linear relationship and does not handle polynomial
+        terms, logistic regression, or other advanced modeling options - those are
+        handled by other fit_* methods in the class.
+        """
+        raise NotImplementedError
+
+    def fit_logx(self, grid):
+        """
+        Fit a linear regression model in logarithmic space for the x variable.
+
+        This method performs minimum-norm least-squares regression of the form y ~ log(x),
+        where the x values are log-transformed before fitting the model.
+
+        Parameters
+        ----------
+        grid : array-like
+            The x values at which to evaluate the fitted regression model. These values
+            will be log-transformed internally for the regression computation but the
+            original scale is preserved for plotting purposes.
+
+        Returns
+        -------
+        yhat : ndarray
+            Predicted y values at the grid points based on the log-linear model.
+        yhat_boots : ndarray or None
+            Bootstrap samples of predicted y values for confidence interval computation.
+            Returns None if self.ci is None, otherwise returns an array of shape
+            (n_boot, len(grid)) containing bootstrap predictions.
+
+        Notes
+        -----
+        - Positive x values are required for finite real-valued logarithms; this method
+          relies on NumPy's logarithm behavior and does not perform an explicit positivity check
+        - The fitted model includes an intercept and remains defined for rank-deficient
+          inputs by selecting the minimum-norm coefficient solution
+        - Bootstrap resampling is performed on the original data if confidence intervals
+          are requested (self.ci is not None)
+        - The regression coefficients are computed in log-space but predictions are
+          returned in the original y-scale
+
+        """
+        raise NotImplementedError
+
+    def fit_regression(self, ax = None, x_range = None, grid = None):
+        """
+        Fit the regression model and compute predictions with confidence intervals.
+
+        This method fits the appropriate regression model based on the plotter's configuration
+        and returns predictions over a grid of x values along with confidence intervals.
+        The method automatically selects the fitting approach based on the regression options
+        set during initialization (polynomial, logistic, lowess, robust, or logx).
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes, optional
+            Matplotlib axes object. If provided, the x-axis limits will be used to
+            determine the prediction grid range when truncate=False. If None and
+            truncate=False, x_range must be provided unless grid is supplied directly.
+        x_range : tuple of float, optional
+            Two-element tuple specifying the (min, max) range for the prediction grid.
+            Used when ax is None and truncate=False. It must be provided in that case.
+        grid : array-like, optional
+            Custom grid of x values for which to compute predictions. If provided,
+            this overrides the automatic grid generation and the ax/x_range parameters
+            are ignored.
+
+        Returns
+        -------
+        grid : numpy.ndarray
+            Array of x values where predictions were computed. Shape is (n_points,)
+            where n_points is typically 100 for automatically generated grids.
+        yhat : numpy.ndarray
+            Predicted y values corresponding to the grid points. Shape is (n_points,).
+        err_bands : numpy.ndarray or None
+            Confidence interval bounds for the predictions. Shape is (2, n_points)
+            where the first row contains lower bounds and second row contains upper
+            bounds. Returns None if ci=None or for lowess regression which doesn't
+            support confidence intervals.
+
+        Notes
+        -----
+        The method automatically selects the appropriate fitting procedure:
+        - Least-squares polynomial regression of the requested degree when order > 1
+        - Logistic regression (statsmodels GLM) when logistic=True
+        - Lowess smoothing (statsmodels lowess) when lowess=True
+        - Robust regression (statsmodels RLM) when robust=True  
+        - Log-space regression when logx=True
+        - Fast linear regression (linear algebra) for the default case
+
+        For methods requiring statsmodels (logistic, lowess, robust), the method
+        will check if statsmodels is available and raise RuntimeError if not.
+
+        Confidence intervals are computed via bootstrap resampling using the number
+        of bootstrap samples specified in self.n_boot, except for lowess regression
+        where confidence intervals are not supported.
+
+        The prediction grid spans either the data range (when truncate=True) or
+        the axis limits (when truncate=False), unless a custom grid is provided.
+        """
+        raise NotImplementedError
+
+    @property
+    def scatter_data(self):
+        """
+        Data where each observation is a point.
+
+        This property returns the x and y coordinates for scatter plot visualization,
+        with optional jitter applied to both dimensions to help visualize overlapping
+        data points.
+
+        Returns
+        -------
+        tuple of array-like
+            A tuple containing (x, y) coordinates where:
+            - x : array-like
+                X-coordinates for scatter plot points. If x_jitter is specified,
+                uniform random noise is added to the original x values.
+            - y : array-like  
+                Y-coordinates for scatter plot points. If y_jitter is specified,
+                uniform random noise is added to the original y values.
+
+        Notes
+        -----
+        The jitter is applied by adding uniform random noise in the range 
+        [-jitter_value, jitter_value] to each coordinate. This jittering only
+        affects the visual representation of the data points and does not modify
+        the underlying data used for regression calculations.
+
+        If no jitter is specified (x_jitter=None or y_jitter=None), the original
+        coordinate values are returned unchanged for the respective dimension.
+
+        The jitter values are controlled by the x_jitter and y_jitter parameters
+        set during _RegressionPlotter initialization.
+        """
+        raise NotImplementedError
+
+    def _check_statsmodels(self):
+        """Raise RuntimeError when an enabled logistic, robust, or lowess fit requires unavailable statsmodels."""
+        raise NotImplementedError
+
+    def regress_out(self, a, b):
+        """Remove the linear effect of b from a while preserving the original mean of a."""
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_regression_docs = dict(
+
+    model_api=dedent("""\
+    There are a number of mutually exclusive options for estimating the
+    regression model. See the :ref:`tutorial <regression_tutorial>` for more
+    information.\
+    """),
+    regplot_vs_lmplot=dedent("""\
+    The :func:`regplot` and :func:`lmplot` functions are closely related, but
+    the former is an axes-level function while the latter is a figure-level
+    function that combines :func:`regplot` and :class:`FacetGrid`.\
+    """),
+    x_estimator=dedent("""\
+    x_estimator : callable that maps vector -> scalar, optional
+        Apply this function to each unique value of ``x`` and plot the
+        resulting estimate. This is useful when ``x`` is a discrete variable.
+        If ``x_ci`` is given, this estimate will be bootstrapped and a
+        confidence interval will be drawn.\
+    """),
+    x_bins=dedent("""\
+    x_bins : int or vector, optional
+        Bin the ``x`` variable into discrete bins and then estimate the central
+        tendency and a confidence interval. This binning only influences how
+        the scatterplot is drawn; the regression is still fit to the original
+        data.  This parameter is interpreted either as the number of
+        evenly-sized (not necessary spaced) bins or the positions of the bin
+        centers. When this parameter is used, it implies that the default of
+        ``x_estimator`` is ``numpy.mean``.\
+    """),
+    x_ci=dedent("""\
+    x_ci : "ci", "sd", int in [0, 100] or None, optional
+        Size of the confidence interval used when plotting a central tendency
+        for discrete values of ``x``. If ``"ci"``, defer to the value of the
+        ``ci`` parameter. If ``"sd"``, skip bootstrapping and show the
+        standard deviation of the observations in each bin.\
+    """),
+    scatter=dedent("""\
+    scatter : bool, optional
+        If ``True``, draw a scatterplot with the underlying observations (or
+        the ``x_estimator`` values).\
+    """),
+    fit_reg=dedent("""\
+    fit_reg : bool, optional
+        If ``True``, estimate and plot a regression model relating the ``x``
+        and ``y`` variables.\
+    """),
+    ci=dedent("""\
+    ci : int in [0, 100] or None, optional
+        Size of the confidence interval for the regression estimate. This will
+        be drawn using translucent bands around the regression line. The
+        confidence interval is estimated using a bootstrap; for large
+        datasets, it may be advisable to avoid that computation by setting
+        this parameter to None.\
+    """),
+    n_boot=dedent("""\
+    n_boot : int, optional
+        Number of bootstrap resamples used to estimate the ``ci``. The default
+        value attempts to balance time and stability; you may want to increase
+        this value for "final" versions of plots.\
+    """),
+    units=dedent("""\
+    units : variable name in ``data``, optional
+        If the ``x`` and ``y`` observations are nested within sampling units,
+        those can be specified here. This will be taken into account when
+        computing the confidence intervals by performing a multilevel bootstrap
+        that resamples both units and observations (within unit). This does not
+        otherwise influence how the regression is estimated or drawn.\
+    """),
+    seed=dedent("""\
+    seed : int, numpy.random.Generator, or numpy.random.RandomState, optional
+        Seed or random number generator for reproducible bootstrapping.\
+    """),
+    order=dedent("""\
+    order : int, optional
+        If ``order`` is greater than 1, use ``numpy.polyfit`` to estimate a
+        polynomial regression.\
+    """),
+    logistic=dedent("""\
+    logistic : bool, optional
+        If ``True``, assume that ``y`` is a binary variable and use
+        ``statsmodels`` to estimate a logistic regression model. Note that this
+        is substantially more computationally intensive than linear regression,
+        so you may wish to decrease the number of bootstrap resamples
+        (``n_boot``) or set ``ci`` to None.\
+    """),
+    lowess=dedent("""\
+    lowess : bool, optional
+        If ``True``, use ``statsmodels`` to estimate a nonparametric lowess
+        model (locally weighted linear regression). Note that confidence
+        intervals cannot currently be drawn for this kind of model.\
+    """),
+    robust=dedent("""\
+    robust : bool, optional
+        If ``True``, use ``statsmodels`` to estimate a robust regression. This
+        will de-weight outliers. Note that this is substantially more
+        computationally intensive than standard linear regression, so you may
+        wish to decrease the number of bootstrap resamples (``n_boot``) or set
+        ``ci`` to None.\
+    """),
+    logx=dedent("""\
+    logx : bool, optional
+        If ``True``, estimate a linear regression of the form y ~ log(x), but
+        plot the scatterplot and regression model in the input space. Note that
+        ``x`` must be positive for this to work.\
+    """),
+    xy_partial=dedent("""\
+    {x,y}_partial : strings in ``data`` or matrices
+        Confounding variables to regress out of the ``x`` or ``y`` variables
+        before plotting.\
+    """),
+    truncate=dedent("""\
+    truncate : bool, optional
+        If ``True``, the regression line is bounded by the data limits. If
+        ``False``, it extends to the ``x`` axis limits.
+    """),
+    dropna=dedent("""\
+    dropna : bool, optional
+        If ``True``, remove observations with missing data from the plot.
+    """),
+    xy_jitter=dedent("""\
+    {x,y}_jitter : floats, optional
+        Add uniform random noise of this size to either the ``x`` or ``y``
+        variables. The noise is added to a copy of the data after fitting the
+        regression, and only influences the look of the scatterplot. This can
+        be helpful when plotting variables that take discrete values.\
+    """),
+    scatter_line_kws=dedent("""\
+    {scatter,line}_kws : dictionaries
+        Additional keyword arguments to pass to ``plt.scatter`` and
+        ``plt.plot``.\
+    """),
+)
+_regression_docs.update(_facet_docs)
+
+
+def lmplot(
+    data, *,
+    x=None, y=None, hue=None, col=None, row=None,
+    palette=None, col_wrap=None, height=5, aspect=1, markers="o",
+    sharex=None, sharey=None, hue_order=None, col_order=None, row_order=None,
+    legend=True, legend_out=None, x_estimator=None, x_bins=None,
+    x_ci="ci", scatter=True, fit_reg=True, ci=95, n_boot=1000,
+    units=None, seed=None, order=1, logistic=False, lowess=False,
+    robust=False, logx=False, x_partial=None, y_partial=None,
+    truncate=True, x_jitter=None, y_jitter=None, scatter_kws=None,
+    line_kws=None, facet_kws=None,
+):
+
+    if facet_kws is None:
+        facet_kws = {}
+
+
+
+
+
+
+
+
+
+
+    facet_kw_deprecation("sharex", sharex)
+    facet_kw_deprecation("sharey", sharey)
+    facet_kw_deprecation("legend_out", legend_out)
+
+    if data is None:
+        raise TypeError("Missing required keyword argument `data`.")
+
+    # Reduce the dataframe to only needed columns
+    need_cols = [x, y, hue, col, row, units, x_partial, y_partial]
+    cols = np.unique([a for a in need_cols if a is not None]).tolist()
+    data = data[cols]
+
+    # Initialize the grid
+    facets = FacetGrid(
+        data, row=row, col=col, hue=hue,
+        palette=palette,
+        row_order=row_order, col_order=col_order, hue_order=hue_order,
+        height=height, aspect=aspect, col_wrap=col_wrap,
+        **facet_kws,
+    )
+
+    # Add the markers here as FacetGrid has figured out how many levels of the
+    # hue variable are needed and we don't want to duplicate that process
+    if facets.hue_names is None:
+        n_markers = 1
+    else:
+        n_markers = len(facets.hue_names)
+    if not isinstance(markers, list):
+        markers = [markers] * n_markers
+    if len(markers) != n_markers:
+        raise ValueError("markers must be a singleton or a list of markers "
+                         "for each level of the hue variable")
+    facets.hue_kws = {"marker": markers}
+
+
+
+
+
+
+    facets.map_dataframe(update_datalim, x=x, y=y)
+
+    # Draw the regression plot on each facet
+    regplot_kws = dict(
+        x_estimator=x_estimator, x_bins=x_bins, x_ci=x_ci,
+        scatter=scatter, fit_reg=fit_reg, ci=ci, n_boot=n_boot, units=units,
+        seed=seed, order=order, logistic=logistic, lowess=lowess,
+        robust=robust, logx=logx, x_partial=x_partial, y_partial=y_partial,
+        truncate=truncate, x_jitter=x_jitter, y_jitter=y_jitter,
+        scatter_kws=scatter_kws, line_kws=line_kws,
+    )
+    facets.map_dataframe(regplot, x=x, y=y, **regplot_kws)
+    facets.set_axis_labels(x, y)
+
+    # Add a legend
+    if legend and (hue is not None) and (hue not in [col, row]):
+        facets.add_legend()
+    return facets
+
+
+lmplot.__doc__ = dedent("""\
+    Plot data and regression model fits across a FacetGrid.
+
+    This function combines :func:`regplot` and :class:`FacetGrid`. It is
+    intended as a convenient interface to fit regression models across
+    conditional subsets of a dataset.
+
+    When thinking about how to assign variables to different facets, a general
+    rule is that it makes sense to use ``hue`` for the most important
+    comparison, followed by ``col`` and ``row``. However, always think about
+    your particular dataset and the goals of the visualization you are
+    creating.
+
+    {model_api}
+
+    The parameters to this function span most of the options in
+    :class:`FacetGrid`, although there may be occasional cases where you will
+    want to use that class and :func:`regplot` directly.
+
+    Parameters
+    ----------
+    {data}
+    x, y : strings, optional
+        Input variables; these should be column names in ``data``.
+    hue, col, row : strings
+        Variables that define subsets of the data, which will be drawn on
+        separate facets in the grid. See the ``*_order`` parameters to control
+        the order of levels of this variable.
+    {palette}
+    {col_wrap}
+    {height}
+    {aspect}
+    markers : matplotlib marker code or list of marker codes, optional
+        Markers for the scatterplot. If a list, each marker in the list will be
+        used for each level of the ``hue`` variable.
+    {share_xy}
+
+        .. deprecated:: 0.12.0
+            Pass using the `facet_kws` dictionary.
+
+    {{hue,col,row}}_order : lists, optional
+        Order for the levels of the faceting variables. By default, this will
+        be the order that the levels appear in ``data`` or, if the variables
+        are pandas categoricals, the category order.
+    legend : bool, optional
+        If ``True`` and there is a ``hue`` variable, add a legend.
+    {legend_out}
+
+        .. deprecated:: 0.12.0
+            Pass using the `facet_kws` dictionary.
+
+    {x_estimator}
+    {x_bins}
+    {x_ci}
+    {scatter}
+    {fit_reg}
+    {ci}
+    {n_boot}
+    {units}
+    {seed}
+    {order}
+    {logistic}
+    {lowess}
+    {robust}
+    {logx}
+    {xy_partial}
+    {truncate}
+    {xy_jitter}
+    {scatter_line_kws}
+    facet_kws : dict
+        Dictionary of keyword arguments for :class:`FacetGrid`.
+
+    Returns
+    -------
+    :class:`FacetGrid`
+        The :class:`FacetGrid` object with the plot on it for further tweaking.
+
+    See Also
+    --------
+    regplot : Plot data and a conditional model fit.
+    FacetGrid : Subplot grid for plotting conditional relationships.
+    pairplot : Combine :func:`regplot` and :class:`PairGrid` (when used with
+               ``kind="reg"``).
+
+    Notes
+    -----
+
+    {regplot_vs_lmplot}
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/lmplot.rst
+
+    """).format(**_regression_docs)
+
+
+def regplot(
+    data=None, *, x=None, y=None,
+    x_estimator=None, x_bins=None, x_ci="ci",
+    scatter=True, fit_reg=True, ci=95, n_boot=1000, units=None,
+    seed=None, order=1, logistic=False, lowess=False, robust=False,
+    logx=False, x_partial=None, y_partial=None,
+    truncate=True, dropna=True, x_jitter=None, y_jitter=None,
+    label=None, color=None, marker="o",
+    scatter_kws=None, line_kws=None, ax=None
+):
+
+    plotter = _RegressionPlotter(x, y, data, x_estimator, x_bins, x_ci,
+                                 scatter, fit_reg, ci, n_boot, units, seed,
+                                 order, logistic, lowess, robust, logx,
+                                 x_partial, y_partial, truncate, dropna,
+                                 x_jitter, y_jitter, color, label)
+
+    if ax is None:
+        ax = plt.gca()
+
+    scatter_kws = {} if scatter_kws is None else copy.copy(scatter_kws)
+    scatter_kws["marker"] = marker
+    line_kws = {} if line_kws is None else copy.copy(line_kws)
+    plotter.plot(ax, scatter_kws, line_kws)
+    return ax
+
+
+regplot.__doc__ = dedent("""\
+    Plot data and a linear regression model fit.
+
+    {model_api}
+
+    Parameters
+    ----------
+    x, y : string, series, or vector array
+        Input variables. If strings, these should correspond with column names
+        in ``data``. When pandas objects are used, axes will be labeled with
+        the series name.
+    {data}
+    {x_estimator}
+    {x_bins}
+    {x_ci}
+    {scatter}
+    {fit_reg}
+    {ci}
+    {n_boot}
+    {units}
+    {seed}
+    {order}
+    {logistic}
+    {lowess}
+    {robust}
+    {logx}
+    {xy_partial}
+    {truncate}
+    {dropna}
+    {xy_jitter}
+    label : string
+        Label to apply to either the scatterplot or regression line (if
+        ``scatter`` is ``False``) for use in a legend.
+    color : matplotlib color
+        Color to apply to all plot elements; will be superseded by colors
+        passed in ``scatter_kws`` or ``line_kws``.
+    marker : matplotlib marker code
+        Marker to use for the scatterplot glyphs.
+    {scatter_line_kws}
+    ax : matplotlib Axes, optional
+        Axes object to draw the plot onto, otherwise uses the current Axes.
+
+    Returns
+    -------
+    ax : matplotlib Axes
+        The Axes object containing the plot.
+
+    See Also
+    --------
+    lmplot : Combine :func:`regplot` and :class:`FacetGrid` to plot multiple
+             linear relationships in a dataset.
+    jointplot : Combine :func:`regplot` and :class:`JointGrid` (when used with
+                ``kind="reg"``).
+    pairplot : Combine :func:`regplot` and :class:`PairGrid` (when used with
+               ``kind="reg"``).
+    residplot : Plot the residuals of a linear regression model.
+
+    Notes
+    -----
+
+    {regplot_vs_lmplot}
+
+
+    It's also easy to combine :func:`regplot` and :class:`JointGrid` or
+    :class:`PairGrid` through the :func:`jointplot` and :func:`pairplot`
+    functions, although these do not directly accept all of :func:`regplot`'s
+    parameters.
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/regplot.rst
+
+    """).format(**_regression_docs)
+
+
+def residplot(
+    data=None, *, x=None, y=None,
+    x_partial=None, y_partial=None, lowess=False,
+    order=1, robust=False, dropna=True, label=None, color=None,
+    scatter_kws=None, line_kws=None, ax=None
+):
+    """Plot the residuals of a linear regression.
+
+    This function will regress y on x (possibly as a robust or polynomial
+    regression) and then draw a scatterplot of the residuals. You can
+    optionally fit a lowess smoother to the residual plot, which can
+    help in determining if there is structure to the residuals.
+
+    Parameters
+    ----------
+    data : DataFrame, optional
+        DataFrame to use if `x` and `y` are column names.
+    x : vector or string
+        Data or column name in `data` for the predictor variable.
+    y : vector or string
+        Data or column name in `data` for the response variable.
+    {x, y}_partial : vectors or string(s) , optional
+        These variables are treated as confounding and are removed from
+        the `x` or `y` variables before plotting.
+    lowess : boolean, optional
+        Fit a lowess smoother to the residual scatterplot.
+    order : int, optional
+        Order of the polynomial to fit when calculating the residuals.
+    robust : boolean, optional
+        Fit a robust linear regression when calculating the residuals.
+    dropna : boolean, optional
+        If True, ignore observations with missing data when fitting and
+        plotting.
+    label : string, optional
+        Label that will be used in any plot legends.
+    color : matplotlib color, optional
+        Color to use for all elements of the plot.
+    {scatter, line}_kws : dictionaries, optional
+        Additional keyword arguments passed to scatter() and plot() for drawing
+        the components of the plot.
+    ax : matplotlib axis, optional
+        Plot into this axis, otherwise grab the current axis or make a new
+        one if not existing.
+
+    Returns
+    -------
+    ax: matplotlib axes
+        Axes with the regression plot.
+
+    See Also
+    --------
+    regplot : Plot a simple linear regression model.
+    jointplot : Draw a :func:`residplot` with univariate marginal distributions
+                (when used with ``kind="resid"``).
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/residplot.rst
+
+    """
+    plotter = _RegressionPlotter(x, y, data, ci=None,
+                                 order=order, robust=robust,
+                                 x_partial=x_partial, y_partial=y_partial,
+                                 dropna=dropna, color=color, label=label)
+
+    if ax is None:
+        ax = plt.gca()
+
+    # Calculate the residual from a linear regression
+    _, yhat, _ = plotter.fit_regression(grid=plotter.x)
+    plotter.y = plotter.y - yhat
+
+    # Set the regression option on the plotter
+    if lowess:
+        plotter.lowess = True
+    else:
+        plotter.fit_reg = False
+
+    # Plot a horizontal line at 0
+    ax.axhline(0, ls=":", c=".2")
+
+    # Draw the scatterplot
+    scatter_kws = {} if scatter_kws is None else scatter_kws.copy()
+    line_kws = {} if line_kws is None else line_kws.copy()
+    plotter.plot(ax, scatter_kws, line_kws)
+    return ax
+
+=== seaborn/utils.py
+"""Utility functions, mostly for internal use."""
+import os
+import inspect
+import warnings
+import colorsys
+from contextlib import contextmanager
+from urllib.request import urlopen, urlretrieve
+from types import ModuleType
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+from matplotlib.colors import to_rgb
+import matplotlib.pyplot as plt
+from matplotlib.cbook import normalize_kwargs
+
+from seaborn._core.typing import deprecated
+from seaborn.external.version import Version
+from seaborn.external.appdirs import user_cache_dir
+
+__all__ = ["desaturate", "saturate", "set_hls_values", "move_legend",
+           "despine", "get_dataset_names", "get_data_home", "load_dataset"]
+
+DATASET_SOURCE = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master"
+DATASET_NAMES_URL = f"{DATASET_SOURCE}/dataset_names.txt"
+
+
+def ci_to_errsize(cis, heights):
+    """Convert intervals to error arguments relative to plot heights.
+
+    Parameters
+    ----------
+    cis : 2 x n sequence
+        sequence of confidence interval limits
+    heights : n sequence
+        sequence of plot heights
+
+    Returns
+    -------
+    errsize : 2 x n array
+        sequence of error size relative to height values in correct
+        format as argument for plt.bar
+
+    """
+    cis = np.atleast_2d(cis).reshape(2, -1)
+    heights = np.atleast_1d(heights)
+    errsize = []
+    for i, (low, high) in enumerate(np.transpose(cis)):
+        h = heights[i]
+        elow = h - low
+        ehigh = high - h
+        errsize.append([elow, ehigh])
+
+    errsize = np.asarray(errsize).T
+    return errsize
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _default_color(method, hue, color, kws, saturation=1):
+    """If needed, get a default color by using the matplotlib property cycle."""
+
+    if hue is not None:
+        # This warning is probably user-friendly, but it's currently triggered
+        # in a FacetGrid context and I don't want to mess with that logic right now
+        #  if color is not None:
+        #      msg = "`color` is ignored when `hue` is assigned."
+        #      warnings.warn(msg)
+        return None
+
+    kws = kws.copy()
+    kws.pop("label", None)
+
+    if color is not None:
+        if saturation < 1:
+            color = desaturate(color, saturation)
+        return color
+
+    elif method.__name__ == "plot":
+
+        color = normalize_kwargs(kws, mpl.lines.Line2D).get("color")
+        scout, = method([], [], scalex=False, scaley=False, color=color)
+        color = scout.get_color()
+        scout.remove()
+
+    elif method.__name__ == "scatter":
+
+        # Matplotlib will raise if the size of x/y don't match s/c,
+        # and the latter might be in the kws dict
+        scout_size = max(
+            np.atleast_1d(kws.get(key, [])).shape[0]
+            for key in ["s", "c", "fc", "facecolor", "facecolors"]
+        )
+        scout_x = scout_y = np.full(scout_size, np.nan)
+
+        scout = method(scout_x, scout_y, **kws)
+        facecolors = scout.get_facecolors()
+
+        if not len(facecolors):
+            # Handle bug in matplotlib <= 3.2 (I think)
+            # This will limit the ability to use non color= kwargs to specify
+            # a color in versions of matplotlib with the bug, but trying to
+            # work out what the user wanted by re-implementing the broken logic
+            # of inspecting the kwargs is probably too brittle.
+            single_color = False
+        else:
+            single_color = np.unique(facecolors, axis=0).shape[0] == 1
+
+        # Allow the user to specify an array of colors through various kwargs
+        if "c" not in kws and single_color:
+            color = to_rgb(facecolors[0])
+
+        scout.remove()
+
+    elif method.__name__ == "bar":
+
+        # bar() needs masked, not empty data, to generate a patch
+        scout, = method([np.nan], [np.nan], **kws)
+        color = to_rgb(scout.get_facecolor())
+        scout.remove()
+        # Axes.bar adds both a patch and a container
+        method.__self__.containers.pop(-1)
+
+    elif method.__name__ == "fill_between":
+
+        kws = normalize_kwargs(kws, mpl.collections.PolyCollection)
+        scout = method([], [], **kws)
+        facecolor = scout.get_facecolor()
+        color = to_rgb(facecolor[0])
+        scout.remove()
+
+    if saturation < 1:
+        color = desaturate(color, saturation)
+
+    return color
+
+
+def desaturate(color, prop):
+    """Decrease the saturation channel of a color by some percent.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+    prop : float
+        saturation channel of color will be multiplied by this value
+
+    Returns
+    -------
+    new_color : rgb tuple
+        desaturated color code in RGB tuple representation
+
+    """
+    # Check inputs
+    if not 0 <= prop <= 1:
+        raise ValueError("prop must be between 0 and 1")
+
+    # Get rgb tuple rep
+    rgb = to_rgb(color)
+
+    # Short circuit to avoid floating point issues
+    if prop == 1:
+        return rgb
+
+    # Convert to hls
+    h, l, s = colorsys.rgb_to_hls(*rgb)
+
+    # Desaturate the saturation channel
+    s *= prop
+
+    # Convert back to rgb
+    new_color = colorsys.hls_to_rgb(h, l, s)
+
+    return new_color
+
+
+def saturate(color):
+    """Return a fully saturated color with the same hue.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+
+    Returns
+    -------
+    new_color : rgb tuple
+        saturated color code in RGB tuple representation
+
+    """
+    return set_hls_values(color, s=1)
+
+
+def set_hls_values(color, h=None, l=None, s=None):  # noqa
+    """Independently manipulate the h, l, or s channels of a color.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+    h, l, s : floats between 0 and 1, or None
+        new values for each channel in hls space
+
+    Returns
+    -------
+    new_color : rgb tuple
+        new color code in RGB tuple representation
+
+    """
+    # Get an RGB tuple representation
+    rgb = to_rgb(color)
+    vals = list(colorsys.rgb_to_hls(*rgb))
+    for i, val in enumerate([h, l, s]):
+        if val is not None:
+            vals[i] = val
+
+    rgb = colorsys.hls_to_rgb(*vals)
+    return rgb
+
+
+def axlabel(xlabel, ylabel, **kwargs):
+    """Grab current axis and label it.
+
+    DEPRECATED: will be removed in a future version.
+
+    """
+    msg = "This function is deprecated and will be removed in a future version"
+    warnings.warn(msg, FutureWarning)
+    ax = plt.gca()
+    ax.set_xlabel(xlabel, **kwargs)
+    ax.set_ylabel(ylabel, **kwargs)
+
+
+def remove_na(vector):
+    """Helper method for removing null values from data vectors.
+
+    Parameters
+    ----------
+    vector : vector object
+        Must implement boolean masking with [] subscript syntax.
+
+    Returns
+    -------
+    clean_clean : same type as ``vector``
+        Vector of data with null values removed. May be a copy or a view.
+
+    """
+    return vector[pd.notnull(vector)]
+
+
+def get_color_cycle():
+    """Return the list of colors in the current matplotlib color cycle
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    colors : list
+        List of matplotlib colors in the current cycle, or dark gray if
+        the current color cycle is empty.
+    """
+    cycler = mpl.rcParams['axes.prop_cycle']
+    return cycler.by_key()['color'] if 'color' in cycler.keys else [".15"]
+
+
+def despine(fig=None, ax=None, top=True, right=True, left=False,
+            bottom=False, offset=None, trim=False):
+    """Remove the top and right spines from plot(s).
+
+    fig : matplotlib figure, optional
+        Figure to despine all axes of, defaults to the current figure.
+    ax : matplotlib axes, optional
+        Specific axes object to despine. Ignored if fig is provided.
+    top, right, left, bottom : boolean, optional
+        If True, remove that spine.
+    offset : int or dict, optional
+        Absolute distance, in points, spines should be moved away
+        from the axes (negative values move spines inward). A single value
+        applies to all spines; a dict can be used to set offset values per
+        side.
+    trim : bool, optional
+        If True, limit spines to the smallest and largest major tick
+        on each non-despined axis.
+
+    Returns
+    -------
+    None
+
+    """
+    # Get references to the axes we want
+    if fig is None and ax is None:
+        axes = plt.gcf().axes
+    elif fig is not None:
+        axes = fig.axes
+    elif ax is not None:
+        axes = [ax]
+
+    for ax_i in axes:
+        for side in ["top", "right", "left", "bottom"]:
+            # Toggle the spine objects
+            is_visible = not locals()[side]
+            ax_i.spines[side].set_visible(is_visible)
+            if offset is not None and is_visible:
+                try:
+                    val = offset.get(side, 0)
+                except AttributeError:
+                    val = offset
+                ax_i.spines[side].set_position(('outward', val))
+
+        # Potentially move the ticks
+        if left and not right:
+            maj_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.yaxis.majorTicks
+            )
+            min_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.yaxis.minorTicks
+            )
+            ax_i.yaxis.set_ticks_position("right")
+            for t in ax_i.yaxis.majorTicks:
+                t.tick2line.set_visible(maj_on)
+            for t in ax_i.yaxis.minorTicks:
+                t.tick2line.set_visible(min_on)
+
+        if bottom and not top:
+            maj_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.xaxis.majorTicks
+            )
+            min_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.xaxis.minorTicks
+            )
+            ax_i.xaxis.set_ticks_position("top")
+            for t in ax_i.xaxis.majorTicks:
+                t.tick2line.set_visible(maj_on)
+            for t in ax_i.xaxis.minorTicks:
+                t.tick2line.set_visible(min_on)
+
+        if trim:
+            # clip off the parts of the spines that extend past major ticks
+            xticks = np.asarray(ax_i.get_xticks())
+            if xticks.size:
+                firsttick = np.compress(xticks >= min(ax_i.get_xlim()),
+                                        xticks)[0]
+                lasttick = np.compress(xticks <= max(ax_i.get_xlim()),
+                                       xticks)[-1]
+                ax_i.spines['bottom'].set_bounds(firsttick, lasttick)
+                ax_i.spines['top'].set_bounds(firsttick, lasttick)
+                newticks = xticks.compress(xticks <= lasttick)
+                newticks = newticks.compress(newticks >= firsttick)
+                ax_i.set_xticks(newticks)
+
+            yticks = np.asarray(ax_i.get_yticks())
+            if yticks.size:
+                firsttick = np.compress(yticks >= min(ax_i.get_ylim()),
+                                        yticks)[0]
+                lasttick = np.compress(yticks <= max(ax_i.get_ylim()),
+                                       yticks)[-1]
+                ax_i.spines['left'].set_bounds(firsttick, lasttick)
+                ax_i.spines['right'].set_bounds(firsttick, lasttick)
+                newticks = yticks.compress(yticks <= lasttick)
+                newticks = newticks.compress(newticks >= firsttick)
+                ax_i.set_yticks(newticks)
+
+
+def move_legend(obj, loc, **kwargs):
+    """
+    Recreate a plot's legend at a new location.
+
+    The name is a slight misnomer. Matplotlib legends do not expose public
+    control over their position parameters. So this function creates a new legend,
+    copying over the data from the original object, which is then removed.
+
+    Parameters
+    ----------
+    obj : the object with the plot
+        This argument can be either a seaborn or matplotlib object:
+
+        - :class:`seaborn.FacetGrid` or :class:`seaborn.PairGrid`
+        - :class:`matplotlib.axes.Axes` or :class:`matplotlib.figure.Figure`
+
+    loc : str or int
+        Location argument, as in :meth:`matplotlib.axes.Axes.legend`.
+
+    kwargs
+        Other keyword arguments are passed to :meth:`matplotlib.axes.Axes.legend`.
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/move_legend.rst
+
+    """
+    # This is a somewhat hackish solution that will hopefully be obviated by
+    # upstream improvements to matplotlib legends that make them easier to
+    # modify after creation.
+
+    from seaborn.axisgrid import Grid  # Avoid circular import
+
+    # Locate the legend object and a method to recreate the legend
+    if isinstance(obj, Grid):
+        old_legend = obj.legend
+        legend_func = obj.figure.legend
+    elif isinstance(obj, mpl.axes.Axes):
+        old_legend = obj.legend_
+        legend_func = obj.legend
+    elif isinstance(obj, mpl.figure.Figure):
+        if obj.legends:
+            old_legend = obj.legends[-1]
+        else:
+            old_legend = None
+        legend_func = obj.legend
+    else:
+        err = "`obj` must be a seaborn Grid or matplotlib Axes or Figure instance."
+        raise TypeError(err)
+
+    if old_legend is None:
+        err = f"{obj} has no legend attached."
+        raise ValueError(err)
+
+    # Extract the components of the legend we need to reuse
+    # Import here to avoid a circular import
+    from seaborn._compat import get_legend_handles
+    handles = get_legend_handles(old_legend)
+    labels = [t.get_text() for t in old_legend.get_texts()]
+
+    # Handle the case where the user is trying to override the labels
+    if (new_labels := kwargs.pop("labels", None)) is not None:
+        if len(new_labels) != len(labels):
+            err = "Length of new labels does not match existing legend."
+            raise ValueError(err)
+        labels = new_labels
+
+    # Extract legend properties that can be passed to the recreation method
+    # (Vexingly, these don't all round-trip)
+    legend_kws = inspect.signature(mpl.legend.Legend).parameters
+    props = {k: v for k, v in old_legend.properties().items() if k in legend_kws}
+
+    # Delegate default bbox_to_anchor rules to matplotlib
+    props.pop("bbox_to_anchor")
+
+    # Try to propagate the existing title and font properties; respect new ones too
+    title = props.pop("title")
+    if "title" in kwargs:
+        title.set_text(kwargs.pop("title"))
+    title_kwargs = {k: v for k, v in kwargs.items() if k.startswith("title_")}
+    for key, val in title_kwargs.items():
+        title.set(**{key[6:]: val})
+        kwargs.pop(key)
+
+    # Try to respect the frame visibility
+    kwargs.setdefault("frameon", old_legend.legendPatch.get_visible())
+
+    # Remove the old legend and create the new one
+    props.update(kwargs)
+    old_legend.remove()
+    new_legend = legend_func(handles, labels, loc=loc, **props)
+    new_legend.set_title(title.get_text(), title.get_fontproperties())
+
+    # Let the Grid object continue to track the correct legend object
+    if isinstance(obj, Grid):
+        obj._legend = new_legend
+
+
+def _kde_support(data, bw, gridsize, cut, clip):
+    """Establish support for a kernel density estimate."""
+    support_min = max(data.min() - bw * cut, clip[0])
+    support_max = min(data.max() + bw * cut, clip[1])
+    support = np.linspace(support_min, support_max, gridsize)
+
+    return support
+
+
+
+
+
+
+
+
+def get_dataset_names():
+    """Report available example datasets, useful for reporting issues.
+
+    Requires an internet connection.
+
+    """
+    with urlopen(DATASET_NAMES_URL) as resp:
+        txt = resp.read()
+
+    dataset_names = [name.strip() for name in txt.decode().split("\n")]
+    return list(filter(None, dataset_names))
+
+
+def get_data_home(data_home=None):
+    """Return a path to the cache directory for example datasets.
+
+    This directory is used by :func:`load_dataset`.
+
+    If the ``data_home`` argument is not provided, it will use a directory
+    specified by the `SEABORN_DATA` environment variable (if it exists)
+    or otherwise default to an OS-appropriate user cache location.
+
+    """
+    if data_home is None:
+        data_home = os.environ.get("SEABORN_DATA", user_cache_dir("seaborn"))
+    data_home = os.path.expanduser(data_home)
+    if not os.path.exists(data_home):
+        os.makedirs(data_home)
+    return data_home
+
+
+def load_dataset(name, cache=True, data_home=None, **kws):
+    """Load an example dataset from the online repository (requires internet).
+
+    This function provides quick access to a small number of example datasets
+    that are useful for documenting seaborn or generating reproducible examples
+    for bug reports. It is not necessary for normal usage.
+
+    Note that some of the datasets have a small amount of preprocessing applied
+    to define a proper ordering for categorical variables.
+
+    Use :func:`get_dataset_names` to see a list of available datasets.
+
+    Parameters
+    ----------
+    name : str
+        Name of the dataset (``{name}.csv`` on
+        https://github.com/mwaskom/seaborn-data).
+    cache : boolean, optional
+        If True, try to load from the local cache first, and save to the cache
+        if a download is required.
+    data_home : string, optional
+        The directory in which to cache data; see :func:`get_data_home`.
+    kws : keys and values, optional
+        Additional keyword arguments are passed to passed through to
+        :func:`pandas.read_csv`.
+
+    Returns
+    -------
+    df : :class:`pandas.DataFrame`
+        Tabular data, possibly with some preprocessing applied.
+
+    """
+    # A common beginner mistake is to assume that one's personal data needs
+    # to be passed through this function to be usable with seaborn.
+    # Let's provide a more helpful error than you would otherwise get.
+    if isinstance(name, pd.DataFrame):
+        err = (
+            "This function accepts only strings (the name of an example dataset). "
+            "You passed a pandas DataFrame. If you have your own dataset, "
+            "it is not necessary to use this function before plotting."
+        )
+        raise TypeError(err)
+
+    url = f"{DATASET_SOURCE}/{name}.csv"
+
+    if cache:
+        cache_path = os.path.join(get_data_home(data_home), os.path.basename(url))
+        if not os.path.exists(cache_path):
+            if name not in get_dataset_names():
+                raise ValueError(f"'{name}' is not one of the example datasets.")
+            urlretrieve(url, cache_path)
+        full_path = cache_path
+    else:
+        full_path = url
+
+    df = pd.read_csv(full_path, **kws)
+
+    if df.iloc[-1].isnull().all():
+        df = df.iloc[:-1]
+
+    # Set some columns as a categorical type with ordered levels
+
+    if name == "tips":
+        df["day"] = pd.Categorical(df["day"], ["Thur", "Fri", "Sat", "Sun"])
+        df["sex"] = pd.Categorical(df["sex"], ["Male", "Female"])
+        df["time"] = pd.Categorical(df["time"], ["Lunch", "Dinner"])
+        df["smoker"] = pd.Categorical(df["smoker"], ["Yes", "No"])
+
+    elif name == "flights":
+        months = df["month"].str[:3]
+        df["month"] = pd.Categorical(months, months.unique())
+
+    elif name == "exercise":
+        df["time"] = pd.Categorical(df["time"], ["1 min", "15 min", "30 min"])
+        df["kind"] = pd.Categorical(df["kind"], ["rest", "walking", "running"])
+        df["diet"] = pd.Categorical(df["diet"], ["no fat", "low fat"])
+
+    elif name == "titanic":
+        df["class"] = pd.Categorical(df["class"], ["First", "Second", "Third"])
+        df["deck"] = pd.Categorical(df["deck"], list("ABCDEFG"))
+
+    elif name == "penguins":
+        df["sex"] = df["sex"].str.title()
+
+    elif name == "diamonds":
+        df["color"] = pd.Categorical(
+            df["color"], ["D", "E", "F", "G", "H", "I", "J"],
+        )
+        df["clarity"] = pd.Categorical(
+            df["clarity"], ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"],
+        )
+        df["cut"] = pd.Categorical(
+            df["cut"], ["Ideal", "Premium", "Very Good", "Good", "Fair"],
+        )
+
+    elif name == "taxis":
+        df["pickup"] = pd.to_datetime(df["pickup"])
+        df["dropoff"] = pd.to_datetime(df["dropoff"])
+
+    elif name == "seaice":
+        df["Date"] = pd.to_datetime(df["Date"])
+
+    elif name == "dowjones":
+        df["Date"] = pd.to_datetime(df["Date"])
+
+    return df
+
+
+def axis_ticklabels_overlap(labels):
+    """Return a boolean for whether the list of ticklabels have overlaps.
+
+    Parameters
+    ----------
+    labels : list of matplotlib ticklabels
+
+    Returns
+    -------
+    overlap : boolean
+        True if any of the labels overlap.
+
+    """
+    if not labels:
+        return False
+    try:
+        bboxes = [l.get_window_extent() for l in labels]
+        overlaps = [b.count_overlaps(bboxes) for b in bboxes]
+        return max(overlaps) > 1
+    except RuntimeError:
+        # Issue on macos backend raises an error in the above code
+        return False
+
+
+def axes_ticklabels_overlap(ax):
+    """Return booleans for whether the x and y ticklabels on an Axes overlap.
+
+    Parameters
+    ----------
+    ax : matplotlib Axes
+
+    Returns
+    -------
+    x_overlap, y_overlap : booleans
+        True when the labels on that axis overlap.
+
+    """
+    return (axis_ticklabels_overlap(ax.get_xticklabels()),
+            axis_ticklabels_overlap(ax.get_yticklabels()))
+
+
+def locator_to_legend_entries(locator, limits, dtype):
+    """Return levels and formatted levels for brief numeric legends."""
+    raw_levels = locator.tick_values(*limits).astype(dtype)
+
+    # The locator can return ticks outside the limits, clip them here
+    raw_levels = [l for l in raw_levels if l >= limits[0] and l <= limits[1]]
+
+    class dummy_axis:
+        def get_view_interval(self):
+            return limits
+
+    if isinstance(locator, mpl.ticker.LogLocator):
+        formatter = mpl.ticker.LogFormatter()
+    else:
+        formatter = mpl.ticker.ScalarFormatter()
+        # Avoid having an offset/scientific notation which we don't currently
+        # have any way of representing in the legend
+        formatter.set_useOffset(False)
+        formatter.set_scientific(False)
+    formatter.axis = dummy_axis()
+
+    formatted_levels = formatter.format_ticks(raw_levels)
+
+    return raw_levels, formatted_levels
+
+
+def relative_luminance(color):
+    """Calculate the relative luminance of a color according to W3C standards
+
+    Parameters
+    ----------
+    color : matplotlib color or sequence of matplotlib colors
+        Hex code, rgb-tuple, or html color name.
+
+    Returns
+    -------
+    luminance : float(s) between 0 and 1
+
+    """
+    rgb = mpl.colors.colorConverter.to_rgba_array(color)[:, :3]
+    rgb = np.where(rgb <= .03928, rgb / 12.92, ((rgb + .055) / 1.055) ** 2.4)
+    lum = rgb.dot([.2126, .7152, .0722])
+    try:
+        return lum.item()
+    except ValueError:
+        return lum
+
+
+def to_utf8(obj):
+    """Return a string representing a Python object.
+
+    Strings (i.e. type ``str``) are returned unchanged.
+
+    Byte strings (i.e. type ``bytes``) are returned as UTF-8-decoded strings.
+
+    For other objects, the method ``__str__()`` is called, and the result is
+    returned as a string.
+
+    Parameters
+    ----------
+    obj : object
+        Any Python object
+
+    Returns
+    -------
+    s : str
+        UTF-8-decoded string representation of ``obj``
+
+    """
+    if isinstance(obj, str):
+        return obj
+    try:
+        return obj.decode(encoding="utf-8")
+    except AttributeError:  # obj is not bytes-like
+        return str(obj)
+
+
+def _check_argument(param, options, value, prefix=False):
+    """Raise if value for param is not in options."""
+    if prefix and value is not None:
+        failure = not any(value.startswith(p) for p in options if isinstance(p, str))
+    else:
+        failure = value not in options
+    if failure:
+        raise ValueError(
+            f"The value for `{param}` must be one of {options}, "
+            f"but {repr(value)} was passed."
+        )
+    return value
+
+
+def _assign_default_kwargs(kws, call_func, source_func):
+    """Assign default kwargs for call_func using values from source_func."""
+    # This exists so that axes-level functions and figure-level functions can
+    # both call a Plotter method while having the default kwargs be defined in
+    # the signature of the axes-level function.
+    # An alternative would be to have a decorator on the method that sets its
+    # defaults based on those defined in the axes-level function.
+    # Then the figure-level function would not need to worry about defaults.
+    # I am not sure which is better.
+    needed = inspect.signature(call_func).parameters
+    defaults = inspect.signature(source_func).parameters
+
+    for param in needed:
+        if param in defaults and param not in kws:
+            kws[param] = defaults[param].default
+
+    return kws
+
+
+def adjust_legend_subtitles(legend):
+    """
+    Make invisible-handle "subtitles" entries look more like titles.
+
+    Note: This function is not part of the public API and may be changed or removed.
+
+    """
+    # Legend title not in rcParams until 3.0
+    font_size = plt.rcParams.get("legend.title_fontsize", None)
+    hpackers = legend.findobj(mpl.offsetbox.VPacker)[0].get_children()
+    for hpack in hpackers:
+        draw_area, text_area = hpack.get_children()
+        handles = draw_area.get_children()
+        if not all(artist.get_visible() for artist in handles):
+            draw_area.set_width(0)
+            for text in text_area.get_children():
+                if font_size is not None:
+                    text.set_size(font_size)
+
+
+def _deprecate_ci(errorbar, ci):
+    """
+    Warn on usage of ci= and convert to appropriate errorbar= arg.
+
+    ci was deprecated when errorbar was added in 0.12. It should not be removed
+    completely for some time, but it can be moved out of function definitions
+    (and extracted from kwargs) after one cycle.
+
+    """
+    if ci is not deprecated and ci != "deprecated":
+        if ci is None:
+            errorbar = None
+        elif ci == "sd":
+            errorbar = "sd"
+        else:
+            errorbar = ("ci", ci)
+        msg = (
+            "\n\nThe `ci` parameter is deprecated. "
+            f"Use `errorbar={repr(errorbar)}` for the same effect.\n"
+        )
+        warnings.warn(msg, FutureWarning, stacklevel=3)
+
+    return errorbar
+
+
+def _get_transform_functions(ax, axis):
+    """Return the forward and inverse transforms for a given axis."""
+    axis_obj = getattr(ax, f"{axis}axis")
+    transform = axis_obj.get_transform()
+    return transform.transform, transform.inverted().transform
+
+
+@contextmanager
+def _disable_autolayout():
+    """Context manager for preventing rc-controlled auto-layout behavior."""
+    # This is a workaround for an issue in matplotlib, for details see
+    # https://github.com/mwaskom/seaborn/issues/2914
+    # The only affect of this rcParam is to set the default value for
+    # layout= in plt.figure, so we could just do that instead.
+    # But then we would need to own the complexity of the transition
+    # from tight_layout=True -> layout="tight". This seems easier,
+    # but can be removed when (if) that is simpler on the matplotlib side,
+    # or if the layout algorithms are improved to handle figure legends.
+    orig_val = mpl.rcParams["figure.autolayout"]
+    try:
+        mpl.rcParams["figure.autolayout"] = False
+        yield
+    finally:
+        mpl.rcParams["figure.autolayout"] = orig_val
+
+
+def _version_predates(lib: ModuleType, version: str) -> bool:
+    """Helper function for checking version compatibility."""
+    return Version(lib.__version__) < Version(version)
+
+
+def _scatter_legend_artist(**kws):
+
+    kws = normalize_kwargs(kws, mpl.collections.PathCollection)
+
+    edgecolor = kws.pop("edgecolor", None)
+    rc = mpl.rcParams
+    line_kws = {
+        "linestyle": "",
+        "marker": kws.pop("marker", "o"),
+        "markersize": np.sqrt(kws.pop("s", rc["lines.markersize"] ** 2)),
+        "markerfacecolor": kws.pop("facecolor", kws.get("color")),
+        "markeredgewidth": kws.pop("linewidth", 0),
+        **kws,
+    }
+
+    if edgecolor is not None:
+        if edgecolor == "face":
+            line_kws["markeredgecolor"] = line_kws["markerfacecolor"]
+        else:
+            line_kws["markeredgecolor"] = edgecolor
+
+    return mpl.lines.Line2D([], [], **line_kws)
+
+
+def _get_patch_legend_artist(fill):
+
+    def legend_artist(**kws):
+
+        color = kws.pop("color", None)
+        if color is not None:
+            if fill:
+                kws["facecolor"] = color
+            else:
+                kws["edgecolor"] = color
+                kws["facecolor"] = "none"
+
+        return mpl.patches.Rectangle((0, 0), 0, 0, **kws)
+
+    return legend_artist
+
+
+def ci(a, which=95, axis=None):
+    """Return symmetric percentile bounds using percentiles 50 - which / 2 and 50 + which / 2."""
+    raise NotImplementedError

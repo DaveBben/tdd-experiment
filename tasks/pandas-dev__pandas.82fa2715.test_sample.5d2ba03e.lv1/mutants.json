@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_sample.5d2ba03e.lv1",
+ "pool": 205,
+ "mutants": [
+  {
+   "path": "pandas/core/base.py",
+   "line": 191,
+   "op": "return",
+   "start": 4846,
+   "end": 4868,
+   "old": "return self._selection",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/base.py",
+   "line": 1494,
+   "op": "statement",
+   "start": 44255,
+   "end": 44286,
+   "old": "raise AbstractMethodError(self)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/base.py",
+   "line": 187,
+   "op": "boolean",
+   "start": 4698,
+   "end": 4799,
+   "old": "not isinstance(\n            self._selection, (list, tuple, ABCSeries, ABCIndex, np.ndarray)\n        )",
+   "new": "(isinstance(self._selection, (list, tuple, ABCSeries, ABCIndex, np.ndarray)))",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/base.py",
+   "line": 190,
+   "op": "return",
+   "start": 4813,
+   "end": 4837,
+   "old": "return [self._selection]",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 654,
+   "op": "return",
+   "start": 16918,
+   "end": 16997,
+   "old": "return [f\"level_{i}\" if name is None else name for i, name in enumerate(names)]",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 452,
+   "op": "return",
+   "start": 11622,
+   "end": 11657,
+   "old": "return np.random.RandomState(state)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 454,
+   "op": "return",
+   "start": 11717,
+   "end": 11729,
+   "old": "return state",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 456,
+   "op": "return",
+   "start": 11787,
+   "end": 11799,
+   "old": "return state",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 654,
+   "op": "comparison",
+   "start": 16942,
+   "end": 16954,
+   "old": "name is None",
+   "new": "(name is not None)",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5815,
+   "op": "return",
+   "start": 183946,
+   "end": 183955,
+   "old": "return mi",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5635,
+   "op": "statement",
+   "start": 177424,
+   "end": 177487,
+   "old": "group_iterator = self._grouper.get_iterator(self._selected_obj)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5657,
+   "op": "return",
+   "start": 178230,
+   "end": 178285,
+   "old": "return self._selected_obj.take(sampled_indices, axis=0)",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5628,
+   "op": "return",
+   "start": 177151,
+   "end": 177176,
+   "old": "return self._selected_obj",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5630,
+   "op": "comparison",
+   "start": 177250,
+   "end": 177269,
+   "old": "weights is not None",
+   "new": "(weights is None)",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5640,
+   "op": "statement",
+   "start": 177620,
+   "end": 177649,
+   "old": "group_size = len(grp_indices)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5647,
+   "op": "statement",
+   "start": 177844,
+   "end": 178102,
+   "old": "grp_sample = sample.sample(\n                group_size,\n                size=sample_size,\n                replace=replace,\n                weights=None if weights is None else weights_arr[grp_indices],\n                random_state=random_state,\n            )",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5654,
+   "op": "statement",
+   "start": 178115,
+   "end": 178162,
+   "old": "sampled_indices.append(grp_indices[grp_sample])",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5645,
+   "op": "statement",
+   "start": 177792,
+   "end": 177830,
+   "old": "sample_size = round(frac * group_size)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5644,
+   "op": "comparison",
+   "start": 177759,
+   "end": 177775,
+   "old": "frac is not None",
+   "new": "(frac is None)",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5631,
+   "op": "constant",
+   "start": 177357,
+   "end": 177358,
+   "old": "0",
+   "new": "(1)",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5645,
+   "op": "arithmetic",
+   "start": 177812,
+   "end": 177829,
+   "old": "frac * group_size",
+   "new": "(frac / group_size)",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 5651,
+   "op": "comparison",
+   "start": 177999,
+   "end": 178014,
+   "old": "weights is None",
+   "new": "(weights is not None)",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 668,
+   "op": "statement",
+   "start": 21353,
+   "end": 21367,
+   "old": "ids = self.ids",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 676,
+   "op": "statement",
+   "start": 21614,
+   "end": 21664,
+   "old": "result = get_group_index_sorter(ids, self.ngroups)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 682,
+   "op": "return",
+   "start": 21809,
+   "end": 21822,
+   "old": "return result",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1036,
+   "op": "statement",
+   "start": 34558,
+   "end": 34599,
+   "old": "result = self.ids.take(self.result_ilocs)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1040,
+   "op": "return",
+   "start": 34730,
+   "end": 34743,
+   "old": "return result",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1126,
+   "op": "statement",
+   "start": 37208,
+   "end": 37258,
+   "old": "slicer = lambda start, edge: data.iloc[start:edge]",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1141,
+   "op": "statement",
+   "start": 37663,
+   "end": 37684,
+   "old": "i: np.int64 | int = 0",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1173,
+   "op": "return",
+   "start": 38645,
+   "end": 38668,
+   "old": "return [self.binlabels]",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1256,
+   "op": "statement",
+   "start": 41032,
+   "end": 41077,
+   "old": "mgr = sdata._mgr.get_slice(slice_obj, axis=1)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1258,
+   "op": "return",
+   "start": 41147,
+   "end": 41194,
+   "old": "return df.__finalize__(sdata, method=\"groupby\")",
+   "new": "return None",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 671,
+   "op": "statement",
+   "start": 21413,
+   "end": 21438,
+   "old": "mask = np.where(ids >= 0)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 674,
+   "op": "statement",
+   "start": 21589,
+   "end": 21604,
+   "old": "ids = ids[mask]",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1039,
+   "op": "statement",
+   "start": 34693,
+   "end": 34721,
+   "old": "result = result[result >= 0]",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1128,
+   "op": "constant",
+   "start": 37292,
+   "end": 37293,
+   "old": "0",
+   "new": "(1)",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1132,
+   "op": "statement",
+   "start": 37460,
+   "end": 37472,
+   "old": "start = edge",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1134,
+   "op": "comparison",
+   "start": 37485,
+   "end": 37502,
+   "old": "start < len(data)",
+   "new": "(start <= len(data))",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1141,
+   "op": "constant",
+   "start": 37683,
+   "end": 37684,
+   "old": "0",
+   "new": "(1)",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1037,
+   "op": "constant",
+   "start": 34635,
+   "end": 34639,
+   "old": "True",
+   "new": "(False)",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1130,
+   "op": "comparison",
+   "start": 37381,
+   "end": 37397,
+   "old": "label is not NaT",
+   "new": "(label is NaT)",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1143,
+   "op": "comparison",
+   "start": 37771,
+   "end": 37778,
+   "old": "i < bin",
+   "new": "(i <= bin)",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1146,
+   "op": "statement",
+   "start": 37890,
+   "end": 37897,
+   "old": "i = bin",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1039,
+   "op": "comparison",
+   "start": 34709,
+   "end": 34720,
+   "old": "result >= 0",
+   "new": "(result > 0)",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1129,
+   "op": "constant",
+   "start": 37359,
+   "end": 37363,
+   "old": "True",
+   "new": "(False)",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1142,
+   "op": "constant",
+   "start": 37749,
+   "end": 37753,
+   "old": "True",
+   "new": "(False)",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1145,
+   "op": "statement",
+   "start": 37837,
+   "end": 37873,
+   "old": "indices[label] = list(range(i, bin))",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1258,
+   "op": "constant",
+   "start": 41184,
+   "end": 41193,
+   "old": "\"groupby\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 741,
+   "op": "comparison",
+   "start": 23728,
+   "end": 23740,
+   "old": "self.ids < 0",
+   "new": "(self.ids <= 0)",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 673,
+   "op": "constant",
+   "start": 21568,
+   "end": 21569,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 62,
+   "op": "statement",
+   "start": 1721,
+   "end": 1769,
+   "old": "weights = func(weights, dtype=\"float64\")._values",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 78,
+   "op": "return",
+   "start": 2260,
+   "end": 2274,
+   "old": "return weights",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 58,
+   "op": "statement",
+   "start": 1643,
+   "end": 1666,
+   "old": "func = obj._constructor",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2235,
+   "end": 2255,
+   "old": "weights[missing] = 0",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 93,
+   "op": "statement",
+   "start": 2693,
+   "end": 2698,
+   "old": "n = 1",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 77,
+   "op": "constant",
+   "start": 2254,
+   "end": 2255,
+   "old": "0",
+   "new": "(1)",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 92,
+   "op": "comparison",
+   "start": 2657,
+   "end": 2666,
+   "old": "n is None",
+   "new": "(n is not None)",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 93,
+   "op": "constant",
+   "start": 2697,
+   "end": 2698,
+   "old": "1",
+   "new": "(2)",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 94,
+   "op": "boolean",
+   "start": 2708,
+   "end": 2742,
+   "old": "n is not None and frac is not None",
+   "new": "(n is not None or frac is not None)",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 148,
+   "op": "comparison",
+   "start": 4363,
+   "end": 4378,
+   "old": "weight_sum != 0",
+   "new": "(weight_sum == 0)",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4392,
+   "end": 4422,
+   "old": "weights = weights / weight_sum",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 153,
+   "op": "comparison",
+   "start": 4522,
+   "end": 4541,
+   "old": "weights is not None",
+   "new": "(weights is None)",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 154,
+   "op": "boolean",
+   "start": 4565,
+   "end": 4605,
+   "old": "not replace and size * weights.max() > 1",
+   "new": "(not replace or size * weights.max() > 1)",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 155,
+   "op": "statement",
+   "start": 4619,
+   "end": 4852,
+   "old": "raise ValueError(\n                \"Weighted sampling cannot be achieved with replace=False. Either \"\n                \"set replace=True or use smaller weights. See the docstring of \"\n                \"sample for details.\"\n            )",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1277,
+   "end": 1457,
+   "old": "raise ValueError(\n                    \"Strings can only be passed to \"\n                    \"weights when sampling from rows on \"\n                    \"a DataFrame\"\n                )",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 70,
+   "op": "comparison",
+   "start": 2004,
+   "end": 2015,
+   "old": "weights < 0",
+   "new": "(weights <= 0)",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 94,
+   "op": "comparison",
+   "start": 2726,
+   "end": 2742,
+   "old": "frac is not None",
+   "new": "(frac is None)",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 154,
+   "op": "comparison",
+   "start": 4581,
+   "end": 4605,
+   "old": "size * weights.max() > 1",
+   "new": "(size * weights.max() >= 1)",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 39,
+   "op": "constant",
+   "start": 999,
+   "end": 1000,
+   "old": "0",
+   "new": "(1)",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1043,
+   "end": 1065,
+   "old": "weights = obj[weights]",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 97,
+   "op": "comparison",
+   "start": 2856,
+   "end": 2861,
+   "old": "n < 0",
+   "new": "(n <= 0)",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 98,
+   "op": "statement",
+   "start": 2875,
+   "end": 2986,
+   "old": "raise ValueError(\n                \"A negative number of rows requested. Please provide `n` >= 0.\"\n            )",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 104,
+   "op": "comparison",
+   "start": 3104,
+   "end": 3120,
+   "old": "frac is not None",
+   "new": "(frac is None)",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3182,
+   "end": 3325,
+   "old": "raise ValueError(\n                \"Replace has to be set to `True` when \"\n                \"upsampling the population `frac` > 1.\"\n            )",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 110,
+   "op": "comparison",
+   "start": 3337,
+   "end": 3345,
+   "old": "frac < 0",
+   "new": "(frac <= 0)",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 154,
+   "op": "constant",
+   "start": 4604,
+   "end": 4605,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 156,
+   "op": "constant",
+   "start": 4653,
+   "end": 4838,
+   "old": "\"Weighted sampling cannot be achieved with replace=False. Either \"\n                \"set replace=True or use smaller weights. See the docstring of \"\n                \"sample for details.\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1126,
+   "end": 1242,
+   "old": "raise KeyError(\n                        \"String passed to weights not a valid column\"\n                    ) from err",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 97,
+   "op": "constant",
+   "start": 2860,
+   "end": 2861,
+   "old": "0",
+   "new": "(1)",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 105,
+   "op": "comparison",
+   "start": 3144,
+   "end": 3152,
+   "old": "frac > 1",
+   "new": "(frac >= 1)",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 105,
+   "op": "boolean",
+   "start": 3157,
+   "end": 3168,
+   "old": "not replace",
+   "new": "(replace)",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 99,
+   "op": "constant",
+   "start": 2909,
+   "end": 2972,
+   "old": "\"A negative number of rows requested. Please provide `n` >= 0.\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3151,
+   "end": 3152,
+   "old": "1",
+   "new": "(2)",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/sample.py",
+   "line": 107,
+   "op": "constant",
+   "start": 3216,
+   "end": 3311,
+   "old": "\"Replace has to be set to `True` when \"\n                \"upsampling the population `frac` > 1.\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 614,
+   "op": "statement",
+   "start": 18422,
+   "end": 18579,
+   "old": "ngroups = (\n        ((group_index.size and group_index.max()) + 1)\n        if is_int64_overflow_possible(shape)\n        else np.prod(shape, dtype=\"i8\")\n    )",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 622,
+   "op": "statement",
+   "start": 18644,
+   "end": 18700,
+   "old": "sorted_labels = [lab.take(sorter) for lab in label_list]",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 662,
+   "op": "statement",
+   "start": 19990,
+   "end": 20000,
+   "old": "beta = 1.0",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 613,
+   "op": "return",
+   "start": 18408,
+   "end": 18417,
+   "old": "return {}",
+   "new": "return None",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 663,
+   "op": "boolean",
+   "start": 20066,
+   "end": 20132,
+   "old": "count > 0 and ((alpha + beta * ngroups) < (count * np.log(count)))",
+   "new": "(count > 0 or alpha + beta * ngroups < count * np.log(count))",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 665,
+   "op": "statement",
+   "start": 20162,
+   "end": 20275,
+   "old": "sorter, _ = algos.groupsort_indexer(\n            ensure_platform_int(group_index),\n            ngroups,\n        )",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 671,
+   "op": "statement",
+   "start": 20372,
+   "end": 20418,
+   "old": "sorter = group_index.argsort(kind=\"mergesort\")",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 611,
+   "op": "comparison",
+   "start": 18317,
+   "end": 18334,
+   "old": "group_index == -1",
+   "new": "(group_index != -1)",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 663,
+   "op": "comparison",
+   "start": 20081,
+   "end": 20131,
+   "old": "(alpha + beta * ngroups) < (count * np.log(count))",
+   "new": "(alpha + beta * ngroups <= count * np.log(count))",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 610,
+   "op": "constant",
+   "start": 18285,
+   "end": 18289,
+   "old": "True",
+   "new": "(False)",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 610,
+   "op": "constant",
+   "start": 18297,
+   "end": 18301,
+   "old": "True",
+   "new": "(False)",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 615,
+   "op": "constant",
+   "start": 18486,
+   "end": 18487,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 659,
+   "op": "constant",
+   "start": 19872,
+   "end": 19873,
+   "old": "1",
+   "new": "(2)",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 663,
+   "op": "constant",
+   "start": 20074,
+   "end": 20075,
+   "old": "0",
+   "new": "(1)",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 663,
+   "op": "arithmetic",
+   "start": 20109,
+   "end": 20130,
+   "old": "count * np.log(count)",
+   "new": "(count / np.log(count))",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 663,
+   "op": "arithmetic",
+   "start": 20090,
+   "end": 20104,
+   "old": "beta * ngroups",
+   "new": "(beta / ngroups)",
+   "id": 99
+  }
+ ]
+}

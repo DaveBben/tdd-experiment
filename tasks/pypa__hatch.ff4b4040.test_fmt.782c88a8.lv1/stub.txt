@@ -1,0 +1,4715 @@
+=== src/hatch/cli/application.py
+from __future__ import annotations
+
+import os
+import sys
+from functools import cached_property
+from typing import TYPE_CHECKING, cast
+
+from hatch.cli.terminal import Terminal
+from hatch.config.user import ConfigFile, RootConfig
+from hatch.project.core import Project
+from hatch.utils.fs import Path
+from hatch.utils.platform import Platform
+from hatch.utils.runner import ExecutionContext
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from hatch.dep.core import Dependency
+    from hatch.env.plugin.interface import EnvironmentInterface
+
+
+class Application(Terminal):
+    def __init__(self, exit_func, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.platform = Platform(self.output)
+        self.__exit_func = exit_func
+
+        self.config_file = ConfigFile()
+        self.quiet = self.verbosity < 0
+        self.verbose = self.verbosity > 0
+
+        # Lazily set these as we acquire more knowledge about the environment
+        self.data_dir = cast(Path, None)
+        self.cache_dir = cast(Path, None)
+        self.project = cast(Project, None)
+        self.env = cast(str, None)
+        self.env_active = cast(str, None)
+
+    @property
+    def plugins(self):
+        return self.project.plugin_manager
+
+    @property
+    def config(self) -> RootConfig:
+        return self.config_file.model
+
+    def get_environment(self, env_name: str | None = None) -> EnvironmentInterface:
+        return self.project.get_environment(env_name)
+
+    def prepare_environment(self, environment: EnvironmentInterface):
+        self.project.prepare_environment(environment)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def runner_context(
+        self,
+        environments: list[str],
+        *,
+        ignore_compat: bool = False,
+        display_header: bool = False,
+    ) -> Generator[ExecutionContext, None, None]:
+        if self.verbose or len(environments) > 1:
+            display_header = True
+
+        any_compatible = False
+        incompatible = {}
+        with self.project.ensure_cwd():
+            for env_name in environments:
+                environment = self.get_environment(env_name)
+                if not environment.exists():
+                    try:
+                        environment.check_compatibility()
+                    except Exception as e:  # noqa: BLE001
+                        if ignore_compat:
+                            incompatible[environment.name] = str(e)
+                            continue
+
+                        self.abort(f"Environment `{env_name}` is incompatible: {e}")
+
+                any_compatible = True
+                if display_header:
+                    self.display_header(environment.name)
+
+                context = ExecutionContext(environment)
+                yield context
+
+                self.prepare_environment(environment)
+                self.execute_context(context)
+
+        if incompatible:
+            num_incompatible = len(incompatible)
+            padding = "\n" if any_compatible else ""
+            self.display_warning(
+                f"{padding}Skipped {num_incompatible} incompatible environment{'s' if num_incompatible > 1 else ''}:"
+            )
+            for env_name, reason in incompatible.items():
+                self.display_warning(f"{env_name} -> {reason}")
+
+    def execute_context(self, context: ExecutionContext) -> None:
+        from hatch.utils.structures import EnvVars
+
+        with EnvVars(context.env_vars):
+            self.run_shell_commands(context)
+
+    def ensure_environment_plugin_dependencies(self) -> None:
+        self.ensure_plugin_dependencies(
+            self.project.config.env_requires_complex, wait_message="Syncing environment plugin requirements"
+        )
+
+    def ensure_plugin_dependencies(self, dependencies: list[Dependency], *, wait_message: str) -> None:
+        if not dependencies:
+            return
+
+        from hatch.dep.sync import InstalledDistributions
+        from hatch.env.utils import add_verbosity_flag
+
+        if app_path := os.environ.get("PYAPP"):
+            from hatch.utils.env import PythonInfo
+
+            management_command = os.environ["PYAPP_COMMAND_NAME"]
+            executable = self.platform.check_command_output([app_path, management_command, "python-path"]).strip()
+            python_info = PythonInfo(self.platform, executable=executable)
+            distributions = InstalledDistributions(sys_path=python_info.sys_path)
+            if distributions.dependencies_in_sync(dependencies):
+                return
+
+            pip_command = [app_path, management_command, "pip"]
+        else:
+            distributions = InstalledDistributions()
+            if distributions.dependencies_in_sync(dependencies):
+                return
+
+            pip_command = [sys.executable, "-u", "-m", "pip"]
+
+        pip_command.extend(["install", "--disable-pip-version-check"])
+
+        # Default to -1 verbosity
+        add_verbosity_flag(pip_command, self.verbosity, adjustment=-1)
+
+        pip_command.extend(str(dependency) for dependency in dependencies)
+
+        with self.status(wait_message):
+            self.platform.check_command(pip_command)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_python_manager(self, directory: str | None = None):
+        from hatch.python.core import PythonManager
+
+        configured_dir = directory or self.config.dirs.python
+        if configured_dir == "isolated":
+            return PythonManager(self.data_dir / "pythons")
+
+        return PythonManager(Path(configured_dir).expand())
+
+    @cached_property
+    def shell_data(self) -> tuple[str, str]:
+        from hatch.utils.shells import detect_shell
+
+        return detect_shell(self.platform)
+
+    def abort(self, text="", code=1, **kwargs):
+        if text:
+            self.display_error(text, **kwargs)
+        self.__exit_func(code)
+
+    def run_shell_commands(self, context: ExecutionContext) -> None:
+        """
+        Execute a series of shell commands within the provided execution context.
+
+        This method runs shell commands in sequence within the environment's command context,
+        handling error conditions and providing optional command display based on verbosity
+        settings.
+
+        Args:
+            context (ExecutionContext): The execution context containing the environment,
+                shell commands to run, and execution configuration options including:
+                - env: The environment interface to run commands in
+                - shell_commands: List of shell commands to execute
+                - hide_commands: Whether to suppress command display
+                - force_continue: Whether to continue execution after errors
+                - show_code_on_error: Whether to display exit codes on failure
+                - source: Source identifier for command display
+
+        Returns:
+            None
+
+        Raises:
+            SystemExit: Called via self.abort() when:
+                - Command resolution fails
+                - A command fails and force_continue is False
+                - All commands complete but force_continue is True and errors occurred
+
+        Notes:
+            - Commands prefixed with "- " will continue execution on error regardless
+              of the force_continue setting
+            - Command display is shown when verbose mode is enabled or when multiple
+              commands are being executed (unless hide_commands is True)
+            - The method flushes stdout and stderr after each command execution
+            - If force_continue is True, execution continues through errors but will
+              still abort with the first error code encountered after all commands complete
+        """
+        raise NotImplementedError
+
+=== src/hatch/cli/fmt/core.py
+from __future__ import annotations
+
+from functools import cached_property
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from hatch.env.plugin.interface import EnvironmentInterface
+    from hatch.utils.fs import Path
+
+
+class StaticAnalysisEnvironment:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def formatter_preview(self) -> bool:
+        return self.get_config("format").get("preview", False)
+
+    def __init__(self, env: EnvironmentInterface) -> None:
+        """
+        Initialize a StaticAnalysisEnvironment instance.
+
+        This constructor creates a new StaticAnalysisEnvironment that wraps around a Hatch
+        environment interface to provide static analysis functionality. The environment is
+        used to manage configuration files, linting rules, and formatting settings for
+        static analysis tools like Ruff.
+
+        Parameters
+        ----------
+        env : EnvironmentInterface
+            The Hatch environment interface that provides access to the project's
+            configuration, metadata, file system paths, and other environment-specific
+            functionality. This interface is used throughout the static analysis
+            environment to access project information and manage configuration files.
+
+        Returns
+        -------
+        None
+            This is a constructor method and does not return a value.
+
+        Notes
+        -----
+        The StaticAnalysisEnvironment acts as a wrapper around the provided environment
+        interface, adding static analysis-specific functionality such as:
+        - Managing configuration file paths and content
+        - Handling stable and preview linting rules
+        - Constructing default arguments for static analysis tools
+        - Managing user configuration files and internal configuration files
+
+        The environment interface should be a valid Hatch EnvironmentInterface instance
+        that provides access to the project's root directory, metadata, and configuration
+        settings.
+        """
+        raise NotImplementedError
+
+    def get_default_args(self) -> list[str]:
+        """
+        Get the default command-line arguments for the static analysis tool.
+
+        This method constructs a list of default arguments that should be passed to the static
+        analysis tool (typically Ruff) when no custom config path is specified. The method
+        determines the appropriate configuration file to use based on the current environment
+        setup and user configuration.
+
+        Returns:
+            list[str]: A list of command-line arguments. If no custom config path is set via
+                the 'config-path' environment configuration, returns a list containing
+                ['--config', '<path_to_config_file>'] where the config file path is either
+                the internal user config file (if it exists) or the internal config file.
+                If a custom config path is already specified, returns an empty list.
+
+        Notes:
+            - The method relies on the `config_path` property to determine if a custom
+              configuration path has been set
+            - When no custom config path is set, it prioritizes the internal user config
+              file over the internal config file if available
+            - The returned arguments are intended to be passed directly to the static
+              analysis tool's command-line interface
+            - This method uses cached properties `internal_user_config_file` and
+              `internal_config_file` which may be None depending on the environment setup
+        """
+        raise NotImplementedError
+
+    def write_config_file(self, *, preview: bool) -> None:
+        """
+        Write a configuration file for the static analysis tool (Ruff) based on the provided settings.
+
+        This method generates and writes a configuration file containing linting and formatting rules.
+        The configuration includes stable rules and optionally preview rules, per-file ignores,
+        and tool-specific settings for flake8-tidy-imports, isort, and flake8-pytest-style.
+
+        Parameters:
+            preview (bool): Required keyword-only flag requesting preview rules. Preview rules
+                are included when this flag or the configured linter preview setting is true.
+
+        Return value:
+            None: This method does not return a value. It writes the configuration to a file.
+
+        Important notes:
+            - If a custom config path is specified via self.config_path, the configuration
+              is written to that location using atomic write operations with UTF-8 encoding.
+            - If no custom path is specified, writes to the internal config file location
+              and ensures the parent directory exists.
+            - Contains a workaround for Ruff issue #8737: if a user config file exists,
+              creates an internal copy that extends the generated configuration.
+            - For pyproject.toml files, the extend directive is inserted after the [tool.ruff] section.
+            - For other config file types, the extend directive is prepended to the file contents.
+            - The generated configuration includes project-specific settings like the package name
+              for isort's known-first-party setting, derived from the environment metadata.
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+STABLE_RULES: tuple[str, ...] = (
+    "A001",
+    "A002",
+    "A003",
+    "A004",
+    "A005",
+    "A006",
+    "ARG001",
+    "ARG002",
+    "ARG003",
+    "ARG004",
+    "ARG005",
+    "ASYNC100",
+    "ASYNC105",
+    "ASYNC109",
+    "ASYNC110",
+    "ASYNC115",
+    "ASYNC116",
+    "ASYNC210",
+    "ASYNC220",
+    "ASYNC221",
+    "ASYNC222",
+    "ASYNC230",
+    "ASYNC251",
+    "B002",
+    "B003",
+    "B004",
+    "B005",
+    "B006",
+    "B007",
+    "B008",
+    "B009",
+    "B010",
+    "B011",
+    "B012",
+    "B013",
+    "B014",
+    "B015",
+    "B016",
+    "B017",
+    "B018",
+    "B019",
+    "B020",
+    "B021",
+    "B022",
+    "B023",
+    "B024",
+    "B025",
+    "B026",
+    "B028",
+    "B029",
+    "B030",
+    "B031",
+    "B032",
+    "B033",
+    "B034",
+    "B035",
+    "B039",
+    "B904",
+    "B905",
+    "B911",
+    "BLE001",
+    "C400",
+    "C401",
+    "C402",
+    "C403",
+    "C404",
+    "C405",
+    "C406",
+    "C408",
+    "C409",
+    "C410",
+    "C411",
+    "C413",
+    "C414",
+    "C415",
+    "C416",
+    "C417",
+    "C418",
+    "C419",
+    "C420",
+    "COM818",
+    "DTZ001",
+    "DTZ002",
+    "DTZ003",
+    "DTZ004",
+    "DTZ005",
+    "DTZ006",
+    "DTZ007",
+    "DTZ011",
+    "DTZ012",
+    "DTZ901",
+    "E101",
+    "E401",
+    "E402",
+    "E701",
+    "E702",
+    "E703",
+    "E711",
+    "E712",
+    "E713",
+    "E714",
+    "E721",
+    "E722",
+    "E731",
+    "E741",
+    "E742",
+    "E743",
+    "E902",
+    "EM101",
+    "EM102",
+    "EM103",
+    "EXE001",
+    "EXE002",
+    "EXE003",
+    "EXE004",
+    "EXE005",
+    "F401",
+    "F402",
+    "F403",
+    "F404",
+    "F405",
+    "F406",
+    "F407",
+    "F501",
+    "F502",
+    "F503",
+    "F504",
+    "F505",
+    "F506",
+    "F507",
+    "F508",
+    "F509",
+    "F521",
+    "F522",
+    "F523",
+    "F524",
+    "F525",
+    "F541",
+    "F601",
+    "F602",
+    "F621",
+    "F622",
+    "F631",
+    "F632",
+    "F633",
+    "F634",
+    "F701",
+    "F702",
+    "F704",
+    "F706",
+    "F707",
+    "F722",
+    "F811",
+    "F821",
+    "F822",
+    "F823",
+    "F841",
+    "F842",
+    "F901",
+    "FA100",
+    "FA102",
+    "FAST001",
+    "FAST002",
+    "FAST003",
+    "FBT001",
+    "FBT002",
+    "FLY002",
+    "FURB105",
+    "FURB116",
+    "FURB122",
+    "FURB129",
+    "FURB132",
+    "FURB136",
+    "FURB157",
+    "FURB161",
+    "FURB162",
+    "FURB163",
+    "FURB166",
+    "FURB167",
+    "FURB168",
+    "FURB169",
+    "FURB177",
+    "FURB181",
+    "FURB187",
+    "FURB188",
+    "G001",
+    "G002",
+    "G003",
+    "G004",
+    "G010",
+    "G101",
+    "G201",
+    "G202",
+    "I001",
+    "I002",
+    "ICN001",
+    "ICN002",
+    "ICN003",
+    "INP001",
+    "INT001",
+    "INT002",
+    "INT003",
+    "ISC003",
+    "LOG001",
+    "LOG002",
+    "LOG007",
+    "LOG009",
+    "LOG014",
+    "LOG015",
+    "N801",
+    "N802",
+    "N803",
+    "N804",
+    "N805",
+    "N806",
+    "N807",
+    "N811",
+    "N812",
+    "N813",
+    "N814",
+    "N815",
+    "N816",
+    "N817",
+    "N818",
+    "N999",
+    "PERF101",
+    "PERF102",
+    "PERF401",
+    "PERF402",
+    "PERF403",
+    "PGH005",
+    "PIE790",
+    "PIE794",
+    "PIE796",
+    "PIE800",
+    "PIE804",
+    "PIE807",
+    "PIE808",
+    "PIE810",
+    "PLC0105",
+    "PLC0131",
+    "PLC0132",
+    "PLC0205",
+    "PLC0206",
+    "PLC0208",
+    "PLC0414",
+    "PLC0415",
+    "PLC1802",
+    "PLC2401",
+    "PLC2403",
+    "PLC3002",
+    "PLE0100",
+    "PLE0101",
+    "PLE0115",
+    "PLE0116",
+    "PLE0117",
+    "PLE0118",
+    "PLE0237",
+    "PLE0241",
+    "PLE0302",
+    "PLE0303",
+    "PLE0305",
+    "PLE0307",
+    "PLE0308",
+    "PLE0309",
+    "PLE0604",
+    "PLE0605",
+    "PLE0643",
+    "PLE0704",
+    "PLE1132",
+    "PLE1142",
+    "PLE1205",
+    "PLE1206",
+    "PLE1300",
+    "PLE1307",
+    "PLE1310",
+    "PLE1507",
+    "PLE1519",
+    "PLE1520",
+    "PLE1700",
+    "PLE2502",
+    "PLE2510",
+    "PLE2512",
+    "PLE2513",
+    "PLE2514",
+    "PLE2515",
+    "PLR0124",
+    "PLR0133",
+    "PLR0206",
+    "PLR0402",
+    "PLR1704",
+    "PLR1711",
+    "PLR1714",
+    "PLR1716",
+    "PLR1722",
+    "PLR1730",
+    "PLR1733",
+    "PLR1736",
+    "PLR2004",
+    "PLR2044",
+    "PLR5501",
+    "PLW0120",
+    "PLW0127",
+    "PLW0128",
+    "PLW0129",
+    "PLW0131",
+    "PLW0133",
+    "PLW0177",
+    "PLW0211",
+    "PLW0245",
+    "PLW0406",
+    "PLW0602",
+    "PLW0603",
+    "PLW0604",
+    "PLW0642",
+    "PLW0711",
+    "PLW1501",
+    "PLW1507",
+    "PLW1508",
+    "PLW1509",
+    "PLW1510",
+    "PLW1641",
+    "PLW2101",
+    "PLW2901",
+    "PLW3301",
+    "PT001",
+    "PT002",
+    "PT003",
+    "PT006",
+    "PT007",
+    "PT008",
+    "PT009",
+    "PT010",
+    "PT011",
+    "PT012",
+    "PT013",
+    "PT014",
+    "PT015",
+    "PT016",
+    "PT017",
+    "PT018",
+    "PT019",
+    "PT020",
+    "PT021",
+    "PT022",
+    "PT023",
+    "PT024",
+    "PT025",
+    "PT026",
+    "PT027",
+    "PT028",
+    "PT030",
+    "PT031",
+    "PYI001",
+    "PYI002",
+    "PYI003",
+    "PYI004",
+    "PYI005",
+    "PYI006",
+    "PYI007",
+    "PYI008",
+    "PYI009",
+    "PYI010",
+    "PYI011",
+    "PYI012",
+    "PYI013",
+    "PYI014",
+    "PYI015",
+    "PYI016",
+    "PYI017",
+    "PYI018",
+    "PYI019",
+    "PYI020",
+    "PYI021",
+    "PYI024",
+    "PYI025",
+    "PYI026",
+    "PYI029",
+    "PYI030",
+    "PYI032",
+    "PYI033",
+    "PYI034",
+    "PYI035",
+    "PYI036",
+    "PYI041",
+    "PYI042",
+    "PYI043",
+    "PYI044",
+    "PYI045",
+    "PYI046",
+    "PYI047",
+    "PYI048",
+    "PYI049",
+    "PYI050",
+    "PYI051",
+    "PYI052",
+    "PYI053",
+    "PYI054",
+    "PYI055",
+    "PYI056",
+    "PYI057",
+    "PYI058",
+    "PYI059",
+    "PYI061",
+    "PYI062",
+    "PYI063",
+    "PYI064",
+    "PYI066",
+    "RET503",
+    "RET504",
+    "RET505",
+    "RET506",
+    "RET507",
+    "RET508",
+    "RSE102",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "RUF005",
+    "RUF006",
+    "RUF007",
+    "RUF008",
+    "RUF009",
+    "RUF010",
+    "RUF012",
+    "RUF013",
+    "RUF015",
+    "RUF016",
+    "RUF017",
+    "RUF018",
+    "RUF019",
+    "RUF020",
+    "RUF021",
+    "RUF022",
+    "RUF023",
+    "RUF024",
+    "RUF026",
+    "RUF028",
+    "RUF030",
+    "RUF032",
+    "RUF033",
+    "RUF034",
+    "RUF040",
+    "RUF041",
+    "RUF043",
+    "RUF046",
+    "RUF048",
+    "RUF049",
+    "RUF051",
+    "RUF053",
+    "RUF057",
+    "RUF058",
+    "RUF059",
+    "RUF100",
+    "RUF101",
+    "S101",
+    "S102",
+    "S103",
+    "S104",
+    "S105",
+    "S106",
+    "S107",
+    "S108",
+    "S110",
+    "S112",
+    "S113",
+    "S201",
+    "S202",
+    "S301",
+    "S302",
+    "S303",
+    "S304",
+    "S305",
+    "S306",
+    "S307",
+    "S308",
+    "S310",
+    "S311",
+    "S312",
+    "S313",
+    "S314",
+    "S315",
+    "S316",
+    "S317",
+    "S318",
+    "S319",
+    "S321",
+    "S323",
+    "S324",
+    "S501",
+    "S502",
+    "S503",
+    "S504",
+    "S505",
+    "S506",
+    "S507",
+    "S508",
+    "S509",
+    "S601",
+    "S602",
+    "S604",
+    "S605",
+    "S606",
+    "S607",
+    "S608",
+    "S609",
+    "S610",
+    "S611",
+    "S612",
+    "S701",
+    "S702",
+    "S704",
+    "SIM101",
+    "SIM102",
+    "SIM103",
+    "SIM105",
+    "SIM107",
+    "SIM108",
+    "SIM109",
+    "SIM110",
+    "SIM112",
+    "SIM113",
+    "SIM114",
+    "SIM115",
+    "SIM116",
+    "SIM117",
+    "SIM118",
+    "SIM201",
+    "SIM202",
+    "SIM208",
+    "SIM210",
+    "SIM211",
+    "SIM212",
+    "SIM220",
+    "SIM221",
+    "SIM222",
+    "SIM223",
+    "SIM300",
+    "SIM905",
+    "SIM910",
+    "SIM911",
+    "SLF001",
+    "SLOT000",
+    "SLOT001",
+    "SLOT002",
+    "T100",
+    "T201",
+    "T203",
+    "TC001",
+    "TC002",
+    "TC003",
+    "TC004",
+    "TC005",
+    "TC006",
+    "TC007",
+    "TC010",
+    "TD004",
+    "TD005",
+    "TD006",
+    "TD007",
+    "TID251",
+    "TID252",
+    "TID253",
+    "TRY002",
+    "TRY003",
+    "TRY004",
+    "TRY201",
+    "TRY203",
+    "TRY300",
+    "TRY301",
+    "TRY400",
+    "TRY401",
+    "UP001",
+    "UP003",
+    "UP004",
+    "UP005",
+    "UP006",
+    "UP007",
+    "UP008",
+    "UP009",
+    "UP010",
+    "UP011",
+    "UP012",
+    "UP013",
+    "UP014",
+    "UP015",
+    "UP017",
+    "UP018",
+    "UP019",
+    "UP020",
+    "UP021",
+    "UP022",
+    "UP023",
+    "UP024",
+    "UP025",
+    "UP026",
+    "UP028",
+    "UP029",
+    "UP030",
+    "UP031",
+    "UP032",
+    "UP033",
+    "UP034",
+    "UP035",
+    "UP036",
+    "UP037",
+    "UP039",
+    "UP040",
+    "UP041",
+    "UP043",
+    "UP044",
+    "UP045",
+    "UP046",
+    "UP047",
+    "UP049",
+    "UP050",
+    "W291",
+    "W292",
+    "W293",
+    "W505",
+    "W605",
+    "YTT101",
+    "YTT102",
+    "YTT103",
+    "YTT201",
+    "YTT202",
+    "YTT203",
+    "YTT204",
+    "YTT301",
+    "YTT302",
+    "YTT303",
+)
+PREVIEW_RULES: tuple[str, ...] = (
+    "ASYNC212",
+    "ASYNC240",
+    "ASYNC250",
+    "B901",
+    "B903",
+    "B909",
+    "B912",
+    "DOC201",
+    "DOC202",
+    "DOC402",
+    "DOC403",
+    "DOC501",
+    "DOC502",
+    "E112",
+    "E113",
+    "E115",
+    "E116",
+    "E201",
+    "E202",
+    "E203",
+    "E204",
+    "E211",
+    "E221",
+    "E222",
+    "E223",
+    "E224",
+    "E225",
+    "E226",
+    "E227",
+    "E228",
+    "E231",
+    "E241",
+    "E242",
+    "E251",
+    "E252",
+    "E261",
+    "E262",
+    "E265",
+    "E266",
+    "E271",
+    "E272",
+    "E273",
+    "E274",
+    "E275",
+    "E502",
+    "FURB110",
+    "FURB113",
+    "FURB118",
+    "FURB131",
+    "FURB142",
+    "FURB145",
+    "FURB148",
+    "FURB152",
+    "FURB154",
+    "FURB156",
+    "FURB164",
+    "FURB171",
+    "FURB180",
+    "FURB189",
+    "FURB192",
+    "LOG004",
+    "PLC0207",
+    "PLC1901",
+    "PLC2701",
+    "PLC2801",
+    "PLE0304",
+    "PLE1141",
+    "PLE4703",
+    "PLR0202",
+    "PLR0203",
+    "PLR6104",
+    "PLR6201",
+    "PLR6301",
+    "PLW0108",
+    "PLW0244",
+    "PLW1514",
+    "PLW3201",
+    "PT029",
+    "RUF027",
+    "RUF029",
+    "RUF031",
+    "RUF036",
+    "RUF037",
+    "RUF038",
+    "RUF039",
+    "RUF045",
+    "RUF047",
+    "RUF052",
+    "RUF054",
+    "RUF055",
+    "RUF056",
+    "RUF060",
+    "RUF061",
+    "RUF063",
+    "RUF064",
+    "RUF065",
+    "RUF102",
+    "S401",
+    "S402",
+    "S403",
+    "S405",
+    "S406",
+    "S407",
+    "S408",
+    "S409",
+    "S411",
+    "S412",
+    "S413",
+    "S415",
+    "TC008",
+    "UP042",
+    "W391",
+)
+PER_FILE_IGNORED_RULES: dict[str, list[str]] = {
+    "**/scripts/*": [
+        "INP001",
+        "T201",
+    ],
+    "**/tests/**/*": [
+        "PLC1901",
+        "PLR2004",
+        "PLR6301",
+        "S",
+        "TID252",
+    ],
+}
+
+=== src/hatch/env/plugin/interface.py
+from __future__ import annotations
+
+import os
+import sys
+from abc import ABC, abstractmethod
+from contextlib import contextmanager
+from functools import cached_property
+from os.path import isabs
+from typing import TYPE_CHECKING, Any
+
+from hatch.config.constants import AppEnvVars
+from hatch.env.utils import add_verbosity_flag
+from hatch.project.utils import format_script_commands, parse_script_command
+from hatch.utils.structures import EnvVars
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterable
+
+    from hatch.dep.core import Dependency
+    from hatch.project.core import Project
+    from hatch.utils.fs import Path
+
+
+class EnvironmentInterface(ABC):
+    """
+    Example usage:
+
+    ```python tab="plugin.py"
+    from hatch.env.plugin.interface import EnvironmentInterface
+
+
+    class SpecialEnvironment(EnvironmentInterface):
+        PLUGIN_NAME = "special"
+        ...
+    ```
+
+    ```python tab="hooks.py"
+    from hatchling.plugin import hookimpl
+
+    from .plugin import SpecialEnvironment
+
+
+    @hookimpl
+    def hatch_register_environment():
+        return SpecialEnvironment
+    ```
+    """
+
+    PLUGIN_NAME = ""
+    """The name used for selection."""
+
+    def __init__(
+        self,
+        root,
+        metadata,
+        name,
+        config,
+        matrix_variables,
+        data_directory,
+        isolated_data_directory,
+        platform,
+        verbosity,
+        app,
+    ):
+        self.__root = root
+        self.__metadata = metadata
+        self.__name = name
+        self.__config = config
+        self.__matrix_variables = matrix_variables
+        self.__data_directory = data_directory
+        self.__isolated_data_directory = isolated_data_directory
+        self.__platform = platform
+        self.__verbosity = verbosity
+        self.__app = app
+
+        self.additional_dependencies = []
+
+    @property
+    def matrix_variables(self):
+        return self.__matrix_variables
+
+    @property
+    def app(self):
+        """
+        An instance of [Application](../utilities.md#hatchling.bridge.app.Application).
+        """
+        return self.__app
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def name(self) -> str:
+        """
+        The name of the environment.
+        """
+        return self.__name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def project_root(self) -> str:
+        """
+        The root of the project tree as a string. If the environment is not running locally,
+        this should be the remote path to the project.
+        """
+        return str(self.root)
+
+    @cached_property
+    def sep(self) -> str:
+        """
+        The character used to separate directories in paths. By default, this is `\\` on Windows and `/` otherwise.
+        """
+        return os.sep
+
+    @cached_property
+    def pathsep(self) -> str:
+        """
+        The character used to separate paths. By default, this is `;` on Windows and `:` otherwise.
+        """
+        return os.pathsep
+
+    @cached_property
+    def system_python(self) -> str:
+        system_python = os.environ.get(AppEnvVars.PYTHON)
+        if system_python == "self":
+            system_python = sys.executable
+
+        system_python = (
+            system_python
+            or self.platform.modules.shutil.which("python")
+            or self.platform.modules.shutil.which("python3")
+            or sys.executable
+        )
+        if not isabs(system_python):
+            system_python = self.platform.modules.shutil.which(system_python)
+
+        return system_python
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def environment_dependencies_complex(self) -> list[Dependency]:
+        from hatch.dep.core import Dependency, InvalidDependencyError
+
+        dependencies_complex: list[Dependency] = []
+        with self.apply_context():
+            for option in ("dependencies", "extra-dependencies"):
+                dependencies = self.config.get(option, [])
+                if not isinstance(dependencies, list):
+                    message = f"Field `tool.hatch.envs.{self.name}.{option}` must be an array"
+                    raise TypeError(message)
+
+                for i, entry in enumerate(dependencies, 1):
+                    if not isinstance(entry, str):
+                        message = f"Dependency #{i} of field `tool.hatch.envs.{self.name}.{option}` must be a string"
+                        raise TypeError(message)
+
+                    try:
+                        dependencies_complex.append(Dependency(self.metadata.context.format(entry)))
+                    except InvalidDependencyError as e:
+                        message = f"Dependency #{i} of field `tool.hatch.envs.{self.name}.{option}` is invalid: {e}"
+                        raise ValueError(message) from None
+
+        return dependencies_complex
+
+    @cached_property
+    def environment_dependencies(self) -> list[str]:
+        """
+        The list of all [environment dependencies](../../config/environment/overview.md#dependencies).
+        """
+        return [str(dependency) for dependency in self.environment_dependencies_complex]
+
+    @cached_property
+    def project_dependencies_complex(self) -> list[Dependency]:
+        workspace_dependencies = self.workspace.get_dependencies()
+        if self.skip_install and not self.features and not self.dependency_groups and not workspace_dependencies:
+            return []
+
+        from hatch.dep.core import Dependency
+        from hatch.utils.dep import get_complex_dependencies, get_complex_dependency_group, get_complex_features
+
+        all_dependencies_complex = list(map(Dependency, workspace_dependencies))
+        dependencies, optional_dependencies = self.app.project.get_dependencies()
+        dependencies_complex = get_complex_dependencies(dependencies)
+        optional_dependencies_complex = get_complex_features(optional_dependencies)
+
+        if not self.skip_install:
+            all_dependencies_complex.extend(dependencies_complex.values())
+
+        for feature in self.features:
+            if feature not in optional_dependencies_complex:
+                message = (
+                    f"Feature `{feature}` of field `tool.hatch.envs.{self.name}.features` is not "
+                    f"defined in the dynamic field `project.optional-dependencies`"
+                )
+                raise ValueError(message)
+
+            all_dependencies_complex.extend([
+                dep if isinstance(dep, Dependency) else Dependency(str(dep))
+                for dep in optional_dependencies_complex[feature]
+            ])
+
+        for dependency_group in self.dependency_groups:
+            all_dependencies_complex.extend(
+                get_complex_dependency_group(self.app.project.dependency_groups, dependency_group)
+            )
+
+        return all_dependencies_complex
+
+    @cached_property
+    def project_dependencies(self) -> list[str]:
+        """
+        The list of all [project dependencies](../../config/metadata.md#dependencies) (if
+        [installed](../../config/environment/overview.md#skip-install)), selected
+        [optional dependencies](../../config/environment/overview.md#features), and
+        workspace dependencies.
+        """
+        return [str(dependency) for dependency in self.project_dependencies_complex]
+
+    @cached_property
+    def local_dependencies_complex(self) -> list[Dependency]:
+        from hatch.dep.core import Dependency
+
+        local_dependencies_complex = []
+        if not self.skip_install:
+            local_dependencies_complex.append(
+                Dependency(f"{self.metadata.name} @ {self.root.as_uri()}", editable=self.dev_mode)
+            )
+        if self.workspace.members:
+            local_dependencies_complex.extend(
+                Dependency(f"{member.project.metadata.name} @ {member.project.location.as_uri()}", editable=True)
+                for member in self.workspace.members
+            )
+
+        return local_dependencies_complex
+
+    @cached_property
+    def dependencies_complex(self) -> list[Dependency]:
+        from hatch.dep.core import Dependency
+
+        all_dependencies_complex = list(self.environment_dependencies_complex)
+
+        # Convert additional_dependencies to Dependency objects
+        for dep in self.additional_dependencies:
+            if isinstance(dep, Dependency):
+                all_dependencies_complex.append(dep)
+            else:
+                all_dependencies_complex.append(Dependency(str(dep)))
+
+        if self.builder:
+            from hatch.project.constants import BuildEnvVars
+
+            # Convert build requirements to Dependency objects
+            for req in self.metadata.build.requires_complex:
+                if isinstance(req, Dependency):
+                    all_dependencies_complex.append(req)
+                else:
+                    all_dependencies_complex.append(Dependency(str(req)))
+
+            for target in os.environ.get(BuildEnvVars.REQUESTED_TARGETS, "").split():
+                target_config = self.app.project.config.build.target(target)
+                all_dependencies_complex.extend(map(Dependency, target_config.dependencies))
+
+            return all_dependencies_complex
+
+        # Ensure these are checked last to speed up initial environment creation since
+        # they will already be installed along with the project
+        if self.dev_mode:
+            all_dependencies_complex.extend(self.project_dependencies_complex)
+
+        return all_dependencies_complex
+
+    @cached_property
+    def dependencies(self) -> list[str]:
+        """
+        The list of all
+        [project dependencies](reference.md#hatch.env.plugin.interface.EnvironmentInterface.project_dependencies)
+        (if in [dev mode](../../config/environment/overview.md#dev-mode)) and
+        [environment dependencies](../../config/environment/overview.md#dependencies).
+        """
+        return [str(dependency) for dependency in self.dependencies_complex]
+
+    @cached_property
+    def all_dependencies_complex(self) -> list[Dependency]:
+        from hatch.dep.core import Dependency
+
+        local_deps = list(self.local_dependencies_complex)
+        other_deps = list(self.dependencies_complex)
+
+        # Create workspace member name set for conflict detection
+        workspace_names = {dep.name.lower() for dep in local_deps}
+
+        # Filter out conflicting dependencies, keeping only workspace versions
+        filtered_deps = [
+            dep if isinstance(dep, Dependency) else Dependency(str(dep))
+            for dep in other_deps
+            if dep.name.lower() not in workspace_names
+        ]
+        # Workspace members first to ensure precedence
+        return local_deps + filtered_deps
+
+    @cached_property
+    def all_dependencies(self) -> list[str]:
+        return [str(dependency) for dependency in self.all_dependencies_complex]
+
+    @cached_property
+    def platforms(self) -> list[str]:
+        """
+        All names are stored as their lower-cased version.
+
+        ```toml config-example
+        [tool.hatch.envs.<ENV_NAME>]
+        platforms = [...]
+        ```
+        """
+        platforms = self.config.get("platforms", [])
+        if not isinstance(platforms, list):
+            message = f"Field `tool.hatch.envs.{self.name}.platforms` must be an array"
+            raise TypeError(message)
+
+        for i, command in enumerate(platforms, 1):
+            if not isinstance(command, str):
+                message = f"Platform #{i} of field `tool.hatch.envs.{self.name}.platforms` must be a string"
+                raise TypeError(message)
+
+        return [platform.lower() for platform in platforms]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def dev_mode(self) -> bool:
+        """
+        ```toml config-example
+        [tool.hatch.envs.<ENV_NAME>]
+        dev-mode = ...
+        ```
+        """
+        dev_mode = self.config.get("dev-mode", True)
+        if not isinstance(dev_mode, bool):
+            message = f"Field `tool.hatch.envs.{self.name}.dev-mode` must be a boolean"
+            raise TypeError(message)
+
+        return dev_mode
+
+    @cached_property
+    def builder(self) -> bool:
+        """
+        ```toml config-example
+        [tool.hatch.envs.<ENV_NAME>]
+        builder = ...
+        ```
+        """
+        builder = self.config.get("builder", False)
+        if not isinstance(builder, bool):
+            message = f"Field `tool.hatch.envs.{self.name}.builder` must be a boolean"
+            raise TypeError(message)
+
+        return builder
+
+    @cached_property
+    def features(self):
+        from hatch.utils.metadata import normalize_project_name
+
+        features = self.config.get("features", [])
+        if not isinstance(features, list):
+            message = f"Field `tool.hatch.envs.{self.name}.features` must be an array of strings"
+            raise TypeError(message)
+
+        all_features = set()
+        for i, feature in enumerate(features, 1):
+            if not isinstance(feature, str):
+                message = f"Feature #{i} of field `tool.hatch.envs.{self.name}.features` must be a string"
+                raise TypeError(message)
+
+            if not feature:
+                message = f"Feature #{i} of field `tool.hatch.envs.{self.name}.features` cannot be an empty string"
+                raise ValueError(message)
+
+            normalized_feature = (
+                feature if self.metadata.hatch.metadata.allow_ambiguous_features else normalize_project_name(feature)
+            )
+            if (
+                not self.metadata.hatch.metadata.hook_config
+                and normalized_feature not in self.metadata.core.optional_dependencies
+            ):
+                message = (
+                    f"Feature `{normalized_feature}` of field `tool.hatch.envs.{self.name}.features` is not "
+                    f"defined in field `project.optional-dependencies`"
+                )
+                raise ValueError(message)
+
+            all_features.add(normalized_feature)
+
+        return sorted(all_features)
+
+    @cached_property
+    def dependency_groups(self):
+        from hatch.utils.metadata import normalize_project_name
+
+        dependency_groups = self.config.get("dependency-groups", [])
+        if not isinstance(dependency_groups, list):
+            message = f"Field `tool.hatch.envs.{self.name}.dependency-groups` must be an array of strings"
+            raise TypeError(message)
+
+        all_dependency_groups = set()
+        for i, dependency_group in enumerate(dependency_groups, 1):
+            if not isinstance(dependency_group, str):
+                message = (
+                    f"Dependency Group #{i} of field `tool.hatch.envs.{self.name}.dependency-groups` must be a string"
+                )
+                raise TypeError(message)
+
+            if not dependency_group:
+                message = f"Dependency Group #{i} of field `tool.hatch.envs.{self.name}.dependency-groups` cannot be an empty string"
+                raise ValueError(message)
+
+            normalized_dependency_group = normalize_project_name(dependency_group)
+            if (
+                not self.metadata.hatch.metadata.hook_config
+                and normalized_dependency_group not in self.app.project.dependency_groups
+            ):
+                message = (
+                    f"Dependency Group `{normalized_dependency_group}` of field `tool.hatch.envs.{self.name}.dependency-groups` is not "
+                    f"defined in field `dependency-groups`"
+                )
+                raise ValueError(message)
+
+            all_dependency_groups.add(normalized_dependency_group)
+
+        return sorted(all_dependency_groups)
+
+    @cached_property
+    def description(self) -> str:
+        """
+        ```toml config-example
+        [tool.hatch.envs.<ENV_NAME>]
+        description = ...
+        ```
+        """
+        description = self.config.get("description", "")
+        if not isinstance(description, str):
+            message = f"Field `tool.hatch.envs.{self.name}.description` must be a string"
+            raise TypeError(message)
+
+        return description
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def pre_install_commands(self):
+        pre_install_commands = self.config.get("pre-install-commands", [])
+        if not isinstance(pre_install_commands, list):
+            message = f"Field `tool.hatch.envs.{self.name}.pre-install-commands` must be an array"
+            raise TypeError(message)
+
+        for i, command in enumerate(pre_install_commands, 1):
+            if not isinstance(command, str):
+                message = f"Command #{i} of field `tool.hatch.envs.{self.name}.pre-install-commands` must be a string"
+                raise TypeError(message)
+
+        return list(pre_install_commands)
+
+    @cached_property
+    def post_install_commands(self):
+        post_install_commands = self.config.get("post-install-commands", [])
+        if not isinstance(post_install_commands, list):
+            message = f"Field `tool.hatch.envs.{self.name}.post-install-commands` must be an array"
+            raise TypeError(message)
+
+        for i, command in enumerate(post_install_commands, 1):
+            if not isinstance(command, str):
+                message = f"Command #{i} of field `tool.hatch.envs.{self.name}.post-install-commands` must be a string"
+                raise TypeError(message)
+
+        return list(post_install_commands)
+
+    @cached_property
+    def workspace(self) -> Workspace:
+        env_config = self.config.get("workspace", {})
+        if not isinstance(env_config, dict):
+            message = f"Field `tool.hatch.envs.{self.name}.workspace` must be a table"
+            raise TypeError(message)
+
+        return Workspace(self, env_config)
+
+    def activate(self):
+        """
+        A convenience method called when using the environment as a context manager:
+
+        ```python
+        with environment:
+            ...
+        ```
+        """
+
+    def deactivate(self):
+        """
+        A convenience method called after using the environment as a context manager:
+
+        ```python
+        with environment:
+            ...
+        ```
+        """
+
+    @abstractmethod
+    def find(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should return information about how to locate the environment or represent its ID in
+        some way. Additionally, this is expected to return something even if the environment is
+        [incompatible](reference.md#hatch.env.plugin.interface.EnvironmentInterface.check_compatibility).
+        """
+
+    @abstractmethod
+    def create(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should perform the necessary steps to set up the environment.
+        """
+
+    @abstractmethod
+    def remove(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should perform the necessary steps to completely remove the environment from the system and will only
+        be triggered manually by users with the [`env remove`](../../cli/reference.md#hatch-env-remove) or
+        [`env prune`](../../cli/reference.md#hatch-env-prune) commands.
+        """
+
+    @abstractmethod
+    def exists(self) -> bool:
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should indicate whether or not the environment has already been created.
+        """
+
+    @abstractmethod
+    def install_project(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should install the project in the environment.
+        """
+
+    @abstractmethod
+    def install_project_dev_mode(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should install the project in the environment such that the environment
+        always reflects the current state of the project.
+        """
+
+    @abstractmethod
+    def dependencies_in_sync(self) -> bool:
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should indicate whether or not the environment is compatible with the current
+        [dependencies](reference.md#hatch.env.plugin.interface.EnvironmentInterface.dependencies).
+        """
+
+    @abstractmethod
+    def sync_dependencies(self):
+        """
+        :material-align-horizontal-left: **REQUIRED** :material-align-horizontal-right:
+
+        This should install the
+        [dependencies](reference.md#hatch.env.plugin.interface.EnvironmentInterface.dependencies)
+        in the environment.
+        """
+
+    def dependency_hash(self):
+        """
+        This should return a hash of the environment's
+        [dependencies](reference.md#hatch.env.plugin.interface.EnvironmentInterface.dependencies)
+        and any other data that is handled by the
+        [sync_dependencies](reference.md#hatch.env.plugin.interface.EnvironmentInterface.sync_dependencies)
+        and
+        [dependencies_in_sync](reference.md#hatch.env.plugin.interface.EnvironmentInterface.dependencies_in_sync)
+        methods.
+        """
+        from hatch.utils.dep import hash_dependencies
+
+        return hash_dependencies(self.all_dependencies_complex)
+
+    @contextmanager
+    def app_status_creation(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        with self.app.status(f"Creating environment: {self.name}"):
+            yield
+
+    @contextmanager
+    def app_status_pre_installation(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        with self.app.status("Running pre-installation commands"):
+            yield
+
+    @contextmanager
+    def app_status_post_installation(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        with self.app.status("Running post-installation commands"):
+            yield
+
+    @contextmanager
+    def app_status_project_installation(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        if self.dev_mode:
+            with self.app.status("Installing project in development mode"):
+                yield
+        else:
+            with self.app.status("Installing project"):
+                yield
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @contextmanager
+    def app_status_dependency_installation_check(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        with self.app.status("Checking dependencies"):
+            yield
+
+    @contextmanager
+    def app_status_dependency_synchronization(self):
+        """
+        See the [life cycle of environments](reference.md#life-cycle).
+        """
+        with self.app.status("Syncing dependencies"):
+            yield
+
+    @contextmanager
+    def fs_context(self) -> Generator[FileSystemContext, None, None]:
+        """
+        A context manager that must yield a subclass of
+        [FileSystemContext](../utilities.md#hatch.env.plugin.interface.FileSystemContext).
+        """
+        from hatch.utils.fs import temp_directory
+
+        with temp_directory() as temp_dir:
+            yield FileSystemContext(self, local_path=temp_dir, env_path=str(temp_dir))
+
+    def enter_shell(
+        self,
+        name: str,  # noqa: ARG002
+        path: str,
+        args: Iterable[str],
+    ):
+        """
+        Spawn a [shell](../../config/hatch.md#shell) within the environment.
+
+        This should either use
+        [command_context](reference.md#hatch.env.plugin.interface.EnvironmentInterface.command_context)
+        directly or provide the same guarantee.
+        """
+        with self.command_context():
+            self.platform.exit_with_command([path, *args])
+
+
+
+
+
+
+
+
+
+
+
+
+    @contextmanager
+    def command_context(self):
+        """
+        A context manager that when active should make executed shell commands reflect any
+        [environment variables](reference.md#hatch.env.plugin.interface.EnvironmentInterface.get_env_vars)
+        the user defined either currently or at the time of
+        [creation](reference.md#hatch.env.plugin.interface.EnvironmentInterface.create).
+
+        For an example, open the default implementation below:
+        """
+        with self.get_env_vars():
+            yield
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def construct_pip_install_command(self, args: list[str]):
+        """
+        A convenience method for constructing a [`pip install`](https://pip.pypa.io/en/stable/cli/pip_install/)
+        command with the given verbosity. The default verbosity is set to one less than Hatch's verbosity.
+        """
+        command = ["python", "-u", "-m", "pip", "install", "--disable-pip-version-check"]
+
+        # Default to -1 verbosity
+        add_verbosity_flag(command, self.verbosity, adjustment=-1)
+
+        command.extend(args)
+        return command
+
+
+
+
+
+
+
+
+    def apply_features(self, requirement: str):
+        """
+        A convenience method that applies any user defined [features](../../config/environment/overview.md#features)
+        to the given requirement.
+        """
+        if self.features:
+            features = ",".join(self.features)
+            return f"{requirement}[{features}]"
+
+        return requirement
+
+    def check_compatibility(self):
+        """
+        This raises an exception if the environment is not compatible with the user's setup. The default behavior
+        checks for [platform compatibility](../../config/environment/overview.md#supported-platforms)
+        and any method override should keep this check.
+
+        This check is never performed if the environment has been
+        [created](reference.md#hatch.env.plugin.interface.EnvironmentInterface.create).
+        """
+        if self.platforms and self.platform.name not in self.platforms:
+            message = "unsupported platform"
+            raise OSError(message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def get_option_types() -> dict:
+        """
+        Returns a mapping of supported options to their respective types so that they can be used by
+        [overrides](../../config/environment/advanced.md#option-overrides).
+        """
+        return {}
+
+
+
+
+
+
+    def __enter__(self):
+        self.activate()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.deactivate()
+
+    def join_command_args(self, args: list[str]):
+        """
+        Join command arguments into a single command string suitable for shell execution.
+
+        This method is used by the `run` command to construct the root command string
+        from the received arguments using the current platform's quoting rules.
+
+        Parameters:
+            args (list[str]): A list of command arguments to be joined into a single
+                command string. Each element represents a separate argument that would
+                typically be passed to a shell command.
+
+        Returns:
+            str: A properly formatted command string with arguments joined and escaped
+                according to the platform's shell requirements. On Windows, this typically
+                means handling spaces and special characters differently than on Unix-like
+                systems.
+
+        Notes:
+            - The actual joining logic is platform-dependent and handled by the underlying
+              platform implementation
+            - This method ensures that command arguments are properly escaped for safe
+              shell execution
+            - Used internally by Hatch's run command to convert argument lists into
+              executable command strings
+        """
+        raise NotImplementedError
+
+
+class FileSystemContext:
+    """
+    This class represents a synchronized path between the local file system and a potentially remote environment.
+    """
+
+    def __init__(self, env: EnvironmentInterface, *, local_path: Path, env_path: str):
+        self.__env = env
+        self.__local_path = local_path
+        self.__env_path = env_path
+
+    @property
+    def env(self) -> EnvironmentInterface:
+        """
+        Returns the environment to which this context belongs.
+        """
+        return self.__env
+
+    @property
+    def local_path(self) -> Path:
+        """
+        Returns the local path to which this context refers as a path-like object.
+        """
+        return self.__local_path
+
+    @property
+    def env_path(self) -> str:
+        """
+        Returns the environment path to which this context refers as a string. The environment
+        may not be on the local file system.
+        """
+        return self.__env_path
+
+    def join(self, relative_path: str) -> FileSystemContext:
+        """
+        Returns a new instance of this class with the given relative path appended to the local and
+        environment paths.
+
+        This method should not need overwriting.
+        """
+        local_path = self.local_path / relative_path
+        env_path = f"{self.env_path}{self.__env.sep.join(['', *os.path.normpath(relative_path).split(os.sep)])}"
+        return FileSystemContext(self.__env, local_path=local_path, env_path=env_path)
+
+    def sync_env(self):
+        """
+        Synchronizes the [environment path](utilities.md#hatch.env.plugin.interface.FileSystemContext.env_path)
+        with the [local path](utilities.md#hatch.env.plugin.interface.FileSystemContext.local_path) as the source.
+        """
+
+    def sync_local(self):
+        """
+        Synchronizes the [local path](utilities.md#hatch.env.plugin.interface.FileSystemContext.local_path) as the
+        source with the [environment path](utilities.md#hatch.env.plugin.interface.FileSystemContext.env_path) as
+        the source.
+        """
+
+
+class Workspace:
+    def __init__(self, env: EnvironmentInterface, config: dict[str, Any]):
+        self.env = env
+        self.config = config
+
+    @cached_property
+    def parallel(self) -> bool:
+        parallel = self.config.get("parallel", True)
+        if not isinstance(parallel, bool):
+            message = f"Field `tool.hatch.envs.{self.env.name}.workspace.parallel` must be a boolean"
+            raise TypeError(message)
+
+        return parallel
+
+    def get_dependencies(self) -> list[str]:
+        static_members: list[WorkspaceMember] = []
+        dynamic_members: list[WorkspaceMember] = []
+        for member in self.members:
+            if member.has_static_dependencies:
+                static_members.append(member)
+            else:
+                dynamic_members.append(member)
+
+        all_dependencies = []
+        for member in static_members:
+            dependencies, features = member.get_dependencies()
+            all_dependencies.extend(dependencies)
+            for feature in member.features:
+                all_dependencies.extend(features.get(feature, []))
+
+        if self.parallel:
+            from concurrent.futures import ThreadPoolExecutor
+
+            def get_member_deps(member):
+                with self.env.app.status(f"Checking workspace member: {member.name}"):
+                    dependencies, features = member.get_dependencies()
+                    deps = list(dependencies)
+                    for feature in member.features:
+                        deps.extend(features.get(feature, []))
+                    return deps
+
+            with ThreadPoolExecutor() as executor:
+                results = executor.map(get_member_deps, dynamic_members)
+                for deps in results:
+                    all_dependencies.extend(deps)
+        else:
+            for member in dynamic_members:
+                with self.env.app.status(f"Checking workspace member: {member.name}"):
+                    dependencies, features = member.get_dependencies()
+                    all_dependencies.extend(dependencies)
+                    for feature in member.features:
+                        all_dependencies.extend(features.get(feature, []))
+
+        return all_dependencies
+
+    @cached_property
+    def members(self) -> list[WorkspaceMember]:
+        import fnmatch
+
+        from hatch.project.core import Project
+        from hatch.utils.fs import Path
+        from hatch.utils.metadata import normalize_project_name
+
+        raw_members = self.config.get("members", [])
+        if not isinstance(raw_members, list):
+            message = f"Field `tool.hatch.envs.{self.env.name}.workspace.members` must be an array"
+            raise TypeError(message)
+
+        # Get exclude patterns
+        exclude_patterns = self.config.get("exclude", [])
+        if not isinstance(exclude_patterns, list):
+            message = f"Field `tool.hatch.envs.{self.env.name}.workspace.exclude` must be an array"
+            raise TypeError(message)
+
+        # First normalize configuration with context expansion
+        member_data: list[dict[str, Any]] = []
+        with self.env.apply_context():
+            for i, data in enumerate(raw_members, 1):
+                if isinstance(data, str):
+                    expanded_path = self.env.metadata.context.format(data)
+                    member_data.append({"path": expanded_path, "features": ()})
+                elif isinstance(data, dict):
+                    if "path" not in data:
+                        message = (
+                            f"Member #{i} of field `tool.hatch.envs.{self.env.name}.workspace.members` must define "
+                            f"a `path` key"
+                        )
+                        raise TypeError(message)
+
+                    path = data["path"]
+                    if not isinstance(path, str):
+                        message = (
+                            f"Option `path` of member #{i} of field `tool.hatch.envs.{self.env.name}.workspace.members` "
+                            f"must be a string"
+                        )
+                        raise TypeError(message)
+
+                    if not path:
+                        message = (
+                            f"Option `path` of member #{i} of field `tool.hatch.envs.{self.env.name}.workspace.members` "
+                            f"cannot be an empty string"
+                        )
+                        raise ValueError(message)
+
+                    expanded_path = self.env.metadata.context.format(path)
+
+                    features = data.get("features", [])
+                    if not isinstance(features, list):
+                        message = (
+                            f"Option `features` of member #{i} of field `tool.hatch.envs.{self.env.name}.workspace."
+                            f"members` must be an array of strings"
+                        )
+                        raise TypeError(message)
+
+                    all_features: set[str] = set()
+                    for j, feature in enumerate(features, 1):
+                        if not isinstance(feature, str):
+                            message = (
+                                f"Feature #{j} of option `features` of member #{i} of field "
+                                f"`tool.hatch.envs.{self.env.name}.workspace.members` must be a string"
+                            )
+                            raise TypeError(message)
+
+                        if not feature:
+                            message = (
+                                f"Feature #{j} of option `features` of member #{i} of field "
+                                f"`tool.hatch.envs.{self.env.name}.workspace.members` cannot be an empty string"
+                            )
+                            raise ValueError(message)
+
+                        normalized_feature = normalize_project_name(feature)
+                        if normalized_feature in all_features:
+                            message = (
+                                f"Feature #{j} of option `features` of member #{i} of field "
+                                f"`tool.hatch.envs.{self.env.name}.workspace.members` is a duplicate"
+                            )
+                            raise ValueError(message)
+
+                        all_features.add(normalized_feature)
+
+                    member_data.append({"path": expanded_path, "features": tuple(sorted(all_features))})
+                else:
+                    message = (
+                        f"Member #{i} of field `tool.hatch.envs.{self.env.name}.workspace.members` must be "
+                        f"a string or an inline table"
+                    )
+                    raise TypeError(message)
+
+        root = str(self.env.root)
+        member_paths: dict[str, WorkspaceMember] = {}
+        for data in member_data:
+            # Given root R and member spec M, we need to find:
+            #
+            # 1. The absolute path AP of R/M
+            # 2. The shared prefix SP of R and AP
+            # 3. The relative path RP of M from AP
+            #
+            # For example, if:
+            #
+            # R = /foo/bar/baz
+            # M = ../dir/pkg-*
+            #
+            # Then:
+            #
+            # AP = /foo/bar/dir/pkg-*
+            # SP = /foo/bar
+            # RP = dir/pkg-*
+            path_spec = data["path"]
+            normalized_path = os.path.normpath(os.path.join(root, path_spec))
+            absolute_path = os.path.abspath(normalized_path)
+            shared_prefix = os.path.commonprefix([root, absolute_path])
+            relative_path = os.path.relpath(absolute_path, shared_prefix)
+
+            # Now we have the necessary information to perform an optimized glob search for members
+            members_found = False
+            for member_path in find_members(root, relative_path.split(os.sep)):
+                # Check if member should be excluded
+                relative_member_path = os.path.relpath(member_path, root)
+                should_exclude = False
+                for exclude_pattern in exclude_patterns:
+                    if fnmatch.fnmatch(relative_member_path, exclude_pattern) or fnmatch.fnmatch(
+                        member_path, exclude_pattern
+                    ):
+                        should_exclude = True
+                        break
+
+                if should_exclude:
+                    continue
+
+                project_file = os.path.join(member_path, "pyproject.toml")
+                if not os.path.isfile(project_file):
+                    message = (
+                        f"Member derived from `{path_spec}` of field "
+                        f"`tool.hatch.envs.{self.env.name}.workspace.members` is not a project (no `pyproject.toml` "
+                        f"file): {member_path}"
+                    )
+                    raise OSError(message)
+
+                members_found = True
+                if member_path in member_paths:
+                    message = (
+                        f"Member derived from `{path_spec}` of field "
+                        f"`tool.hatch.envs.{self.env.name}.workspace.members` is a duplicate: {member_path}"
+                    )
+                    raise ValueError(message)
+
+                project = Project(Path(member_path), locate=False)
+                project.set_app(self.env.app)
+                member_paths[member_path] = WorkspaceMember(project, features=data["features"])
+
+            if not members_found:
+                message = (
+                    f"No members could be derived from `{path_spec}` of field "
+                    f"`tool.hatch.envs.{self.env.name}.workspace.members`: {absolute_path}"
+                )
+                raise OSError(message)
+
+        return list(member_paths.values())
+
+
+class WorkspaceMember:
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def has_static_dependencies(self) -> bool:
+        return self.project.has_static_dependencies
+
+    def get_dependencies(self) -> tuple[list[str], dict[str, list[str]]]:
+        return self.project.get_dependencies()
+
+    @property
+    def last_modified(self) -> float:
+        """Get the last modification time of the member's pyproject.toml."""
+        import os
+
+        pyproject_path = self.project.location / "pyproject.toml"
+        if pyproject_path.exists():
+            return os.path.getmtime(pyproject_path)
+        return 0.0
+
+    def get_editable_requirement(self, *, editable: bool = True) -> str:
+        """Get the requirement string for this workspace member."""
+        uri = self.project.location.as_uri()
+        if editable:
+            return f"-e {self.name} @ {uri}"
+        return f"{self.name} @ {uri}"
+
+
+def expand_script_commands(env_name, script_name, commands, config, seen, active):
+    if script_name in seen:
+        return seen[script_name]
+
+    if script_name in active:
+        active.append(script_name)
+
+        message = f"Circular expansion detected for field `tool.hatch.envs.{env_name}.scripts`: {' -> '.join(active)}"
+        raise ValueError(message)
+
+    active.append(script_name)
+
+    expanded_commands = []
+
+    for command in commands:
+        possible_script, args, ignore_exit_code = parse_script_command(command)
+
+        if possible_script in config:
+            expanded_commands.extend(
+                format_script_commands(
+                    commands=expand_script_commands(
+                        env_name, possible_script, config[possible_script], config, seen, active
+                    ),
+                    args=args,
+                    ignore_exit_code=ignore_exit_code,
+                )
+            )
+        else:
+            expanded_commands.append(command)
+
+    seen[script_name] = expanded_commands
+    active.pop()
+
+    return expanded_commands
+
+
+def find_members(root, relative_components):
+    import fnmatch
+    import re
+
+    component_matchers = []
+    for component in relative_components:
+        if any(special in component for special in "*?["):
+            pattern = re.compile(fnmatch.translate(component))
+            component_matchers.append(lambda entry, pattern=pattern: pattern.search(entry.name))
+        else:
+            component_matchers.append(lambda entry, component=component: component == entry.name)
+
+    results = list(_recurse_members(root, 0, component_matchers))
+    yield from sorted(results, key=os.path.basename)
+
+
+def _recurse_members(root, matcher_index, matchers):
+    if matcher_index == len(matchers):
+        yield root
+        return
+
+    matcher = matchers[matcher_index]
+    with os.scandir(root) as it:
+        for entry in it:
+            if entry.is_dir() and matcher(entry):
+                yield from _recurse_members(entry.path, matcher_index + 1, matchers)
+
+=== src/hatch/project/config.py
+from __future__ import annotations
+
+import re
+from copy import deepcopy
+from functools import cached_property
+from itertools import product
+from os import environ
+from typing import TYPE_CHECKING, Any
+
+
+from hatch.project.constants import DEFAULT_BUILD_DIRECTORY, BuildEnvVars
+from hatch.project.env import apply_overrides
+from hatch.project.utils import format_script_commands, parse_script_command
+
+if TYPE_CHECKING:
+    from hatch.dep.core import Dependency
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class BuildConfig:
+    def __init__(self, config: dict[str, Any]) -> None:
+        self.__config = config
+        self.__targets: dict[str, BuildTargetConfig] = config
+
+    @cached_property
+    def directory(self) -> str:
+        directory = self.__config.get("directory", DEFAULT_BUILD_DIRECTORY)
+        if not isinstance(directory, str):
+            message = "Field `tool.hatch.build.directory` must be a string"
+            raise TypeError(message)
+
+        return directory
+
+    @cached_property
+    def dependencies(self) -> list[str]:
+        dependencies: list[str] = self.__config.get("dependencies", [])
+        if not isinstance(dependencies, list):
+            message = "Field `tool.hatch.build.dependencies` must be an array"
+            raise TypeError(message)
+
+        for i, dependency in enumerate(dependencies, 1):
+            if not isinstance(dependency, str):
+                message = f"Dependency #{i} in field `tool.hatch.build.dependencies` must be a string"
+                raise TypeError(message)
+
+        return list(dependencies)
+
+    @cached_property
+    def hook_config(self) -> dict[str, dict[str, Any]]:
+        hook_config: dict[str, dict[str, Any]] = self.__config.get("hooks", {})
+        if not isinstance(hook_config, dict):
+            message = "Field `tool.hatch.build.hooks` must be a table"
+            raise TypeError(message)
+
+        for hook_name, config in hook_config.items():
+            if not isinstance(config, dict):
+                message = f"Field `tool.hatch.build.hooks.{hook_name}` must be a table"
+                raise TypeError(message)
+
+        return finalize_hook_config(hook_config)
+
+    @cached_property
+    def __target_config(self) -> dict[str, Any]:
+        config = self.__config.get("targets", {})
+        if not isinstance(config, dict):
+            message = "Field `tool.hatch.build.targets` must be a table"
+            raise TypeError(message)
+
+        return config
+
+    def target(self, target: str) -> BuildTargetConfig:
+        if target in self.__targets:
+            return self.__targets[target]
+
+        config = self.__target_config.get(target, {})
+        if not isinstance(config, dict):
+            message = f"Field `tool.hatch.build.targets.{target}` must be a table"
+            raise TypeError(message)
+
+        target_config = BuildTargetConfig(target, config, self)
+        self.__targets[target] = target_config
+        return target_config
+
+
+class BuildTargetConfig:
+
+
+
+
+
+    @cached_property
+    def directory(self) -> str:
+        directory = self.__config.get("directory", self.__global_config.directory)
+        if not isinstance(directory, str):
+            message = f"Field `tool.hatch.build.targets.{self.__name}.directory` must be a string"
+            raise TypeError(message)
+
+        return directory
+
+    @cached_property
+    def dependencies(self) -> list[str]:
+        dependencies: list[str] = self.__config.get("dependencies", [])
+        if not isinstance(dependencies, list):
+            message = f"Field `tool.hatch.build.targets.{self.__name}.dependencies` must be an array"
+            raise TypeError(message)
+
+        for i, dependency in enumerate(dependencies, 1):
+            if not isinstance(dependency, str):
+                message = (
+                    f"Dependency #{i} in field `tool.hatch.build.targets.{self.__name}.dependencies` must be a string"
+                )
+                raise TypeError(message)
+
+        all_dependencies = list(self.__global_config.dependencies)
+        all_dependencies.extend(dependencies)
+        return all_dependencies
+
+    @cached_property
+    def hook_config(self) -> dict[str, dict[str, Any]]:
+        hook_config: dict[str, dict[str, Any]] = self.__config.get("hooks", {})
+        if not isinstance(hook_config, dict):
+            message = f"Field `tool.hatch.build.targets.{self.__name}.hooks` must be a table"
+            raise TypeError(message)
+
+        for hook_name, config in hook_config.items():
+            if not isinstance(config, dict):
+                message = f"Field `tool.hatch.build.targets.{self.__name}.hooks.{hook_name}` must be a table"
+                raise TypeError(message)
+
+        config = self.__global_config.hook_config.copy()
+        config.update(hook_config)
+        return finalize_hook_config(config)
+
+    def __init__(self, name: str, config: dict[str, Any], global_config: BuildConfig) -> None:
+        """
+        Initialize a BuildTargetConfig instance for a specific build target.
+
+        This constructor creates a configuration object for a specific build target within
+        the Hatch build system. The resulting object exposes the target-specific settings
+        while falling back to the global build configuration where inheritance applies.
+
+        Parameters
+        ----------
+        name : str
+            The name of the build target (e.g., 'wheel', 'sdist', or custom target names).
+            This identifies the specific build target being configured.
+        config : dict[str, Any]
+            The target-specific configuration dictionary containing settings that override
+            or extend the global build configuration. This typically comes from the
+            `tool.hatch.build.targets.<target_name>` section of the project configuration.
+        global_config : BuildConfig
+            The global build configuration instance that provides default values and
+            shared settings across all build targets. Used for inheritance when
+            target-specific values are not provided.
+
+        Notes
+        -----
+        - Target-specific configuration takes precedence over global configuration
+        - Configuration values are loaded and validated when their corresponding
+          properties are accessed
+        - This class is typically instantiated by BuildConfig.target() method rather
+          than directly by user code
+        """
+        raise NotImplementedError
+
+
+def expand_script_commands(script_name, commands, config, seen, active):
+    if script_name in seen:
+        return seen[script_name]
+
+    if script_name in active:
+        active.append(script_name)
+
+        message = f"Circular expansion detected for field `tool.hatch.scripts`: {' -> '.join(active)}"
+        raise ValueError(message)
+
+    active.append(script_name)
+
+    expanded_commands = []
+
+    for command in commands:
+        possible_script, args, ignore_exit_code = parse_script_command(command)
+
+        if possible_script in config:
+            expanded_commands.extend(
+                format_script_commands(
+                    commands=expand_script_commands(possible_script, config[possible_script], config, seen, active),
+                    args=args,
+                    ignore_exit_code=ignore_exit_code,
+                )
+            )
+        else:
+            expanded_commands.append(command)
+
+    seen[script_name] = expanded_commands
+    active.pop()
+
+    return expanded_commands
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def finalize_hook_config(hook_config: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    if env_var_enabled(BuildEnvVars.NO_HOOKS):
+        return {}
+
+    all_hooks_enabled = env_var_enabled(BuildEnvVars.HOOKS_ENABLE)
+    final_hook_config: dict[str, dict[str, Any]] = {
+        hook_name: config
+        for hook_name, config in hook_config.items()
+        if (
+            all_hooks_enabled
+            or config.get("enable-by-default", True)
+            or env_var_enabled(f"{BuildEnvVars.HOOK_ENABLE_PREFIX}{hook_name.upper()}")
+        )
+    }
+    return final_hook_config
+
+
+def env_var_enabled(env_var: str, *, default: bool = False) -> bool:
+    if env_var in environ:
+        return environ[env_var] in {"1", "true"}
+
+    return default
+
+
+class ProjectConfig:
+    """
+    A comprehensive configuration manager for Hatch projects that handles environment setup, build configuration, publishing settings, and script management.
+
+    This class serves as the central configuration hub for Hatch projects, parsing and validating configuration from pyproject.toml files. It manages complex environment matrices, dependency resolution, script expansion, and provides a unified interface for accessing all project-related configuration settings.
+
+    Attributes:
+        root: The root directory path of the project
+        config: Raw configuration dictionary from pyproject.toml
+        plugin_manager: Plugin manager instance for handling extensions and collectors
+
+    Main Properties:
+        build: BuildConfig instance containing build-related settings including targets, dependencies, and hooks
+        env: Base environment configuration dictionary from tool.hatch.env
+        env_requires: List of environment requirement strings
+        env_requires_complex: List of parsed Dependency objects for environment requirements
+        env_collectors: Dictionary of environment collector configurations
+        envs: Dictionary of all resolved environment configurations (excluding internal environments)
+        internal_envs: Dictionary of internal Hatch environment configurations
+        matrices: Dictionary containing matrix configuration data for environment generation
+        matrix_variables: Dictionary mapping generated environment names to their matrix variable values
+        internal_matrices: Dictionary of matrix configurations for internal environments
+        publish: Dictionary of publishing configuration for different publishers
+        scripts: Dictionary of resolved and expanded script commands
+
+    Key Methods:
+        finalize_env_overrides(option_types): Applies cached environment overrides using type information from plugins
+
+    Features:
+        - Environment matrix generation with variable substitution and naming patterns
+        - Platform-specific and environment variable-based configuration overrides
+        - Script command expansion with circular dependency detection
+        - Template-based environment inheritance
+        - Plugin-based environment collection and finalization
+        - Comprehensive validation with detailed error messages
+
+    Usage Example:
+        ```python
+        from hatch.project.config import ProjectConfig
+
+        # Initialize with project root and parsed config
+        project_config = ProjectConfig(
+            root="/path/to/project",
+            config={"envs": {"test": {"dependencies": ["pytest"]}}},
+            plugin_manager=plugin_manager
+        )
+
+        # Access environment configurations
+        test_env = project_config.envs["test"]
+
+        # Get build configuration
+        build_config = project_config.build
+        build_dir = build_config.directory
+
+        # Access scripts
+        scripts = project_config.scripts
+        if "test" in scripts:
+            test_commands = scripts["test"]
+        ```
+
+    The class handles matrix environment generation, inheritance chains, and overrides.
+    Configuration values are validated lazily as the corresponding properties are accessed.
+    """
+    raise NotImplementedError
+
+=== src/hatch/project/core.py
+from __future__ import annotations
+
+import re
+from collections import defaultdict
+from collections.abc import Generator
+from contextlib import contextmanager
+from functools import cached_property
+from typing import TYPE_CHECKING, Any, cast
+
+from hatch.project.env import EnvironmentMetadata
+from hatch.utils.fs import Path
+from hatch.utils.runner import ExecutionContext
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from hatch.cli.application import Application
+    from hatch.config.model import RootConfig
+    from hatch.env.plugin.interface import EnvironmentInterface
+    from hatch.project.frontend.core import BuildFrontend
+
+
+class Project:
+    def __init__(self, path: Path, *, name: str | None = None, config=None, locate: bool = True):
+        self._path = path
+
+        # From app config
+        self.chosen_name = name
+
+        # Lazily attach the current app
+        self.__app: Application | None = None
+
+        # Location of pyproject.toml
+        self._project_file_path: Path | None = None
+
+        self._root_searched = False
+        self._root: Path | None = None
+        self._raw_config = config
+        self._plugin_manager = None
+        self._metadata = None
+        self._config = None
+
+        self._explicit_path: Path | None = None if locate else path
+        self.current_member_path: Path | None = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def set_path(self, path: Path) -> None:
+        self._explicit_path = path
+
+    def set_app(self, app: Application) -> None:
+        self.__app = app
+
+
+
+
+
+
+
+
+
+
+
+    @cached_property
+    def build_env(self) -> EnvironmentInterface:
+        # Prevent the default environment from being used as a builder environment
+        environment = self.get_environment("hatch-build" if self.app.env == "default" else self.app.env)
+        if not environment.builder:
+            self.app.abort(f"Environment `{environment.name}` is not a builder environment")
+
+        return environment
+
+    @cached_property
+    def build_frontend(self) -> BuildFrontend:
+        from hatch.project.frontend.core import BuildFrontend
+
+        return BuildFrontend(self, self.build_env)
+
+
+
+
+
+    @cached_property
+    def dependency_groups(self) -> dict[str, Any]:
+        """
+        https://peps.python.org/pep-0735/
+        """
+        from hatch.utils.metadata import normalize_project_name
+
+        dependency_groups = self.raw_config.get("dependency-groups", {})
+
+        if not isinstance(dependency_groups, dict):
+            message = "Field `dependency-groups` must be a table"
+            raise TypeError(message)
+
+        original_names = defaultdict(list)
+        normalized_groups = {}
+
+        for group_name, value in dependency_groups.items():
+            normed_group_name = normalize_project_name(group_name)
+            original_names[normed_group_name].append(group_name)
+            normalized_groups[normed_group_name] = value
+
+        errors = []
+        for normed_name, names in original_names.items():
+            if len(names) > 1:
+                errors.append(f"{normed_name} ({', '.join(names)})")
+        if errors:
+            msg = f"Field `dependency-groups` contains duplicate names: {', '.join(errors)}"
+            raise ValueError(msg)
+
+        return normalized_groups
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Ensure that this method is clearly written since it is
+    # used for documenting the life cycle of environments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def prepare_build_environment(self, *, targets: list[str] | None = None) -> None:
+        from hatch.project.constants import BUILD_BACKEND, BuildEnvVars
+        from hatch.utils.structures import EnvVars
+
+        if targets is None:
+            targets = ["wheel"]
+
+        env_vars = {BuildEnvVars.REQUESTED_TARGETS: " ".join(sorted(targets))}
+        build_backend = self.metadata.build.build_backend
+        with self.location.as_cwd(), self.build_env.get_env_vars(), EnvVars(env_vars):
+            if not self.build_env.exists():
+                try:
+                    self.build_env.check_compatibility()
+                except Exception as e:  # noqa: BLE001
+                    self.app.abort(f"Environment `{self.build_env.name}` is incompatible: {e}")
+
+            self.prepare_environment(self.build_env)
+
+            additional_dependencies: list[str] = []
+            with self.app.status("Inspecting build dependencies"):
+                if build_backend != BUILD_BACKEND:
+                    for target in targets:
+                        if target == "sdist":
+                            additional_dependencies.extend(self.build_frontend.get_requires("sdist"))
+                        elif target == "wheel":
+                            additional_dependencies.extend(self.build_frontend.get_requires("wheel"))
+                        else:
+                            self.app.abort(f"Target `{target}` is not supported by `{build_backend}`")
+                else:
+                    required_build_deps = self.build_frontend.hatch.get_required_build_deps(targets)
+                    if required_build_deps:
+                        with self.metadata.context.apply_context(self.build_env.context):
+                            additional_dependencies.extend(
+                                self.metadata.context.format(dep) for dep in required_build_deps
+                            )
+
+            if additional_dependencies:
+                from hatch.dep.core import Dependency
+
+                self.build_env.additional_dependencies.extend(map(Dependency, additional_dependencies))
+                with self.build_env.app_status_dependency_synchronization():
+                    self.build_env.sync_dependencies()
+
+    def get_dependencies(self) -> tuple[list[str], dict[str, list[str]]]:
+        dynamic_fields = {"dependencies", "optional-dependencies"}
+        if not dynamic_fields.intersection(self.metadata.dynamic):
+            dependencies: list[str] = self.metadata.core_raw_metadata.get("dependencies", [])
+            features: dict[str, list[str]] = self.metadata.core_raw_metadata.get("optional-dependencies", {})
+            return dependencies, features
+
+        from hatch.project.constants import BUILD_BACKEND
+
+        self.prepare_build_environment()
+        build_backend = self.metadata.build.build_backend
+        with self.location.as_cwd(), self.build_env.get_env_vars():
+            if build_backend != BUILD_BACKEND:
+                project_metadata = self.build_frontend.get_core_metadata()
+            else:
+                project_metadata = self.build_frontend.hatch.get_core_metadata()
+
+        dynamic_dependencies: list[str] = project_metadata.get("dependencies", [])
+        dynamic_features: dict[str, list[str]] = project_metadata.get("optional-dependencies", {})
+
+        return dynamic_dependencies, dynamic_features
+
+    @cached_property
+    def has_static_dependencies(self) -> bool:
+        dynamic_fields = {"dependencies", "optional-dependencies"}
+        return not dynamic_fields.intersection(self.metadata.dynamic)
+
+    def expand_environments(self, env_name: str) -> list[str]:
+        if env_name in self.config.internal_matrices:
+            return list(self.config.internal_matrices[env_name]["envs"])
+
+        if env_name in self.config.matrices:
+            return list(self.config.matrices[env_name]["envs"])
+
+        if env_name in self.config.internal_envs:
+            return [env_name]
+
+        if env_name in self.config.envs:
+            return [env_name]
+
+        return []
+
+    @classmethod
+    def from_config(cls, config: RootConfig, project: str) -> Project | None:
+        # Disallow empty strings
+        if not project:
+            return None
+
+        if project in config.projects:
+            location = config.projects[project].location
+            if location:
+                return cls(Path(location).resolve(), name=project)
+        else:
+            for project_dir in config.dirs.project:
+                if not project_dir:
+                    continue
+
+                location = Path(project_dir, project)
+                if location.is_dir():
+                    return cls(Path(location).resolve(), name=project)
+
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @contextmanager
+    def ensure_cwd(self) -> Generator[Path, None, None]:
+        cwd = Path.cwd()
+        location = self.location
+        if location.is_file() or cwd == location or location in cwd.parents:
+            yield cwd
+        else:
+            with location.as_cwd():
+                yield location
+
+    @staticmethod
+    def canonicalize_name(name: str, *, strict=True) -> str:
+        if strict:
+            return re.sub(r"[-_.]+", "-", name).lower()
+
+        # Used for creating new projects
+        return re.sub(r"[-_. ]+", "-", name).lower()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def initialize(project_file_path, template_config):
+        import tomlkit
+
+        with open(str(project_file_path), encoding="utf-8") as f:
+            raw_config = tomlkit.parse(f.read())
+
+        build_system_config = raw_config.setdefault("build-system", {})
+
+        build_system_config.clear()
+        build_system_config["requires"] = ["hatchling"]
+        build_system_config["build-backend"] = "hatchling.build"
+
+        project_config = raw_config.get("project")
+        if project_config is None:
+            raw_config["project"] = project_config = {}
+
+        project_name = project_config.get("name")
+        if not project_name:
+            project_config["name"] = template_config["project_name_normalized"]
+
+        project_description = project_config.get("description")
+        if not project_description:
+            project_config["description"] = template_config["description"]
+
+        project_config["dynamic"] = ["version"]
+
+        tool_config = raw_config.get("tool")
+        if tool_config is None:
+            raw_config["tool"] = tool_config = {}
+
+        hatch_config = tool_config.get("hatch")
+        if hatch_config is None:
+            tool_config["hatch"] = hatch_config = {}
+
+        version_config = hatch_config.get("version")
+        if version_config is None:
+            hatch_config["version"] = version_config = {}
+
+        version_config.clear()
+        version_config["path"] = f"{template_config['package_name']}/__init__.py"
+
+        with open(str(project_file_path), "w", encoding="utf-8") as f:
+            f.write(tomlkit.dumps(raw_config))
+
+    @property
+    def config(self):
+        """
+        Property that provides access to the project's configuration object.
+
+        This property lazily provides a ProjectConfig instance that manages
+        the project's configuration settings. The configuration is built from the project's
+        location, Hatch-specific metadata configuration, and the plugin manager.
+
+        Returns:
+            ProjectConfig: A configuration object that provides access to project settings
+                including environments, matrices, and other Hatch-specific configuration
+                options defined in the pyproject.toml file under the [tool.hatch] section.
+
+        Notes:
+            - Repeated access returns the same configuration instance
+            - The result reflects the project's effective location, Hatch metadata
+              configuration, and available plugins
+        """
+        raise NotImplementedError
+
+    def get_environment(self, env_name: str | None = None) -> EnvironmentInterface:
+        """
+        Get an environment instance by name.
+
+        This method retrieves and configures an environment based on the provided name or falls back
+        to the application's default environment. It handles both internal and user-defined environments,
+        validates the environment type, and creates the appropriate environment instance with all
+        necessary configuration.
+
+        Parameters
+        ----------
+        env_name : str or None, optional
+            The name of the environment to retrieve. If None, uses the application's current
+            environment (self.app.env). The environment name should correspond to either an
+            internal environment or a user-defined environment in the project configuration.
+
+        Returns
+        -------
+        EnvironmentInterface
+            A configured environment instance of the appropriate type. The instance includes
+            all necessary metadata, configuration, matrix variables, and directory paths
+            required for environment operations.
+
+        Raises
+        ------
+        SystemExit
+            Raised via self.app.abort() if:
+            - The specified environment name is not found in either internal or user-defined
+              environment configurations
+            - The environment has an unknown or unsupported type that cannot be resolved
+              by the plugin manager
+
+        Notes
+        -----
+        - The method automatically determines the appropriate data directories based on whether
+          the project location is a file or if the environment is isolated
+        - Environment configuration is finalized with option type validation before creating
+          the environment instance
+        - The returned environment includes access to the application instance for status
+          reporting and other operations
+        """
+        raise NotImplementedError
+
+    @property
+    def location(self) -> Path:
+        """
+        Get the effective location path for the project.
+
+        This property returns the most appropriate path representing the project's location,
+        following a priority order: explicit path (if set), project root (if found), or
+        the original initialization path as fallback.
+
+        Returns:
+            Path: The effective project location path. This will be:
+                - The explicitly set path (via set_path()) if available
+                - The discovered project root directory (containing pyproject.toml or setup.py) if found
+                - The original path provided during Project initialization as fallback
+
+        Notes:
+            The location is determined lazily - the project root search is only performed
+            when first accessed. The explicit path takes highest priority and bypasses
+            root discovery entirely. This property is commonly used throughout the project
+            for determining the working directory for various operations like environment
+            management, building, and configuration loading.
+        """
+        raise NotImplementedError
+
+    @property
+    def metadata(self):
+        """
+        Property that provides access to the project's metadata information.
+
+        This property returns a ProjectMetadata instance that contains all the metadata
+        information for the current project, including project configuration, dependencies,
+        build settings, and other metadata defined in pyproject.toml or inferred from the
+        project structure.
+
+        Returns:
+            ProjectMetadata: An instance of ProjectMetadata from hatchling.metadata.core
+                that provides access to all project metadata including:
+                - Project name, version, description
+                - Dependencies and optional dependencies
+                - Build system configuration
+                - Dynamic fields configuration
+                - Plugin manager integration
+
+        Notes:
+            - Repeated access returns the same metadata instance
+            - The metadata reflects the project location, available plugins, and raw
+              configuration data
+            - If no pyproject.toml exists, a minimal configuration with just the
+              project name (derived from location) will be used
+            - The ProjectMetadata instance integrates with the project's plugin
+              manager for extended functionality
+        """
+        raise NotImplementedError
+
+    @property
+    def plugin_manager(self):
+        """
+        Plugin manager instance for the project.
+
+        This property provides lazy initialization and access to the project's plugin manager,
+        which handles loading and managing various Hatch plugins including environment plugins,
+        publisher plugins, and other extension points.
+
+        Returns:
+            PluginManager: A PluginManager instance that handles plugin discovery, loading,
+                and management for this project. The instance is cached after first access.
+
+        Notes:
+            - The plugin manager is lazily initialized on first access to avoid unnecessary
+              overhead when not needed
+            - The same PluginManager instance is returned for subsequent accesses
+            - The plugin manager is used throughout the project for accessing environment
+              types, build backends, and other pluggable functionality
+        """
+        raise NotImplementedError
+
+    def prepare_environment(self, environment: EnvironmentInterface):
+        """
+        Prepare and set up a Python environment for the project.
+
+        This method handles the complete lifecycle of environment preparation, including creation,
+        dependency installation, and synchronization. It ensures the environment is ready for use
+        by checking if it exists, creating it if necessary, installing the project and its
+        dependencies, and keeping dependencies in sync.
+
+        Args:
+            environment (EnvironmentInterface): The environment interface object that represents
+                the target environment to be prepared. This object contains all the configuration
+                and methods needed to manage the environment.
+
+        Returns:
+            None: This method performs side effects on the environment but does not return a value.
+
+        Notes:
+            - If the environment doesn't exist, it will be created from scratch
+            - The method handles both development mode and regular installation modes
+            - Pre-install and post-install commands are executed if configured
+            - Dependency synchronization is performed automatically when dependencies are out of sync
+            - Environment metadata is updated to track dependency states
+            - The method uses various status contexts to provide user feedback during operations
+            - `environment.skip_install` skips the pre-install, project-install, and
+              post-install block, but dependency-state checking and synchronization still run
+
+        Raises:
+            Various exceptions may be raised by the underlying environment operations, including
+            but not limited to installation failures, command execution errors, or environment
+            creation issues. These are typically handled by the application's error handling system.
+        """
+        raise NotImplementedError
+
+    @property
+    def raw_config(self):
+        """
+        Get the raw configuration data for the project.
+
+        This property provides access to the raw configuration dictionary loaded from the
+        project's pyproject.toml file or a default configuration if no file exists.
+
+        Returns:
+            dict: The raw configuration dictionary containing project metadata and settings.
+                  If no pyproject.toml file is found or the project root cannot be located,
+                  returns a minimal default configuration with just the project name derived
+                  from the location directory name. If a pyproject.toml exists but lacks a
+                  'project' section, adds a default 'project' section with the location name.
+
+        Notes:
+            - The configuration is loaded lazily and cached after the first access
+            - Uses the TOML format parser to load the pyproject.toml file
+            - Falls back to environment management mode when no proper project file exists
+            - The returned dictionary maintains the original structure from the TOML file
+            - This is the foundation for all other project configuration and metadata processing
+        """
+        raise NotImplementedError
+
+    @property
+    def root(self) -> Path | None:
+        """
+        Get the root directory of the project.
+
+        This property searches for and returns the root directory of a Python project by looking
+        for project configuration files like 'pyproject.toml' or 'setup.py'. The search is
+        performed only once and the result is cached for subsequent calls.
+
+        Returns:
+            Path | None: The path to the project root directory if found, None otherwise.
+                        The root is determined by traversing up the directory tree from the
+                        initial path until a 'pyproject.toml' or 'setup.py' file is found.
+
+        Notes:
+            - The search is performed lazily - only when this property is first accessed
+            - The result is cached after the first search to avoid repeated filesystem operations
+            - Priority is given to 'pyproject.toml' over 'setup.py' when both exist
+            - Returns None if no project configuration files are found in the directory tree
+        """
+        raise NotImplementedError
+
+    def save_config(self, config):
+        """
+        Save the project configuration to the pyproject.toml file.
+
+        This method writes the provided configuration dictionary to the project's
+        pyproject.toml file using TOML format.
+
+        Parameters
+        ----------
+        config : dict
+            The configuration dictionary to save. This should contain the complete
+            project configuration structure that will be written to pyproject.toml.
+
+        Notes
+        -----
+        - The file is written with UTF-8 encoding
+        - This method overwrites the entire contents of the pyproject.toml file
+        - Path, I/O, and serialization errors propagate to the caller
+        """
+        raise NotImplementedError
+
+=== src/hatch/template/default.py
+from hatch.template import File, files_default, find_template_files
+from hatch.template.plugin.interface import TemplateInterface
+from hatch.utils.fs import Path
+from hatch.utils.network import download_file
+
+
+class DefaultTemplate(TemplateInterface):
+    PLUGIN_NAME = "default"
+
+
+
+
+
+
+
+
+    def initialize_config(self, config):
+        # Default values
+        config["readme_file_path"] = "README.md"
+        config["package_metadata_file_path"] = f"src/{config['package_name']}/__about__.py"
+
+        license_data = {}
+
+        # Licenses
+        license_ids = config["licenses"]["default"]
+        if not license_ids:
+            config["license_data"] = license_data
+            config["license_expression"] = ""
+            config["license_files"] = ""
+            config["license_header"] = ""
+            return
+
+        cached_licenses_dir = self.cache_dir / "licenses"
+        cached_licenses_dir.ensure_dir_exists()
+
+        license_ids = sorted(set(license_ids))
+        for license_id in sorted(set(license_ids)):
+            license_file_name = f"{license_id}.txt"
+            cached_license_path = cached_licenses_dir / license_file_name
+            if not cached_license_path.is_file():
+                from packaging.licenses._spdx import VERSION  # noqa: PLC2701
+
+                url = f"https://raw.githubusercontent.com/spdx/license-list-data/v{VERSION}/text/{license_file_name}"
+                for _ in range(5):
+                    try:
+                        download_file(cached_license_path, url)
+                    except Exception:  # noqa: BLE001, S112
+                        continue
+                    else:
+                        break
+
+            license_data[license_id] = cached_license_path.read_text(encoding="utf-8")
+
+        config["license_data"] = license_data
+        config["license_expression"] = " OR ".join(license_data)
+        config["license_header"] = (
+            ""
+            if not config["licenses"]["headers"]
+            else f"""\
+# SPDX-FileCopyrightText: {self.creation_time.year}-present {config["name"]} <{config["email"]}>
+#
+# SPDX-License-Identifier: {config["license_expression"]}
+"""
+        )
+        if len(license_ids) == 1:
+            config["license_files"] = ""
+        else:
+            config["license_files"] = '\nlicense-files = { globs = ["LICENSES/*"] }'
+
+        if config["args"]["cli"]:
+            config["dependencies"].add("click")
+
+        if not self.plugin_config["src-layout"]:
+            config["package_metadata_file_path"] = f"{config['package_metadata_file_path'][4:]}"
+
+    def get_files(self, config):
+        files = list(find_template_files(files_default))
+
+        # Add any licenses
+        license_data = config["license_data"]
+        if license_data:
+            if len(license_data) == 1:
+                license_id, text = next(iter(license_data.items()))
+                license_text = get_license_text(config, license_id, text, self.creation_time)
+                files.append(File(Path("LICENSE.txt"), license_text))
+            else:
+                # https://reuse.software/faq/#multi-licensing
+                for license_id, text in license_data.items():
+                    license_text = get_license_text(config, license_id, text, self.creation_time)
+                    files.append(File(Path("LICENSES", f"{license_id}.txt"), license_text))
+
+        if config["args"]["cli"]:
+            from hatch.template import files_feature_cli
+
+            files.extend(find_template_files(files_feature_cli))
+
+        if self.plugin_config["tests"]:
+            from hatch.template import files_feature_tests
+
+            files.extend(find_template_files(files_feature_tests))
+
+        if self.plugin_config["ci"]:
+            from hatch.template import files_feature_ci
+
+            files.extend(find_template_files(files_feature_ci))
+
+        return files
+
+    def finalize_files(self, config, files):
+        if config["licenses"]["headers"] and config["license_data"]:
+            for template_file in files:
+                if template_file.path.name.endswith(".py"):
+                    template_file.contents = config["license_header"] + template_file.contents
+
+        if self.plugin_config["src-layout"]:
+            for template_file in files:
+                if template_file.path.parts[0] == config["package_name"]:
+                    template_file.path = Path("src", template_file.path)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initialize a DefaultTemplate instance with default plugin configuration settings.
+
+        This constructor initializes a default template while retaining the base template
+        state. It supplies defaults for continuous integration, source layout structure,
+        and test generation only when those settings are absent.
+
+        Parameters:
+            *args: Positional initialization arguments.
+            **kwargs: Keyword initialization arguments.
+
+        Notes:
+            The following default plugin configuration values are set:
+            - "ci": False - Disables continuous integration files by default
+            - "src-layout": True - Enables source layout (src/ directory structure) by default  
+            - "tests": True - Enables test file generation by default
+
+            Existing values for these keys are preserved.
+        """
+        raise NotImplementedError
+
+
+def get_license_text(config, license_id, license_text, creation_time):
+    if license_id == "MIT":
+        license_text = license_text.replace("<year>", f"{creation_time.year}-present", 1)
+        license_text = license_text.replace("<copyright holders>", f"{config['name']} <{config['email']}>", 1)
+    elif license_id == "BSD-3-Clause":
+        license_text = license_text.replace("<year>", f"{creation_time.year}-present", 1)
+        license_text = license_text.replace("<owner>", f"{config['name']} <{config['email']}>", 1)
+
+    return f"{license_text.rstrip()}\n"
+
+=== src/hatch/utils/platform.py
+from __future__ import annotations
+
+import os
+import sys
+from functools import cache
+from importlib import import_module
+from typing import TYPE_CHECKING, Any, cast
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
+    from subprocess import CompletedProcess, Popen
+    from types import ModuleType
+
+    from hatch.utils.fs import Path
+
+
+@cache
+def get_platform_name() -> str:
+    import platform
+
+    return normalize_platform_name(platform.system())
+
+
+def normalize_platform_name(platform_name: str) -> str:
+    platform_name = platform_name.lower()
+    return "macos" if platform_name == "darwin" else platform_name
+
+
+class Platform:
+    def __init__(self, display_func: Callable = print) -> None:
+        self.__display_func = display_func
+
+        # Lazily loaded constants
+        self.__default_shell: str | None = None
+        self.__format_file_uri: Callable[[str], str] | None = None
+        self.__join_command_args: Callable[[list[str]], str] | None = None
+        self.__name: str | None = None
+        self.__display_name: str | None = None
+        self.__home: Path | None = None
+
+        # Whether or not an interactive status is being displayed
+        self.displaying_status = False
+
+        self.__modules = LazilyLoadedModules()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def exit_with_code(code: str | int | None) -> None:
+        sys.exit(code)
+
+    def _run_command_integrated(
+        self, command: str | list[str], *, shell: bool = False, **kwargs: Any
+    ) -> CompletedProcess:
+        with self.capture_process(command, shell=shell, **kwargs) as process:
+            for line in self.stream_process_output(process):
+                self.__display_func(line, end="")
+
+            stdout, stderr = process.communicate()
+
+        return self.modules.subprocess.CompletedProcess(process.args, process.poll(), stdout, stderr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def check_command(self, command: str | list[str], *, shell: bool = False, **kwargs: Any) -> CompletedProcess:
+        """
+        Equivalent to [run_command](utilities.md#hatch.utils.platform.Platform.run_command),
+        but non-zero exit codes will gracefully end program execution.
+        """
+        process = self.run_command(command, shell=shell, **kwargs)
+        if process.returncode:
+            self.exit_with_code(process.returncode)
+
+        return process
+
+    def check_command_output(self, command: str | list[str], *, shell: bool = False, **kwargs: Any) -> str:
+        """
+        Equivalent to the output from the process returned by
+        [capture_process](utilities.md#hatch.utils.platform.Platform.capture_process),
+        but non-zero exit codes will gracefully end program execution.
+        """
+        kwargs.setdefault("stdout", self.modules.subprocess.PIPE)
+        kwargs.setdefault("stderr", self.modules.subprocess.STDOUT)
+        self.populate_default_popen_kwargs(kwargs, shell=shell)
+
+        process = self.modules.subprocess.run(self.format_for_subprocess(command, shell=shell), shell=shell, **kwargs)
+        if process.returncode:
+            # Callers might not want to merge both streams so try stderr first
+            self.__display_func((process.stderr or process.stdout).decode("utf-8"))
+            self.exit_with_code(process.returncode)
+
+        return process.stdout.decode("utf-8")
+
+    def capture_process(self, command: str | list[str], *, shell: bool = False, **kwargs: Any) -> Popen:
+        """
+        Equivalent to the standard library's
+        [subprocess.Popen](https://docs.python.org/3/library/subprocess.html#subprocess.Popen),
+        with all output captured by `stdout` and the command first being
+        [properly formatted](utilities.md#hatch.utils.platform.Platform.format_for_subprocess).
+        """
+        self.populate_default_popen_kwargs(kwargs, shell=shell)
+        return self.modules.subprocess.Popen(
+            self.format_for_subprocess(command, shell=shell),
+            shell=shell,
+            stdout=self.modules.subprocess.PIPE,
+            stderr=self.modules.subprocess.STDOUT,
+            **kwargs,
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def stream_process_output(process: Popen) -> Iterable[str]:
+        # To avoid blocking never use a pipe's file descriptor iterator. See https://bugs.python.org/issue3907
+        for line in iter(process.stdout.readline, b""):  # type: ignore[union-attr]
+            yield line.decode("utf-8")
+
+    @property
+    def default_shell(self) -> str:
+        """
+        Returns the default shell of the system.
+
+        On Windows systems first try the `SHELL` environment variable, if present, followed by
+        the `COMSPEC` environment variable, defaulting to `cmd`. On all other platforms only
+        the `SHELL` environment variable will be used, defaulting to `bash`.
+        """
+        if self.__default_shell is None:
+            if self.windows:
+                self.__default_shell = cast(str, os.environ.get("SHELL", os.environ.get("COMSPEC", "cmd")))
+            else:
+                self.__default_shell = cast(str, os.environ.get("SHELL", "bash"))
+        return self.__default_shell
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def format_file_uri(self) -> Callable[[str], str]:
+        if self.__format_file_uri is None:
+            if self.windows:
+                self.__format_file_uri = lambda p: f"file:///{p}".replace("\\", "/")
+            else:
+                self.__format_file_uri = lambda p: f"file://{p}"
+
+        return self.__format_file_uri
+
+    @property
+    def windows(self) -> bool:
+        """
+        Indicates whether Hatch is running on Windows.
+        """
+        return self.name == "windows"
+
+
+
+
+
+
+
+
+    @property
+    def linux(self) -> bool:
+        """
+        Indicates whether Hatch is running on neither Windows nor macOS.
+        """
+        return not (self.windows or self.macos)
+
+    def exit_with_command(self, command: list[str]) -> None:
+        """
+        Run the given command and exit with its exit code. On non-Windows systems, this uses the standard library's
+        [os.execvp](https://docs.python.org/3/library/os.html#os.execvp).
+        """
+        if self.windows:
+            process = self.run_command(command)
+            self.exit_with_code(process.returncode)
+        else:
+            os.execvp(command[0], command)  # noqa: S606
+
+    @property
+    def name(self) -> str:
+        """
+        One of the following:
+
+        - `linux`
+        - `windows`
+        - `macos`
+        """
+        if self.__name is None:
+            self.__name = get_platform_name()
+
+        return self.__name
+
+    @property
+    def display_name(self) -> str:
+        """
+        One of the following:
+
+        - `Linux`
+        - `Windows`
+        - `macOS`
+        """
+        if self.__display_name is None:
+            self.__display_name = "macOS" if self.macos else self.name.capitalize()
+
+        return self.__display_name
+
+    @property
+    def join_command_args(self) -> Callable[[list[str]], str]:
+        """
+        A property that returns a platform-specific function for joining command arguments into a single command string.
+
+        This property provides a cross-platform way to properly join a list of command arguments into a single string that can be safely executed by the shell. The implementation varies by operating system to handle platform-specific quoting and escaping requirements.
+
+        Returns:
+            Callable[[list[str]], str]: A function that takes a list of command arguments and returns a properly formatted command string using Windows command-line quoting on Windows and POSIX shell quoting on Unix-like systems.
+
+        Notes:
+            - The function is lazily loaded and cached on first access for performance
+            - Windows and Unix systems have different quoting and escaping rules for command line arguments
+            - The returned function ensures that arguments containing spaces, quotes, or special characters are properly escaped for the target platform's shell
+            - This is particularly important when constructing commands programmatically that will be executed via shell=True
+        """
+        raise NotImplementedError
+
+    @property
+    def modules(self) -> LazilyLoadedModules:
+        """
+        Accessor for lazily loading modules that either take multiple milliseconds to import
+        (like `shutil` and `subprocess`) or are not used on all platforms (like `shlex`).
+
+        This property provides access to a LazilyLoadedModules instance that dynamically imports
+        modules only when they are first accessed. This lazy loading approach improves startup
+        performance by deferring expensive imports until they are actually needed.
+
+        Returns:
+            LazilyLoadedModules: An instance that provides lazy access to commonly used modules
+                such as subprocess, shutil, and shlex. Modules are imported on first use and
+                reused on later access.
+
+        Notes:
+            - Modules are cached after first import to avoid repeated import overhead
+            - This is particularly beneficial for modules like subprocess and shutil which have
+              significant import costs
+            - Platform-specific modules like shlex are only imported when needed, reducing
+              memory usage on platforms where they aren't required
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class LazilyLoadedModules:
+    pass
+
+    def __getattr__(self, name: str) -> ModuleType:
+        """
+        Dynamically import and cache a module when accessed as an attribute.
+
+        This method implements lazy loading of modules by importing them only when they are
+        first accessed. Later access to the same name returns the same imported module.
+
+        Parameters
+        ----------
+        name : str
+            The name of the module to import. This should be a valid module name that
+            can be imported using Python's import system.
+
+        Returns
+        -------
+        ModuleType
+            The imported module object.
+
+        Raises
+        ------
+        ModuleNotFoundError
+            If the specified module cannot be found or imported.
+        ImportError
+            If there are issues importing the module (e.g., circular imports,
+            syntax errors in the module).
+
+        Notes
+        -----
+        This method is called automatically when accessing a module name that has not
+        already been loaded through this object.
+
+        This lazy loading approach is particularly useful for modules that are expensive
+        to import (taking multiple milliseconds) or are only used on specific platforms,
+        helping to improve application startup time.
+        """
+        raise NotImplementedError

@@ -1,0 +1,35 @@
+{
+ "task": "fastapi__fastapi.02e108d1.test_compat.71e8518f.lv1",
+ "image": "libercoders/featurebench-specs_fastapi-instance_835a08db@sha256:f98cb81c4d36a7f5edcecfaf53028db48c1df2ec53f8e53cd9accc9ac322dd5e",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 10 passed in 0.45s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 48 passed in 0.40s =============================="
+ },
+ "mutant_pool": 44,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 48 passed in 0.50s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/fastapi/_compat/__init__.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/fastapi/dependencies/utils.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

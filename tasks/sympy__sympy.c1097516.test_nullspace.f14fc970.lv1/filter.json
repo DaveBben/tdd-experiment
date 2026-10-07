@@ -1,0 +1,43 @@
+{
+ "task": "sympy__sympy.c1097516.test_nullspace.f14fc970.lv1",
+ "image": "libercoders/featurebench-specs_sympy-instance_3d889fef@sha256:207ff124011e74d2b6abbdce2f8d3244546949cd0abfb7949d7dd414368f8935",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 70 passed in 0.11s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 16 passed in 3.12s =============================="
+ },
+ "mutant_pool": 430,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 16 passed in 3.14s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/dense.py": {
+   "lines": 7,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/domainmatrix.py": {
+   "lines": 2,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/rref.py": {
+   "lines": 4,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/sdm.py": {
+   "lines": 6,
+   "tracked": false
+  }
+ },
+ "keep": false
+}

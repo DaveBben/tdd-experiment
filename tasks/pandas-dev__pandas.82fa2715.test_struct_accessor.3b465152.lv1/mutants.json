@@ -1,0 +1,766 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_struct_accessor.3b465152.lv1",
+ "pool": 76,
+ "mutants": [
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 45,
+   "op": "statement",
+   "start": 894,
+   "end": 912,
+   "old": "dtype = data.dtype",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 56,
+   "op": "return",
+   "start": 1402,
+   "end": 1435,
+   "old": "return self._data.array._pa_array",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 296,
+   "op": "statement",
+   "start": 8148,
+   "end": 8188,
+   "old": "pa_type = self._data.dtype.pyarrow_dtype",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 297,
+   "op": "statement",
+   "start": 8197,
+   "end": 8252,
+   "old": "types = [ArrowDtype(struct.type) for struct in pa_type]",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 298,
+   "op": "statement",
+   "start": 8261,
+   "end": 8304,
+   "old": "names = [struct.name for struct in pa_type]",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 299,
+   "op": "return",
+   "start": 8313,
+   "end": 8353,
+   "old": "return Series(types, index=Index(names))",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 452,
+   "op": "statement",
+   "start": 13322,
+   "end": 13357,
+   "old": "pa_arr = self._data.array._pa_array",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 453,
+   "op": "statement",
+   "start": 13366,
+   "end": 13404,
+   "old": "name = get_name(name_or_index, pa_arr)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 454,
+   "op": "statement",
+   "start": 13413,
+   "end": 13463,
+   "old": "field_arr = pc.struct_field(pa_arr, name_or_index)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 456,
+   "op": "return",
+   "start": 13473,
+   "end": 13625,
+   "old": "return Series(\n            field_arr,\n            dtype=ArrowDtype(field_arr.type),\n            index=self._data.index,\n            name=name,\n        )",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 498,
+   "op": "statement",
+   "start": 14606,
+   "end": 14635,
+   "old": "pa_type = self._pa_array.type",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 499,
+   "op": "return",
+   "start": 14644,
+   "end": 14747,
+   "old": "return concat(\n            [self.field(i) for i in range(pa_type.num_fields)], axis=\"columns\"\n        )",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 924,
+   "end": 976,
+   "old": "not HAS_PYARROW or not isinstance(dtype, ArrowDtype)",
+   "new": "(not HAS_PYARROW and (not isinstance(dtype, ArrowDtype)))",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1071,
+   "end": 1133,
+   "old": "raise AttributeError(self._validation_msg.format(dtype=dtype))",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 50,
+   "op": "boolean",
+   "start": 1146,
+   "end": 1199,
+   "old": "not self._is_valid_pyarrow_dtype(dtype.pyarrow_dtype)",
+   "new": "(self._is_valid_pyarrow_dtype(dtype.pyarrow_dtype))",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1291,
+   "end": 1353,
+   "old": "raise AttributeError(self._validation_msg.format(dtype=dtype))",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 450,
+   "op": "return",
+   "start": 13301,
+   "end": 13312,
+   "old": "return name",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 924,
+   "end": 939,
+   "old": "not HAS_PYARROW",
+   "new": "(HAS_PYARROW)",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 46,
+   "op": "boolean",
+   "start": 943,
+   "end": 976,
+   "old": "not isinstance(dtype, ArrowDtype)",
+   "new": "(isinstance(dtype, ArrowDtype))",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 426,
+   "op": "statement",
+   "start": 11965,
+   "end": 12013,
+   "old": "name = data.type.field(level_name_or_index).name",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 428,
+   "op": "statement",
+   "start": 12094,
+   "end": 12120,
+   "old": "name = level_name_or_index",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 500,
+   "op": "constant",
+   "start": 14728,
+   "end": 14737,
+   "old": "\"columns\"",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 430,
+   "op": "statement",
+   "start": 12202,
+   "end": 12233,
+   "old": "name = str(level_name_or_index)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 435,
+   "op": "statement",
+   "start": 12479,
+   "end": 12536,
+   "old": "level_name_or_index = list(reversed(level_name_or_index))",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 436,
+   "op": "statement",
+   "start": 12553,
+   "end": 12568,
+   "old": "selected = data",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 446,
+   "op": "statement",
+   "start": 13121,
+   "end": 13288,
+   "old": "raise ValueError(\n                    \"name_or_index must be an int, str, bytes, \"\n                    \"pyarrow.compute.Expression, or list of those\"\n                )",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 440,
+   "op": "statement",
+   "start": 12781,
+   "end": 12834,
+   "old": "level_name_or_index = cast(list, level_name_or_index)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 441,
+   "op": "statement",
+   "start": 12855,
+   "end": 12896,
+   "old": "name_or_index = level_name_or_index.pop()",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 442,
+   "op": "statement",
+   "start": 12917,
+   "end": 12957,
+   "old": "name = get_name(name_or_index, selected)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 443,
+   "op": "statement",
+   "start": 12978,
+   "end": 13045,
+   "old": "selected = selected.type.field(selected.type.get_field_index(name))",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 444,
+   "op": "statement",
+   "start": 13066,
+   "end": 13086,
+   "old": "name = selected.name",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/arrays/arrow/accessors.py",
+   "line": 447,
+   "op": "constant",
+   "start": 13159,
+   "end": 13270,
+   "old": "\"name_or_index must be an int, str, bytes, \"\n                    \"pyarrow.compute.Expression, or list of those\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 3220,
+   "op": "return",
+   "start": 117001,
+   "end": 117080,
+   "old": "return [ArrowExtensionArray(arr.slice(i * ncols, ncols)) for i in range(nrows)]",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 229,
+   "op": "return",
+   "start": 6537,
+   "end": 6563,
+   "old": "return dtype.pyarrow_dtype",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 231,
+   "op": "return",
+   "start": 6613,
+   "end": 6625,
+   "old": "return dtype",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 233,
+   "op": "return",
+   "start": 6679,
+   "end": 6720,
+   "old": "return pa.timestamp(dtype.unit, dtype.tz)",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 3220,
+   "op": "arithmetic",
+   "start": 117039,
+   "end": 117048,
+   "old": "i * ncols",
+   "new": "(i / ncols)",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/arrays/arrow/array.py",
+   "line": 238,
+   "op": "return",
+   "start": 6846,
+   "end": 6879,
+   "old": "return pa.from_numpy_dtype(dtype)",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 594,
+   "op": "statement",
+   "start": 17621,
+   "end": 17643,
+   "old": "_registry = Registry()",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 481,
+   "op": "return",
+   "start": 14403,
+   "end": 14423,
+   "old": "return libmissing.NA",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 664,
+   "op": "return",
+   "start": 19434,
+   "end": 19465,
+   "old": "return default_index(len(objs))",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 665,
+   "op": "comparison",
+   "start": 19475,
+   "end": 19487,
+   "old": "bm_axis == 0",
+   "new": "(bm_axis != 0)",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 666,
+   "op": "statement",
+   "start": 19497,
+   "end": 19530,
+   "old": "indexes = [x.index for x in objs]",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 676,
+   "op": "return",
+   "start": 20028,
+   "end": 20046,
+   "old": "return concat_axis",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 665,
+   "op": "constant",
+   "start": 19486,
+   "end": 19487,
+   "old": "0",
+   "new": "(1)",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 667,
+   "op": "comparison",
+   "start": 19542,
+   "end": 19554,
+   "old": "keys is None",
+   "new": "(keys is not None)",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 670,
+   "op": "statement",
+   "start": 19683,
+   "end": 19721,
+   "old": "concat_axis = _concat_indexes(indexes)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 672,
+   "op": "statement",
+   "start": 19748,
+   "end": 19815,
+   "old": "concat_axis = _make_concat_multiindex(indexes, keys, levels, names)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 673,
+   "op": "boolean",
+   "start": 19827,
+   "end": 19873,
+   "old": "verify_integrity and not concat_axis.is_unique",
+   "new": "(verify_integrity or not concat_axis.is_unique)",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 674,
+   "op": "statement",
+   "start": 19887,
+   "end": 19943,
+   "old": "overlap = concat_axis[concat_axis.duplicated()].unique()",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 675,
+   "op": "statement",
+   "start": 19956,
+   "end": 20019,
+   "old": "raise ValueError(f\"Indexes have overlapping values: {overlap}\")",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 677,
+   "op": "comparison",
+   "start": 20056,
+   "end": 20068,
+   "old": "keys is None",
+   "new": "(keys is not None)",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 678,
+   "op": "statement",
+   "start": 20078,
+   "end": 20127,
+   "old": "result_names: list[Hashable] = [None] * len(objs)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 679,
+   "op": "statement",
+   "start": 20136,
+   "end": 20143,
+   "old": "num = 0",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 680,
+   "op": "statement",
+   "start": 20152,
+   "end": 20169,
+   "old": "has_names = False",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 698,
+   "op": "return",
+   "start": 20734,
+   "end": 20776,
+   "old": "return ensure_index(keys).set_names(names)",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 668,
+   "op": "comparison",
+   "start": 19571,
+   "end": 19589,
+   "old": "levels is not None",
+   "new": "(levels is None)",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 669,
+   "op": "statement",
+   "start": 19607,
+   "end": 19670,
+   "old": "raise ValueError(\"levels supported only when keys is not None\")",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 673,
+   "op": "boolean",
+   "start": 19848,
+   "end": 19873,
+   "old": "not concat_axis.is_unique",
+   "new": "(concat_axis.is_unique)",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 678,
+   "op": "arithmetic",
+   "start": 20109,
+   "end": 20127,
+   "old": "[None] * len(objs)",
+   "new": "([None] / len(objs))",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 679,
+   "op": "constant",
+   "start": 20142,
+   "end": 20143,
+   "old": "0",
+   "new": "(1)",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 680,
+   "op": "constant",
+   "start": 20164,
+   "end": 20169,
+   "old": "False",
+   "new": "(True)",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 694,
+   "op": "return",
+   "start": 20631,
+   "end": 20657,
+   "old": "return Index(result_names)",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 696,
+   "op": "return",
+   "start": 20684,
+   "end": 20715,
+   "old": "return default_index(len(objs))",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 682,
+   "op": "comparison",
+   "start": 20222,
+   "end": 20233,
+   "old": "x.ndim != 1",
+   "new": "(x.ndim == 1)",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 683,
+   "op": "statement",
+   "start": 20251,
+   "end": 20406,
+   "old": "raise TypeError(\n                    f\"Cannot concatenate type 'Series' with \"\n                    f\"object of type '{type(x).__name__}'\"\n                )",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 687,
+   "op": "comparison",
+   "start": 20422,
+   "end": 20440,
+   "old": "x.name is not None",
+   "new": "(x.name is None)",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 688,
+   "op": "statement",
+   "start": 20458,
+   "end": 20482,
+   "old": "result_names[i] = x.name",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 689,
+   "op": "statement",
+   "start": 20499,
+   "end": 20515,
+   "old": "has_names = True",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 691,
+   "op": "statement",
+   "start": 20550,
+   "end": 20571,
+   "old": "result_names[i] = num",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 692,
+   "op": "arithmetic",
+   "start": 20588,
+   "end": 20596,
+   "old": "num += 1",
+   "new": "num -= 1",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 692,
+   "op": "statement",
+   "start": 20588,
+   "end": 20596,
+   "old": "num += 1",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 669,
+   "op": "constant",
+   "start": 19624,
+   "end": 19669,
+   "old": "\"levels supported only when keys is not None\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 682,
+   "op": "constant",
+   "start": 20232,
+   "end": 20233,
+   "old": "1",
+   "new": "(2)",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 689,
+   "op": "constant",
+   "start": 20511,
+   "end": 20515,
+   "old": "True",
+   "new": "(False)",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 692,
+   "op": "constant",
+   "start": 20595,
+   "end": 20596,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "task": "pytest-dev__pytest.68016f0e.test_local.40fb2f1f.lv1",
+ "image": "libercoders/featurebench-specs_pytest-instance_2b74d6c4@sha256:90aad241a5422d096bff4b5a796300bcb737fbe347531f5c0dc71ea93421f291",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============ 166 passed, 13 skipped, 2 xfailed, 1 xpassed in 1.54s ============="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [
+   "test_unicode_plus_minus.py::test_foo"
+  ],
+  "summary": "======================== 196 passed, 1 skipped in 1.31s ========================"
+ },
+ "mutant_pool": 465,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [
+   "test_unicode_plus_minus.py::test_foo"
+  ],
+  "summary": "======================== 196 passed, 1 skipped in 1.17s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

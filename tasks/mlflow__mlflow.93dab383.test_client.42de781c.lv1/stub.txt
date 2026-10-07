@@ -1,0 +1,714 @@
+=== mlflow/telemetry/client.py
+import atexit
+import random
+import sys
+import threading
+import time
+import uuid
+import warnings
+from dataclasses import asdict
+from queue import Empty, Full, Queue
+
+import requests
+
+from mlflow.environment_variables import _MLFLOW_TELEMETRY_SESSION_ID
+from mlflow.telemetry.constant import (
+    BATCH_SIZE,
+    BATCH_TIME_INTERVAL_SECONDS,
+    MAX_QUEUE_SIZE,
+    MAX_WORKERS,
+    RETRYABLE_ERRORS,
+    UNRECOVERABLE_ERRORS,
+)
+from mlflow.telemetry.schemas import Record, TelemetryConfig, TelemetryInfo, get_source_sdk
+from mlflow.telemetry.utils import _log_error, is_telemetry_disabled
+from mlflow.utils.logging_utils import should_suppress_logs_in_thread
+
+
+class TelemetryClient:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _process_records(self, records: list[Record], request_timeout: float = 1):
+        """Process a batch of telemetry records."""
+        try:
+            self._update_backend_store()
+            if self.info["tracking_uri_scheme"] in ["databricks", "databricks-uc", "uc"]:
+                self._is_stopped = True
+                # set config to None to allow consumer thread drop records in the queue
+                self.config = None
+                self.is_active = False
+                _set_telemetry_client(None)
+                return
+
+            records = [
+                {
+                    "data": self.info | record.to_dict(),
+                    # use random uuid as partition key to make sure records are
+                    # distributed evenly across shards
+                    "partition-key": uuid.uuid4().hex,
+                }
+                for record in records
+            ]
+            # changing this value can affect total time for processing records
+            # the total time = request_timeout * max_attempts + sleep_time * (max_attempts - 1)
+            max_attempts = 3
+            sleep_time = 1
+            for i in range(max_attempts):
+                should_retry = False
+                response = None
+                try:
+                    response = requests.post(
+                        self.config.ingestion_url,
+                        json={"records": records},
+                        headers={"Content-Type": "application/json"},
+                        timeout=request_timeout,
+                    )
+                    should_retry = response.status_code in RETRYABLE_ERRORS
+                except (ConnectionError, TimeoutError):
+                    should_retry = True
+                # NB: DO NOT retry when terminating
+                # otherwise this increases shutdown overhead significantly
+                if self._is_stopped:
+                    return
+                if i < max_attempts - 1 and should_retry:
+                    # we do not use exponential backoff to avoid increasing
+                    # the processing time significantly
+                    time.sleep(sleep_time)
+                elif response and response.status_code in UNRECOVERABLE_ERRORS:
+                    self._is_stopped = True
+                    self.is_active = False
+                    # this is executed in the consumer thread, so
+                    # we cannot join the thread here, but this should
+                    # be enough to stop the telemetry collection
+                    return
+                else:
+                    return
+        except Exception as e:
+            _log_error(f"Failed to send telemetry records: {e}")
+
+    def _consumer(self) -> None:
+        """Individual consumer that processes records from the queue."""
+        # suppress logs in the consumer thread to avoid emitting any irrelevant
+        # logs during telemetry collection.
+        should_suppress_logs_in_thread.set(True)
+
+        while not self._is_config_fetched:
+            time.sleep(0.1)
+
+        while self.config and not self._is_stopped:
+            try:
+                records = self._queue.get(timeout=1)
+            except Empty:
+                # check if batch time interval has passed and send data if needed
+                if time.time() - self._last_batch_time >= self._batch_time_interval:
+                    self._last_batch_time = time.time()
+                    with self._batch_lock:
+                        if self._pending_records:
+                            self._send_batch()
+                continue
+
+            self._process_records(records)
+            self._queue.task_done()
+
+        # clear the queue if config is None
+        while self.config is None and not self._queue.empty():
+            try:
+                self._queue.get_nowait()
+                self._queue.task_done()
+            except Empty:
+                break
+        # drop remaining records when terminating to avoid
+        # causing any overhead
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def is_active(self) -> bool:
+        return self._is_active
+
+    @is_active.setter
+    def is_active(self, value: bool) -> None:
+        self._is_active = value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _update_backend_store(self):
+        """
+        Backend store might be changed after mlflow is imported, we should use this
+        method to update the backend store info at sending telemetry step.
+        """
+        try:
+            # import here to avoid circular import
+            from mlflow.tracking._tracking_service.utils import _get_tracking_scheme
+
+            self.info["tracking_uri_scheme"] = _get_tracking_scheme()
+        except Exception as e:
+            _log_error(f"Failed to update backend store: {e}")
+
+    def __enter__(self):
+        """
+        Enter the runtime context for the TelemetryClient.
+
+        This method implements the context manager protocol, allowing the TelemetryClient
+        to be used with Python's `with` statement. When entering the context, it simply
+        returns the TelemetryClient instance itself, enabling access to all client methods
+        within the context block.
+
+        Returns:
+            TelemetryClient: The current TelemetryClient instance.
+
+        Notes:
+            - This method is part of the context manager protocol alongside __exit__
+            - The actual cleanup and resource management is handled by the __exit__ method
+            - Using the client as a context manager ensures proper cleanup of threads and
+              resources when exiting the context block
+            - Example usage: `with TelemetryClient() as client: client.add_record(record)`
+        """
+        raise NotImplementedError
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Context manager exit method that ensures proper cleanup of the TelemetryClient.
+
+        This method is automatically called when exiting a 'with' statement context and
+        performs cleanup by issuing a terminating flush and then joining live consumer
+        threads for up to one second each.
+
+        Parameters:
+            exc_type: The exception type if an exception was raised in the context, None otherwise
+            exc_value: The exception instance if an exception was raised in the context, None otherwise  
+            traceback: The traceback object if an exception was raised in the context, None otherwise
+
+        Returns:
+            None: This method does not return any value and does not suppress exceptions
+
+        Notes:
+            - A terminating flush stops collection immediately; pending/queued records may be dropped
+            - Live consumer threads are joined with a timeout of 1 second each
+            - Any exceptions that occurred in the context will not be suppressed
+            - This method is part of the context manager protocol and should not be called directly
+        """
+        raise NotImplementedError
+
+    def __init__(self):
+        """
+        Initialize a TelemetryClient instance for collecting and sending MLflow telemetry data.
+
+        This constructor initializes an inactive client for bounded, batched, asynchronous telemetry
+        transmission. Record producers can later activate concurrent background delivery without being
+        blocked by network requests.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Important Notes:
+            - The client is initialized in an inactive state and must be activated via activate() method
+              before it can process telemetry records
+            - A unique session ID is generated using either the environment variable 
+              _MLFLOW_TELEMETRY_SESSION_ID or a new UUID if not set
+            - Queue capacity, batch size, send interval, and worker count use the repository's
+              telemetry defaults and remain available for runtime configuration
+            - The client automatically registers an atexit callback when activated to ensure proper
+              cleanup during program termination
+            - Configuration fetching is deferred until the client is activated to avoid unnecessary
+              network calls when no telemetry records are generated
+            - Background delivery must not prevent normal program exit
+        """
+        raise NotImplementedError
+
+    def _at_exit_callback(self) -> None:
+        """
+        Callback function executed when the program is exiting.
+
+        This method is automatically registered with Python's atexit module when the TelemetryClient
+        is activated. It performs the client's low-overhead terminating shutdown before the
+        program exits.
+
+        The callback performs a fast terminating shutdown: it suppresses shutdown noise, marks
+        collection stopped without waiting for pending sends, and handles shutdown failures.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            - This method is called automatically by Python's atexit mechanism
+            - It suppresses all logs and warnings during execution to ensure clean shutdown
+            - Any exceptions during flushing are caught and logged as errors
+            - The method works in Jupyter notebook environments as well as regular Python scripts
+            - Should not be called directly by user code
+        """
+        raise NotImplementedError
+
+    def _get_config(self):
+        """
+        Fetches telemetry configuration from the remote server for the current MLflow version.
+
+        This method retrieves configuration settings that control telemetry behavior, including
+        the ingestion URL, disabled events, SDK restrictions, OS restrictions, and rollout
+        percentage. The configuration is fetched from a remote endpoint and validated against
+        the current MLflow version and environment.
+
+        The method performs several validation checks:
+        - Verifies the MLflow version matches the configuration
+        - Checks if telemetry is disabled in the configuration
+        - Ensures an ingestion URL is provided
+        - Validates the current SDK is not in the disabled SDKs list
+        - Confirms the current OS platform is not restricted
+        - Applies rollout percentage filtering using random sampling
+
+        If all validations pass, the method sets self.config with a TelemetryConfig object
+        containing the ingestion URL and set of disabled events. If any validation fails
+        or an error occurs during the request, self.config remains None.
+
+        Notes:
+            - Uses a 1-second timeout for the HTTP request
+            - Silently returns on validation failures or HTTP errors
+            - Logs errors only for unexpected exceptions during execution
+            - The rollout percentage determines the probability of enabling telemetry
+              (e.g., 50% means telemetry is enabled for roughly half of the instances)
+            - The version-dependent configuration endpoint may be absent; in that case fetching is
+              skipped and `config` remains None.
+        """
+        raise NotImplementedError
+
+    def activate(self) -> None:
+        """
+        Activate the telemetry client to begin processing telemetry records asynchronously.
+
+        This method starts concurrent background delivery, begins remote configuration fetching,
+        and registers program-termination cleanup.
+
+        The activation is thread-safe and idempotent - calling this method multiple times will not create duplicate threads or resources.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        Notes:
+            - This method is automatically called when the first telemetry record is added via add_record()
+            - Background delivery does not prevent program termination
+            - Configuration fetching happens asynchronously in a separate thread
+            - If telemetry is disabled or configuration cannot be fetched, the client will be automatically stopped
+            - An atexit callback is registered to ensure proper cleanup during program termination
+
+        Exceptions:
+            Activation itself does not wrap thread setup, config-thread creation, or atexit
+            registration in a catch-all; failures from those operations may propagate.
+        """
+        raise NotImplementedError
+
+    def add_record(self, record: Record):
+        """
+        Add a record to be batched and sent to the telemetry server.
+
+        This method adds a telemetry record to the internal batch for processing. If the client
+        is not currently active, it will be automatically activated. Records are batched together
+        and sent when either the batch size limit is reached or the time interval expires.
+
+        Args:
+            record (Record): A telemetry record object containing the data to be sent to the
+                telemetry server. The record will be converted to a dictionary format and
+                combined with session information before transmission.
+
+        Returns:
+            None: This method does not return any value.
+
+        Notes:
+            - If the client is stopped (due to configuration issues or unrecoverable errors),
+              the record will be silently discarded.
+            - Records are batched for efficiency. A batch is sent immediately when it reaches
+              the configured batch size. Otherwise, records are sent at regular
+              time intervals by the consumer thread.
+            - This method is thread-safe and can be called concurrently from multiple threads.
+            - If the internal queue is full, an error is logged and the pending batch remains
+              buffered for a later send attempt.
+        """
+        raise NotImplementedError
+
+    def flush(self, terminate = False) -> None:
+        """
+        Flush the async telemetry queue and optionally terminate the telemetry client.
+
+        It can operate in two distinct modes: a non-terminating flush that briefly waits for
+        configuration, sends buffered records when delivery is enabled, and waits for accepted
+        work to finish; or a terminating flush that marks the client stopped and returns immediately.
+
+        Args:
+            terminate (bool, optional): If True, stop telemetry immediately without waiting for
+                pending records. If False, flush pending records while keeping the client active.
+                Defaults to False.
+
+        Returns:
+            None
+
+        Notes:
+            - If the client is not active, this method returns immediately without performing 
+              any operations.
+            - When terminate=True, the method marks the client stopped/inactive and returns;
+              consumers subsequently drop remaining records rather than sending them.
+            - When terminate=False, the method waits for configuration for at most one second,
+              processes buffered records when delivery is enabled, then waits for accepted work
+              to finish while leaving the client active.
+            - Errors while waiting for accepted work in non-terminating mode are caught and logged.
+            - For terminating flushes, the method exits immediately after signaling shutdown 
+              to minimize overhead during program termination.
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+_MLFLOW_TELEMETRY_CLIENT = None
+_client_lock = threading.Lock()
+
+
+def set_telemetry_client():
+    if is_telemetry_disabled():
+        # set to None again so this function can be used to
+        # re-initialize the telemetry client
+        _set_telemetry_client(None)
+    else:
+        try:
+            _set_telemetry_client(TelemetryClient())
+        except Exception as e:
+            _log_error(f"Failed to set telemetry client: {e}")
+            _set_telemetry_client(None)
+
+
+def _set_telemetry_client(value: TelemetryClient | None):
+    global _MLFLOW_TELEMETRY_CLIENT
+    with _client_lock:
+        _MLFLOW_TELEMETRY_CLIENT = value
+        if value:
+            _MLFLOW_TELEMETRY_SESSION_ID.set(value.info["session_id"])
+        else:
+            _MLFLOW_TELEMETRY_SESSION_ID.unset()
+
+
+def get_telemetry_client() -> TelemetryClient | None:
+    with _client_lock:
+        return _MLFLOW_TELEMETRY_CLIENT
+
+=== mlflow/telemetry/track.py
+import functools
+import inspect
+import logging
+import time
+from typing import Any, Callable, ParamSpec, TypeVar
+
+from mlflow.environment_variables import MLFLOW_EXPERIMENT_ID
+from mlflow.telemetry.client import get_telemetry_client
+from mlflow.telemetry.events import Event
+from mlflow.telemetry.schemas import Record, Status
+from mlflow.telemetry.utils import _log_error, is_telemetry_disabled
+
+P = ParamSpec("P")
+R = TypeVar("R")
+
+_logger = logging.getLogger(__name__)
+
+
+def record_usage_event(event: type[Event]) -> Callable[[Callable[P, R]], Callable[P, R]]:
+    def decorator(func: Callable[P, R]) -> Callable[P, R]:
+        @functools.wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            if is_telemetry_disabled() or _is_telemetry_disabled_for_event(event):
+                return func(*args, **kwargs)
+
+            success = True
+            result = None
+            start_time = time.time()
+            try:
+                result = func(*args, **kwargs)
+                return result  # noqa: RET504
+            except Exception:
+                success = False
+                raise
+            finally:
+                try:
+                    duration_ms = int((time.time() - start_time) * 1000)
+                    _add_telemetry_record(func, args, kwargs, success, duration_ms, event, result)
+                except Exception as e:
+                    _log_error(f"Failed to record telemetry event {event.name}: {e}")
+
+        return wrapper
+
+    return decorator
+
+
+def _add_telemetry_record(
+    func: Callable[..., Any],
+    args: tuple[Any, ...],
+    kwargs: dict[str, Any],
+    success: bool,
+    duration_ms: int,
+    event: type[Event],
+    result: Any,
+) -> None:
+    try:
+        if client := get_telemetry_client():
+            signature = inspect.signature(func)
+            bound_args = signature.bind(*args, **kwargs)
+            bound_args.apply_defaults()
+
+            arguments = dict(bound_args.arguments)
+            arguments.pop("self", None)
+
+            params = list(arguments.keys())
+            if params and params[0] == "cls" and isinstance(arguments["cls"], type):
+                del arguments["cls"]
+
+            record_params = event.parse(arguments) or {}
+            if hasattr(event, "parse_result"):
+                record_params.update(event.parse_result(result))
+            if experiment_id := MLFLOW_EXPERIMENT_ID.get():
+                record_params["mlflow_experiment_id"] = experiment_id
+            record = Record(
+                event_name=event.name,
+                timestamp_ns=time.time_ns(),
+                params=record_params or None,
+                status=Status.SUCCESS if success else Status.FAILURE,
+                duration_ms=duration_ms,
+            )
+            client.add_record(record)
+    except Exception as e:
+        _log_error(f"Failed to generate telemetry record for event {event.name}: {e}")
+
+
+def _record_event(event: type[Event], params: dict[str, Any] | None = None) -> None:
+    try:
+        if client := get_telemetry_client():
+            if experiment_id := MLFLOW_EXPERIMENT_ID.get():
+                params["mlflow_experiment_id"] = experiment_id
+            client.add_record(
+                Record(
+                    event_name=event.name,
+                    params=params,
+                    timestamp_ns=time.time_ns(),
+                    status=Status.SUCCESS,
+                    duration_ms=0,
+                )
+            )
+    except Exception as e:
+        _log_error(f"Failed to record telemetry event {event.name}: {e}")
+
+
+def _is_telemetry_disabled_for_event(event: type[Event]) -> bool:
+    """
+    Check if telemetry is disabled for a specific event type.
+
+    This function determines whether telemetry collection should be skipped for a given event
+    by checking the telemetry client configuration. It handles cases where the client is
+    unavailable, configuration is not yet fetched, or specific events are disabled.
+
+    Args:
+        event (type[Event]): The event class type to check for telemetry status.
+
+    Returns:
+        bool: True if telemetry is disabled for the given event, False if telemetry
+              should be collected for this event.
+
+    Notes:
+        - Returns True if no telemetry client is available (telemetry globally disabled)
+        - Returns False if client exists but config is not yet fetched (assumes enabled)
+        - Returns True if the event name is in the client's disabled events list
+        - Returns True if any exception occurs during the check (fail-safe behavior)
+        - Logs an error when status checking fails
+    """
+    raise NotImplementedError

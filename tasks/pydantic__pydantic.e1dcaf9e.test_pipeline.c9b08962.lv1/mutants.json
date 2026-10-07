@@ -1,0 +1,1006 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_pipeline.c9b08962.lv1",
+ "pool": 223,
+ "mutants": [
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 995,
+   "op": "boolean",
+   "start": 44899,
+   "end": 44907,
+   "old": "not args",
+   "new": "(args)",
+   "id": 0
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 997,
+   "op": "comparison",
+   "start": 44950,
+   "end": 44963,
+   "old": "len(args) < 2",
+   "new": "(len(args) <= 2)",
+   "id": 1
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 998,
+   "op": "statement",
+   "start": 44977,
+   "end": 45001,
+   "old": "origin = get_origin(obj)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 999,
+   "op": "statement",
+   "start": 45014,
+   "end": 45081,
+   "old": "raise TypeError(f'Expected two type arguments for {origin}, got 1')",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1664,
+   "op": "statement",
+   "start": 75279,
+   "end": 75349,
+   "old": "params = tuple(replace_types(param, typevars_map) for param in params)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 997,
+   "op": "constant",
+   "start": 44962,
+   "end": 44963,
+   "old": "2",
+   "new": "(3)",
+   "id": 5
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1669,
+   "op": "comparison",
+   "start": 75595,
+   "end": 75620,
+   "old": "tuple_type in TUPLE_TYPES",
+   "new": "(tuple_type not in TUPLE_TYPES)",
+   "id": 6
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1670,
+   "op": "return",
+   "start": 75638,
+   "end": 75720,
+   "old": "return core_schema.tuple_schema([core_schema.any_schema()], variadic_item_index=0)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1676,
+   "op": "return",
+   "start": 75963,
+   "end": 76052,
+   "old": "return core_schema.tuple_schema([self.generate_schema(params[0])], variadic_item_index=0)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1680,
+   "op": "comparison",
+   "start": 76268,
+   "end": 76283,
+   "old": "params[0] == ()",
+   "new": "(params[0] != ())",
+   "id": 9
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1680,
+   "op": "constant",
+   "start": 76262,
+   "end": 76263,
+   "old": "1",
+   "new": "(2)",
+   "id": 10
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1680,
+   "op": "constant",
+   "start": 76275,
+   "end": 76276,
+   "old": "0",
+   "new": "(1)",
+   "id": 11
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 654,
+   "op": "statement",
+   "start": 23549,
+   "end": 23581,
+   "old": "_OtherOut = TypeVar('_OtherOut')",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 389,
+   "op": "return",
+   "start": 14042,
+   "end": 14050,
+   "old": "return s",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 431,
+   "op": "return",
+   "start": 15123,
+   "end": 15174,
+   "old": "return cs.no_info_after_validator_function(func, s)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 237,
+   "op": "return",
+   "start": 7295,
+   "end": 7349,
+   "old": "return self.constrain(annotated_types.Predicate(func))",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 271,
+   "op": "return",
+   "start": 9123,
+   "end": 9156,
+   "old": "return self.constrain(_Eq(value))",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 275,
+   "op": "return",
+   "start": 9320,
+   "end": 9356,
+   "old": "return self.constrain(_NotEq(value))",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 279,
+   "op": "return",
+   "start": 9517,
+   "end": 9551,
+   "old": "return self.constrain(_In(values))",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 290,
+   "op": "return",
+   "start": 10066,
+   "end": 10118,
+   "old": "return self.constrain(annotated_types.Timezone(...))",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 322,
+   "op": "return",
+   "start": 11416,
+   "end": 11469,
+   "old": "return self.predicate(lambda v: v.startswith(prefix))",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 343,
+   "op": "statement",
+   "start": 12347,
+   "end": 12355,
+   "old": "s = None",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 350,
+   "op": "return",
+   "start": 12514,
+   "end": 12522,
+   "old": "return s",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 377,
+   "op": "statement",
+   "start": 13444,
+   "end": 13507,
+   "old": "s = _apply_parse(s, step.tp, step.strict, handler, source_type)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 399,
+   "op": "comparison",
+   "start": 14221,
+   "end": 14243,
+   "old": "tp is _FieldTypeMarker",
+   "new": "(tp is not _FieldTypeMarker)",
+   "id": 24
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 403,
+   "op": "statement",
+   "start": 14358,
+   "end": 14386,
+   "old": "tp = Annotated[tp, Strict()]",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 406,
+   "op": "return",
+   "start": 14445,
+   "end": 14463,
+   "old": "return handler(tp)",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 408,
+   "op": "return",
+   "start": 14482,
+   "end": 14544,
+   "old": "return cs.chain_schema([s, handler(tp)]) if s else handler(tp)",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 414,
+   "op": "comparison",
+   "start": 14683,
+   "end": 14692,
+   "old": "s is None",
+   "new": "(s is not None)",
+   "id": 28
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 415,
+   "op": "return",
+   "start": 14702,
+   "end": 14750,
+   "old": "return cs.no_info_plain_validator_function(func)",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 654,
+   "op": "constant",
+   "start": 23569,
+   "end": 23580,
+   "old": "'_OtherOut'",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 379,
+   "op": "statement",
+   "start": 13561,
+   "end": 13618,
+   "old": "s = _apply_parse(s, step.tp, False, handler, source_type)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 417,
+   "op": "constant",
+   "start": 14772,
+   "end": 14777,
+   "old": "'str'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 419,
+   "op": "statement",
+   "start": 14821,
+   "end": 14833,
+   "old": "s = s.copy()",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 421,
+   "op": "return",
+   "start": 14887,
+   "end": 14895,
+   "old": "return s",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 381,
+   "op": "statement",
+   "start": 13666,
+   "end": 13709,
+   "old": "s = _apply_transform(s, step.func, handler)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 420,
+   "op": "constant",
+   "start": 14870,
+   "end": 14874,
+   "old": "True",
+   "new": "(False)",
+   "id": 36
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 422,
+   "op": "comparison",
+   "start": 14909,
+   "end": 14926,
+   "old": "func is str.lower",
+   "new": "(func is not str.lower)",
+   "id": 37
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 466,
+   "op": "return",
+   "start": 16423,
+   "end": 16437,
+   "old": "return v >= ge",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 405,
+   "op": "constant",
+   "start": 14419,
+   "end": 14425,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 420,
+   "op": "constant",
+   "start": 14848,
+   "end": 14866,
+   "old": "'strip_whitespace'",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 424,
+   "op": "constant",
+   "start": 14981,
+   "end": 14985,
+   "old": "True",
+   "new": "(False)",
+   "id": 41
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 466,
+   "op": "comparison",
+   "start": 16430,
+   "end": 16437,
+   "old": "v >= ge",
+   "new": "(v > ge)",
+   "id": 42
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 428,
+   "op": "constant",
+   "start": 15092,
+   "end": 15096,
+   "old": "True",
+   "new": "(False)",
+   "id": 43
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 481,
+   "op": "comparison",
+   "start": 16990,
+   "end": 16996,
+   "old": "v < lt",
+   "new": "(v <= lt)",
+   "id": 44
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 496,
+   "op": "return",
+   "start": 17541,
+   "end": 17555,
+   "old": "return v <= le",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 496,
+   "op": "comparison",
+   "start": 17548,
+   "end": 17555,
+   "old": "v <= le",
+   "new": "(v < le)",
+   "id": 46
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 536,
+   "op": "return",
+   "start": 19147,
+   "end": 19174,
+   "old": "return v % multiple_of == 0",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 520,
+   "op": "comparison",
+   "start": 18393,
+   "end": 18410,
+   "old": "len(v) <= max_len",
+   "new": "(len(v) < max_len)",
+   "id": 48
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 536,
+   "op": "arithmetic",
+   "start": 19154,
+   "end": 19169,
+   "old": "v % multiple_of",
+   "new": "(v * multiple_of)",
+   "id": 49
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 587,
+   "op": "return",
+   "start": 21256,
+   "end": 21264,
+   "old": "return v",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 582,
+   "op": "boolean",
+   "start": 21034,
+   "end": 21045,
+   "old": "not func(v)",
+   "new": "(func(v))",
+   "id": 51
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 583,
+   "op": "statement",
+   "start": 21063,
+   "end": 21243,
+   "old": "raise PydanticCustomError(\n                    'predicate_failed',\n                    f'Predicate {predicate_name}failed',  # pyright: ignore[reportArgumentType]\n                )",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 597,
+   "op": "return",
+   "start": 21570,
+   "end": 21602,
+   "old": "return operator.__ne__(v, value)",
+   "new": "return None",
+   "id": 53
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 561,
+   "op": "comparison",
+   "start": 20034,
+   "end": 20050,
+   "old": "v.tzinfo is None",
+   "new": "(v.tzinfo is not None)",
+   "id": 54
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 604,
+   "op": "return",
+   "start": 21782,
+   "end": 21814,
+   "old": "return operator.__eq__(v, value)",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 611,
+   "op": "return",
+   "start": 21992,
+   "end": 22031,
+   "old": "return operator.__contains__(values, v)",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "pydantic/experimental/pipeline.py",
+   "line": 618,
+   "op": "return",
+   "start": 22217,
+   "end": 22274,
+   "old": "return operator.__not__(operator.__contains__(values, v))",
+   "new": "return None",
+   "id": 57
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 670,
+   "op": "return",
+   "start": 31686,
+   "end": 31704,
+   "old": "return json_schema",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 964,
+   "op": "statement",
+   "start": 42099,
+   "end": 42197,
+   "old": "items_schema = {} if 'items_schema' not in schema else self.generate_inner(schema['items_schema'])",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 966,
+   "op": "statement",
+   "start": 42269,
+   "end": 42349,
+   "old": "self.update_with_validations(json_schema, schema, self.ValidationsMapping.array)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 967,
+   "op": "return",
+   "start": 42358,
+   "end": 42376,
+   "old": "return json_schema",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1266,
+   "op": "statement",
+   "start": 54976,
+   "end": 55013,
+   "old": "generated: list[JsonSchemaValue] = []",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1280,
+   "op": "return",
+   "start": 55569,
+   "end": 55612,
+   "old": "return self.get_union_of_schemas(generated)",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1412,
+   "op": "statement",
+   "start": 62302,
+   "end": 62353,
+   "old": "step_index = 0 if self.mode == 'validation' else -1",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2405,
+   "op": "statement",
+   "start": 103731,
+   "end": 103770,
+   "old": "members = _deduplicate_schemas(members)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2859,
+   "op": "return",
+   "start": 123879,
+   "end": 123937,
+   "old": "return _get_ser_schema_for_default_value(schema['schema'])",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1293,
+   "op": "comparison",
+   "start": 56053,
+   "end": 56096,
+   "old": "self.union_format == 'primitive_type_array'",
+   "new": "(self.union_format != 'primitive_type_array')",
+   "id": 67
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2406,
+   "op": "comparison",
+   "start": 103782,
+   "end": 103799,
+   "old": "len(members) == 1",
+   "new": "(len(members) != 1)",
+   "id": 68
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2407,
+   "op": "return",
+   "start": 103813,
+   "end": 103830,
+   "old": "return members[0]",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 667,
+   "op": "constant",
+   "start": 31481,
+   "end": 31490,
+   "old": "'integer'",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 965,
+   "op": "constant",
+   "start": 42221,
+   "end": 42227,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 965,
+   "op": "constant",
+   "start": 42229,
+   "end": 42236,
+   "old": "'array'",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1268,
+   "op": "constant",
+   "start": 55040,
+   "end": 55049,
+   "old": "'choices'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1293,
+   "op": "constant",
+   "start": 56074,
+   "end": 56096,
+   "old": "'primitive_type_array'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1296,
+   "op": "statement",
+   "start": 56183,
+   "end": 56240,
+   "old": "schema_types: list[str] | str | None = schema.get('type')",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1311,
+   "op": "statement",
+   "start": 57109,
+   "end": 57135,
+   "old": "types.extend(schema_types)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1314,
+   "op": "return",
+   "start": 57284,
+   "end": 57327,
+   "old": "return {'type': list(dict.fromkeys(types))}",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1412,
+   "op": "comparison",
+   "start": 62320,
+   "end": 62345,
+   "old": "self.mode == 'validation'",
+   "new": "(self.mode != 'validation')",
+   "id": 78
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1412,
+   "op": "constant",
+   "start": 62315,
+   "end": 62316,
+   "old": "0",
+   "new": "(1)",
+   "id": 79
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2401,
+   "op": "boolean",
+   "start": 103578,
+   "end": 103616,
+   "old": "len(schema) == 1 and 'anyOf' in schema",
+   "new": "(len(schema) == 1 or 'anyOf' in schema)",
+   "id": 80
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2406,
+   "op": "constant",
+   "start": 103798,
+   "end": 103799,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2408,
+   "op": "constant",
+   "start": 103847,
+   "end": 103854,
+   "old": "'anyOf'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 669,
+   "op": "comparison",
+   "start": 31646,
+   "end": 31676,
+   "old": "v not in {math.inf, -math.inf}",
+   "new": "(v in {math.inf, -math.inf})",
+   "id": 83
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1297,
+   "op": "comparison",
+   "start": 56260,
+   "end": 56280,
+   "old": "schema_types is None",
+   "new": "(schema_types is not None)",
+   "id": 84
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1300,
+   "op": "boolean",
+   "start": 56402,
+   "end": 56436,
+   "old": "not isinstance(schema_types, list)",
+   "new": "(isinstance(schema_types, list))",
+   "id": 85
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1301,
+   "op": "statement",
+   "start": 56458,
+   "end": 56487,
+   "old": "schema_types = [schema_types]",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1302,
+   "op": "boolean",
+   "start": 56507,
+   "end": 56571,
+   "old": "not all(t in _PRIMITIVE_JSON_SCHEMA_TYPES for t in schema_types)",
+   "new": "(all((t in _PRIMITIVE_JSON_SCHEMA_TYPES for t in schema_types)))",
+   "id": 87
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1303,
+   "op": "statement",
+   "start": 56593,
+   "end": 56598,
+   "old": "break",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1309,
+   "op": "statement",
+   "start": 57086,
+   "end": 57091,
+   "old": "break",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1412,
+   "op": "constant",
+   "start": 62352,
+   "end": 62353,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2401,
+   "op": "comparison",
+   "start": 103578,
+   "end": 103594,
+   "old": "len(schema) == 1",
+   "new": "(len(schema) != 1)",
+   "id": 91
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2407,
+   "op": "constant",
+   "start": 103828,
+   "end": 103829,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 964,
+   "op": "constant",
+   "start": 42181,
+   "end": 42195,
+   "old": "'items_schema'",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1296,
+   "op": "constant",
+   "start": 56233,
+   "end": 56239,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1304,
+   "op": "constant",
+   "start": 56633,
+   "end": 56634,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1413,
+   "op": "constant",
+   "start": 62453,
+   "end": 62460,
+   "old": "'steps'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1277,
+   "op": "constant",
+   "start": 55466,
+   "end": 55482,
+   "old": "'skipped-choice'",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "pydantic/type_adapter.py",
+   "line": 697,
+   "op": "constant",
+   "start": 30214,
+   "end": 30226,
+   "old": "'validation'",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "pydantic/type_adapter.py",
+   "line": 725,
+   "op": "statement",
+   "start": 31850,
+   "end": 31876,
+   "old": "self.core_schema.rebuild()",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

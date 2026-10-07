@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_rest_store_webhooks.6d85971c.lv1",
+ "pool": 220,
+ "mutants": [
+  {
+   "path": "mlflow/store/entities/paged_list.py",
+   "line": 15,
+   "op": "statement",
+   "start": 404,
+   "end": 422,
+   "old": "self.token = token",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/store/entities/paged_list.py",
+   "line": 18,
+   "op": "return",
+   "start": 455,
+   "end": 472,
+   "old": "return list(self)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/tracking/request_header/databricks_request_header_provider.py",
+   "line": 12,
+   "op": "return",
+   "start": 365,
+   "end": 543,
+   "old": "return (\n            databricks_utils.is_in_cluster()\n            or databricks_utils.is_in_databricks_notebook()\n            or databricks_utils.is_in_databricks_job()\n        )",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/tracking/request_header/default_request_header_provider.py",
+   "line": 19,
+   "op": "return",
+   "start": 591,
+   "end": 602,
+   "old": "return True",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/tracking/request_header/registry.py",
+   "line": 79,
+   "op": "return",
+   "start": 2883,
+   "end": 2909,
+   "old": "return all_request_headers",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/tracking/request_header/registry.py",
+   "line": 74,
+   "op": "constant",
+   "start": 2717,
+   "end": 2784,
+   "old": "\"Encountered unexpected error during resolving request headers: %s\"",
+   "new": "('XX')",
+   "id": 5
+  },
+  {
+   "path": "mlflow/tracking/request_header/registry.py",
+   "line": 70,
+   "op": "comparison",
+   "start": 2571,
+   "end": 2600,
+   "old": "header in all_request_headers",
+   "new": "(header not in all_request_headers)",
+   "id": 6
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 117,
+   "op": "statement",
+   "start": 4244,
+   "end": 4356,
+   "old": "json_dict_with_int64_as_str = json.loads(\n        MessageToJson(message, preserving_proto_field_name=True)\n    )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 129,
+   "op": "return",
+   "start": 4966,
+   "end": 5026,
+   "old": "return json.dumps(json_dict_with_int64_as_numbers, indent=2)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 118,
+   "op": "constant",
+   "start": 4345,
+   "end": 4349,
+   "old": "True",
+   "new": "(False)",
+   "id": 9
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 118,
+   "op": "statement",
+   "start": 4246,
+   "end": 4658,
+   "old": "retry_kwargs = {\n        \"total\": max_retries,\n        \"connect\": max_retries,\n        \"read\": max_retries,\n        \"redirect\": max_retries,\n        \"status\": max_retries,\n        \"status_forcelist\": retry_codes,\n        \"backoff_factor\": backoff_factor,\n        \"backoff_jitter\": backoff_jitter,\n        \"raise_on_status\": raise_on_status,\n        \"respect_retry_after_header\": respect_retry_after_header,\n    }",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 150,
+   "op": "statement",
+   "start": 5300,
+   "end": 5328,
+   "old": "session = requests.Session()",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 152,
+   "op": "statement",
+   "start": 5372,
+   "end": 5405,
+   "old": "session.mount(\"http://\", adapter)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 182,
+   "op": "return",
+   "start": 6469,
+   "end": 6714,
+   "old": "return _cached_get_request_session(\n        max_retries,\n        backoff_factor,\n        backoff_jitter,\n        retry_codes,\n        raise_on_status,\n        _pid=os.getpid(),\n        respect_retry_after_header=respect_retry_after_header,\n    )",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 223,
+   "op": "statement",
+   "start": 7940,
+   "end": 8128,
+   "old": "session = _get_request_session(\n        max_retries,\n        backoff_factor,\n        backoff_jitter,\n        retry_codes,\n        raise_on_status,\n        respect_retry_after_header,\n    )",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 234,
+   "op": "statement",
+   "start": 8280,
+   "end": 8365,
+   "old": "env_value = os.getenv(\"MLFLOW_ALLOW_HTTP_REDIRECTS\", \"true\").lower() in [\"true\", \"1\"]",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 237,
+   "op": "return",
+   "start": 8451,
+   "end": 8529,
+   "old": "return session.request(method, url, allow_redirects=allow_redirects, **kwargs)",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 132,
+   "op": "statement",
+   "start": 4763,
+   "end": 4801,
+   "old": "retry_kwargs[\"allowed_methods\"] = None",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 134,
+   "op": "statement",
+   "start": 4820,
+   "end": 4859,
+   "old": "retry_kwargs[\"method_whitelist\"] = None",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 136,
+   "op": "comparison",
+   "start": 4868,
+   "end": 4900,
+   "old": "urllib3_version < Version(\"2.0\")",
+   "new": "(urllib3_version <= Version('2.0'))",
+   "id": 19
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4966,
+   "end": 4995,
+   "old": "retry = Retry(**retry_kwargs)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 234,
+   "op": "comparison",
+   "start": 8292,
+   "end": 8365,
+   "old": "os.getenv(\"MLFLOW_ALLOW_HTTP_REDIRECTS\", \"true\").lower() in [\"true\", \"1\"]",
+   "new": "(os.getenv('MLFLOW_ALLOW_HTTP_REDIRECTS', 'true').lower() not in ['true', '1'])",
+   "id": 21
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 123,
+   "op": "constant",
+   "start": 4395,
+   "end": 4403,
+   "old": "\"status\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 124,
+   "op": "constant",
+   "start": 4426,
+   "end": 4444,
+   "old": "\"status_forcelist\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 125,
+   "op": "constant",
+   "start": 4467,
+   "end": 4483,
+   "old": "\"backoff_factor\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 126,
+   "op": "constant",
+   "start": 4509,
+   "end": 4525,
+   "old": "\"backoff_jitter\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 101,
+   "op": "constant",
+   "start": 3707,
+   "end": 3709,
+   "old": "64",
+   "new": "(65)",
+   "id": 26
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 235,
+   "op": "comparison",
+   "start": 8401,
+   "end": 8424,
+   "old": "allow_redirects is None",
+   "new": "(allow_redirects is not None)",
+   "id": 27
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 134,
+   "op": "constant",
+   "start": 4833,
+   "end": 4851,
+   "old": "\"method_whitelist\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 136,
+   "op": "constant",
+   "start": 4894,
+   "end": 4899,
+   "old": "\"2.0\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 234,
+   "op": "constant",
+   "start": 8361,
+   "end": 8364,
+   "old": "\"1\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "mlflow/utils/request_utils.py",
+   "line": 234,
+   "op": "constant",
+   "start": 8333,
+   "end": 8339,
+   "old": "\"true\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 104,
+   "op": "statement",
+   "start": 4104,
+   "end": 4157,
+   "old": "cleaned_hostname = strip_suffix(host_creds.host, \"/\")",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 118,
+   "op": "statement",
+   "start": 4715,
+   "end": 4758,
+   "old": "headers = dict(**resolve_request_headers())",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 197,
+   "op": "statement",
+   "start": 8401,
+   "end": 8435,
+   "old": "_validate_max_retries(max_retries)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 198,
+   "op": "statement",
+   "start": 8440,
+   "end": 8480,
+   "old": "_validate_backoff_factor(backoff_factor)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 205,
+   "op": "statement",
+   "start": 8666,
+   "end": 8741,
+   "old": "timeout = MLFLOW_HTTP_REQUEST_TIMEOUT.get() if timeout is None else timeout",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 335,
+   "op": "return",
+   "start": 13470,
+   "end": 13485,
+   "old": "return response",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 580,
+   "op": "statement",
+   "start": 22643,
+   "end": 22754,
+   "old": "call_kwargs = {\n        \"host_creds\": host_creds,\n        \"endpoint\": endpoint,\n        \"method\": method,\n    }",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 596,
+   "op": "statement",
+   "start": 23168,
+   "end": 23219,
+   "old": "response = verify_rest_response(response, endpoint)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 606,
+   "op": "statement",
+   "start": 23555,
+   "end": 23606,
+   "old": "parse_dict(js_dict=js_dict, message=response_proto)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 123,
+   "op": "statement",
+   "start": 4899,
+   "end": 4946,
+   "old": "headers[\"x-databricks-traffic-id\"] = traffic_id",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 128,
+   "op": "statement",
+   "start": 5053,
+   "end": 5336,
+   "old": "ws_client = get_workspace_client(\n            host_creds.use_secret_scope_token,\n            host_creds.host,\n            host_creds.token,\n            host_creds.databricks_auth_profile,\n            retry_timeout_seconds=retry_timeout_seconds,\n            timeout=timeout,\n        )",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 209,
+   "op": "statement",
+   "start": 8903,
+   "end": 8982,
+   "old": "auth_str = \"Basic \" + base64.standard_b64encode(basic_auth_str).decode(\"utf-8\")",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 220,
+   "op": "statement",
+   "start": 9331,
+   "end": 9366,
+   "old": "headers[\"Authorization\"] = auth_str",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 291,
+   "op": "return",
+   "start": 11599,
+   "end": 11642,
+   "old": "return isinstance(json.loads(string), dict)",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 309,
+   "op": "statement",
+   "start": 12374,
+   "end": 12399,
+   "old": "response._content = b\"{}\"",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 310,
+   "op": "return",
+   "start": 12466,
+   "end": 12481,
+   "old": "return response",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 341,
+   "op": "comparison",
+   "start": 13603,
+   "end": 13622,
+   "old": "max_retry_limit < 0",
+   "new": "(max_retry_limit <= 0)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 355,
+   "op": "statement",
+   "start": 14152,
+   "end": 14333,
+   "old": "raise MlflowException(\n            message=f\"The max_retries value must be either 0 a positive integer. Got {max_retries}\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 364,
+   "op": "comparison",
+   "start": 14473,
+   "end": 14501,
+   "old": "max_backoff_factor_limit < 0",
+   "new": "(max_backoff_factor_limit <= 0)",
+   "id": 50
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 371,
+   "op": "comparison",
+   "start": 14741,
+   "end": 14783,
+   "old": "backoff_factor >= max_backoff_factor_limit",
+   "new": "(backoff_factor > max_backoff_factor_limit)",
+   "id": 51
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 372,
+   "op": "statement",
+   "start": 14793,
+   "end": 15071,
+   "old": "raise MlflowException(\n            message=f\"The configured backoff_factor value ({backoff_factor}) is in excess \"\n            \"of the maximum allowable backoff_factor limit \"\n            f\"({max_backoff_factor_limit})\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 379,
+   "op": "comparison",
+   "start": 15080,
+   "end": 15098,
+   "old": "backoff_factor < 0",
+   "new": "(backoff_factor <= 0)",
+   "id": 53
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 380,
+   "op": "statement",
+   "start": 15108,
+   "end": 15310,
+   "old": "raise MlflowException(\n            message=\"The backoff_factor value must be either 0 a positive integer. \"\n            f\"Got {backoff_factor}\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 579,
+   "op": "statement",
+   "start": 22605,
+   "end": 22638,
+   "old": "json_body = json.loads(json_body)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 585,
+   "op": "comparison",
+   "start": 22762,
+   "end": 22787,
+   "old": "extra_headers is not None",
+   "new": "(extra_headers is None)",
+   "id": 56
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 589,
+   "op": "comparison",
+   "start": 22960,
+   "end": 22975,
+   "old": "method == \"GET\"",
+   "new": "(method != 'GET')",
+   "id": 57
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 593,
+   "op": "statement",
+   "start": 23084,
+   "end": 23115,
+   "old": "call_kwargs[\"json\"] = json_body",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 594,
+   "op": "statement",
+   "start": 23124,
+   "end": 23162,
+   "old": "response = http_request(**call_kwargs)",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 104,
+   "op": "constant",
+   "start": 4153,
+   "end": 4156,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 233,
+   "op": "statement",
+   "start": 9756,
+   "end": 9800,
+   "old": "kwargs[\"auth\"] = fetch_auth(host_creds.auth)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 257,
+   "op": "statement",
+   "start": 10586,
+   "end": 10642,
+   "old": "raise InvalidUrlException(f\"Invalid url: {url}\") from iu",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 259,
+   "op": "statement",
+   "start": 10678,
+   "end": 10750,
+   "old": "raise MlflowException(f\"API request to {url} failed with exception {e}\")",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 293,
+   "op": "return",
+   "start": 11673,
+   "end": 11685,
+   "old": "return False",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 308,
+   "op": "comparison",
+   "start": 12322,
+   "end": 12364,
+   "old": "response.text.strip() in (_ARMERIA_OK, \"\")",
+   "new": "(response.text.strip() not in (_ARMERIA_OK, ''))",
+   "id": 65
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 328,
+   "op": "boolean",
+   "start": 13188,
+   "end": 13232,
+   "old": "not _can_parse_as_json_object(response.text)",
+   "new": "(_can_parse_as_json_object(response.text))",
+   "id": 66
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 341,
+   "op": "constant",
+   "start": 13621,
+   "end": 13622,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 354,
+   "op": "constant",
+   "start": 14141,
+   "end": 14142,
+   "old": "0",
+   "new": "(1)",
+   "id": 68
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 589,
+   "op": "constant",
+   "start": 22970,
+   "end": 22975,
+   "old": "\"GET\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 721,
+   "op": "return",
+   "start": 28642,
+   "end": 28681,
+   "old": "return not self.ignore_tls_verification",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 123,
+   "op": "constant",
+   "start": 4907,
+   "end": 4932,
+   "old": "\"x-databricks-traffic-id\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 143,
+   "op": "statement",
+   "start": 5759,
+   "end": 5901,
+   "old": "warnings.filterwarnings(\n                    \"ignore\", message=f\".*{_DATABRICKS_SDK_RETRY_AFTER_SECS_DEPRECATION_WARNING}.*\"\n                )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5918,
+   "end": 6297,
+   "old": "raw_response = ws_client.api_client.do(\n                    method=method,\n                    path=endpoint,\n                    headers=headers,\n                    raw=True,\n                    query=kwargs.get(\"params\"),\n                    body=kwargs.get(\"json\"),\n                    files=kwargs.get(\"files\"),\n                    data=kwargs.get(\"data\"),\n                )",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 184,
+   "op": "statement",
+   "start": 7948,
+   "end": 7978,
+   "old": "response = requests.Response()",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 185,
+   "op": "statement",
+   "start": 7991,
+   "end": 8009,
+   "old": "response.url = url",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 187,
+   "op": "statement",
+   "start": 8106,
+   "end": 8130,
+   "old": "response.reason = str(e)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 188,
+   "op": "statement",
+   "start": 8143,
+   "end": 8170,
+   "old": "response.encoding = \"UTF-8\"",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 189,
+   "op": "statement",
+   "start": 8183,
+   "end": 8367,
+   "old": "response._content = json.dumps(\n                {\n                    \"error_code\": e.error_code,\n                    \"message\": str(e),\n                }\n            ).encode(\"UTF-8\")",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 209,
+   "op": "constant",
+   "start": 8914,
+   "end": 8922,
+   "old": "\"Basic \"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 213,
+   "op": "statement",
+   "start": 9101,
+   "end": 9304,
+   "old": "raise MlflowException(\n            \"To use OAuth authentication, set environmental variable \"\n            f\"'{MLFLOW_ENABLE_DB_SDK.name}' to true\",\n            error_code=CUSTOMER_UNAUTHORIZED,\n        )",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 220,
+   "op": "constant",
+   "start": 9339,
+   "end": 9354,
+   "old": "\"Authorization\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 229,
+   "op": "constant",
+   "start": 9618,
+   "end": 9624,
+   "old": "\"auth\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 229,
+   "op": "constant",
+   "start": 9637,
+   "end": 9650,
+   "old": "\"execute-api\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 308,
+   "op": "constant",
+   "start": 12314,
+   "end": 12317,
+   "old": "200",
+   "new": "(201)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 586,
+   "op": "constant",
+   "start": 22809,
+   "end": 22824,
+   "old": "\"extra_headers\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 588,
+   "op": "constant",
+   "start": 22904,
+   "end": 22927,
+   "old": "\"retry_timeout_seconds\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 601,
+   "op": "comparison",
+   "start": 23359,
+   "end": 23386,
+   "old": "len(response_to_parse) > 50",
+   "new": "(len(response_to_parse) >= 50)",
+   "id": 87
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 602,
+   "op": "statement",
+   "start": 23400,
+   "end": 23450,
+   "old": "response_to_parse = response_to_parse[:50] + \"...\"",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 721,
+   "op": "boolean",
+   "start": 28649,
+   "end": 28681,
+   "old": "not self.ignore_tls_verification",
+   "new": "(self.ignore_tls_verification)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 209,
+   "op": "constant",
+   "start": 8974,
+   "end": 8981,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 233,
+   "op": "constant",
+   "start": 9763,
+   "end": 9769,
+   "old": "\"auth\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 144,
+   "op": "constant",
+   "start": 5804,
+   "end": 5812,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 186,
+   "op": "constant",
+   "start": 8089,
+   "end": 8092,
+   "old": "500",
+   "new": "(501)",
+   "id": 93
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 194,
+   "op": "constant",
+   "start": 8359,
+   "end": 8366,
+   "old": "\"UTF-8\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 156,
+   "op": "constant",
+   "start": 6334,
+   "end": 6344,
+   "old": "\"contents\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 152,
+   "op": "constant",
+   "start": 6179,
+   "end": 6185,
+   "old": "\"json\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 191,
+   "op": "constant",
+   "start": 8253,
+   "end": 8265,
+   "old": "\"error_code\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/utils/rest_utils.py",
+   "line": 192,
+   "op": "constant",
+   "start": 8301,
+   "end": 8310,
+   "old": "\"message\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/utils/string_utils.py",
+   "line": 191,
+   "op": "return",
+   "start": 6069,
+   "end": 6091,
+   "old": "return str(cell_value)",
+   "new": "return None",
+   "id": 99
+  }
+ ]
+}

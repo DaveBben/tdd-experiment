@@ -1,0 +1,55 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_evaluation_dataset.4a6528c2.lv1",
+ "image": "libercoders/featurebench-specs_mlflow-instance_efffa87e@sha256:5a63b594bc99a6dcd876289974979606b276edd49e966020111db3590c40add4",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=20",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 19 passed in 1.01s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 122 passed in 1.32s =============================="
+ },
+ "mutant_pool": 413,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 122 passed in 1.33s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/mlflow/data/huggingface_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/data/meta_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/data/numpy_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/data/pandas_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/data/spark_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/data/tensorflow_dataset.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/mlflow/store/model_registry/sqlalchemy_store.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

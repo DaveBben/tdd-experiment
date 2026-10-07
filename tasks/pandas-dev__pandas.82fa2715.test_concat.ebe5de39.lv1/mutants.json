@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_concat.ebe5de39.lv1",
+ "pool": 338,
+ "mutants": [
+  {
+   "path": "pandas/core/common.py",
+   "line": 92,
+   "op": "comparison",
+   "start": 1621,
+   "end": 1637,
+   "old": "obj.name != name",
+   "new": "(obj.name == name)",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 97,
+   "op": "statement",
+   "start": 1752,
+   "end": 1757,
+   "old": "break",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 654,
+   "op": "comparison",
+   "start": 16942,
+   "end": 16954,
+   "old": "name is None",
+   "new": "(name is not None)",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1858,
+   "op": "return",
+   "start": 59334,
+   "end": 59346,
+   "old": "return False",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 103,
+   "op": "statement",
+   "start": 3100,
+   "end": 3161,
+   "old": "non_empties = [x for x in to_concat if _is_nonempty(x, axis)]",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 77,
+   "op": "statement",
+   "start": 1913,
+   "end": 1969,
+   "old": "to_concat_arrs = cast(\"Sequence[np.ndarray]\", to_concat)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 117,
+   "op": "boolean",
+   "start": 3762,
+   "end": 3789,
+   "old": "ea_compat_axis or axis == 0",
+   "new": "(ea_compat_axis and axis == 0)",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 120,
+   "op": "return",
+   "start": 3873,
+   "end": 4000,
+   "old": "return cls._concat_same_type(\n                to_concat_eas,\n                axis=axis,  # type: ignore[call-arg]\n            )",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 152,
+   "op": "boolean",
+   "start": 5026,
+   "end": 5046,
+   "old": "not len(non_empties)",
+   "new": "(len(non_empties))",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 90,
+   "op": "return",
+   "start": 2507,
+   "end": 2756,
+   "old": "return obj._concat_same_type(\n                # error: Unexpected keyword argument \"axis\" for \"_concat_same_type\"\n                # of \"ExtensionArray\"\n                to_concat_eas,\n                axis=axis,  # type: ignore[call-arg]\n            )",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 112,
+   "op": "constant",
+   "start": 3495,
+   "end": 3521,
+   "old": "\"Sequence[ExtensionArray]\"",
+   "new": "('XX')",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 117,
+   "op": "comparison",
+   "start": 3780,
+   "end": 3789,
+   "old": "axis == 0",
+   "new": "(axis != 0)",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 128,
+   "op": "comparison",
+   "start": 4179,
+   "end": 4205,
+   "old": "result.dtype.kind in \"iuf\"",
+   "new": "(result.dtype.kind not in 'iuf')",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 84,
+   "op": "constant",
+   "start": 2270,
+   "end": 2271,
+   "old": "0",
+   "new": "(1)",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 113,
+   "op": "constant",
+   "start": 3563,
+   "end": 3564,
+   "old": "0",
+   "new": "(1)",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4200,
+   "end": 4205,
+   "old": "\"iuf\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 157,
+   "op": "boolean",
+   "start": 5272,
+   "end": 5340,
+   "old": "not len(kinds - {\"i\", \"u\", \"f\"}) or not len(kinds - {\"b\", \"i\", \"u\"})",
+   "new": "(not len(kinds - {'i', 'u', 'f'}) and (not len(kinds - {'b', 'i', 'u'})))",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 162,
+   "op": "statement",
+   "start": 5467,
+   "end": 5498,
+   "old": "target_dtype = np.dtype(object)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 108,
+   "op": "constant",
+   "start": 3331,
+   "end": 3336,
+   "old": "False",
+   "new": "(True)",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 130,
+   "op": "constant",
+   "start": 4329,
+   "end": 4334,
+   "old": "False",
+   "new": "(True)",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 167,
+   "op": "constant",
+   "start": 5657,
+   "end": 5660,
+   "old": "\"o\"",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 157,
+   "op": "constant",
+   "start": 5289,
+   "end": 5292,
+   "old": "\"i\"",
+   "new": "('XX')",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 412,
+   "op": "statement",
+   "start": 12163,
+   "end": 12180,
+   "old": "sort = bool(sort)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 417,
+   "op": "statement",
+   "start": 12294,
+   "end": 12372,
+   "old": "sample, objs = _get_sample_object(objs, ndims, keys, names, levels, intersect)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 441,
+   "op": "return",
+   "start": 13109,
+   "end": 13324,
+   "old": "return _get_result(\n        objs,\n        is_series,\n        bm_axis,\n        ignore_index,\n        intersect,\n        sort,\n        keys,\n        levels,\n        verify_integrity,\n        names,\n        axis,\n    )",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 467,
+   "op": "statement",
+   "start": 13618,
+   "end": 13636,
+   "old": "current_column = 0",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 521,
+   "op": "statement",
+   "start": 15281,
+   "end": 15307,
+   "old": "sample: DataFrame | Series",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 773,
+   "op": "statement",
+   "start": 23188,
+   "end": 23204,
+   "old": "key_indices = []",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 774,
+   "op": "statement",
+   "start": 23209,
+   "end": 23224,
+   "old": "clean_objs = []",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 830,
+   "op": "return",
+   "start": 24929,
+   "end": 24966,
+   "old": "return indexes[0].append(indexes[1:])",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 159,
+   "op": "constant",
+   "start": 3582,
+   "end": 3589,
+   "old": "\"outer\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 400,
+   "op": "statement",
+   "start": 11801,
+   "end": 11818,
+   "old": "intersect = False",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 424,
+   "op": "statement",
+   "start": 12536,
+   "end": 12552,
+   "old": "is_frame = False",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 432,
+   "op": "statement",
+   "start": 12766,
+   "end": 12815,
+   "old": "bm_axis = sample._get_block_manager_axis(bm_axis)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 467,
+   "op": "constant",
+   "start": 13635,
+   "end": 13636,
+   "old": "0",
+   "new": "(1)",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 502,
+   "op": "statement",
+   "start": 14898,
+   "end": 14918,
+   "old": "new_objs.append(obj)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 581,
+   "op": "statement",
+   "start": 17119,
+   "end": 17154,
+   "old": "sample = cast(\"DataFrame\", objs[0])",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 583,
+   "op": "statement",
+   "start": 17164,
+   "end": 17182,
+   "old": "mgrs_indexers = []",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 584,
+   "op": "statement",
+   "start": 17191,
+   "end": 17435,
+   "old": "result_axes = new_axes(\n            objs,\n            bm_axis,\n            intersect,\n            sort,\n            keys,\n            names,\n            axis,\n            levels,\n            verify_integrity,\n            ignore_index,\n        )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 611,
+   "op": "statement",
+   "start": 18037,
+   "end": 18151,
+   "old": "new_data = concatenate_managers(\n            mgrs_indexers, result_axes, concat_axis=bm_axis, copy=False\n        )",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 664,
+   "op": "return",
+   "start": 19434,
+   "end": 19465,
+   "old": "return default_index(len(objs))",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 790,
+   "op": "boolean",
+   "start": 23698,
+   "end": 23747,
+   "old": "keys is not None and len(key_indices) < len(keys)",
+   "new": "(keys is not None or len(key_indices) < len(keys))",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 793,
+   "op": "comparison",
+   "start": 23795,
+   "end": 23815,
+   "old": "len(clean_objs) == 0",
+   "new": "(len(clean_objs) != 0)",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 810,
+   "op": "comparison",
+   "start": 24229,
+   "end": 24243,
+   "old": "len(ndims) > 1",
+   "new": "(len(ndims) >= 1)",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 399,
+   "op": "constant",
+   "start": 11784,
+   "end": 11791,
+   "old": "\"outer\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 402,
+   "op": "statement",
+   "start": 11853,
+   "end": 11869,
+   "old": "intersect = True",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 404,
+   "op": "statement",
+   "start": 11908,
+   "end": 12013,
+   "old": "raise ValueError(\n            \"Only can inner (intersect) or outer (union) join the other axis\"\n        )",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 424,
+   "op": "constant",
+   "start": 12547,
+   "end": 12552,
+   "old": "False",
+   "new": "(True)",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 428,
+   "op": "constant",
+   "start": 12655,
+   "end": 12659,
+   "old": "True",
+   "new": "(False)",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 436,
+   "op": "constant",
+   "start": 12936,
+   "end": 12937,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 439,
+   "op": "constant",
+   "start": 13053,
+   "end": 13054,
+   "old": "0",
+   "new": "(1)",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 528,
+   "op": "comparison",
+   "start": 15421,
+   "end": 15433,
+   "old": "bm_axis == 0",
+   "new": "(bm_axis != 0)",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 529,
+   "op": "statement",
+   "start": 15447,
+   "end": 15483,
+   "old": "name = com.consensus_name_attr(objs)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 534,
+   "op": "statement",
+   "start": 15586,
+   "end": 15619,
+   "old": "res = concat_compat(arrs, axis=0)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 549,
+   "op": "statement",
+   "start": 16019,
+   "end": 16075,
+   "old": "mgr = type(sample._mgr).from_array(res, index=new_index)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 597,
+   "op": "statement",
+   "start": 17473,
+   "end": 17486,
+   "old": "indexers = {}",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 665,
+   "op": "comparison",
+   "start": 19475,
+   "end": 19487,
+   "old": "bm_axis == 0",
+   "new": "(bm_axis != 0)",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 666,
+   "op": "statement",
+   "start": 19497,
+   "end": 19530,
+   "old": "indexes = [x.index for x in objs]",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 751,
+   "op": "boolean",
+   "start": 22446,
+   "end": 22508,
+   "old": "isinstance(objs, (ABCSeries, ABCDataFrame)) or is_scalar(objs)",
+   "new": "(isinstance(objs, (ABCSeries, ABCDataFrame)) and is_scalar(objs))",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 759,
+   "op": "constant",
+   "start": 22771,
+   "end": 22772,
+   "old": "0",
+   "new": "(1)",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 763,
+   "op": "boolean",
+   "start": 22865,
+   "end": 22892,
+   "old": "not isinstance(keys, Index)",
+   "new": "(isinstance(keys, Index))",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 764,
+   "op": "statement",
+   "start": 22906,
+   "end": 22924,
+   "old": "keys = Index(keys)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 815,
+   "op": "boolean",
+   "start": 24424,
+   "end": 24491,
+   "old": "keys is None and names is None and levels is None and not intersect",
+   "new": "(keys is None or names is None or levels is None or (not intersect))",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 401,
+   "op": "constant",
+   "start": 11836,
+   "end": 11843,
+   "old": "\"inner\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 402,
+   "op": "constant",
+   "start": 11865,
+   "end": 11869,
+   "old": "True",
+   "new": "(False)",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 439,
+   "op": "constant",
+   "start": 13024,
+   "end": 13025,
+   "old": "1",
+   "new": "(2)",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 440,
+   "op": "constant",
+   "start": 13090,
+   "end": 13097,
+   "old": "\"names\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 475,
+   "op": "statement",
+   "start": 13803,
+   "end": 13915,
+   "old": "raise ValueError(\n                \"cannot concatenate unaligned mixed dimensional NDFrame objects\"\n            )",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 481,
+   "op": "statement",
+   "start": 13989,
+   "end": 14011,
+   "old": "rename_columns = False",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 539,
+   "op": "statement",
+   "start": 15743,
+   "end": 16005,
+   "old": "new_index = _get_concat_axis_series(\n                    objs,\n                    ignore_index,\n                    bm_axis,\n                    keys,\n                    levels,\n                    verify_integrity,\n                    names,\n                )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 581,
+   "op": "constant",
+   "start": 17133,
+   "end": 17144,
+   "old": "\"DataFrame\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 605,
+   "op": "statement",
+   "start": 17818,
+   "end": 17847,
+   "old": "obj_labels = obj.axes[1 - ax]",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 670,
+   "op": "statement",
+   "start": 19683,
+   "end": 19721,
+   "old": "concat_axis = _concat_indexes(indexes)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 674,
+   "op": "statement",
+   "start": 19887,
+   "end": 19943,
+   "old": "overlap = concat_axis[concat_axis.duplicated()].unique()",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 677,
+   "op": "comparison",
+   "start": 20056,
+   "end": 20068,
+   "old": "keys is None",
+   "new": "(keys is not None)",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 760,
+   "op": "constant",
+   "start": 22799,
+   "end": 22826,
+   "old": "\"No objects to concatenate\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 780,
+   "op": "statement",
+   "start": 23392,
+   "end": 23413,
+   "old": "key_indices.append(i)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 784,
+   "op": "statement",
+   "start": 23507,
+   "end": 23656,
+   "old": "msg = (\n                f\"cannot concatenate object of type '{type(obj)}'; \"\n                \"only Series and DataFrame objs are valid\"\n            )",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 813,
+   "op": "boolean",
+   "start": 24315,
+   "end": 24354,
+   "old": "obj.ndim == max_ndim and sum(obj.shape)",
+   "new": "(obj.ndim == max_ndim or sum(obj.shape))",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 815,
+   "op": "comparison",
+   "start": 24459,
+   "end": 24473,
+   "old": "levels is None",
+   "new": "(levels is not None)",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 405,
+   "op": "constant",
+   "start": 11938,
+   "end": 12003,
+   "old": "\"Only can inner (intersect) or outer (union) join the other axis\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 474,
+   "op": "arithmetic",
+   "start": 13777,
+   "end": 13789,
+   "old": "max_ndim - 1",
+   "new": "(max_ndim + 1)",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 482,
+   "op": "boolean",
+   "start": 14027,
+   "end": 14055,
+   "old": "ignore_index or name is None",
+   "new": "(ignore_index and name is None)",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 600,
+   "op": "comparison",
+   "start": 17630,
+   "end": 17643,
+   "old": "ax == bm_axis",
+   "new": "(ax != bm_axis)",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 680,
+   "op": "constant",
+   "start": 20164,
+   "end": 20169,
+   "old": "False",
+   "new": "(True)",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 694,
+   "op": "return",
+   "start": 20631,
+   "end": 20657,
+   "old": "return Index(result_names)",
+   "new": "return None",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 830,
+   "op": "constant",
+   "start": 24962,
+   "end": 24963,
+   "old": "1",
+   "new": "(2)",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 534,
+   "op": "constant",
+   "start": 15617,
+   "end": 15618,
+   "old": "0",
+   "new": "(1)",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 576,
+   "op": "constant",
+   "start": 17048,
+   "end": 17056,
+   "old": "\"concat\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 687,
+   "op": "comparison",
+   "start": 20422,
+   "end": 20440,
+   "old": "x.name is not None",
+   "new": "(x.name is None)",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 689,
+   "op": "statement",
+   "start": 20499,
+   "end": 20515,
+   "old": "has_names = True",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 692,
+   "op": "arithmetic",
+   "start": 20588,
+   "end": 20596,
+   "old": "num += 1",
+   "new": "num -= 1",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 488,
+   "op": "statement",
+   "start": 14286,
+   "end": 14307,
+   "old": "rename_columns = True",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 493,
+   "op": "statement",
+   "start": 14505,
+   "end": 14526,
+   "old": "rename_columns = True",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 605,
+   "op": "constant",
+   "start": 17840,
+   "end": 17841,
+   "old": "1",
+   "new": "(2)",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 682,
+   "op": "constant",
+   "start": 20232,
+   "end": 20233,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 689,
+   "op": "constant",
+   "start": 20511,
+   "end": 20515,
+   "old": "True",
+   "new": "(False)",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 488,
+   "op": "constant",
+   "start": 14303,
+   "end": 14307,
+   "old": "True",
+   "new": "(False)",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 498,
+   "op": "constant",
+   "start": 14801,
+   "end": 14802,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 500,
+   "op": "constant",
+   "start": 14882,
+   "end": 14887,
+   "old": "False",
+   "new": "(True)",
+   "id": 99
+  }
+ ]
+}

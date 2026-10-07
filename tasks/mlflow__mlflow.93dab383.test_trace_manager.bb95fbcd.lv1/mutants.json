@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_trace_manager.bb95fbcd.lv1",
+ "pool": 102,
+ "mutants": [
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 123,
+   "op": "return",
+   "start": 4136,
+   "end": 4156,
+   "old": "return self.trace_id",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 225,
+   "op": "return",
+   "start": 7167,
+   "end": 7199,
+   "old": "return self._attributes.get(key)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 675,
+   "op": "return",
+   "start": 26793,
+   "end": 26816,
+   "old": "return Span(self._span)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 789,
+   "op": "return",
+   "start": 31346,
+   "end": 31372,
+   "old": "return NO_OP_SPAN_TRACE_ID",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 903,
+   "op": "return",
+   "start": 34640,
+   "end": 34663,
+   "old": "return super().get(key)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 901,
+   "op": "constant",
+   "start": 34598,
+   "end": 34601,
+   "old": "128",
+   "new": "(129)",
+   "id": 5
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 23,
+   "op": "statement",
+   "start": 711,
+   "end": 735,
+   "old": "self.spans = spans or []",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 23,
+   "op": "boolean",
+   "start": 724,
+   "end": 735,
+   "old": "spans or []",
+   "new": "(spans and [])",
+   "id": 7
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 77,
+   "op": "return",
+   "start": 3189,
+   "end": 3246,
+   "old": "return span._span.attributes.get(SpanAttributeKey.INPUTS)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 84,
+   "op": "return",
+   "start": 3452,
+   "end": 3510,
+   "old": "return span._span.attributes.get(SpanAttributeKey.OUTPUTS)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 2873,
+   "end": 2895,
+   "old": "span.parent_id is None",
+   "new": "(span.parent_id is not None)",
+   "id": 10
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 70,
+   "op": "return",
+   "start": 2913,
+   "end": 2924,
+   "old": "return span",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 27,
+   "op": "statement",
+   "start": 986,
+   "end": 1010,
+   "old": "trace_data = TraceData()",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 32,
+   "op": "statement",
+   "start": 1223,
+   "end": 1274,
+   "old": "set_request_response_preview(self.info, trace_data)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 33,
+   "op": "return",
+   "start": 1283,
+   "end": 1318,
+   "old": "return Trace(self.info, trace_data)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 66,
+   "op": "return",
+   "start": 2060,
+   "end": 2080,
+   "old": "return cls._instance",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2177,
+   "end": 2222,
+   "old": "self._traces = get_trace_cache_with_timeout()",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 73,
+   "op": "statement",
+   "start": 2307,
+   "end": 2360,
+   "old": "self._otel_id_to_mlflow_trace_id: dict[int, str] = {}",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 74,
+   "op": "statement",
+   "start": 2369,
+   "end": 2399,
+   "old": "self._lock = threading.RLock()",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 85,
+   "op": "statement",
+   "start": 2823,
+   "end": 2851,
+   "old": "self._check_timeout_update()",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 145,
+   "op": "return",
+   "start": 5282,
+   "end": 5336,
+   "old": "return trace.span_dict.get(span_id) if trace else None",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 194,
+   "op": "statement",
+   "start": 7129,
+   "end": 7177,
+   "old": "new_timeout = MLFLOW_TRACE_TIMEOUT_SECONDS.get()",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 30,
+   "op": "statement",
+   "start": 1164,
+   "end": 1213,
+   "old": "trace_data.spans.append(span.to_immutable_span())",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 62,
+   "op": "comparison",
+   "start": 1891,
+   "end": 1912,
+   "old": "cls._instance is None",
+   "new": "(cls._instance is not None)",
+   "id": 23
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2889,
+   "end": 2943,
+   "old": "self._traces[trace_info.trace_id] = _Trace(trace_info)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 97,
+   "op": "boolean",
+   "start": 3221,
+   "end": 3251,
+   "old": "not isinstance(span, LiveSpan)",
+   "new": "(isinstance(span, LiveSpan))",
+   "id": 25
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 98,
+   "op": "statement",
+   "start": 3265,
+   "end": 3336,
+   "old": "_logger.debug(f\"Invalid span object {type(span)} is passed. Skipping.\")",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 102,
+   "op": "statement",
+   "start": 3394,
+   "end": 3451,
+   "old": "trace_data_dict = self._traces[span.request_id].span_dict",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 103,
+   "op": "statement",
+   "start": 3464,
+   "end": 3500,
+   "old": "trace_data_dict[span.span_id] = span",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 143,
+   "op": "statement",
+   "start": 5238,
+   "end": 5272,
+   "old": "trace = self._traces.get(trace_id)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 152,
+   "op": "statement",
+   "start": 5508,
+   "end": 5542,
+   "old": "trace = self._traces.get(trace_id)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 181,
+   "op": "statement",
+   "start": 6510,
+   "end": 6585,
+   "old": "mlflow_trace_id = self._otel_id_to_mlflow_trace_id.pop(otel_trace_id, None)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 182,
+   "op": "statement",
+   "start": 6598,
+   "end": 6683,
+   "old": "internal_trace = self._traces.pop(mlflow_trace_id, None) if mlflow_trace_id else None",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 185,
+   "op": "return",
+   "start": 6763,
+   "end": 6884,
+   "old": "return ManagerTrace(\n                trace=internal_trace.to_mlflow_trace(), prompts=internal_trace.prompts\n            )",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 195,
+   "op": "comparison",
+   "start": 7189,
+   "end": 7242,
+   "old": "new_timeout != getattr(self._traces, \"timeout\", None)",
+   "new": "(new_timeout == getattr(self._traces, 'timeout', None))",
+   "id": 34
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 214,
+   "op": "statement",
+   "start": 8118,
+   "end": 8138,
+   "old": "cls._instance = None",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 114,
+   "op": "comparison",
+   "start": 3850,
+   "end": 3894,
+   "old": "prompt not in self._traces[trace_id].prompts",
+   "new": "(prompt in self._traces[trace_id].prompts)",
+   "id": 36
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 115,
+   "op": "statement",
+   "start": 3912,
+   "end": 3957,
+   "old": "self._traces[trace_id].prompts.append(prompt)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 121,
+   "op": "statement",
+   "start": 4260,
+   "end": 4334,
+   "old": "current_tag = self._traces[trace_id].info.tags.get(LINKED_PROMPTS_TAG_KEY)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 122,
+   "op": "statement",
+   "start": 4351,
+   "end": 4413,
+   "old": "updated_tag = update_linked_prompts_tag(current_tag, [prompt])",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 123,
+   "op": "statement",
+   "start": 4430,
+   "end": 4500,
+   "old": "self._traces[trace_id].info.tags[LINKED_PROMPTS_TAG_KEY] = updated_tag",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 183,
+   "op": "comparison",
+   "start": 6699,
+   "end": 6721,
+   "old": "internal_trace is None",
+   "new": "(internal_trace is not None)",
+   "id": 41
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 196,
+   "op": "comparison",
+   "start": 7259,
+   "end": 7280,
+   "old": "len(self._traces) > 0",
+   "new": "(len(self._traces) >= 0)",
+   "id": 42
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 197,
+   "op": "statement",
+   "start": 7298,
+   "end": 7615,
+   "old": "_logger.warning(\n                    f\"The timeout of the trace buffer has been updated to {new_timeout} seconds. \"\n                    \"This operation discards all in-progress traces at the moment. Please make \"\n                    \"sure to update the timeout when there are no in-progress traces.\"\n                )",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 64,
+   "op": "comparison",
+   "start": 1970,
+   "end": 1991,
+   "old": "cls._instance is None",
+   "new": "(cls._instance is not None)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 65,
+   "op": "statement",
+   "start": 2013,
+   "end": 2051,
+   "old": "cls._instance = InMemoryTraceManager()",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 125,
+   "op": "statement",
+   "start": 4547,
+   "end": 4629,
+   "old": "_logger.debug(f\"Failed to update prompts tag for trace {trace_id}\", exc_info=True)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4646,
+   "end": 4651,
+   "old": "raise",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 156,
+   "op": "comparison",
+   "start": 5631,
+   "end": 5653,
+   "old": "span.parent_id is None",
+   "new": "(span.parent_id is not None)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 157,
+   "op": "return",
+   "start": 5675,
+   "end": 5694,
+   "old": "return span.span_id",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 195,
+   "op": "constant",
+   "start": 7226,
+   "end": 7235,
+   "old": "\"timeout\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 196,
+   "op": "constant",
+   "start": 7279,
+   "end": 7280,
+   "old": "0",
+   "new": "(1)",
+   "id": 51
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 205,
+   "op": "comparison",
+   "start": 7748,
+   "end": 7801,
+   "old": "new_timeout != getattr(self._traces, \"timeout\", None)",
+   "new": "(new_timeout == getattr(self._traces, 'timeout', None))",
+   "id": 52
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 206,
+   "op": "statement",
+   "start": 7823,
+   "end": 7868,
+   "old": "self._traces = get_trace_cache_with_timeout()",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 205,
+   "op": "constant",
+   "start": 7785,
+   "end": 7794,
+   "old": "\"timeout\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 125,
+   "op": "constant",
+   "start": 4624,
+   "end": 4628,
+   "old": "True",
+   "new": "(False)",
+   "id": 55
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1348,
+   "end": 1500,
+   "old": "new_prompt_entries = [\n        {\"name\": prompt_version.name, \"version\": str(prompt_version.version)}\n        for prompt_version in prompt_versions\n    ]",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1506,
+   "end": 1591,
+   "old": "prompts_to_add = [p for p in new_prompt_entries if p not in parsed_prompts_tag_value]",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1657,
+   "end": 1704,
+   "old": "parsed_prompts_tag_value.extend(prompts_to_add)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 47,
+   "op": "return",
+   "start": 1709,
+   "end": 1752,
+   "old": "return json.dumps(parsed_prompts_tag_value)",
+   "new": "return None",
+   "id": 59
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 23,
+   "op": "comparison",
+   "start": 787,
+   "end": 816,
+   "old": "current_tag_value is not None",
+   "new": "(current_tag_value is None)",
+   "id": 60
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 35,
+   "op": "statement",
+   "start": 1313,
+   "end": 1342,
+   "old": "parsed_prompts_tag_value = []",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 43,
+   "op": "boolean",
+   "start": 1599,
+   "end": 1617,
+   "old": "not prompts_to_add",
+   "new": "(prompts_to_add)",
+   "id": 62
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 44,
+   "op": "return",
+   "start": 1627,
+   "end": 1651,
+   "old": "return current_tag_value",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 25,
+   "op": "statement",
+   "start": 843,
+   "end": 899,
+   "old": "parsed_prompts_tag_value = json.loads(current_tag_value)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 26,
+   "op": "boolean",
+   "start": 915,
+   "end": 961,
+   "old": "not isinstance(parsed_prompts_tag_value, list)",
+   "new": "(isinstance(parsed_prompts_tag_value, list))",
+   "id": 65
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 27,
+   "op": "statement",
+   "start": 979,
+   "end": 1113,
+   "old": "raise MlflowException(\n                    f\"Invalid format for '{LINKED_PROMPTS_TAG_KEY}' tag: {current_tag_value}\"\n                )",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 31,
+   "op": "statement",
+   "start": 1163,
+   "end": 1294,
+   "old": "raise MlflowException(\n                f\"Invalid JSON format for '{LINKED_PROMPTS_TAG_KEY}' tag: {current_tag_value}\"\n            )",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1380,
+   "end": 1386,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1409,
+   "end": 1418,
+   "old": "\"version\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "mlflow/tracing/utils/prompt.py",
+   "line": 42,
+   "op": "comparison",
+   "start": 1557,
+   "end": 1590,
+   "old": "p not in parsed_prompts_tag_value",
+   "new": "(p in parsed_prompts_tag_value)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/tracing/utils/timeout.py",
+   "line": 46,
+   "op": "return",
+   "start": 1576,
+   "end": 1701,
+   "old": "return TTLCache(\n        ttl=MLFLOW_TRACE_BUFFER_TTL_SECONDS.get(),\n        maxsize=MLFLOW_TRACE_BUFFER_MAX_SIZE.get(),\n    )",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "mlflow/tracing/utils/timeout.py",
+   "line": 37,
+   "op": "return",
+   "start": 1158,
+   "end": 1284,
+   "old": "return MlflowTraceTimeoutCache(\n            timeout=timeout,\n            maxsize=MLFLOW_TRACE_BUFFER_MAX_SIZE.get(),\n        )",
+   "new": "return None",
+   "id": 72
+  },
+  {
+   "path": "mlflow/tracing/utils/timeout.py",
+   "line": 250,
+   "op": "statement",
+   "start": 8744,
+   "end": 8778,
+   "old": "self._expire_checker_thread.join()",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 34,
+   "op": "statement",
+   "start": 1249,
+   "end": 1279,
+   "old": "max_length = _get_max_length()",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 36,
+   "op": "statement",
+   "start": 1285,
+   "end": 1299,
+   "old": "content = None",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1304,
+   "end": 1314,
+   "old": "obj = None",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1817,
+   "end": 1857,
+   "old": "content = content or request_or_response",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "return",
+   "start": 1922,
+   "end": 1962,
+   "old": "return content[: max_length - 3] + \"...\"",
+   "new": "return None",
+   "id": 78
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 130,
+   "op": "return",
+   "start": 4500,
+   "end": 4509,
+   "old": "return \"\"",
+   "new": "return None",
+   "id": 79
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 21,
+   "op": "comparison",
+   "start": 747,
+   "end": 781,
+   "old": "trace_info.request_preview is None",
+   "new": "(trace_info.request_preview is not None)",
+   "id": 80
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 22,
+   "op": "statement",
+   "start": 791,
+   "end": 875,
+   "old": "trace_info.request_preview = _get_truncated_preview(trace_data.request, role=\"user\")",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 23,
+   "op": "comparison",
+   "start": 883,
+   "end": 918,
+   "old": "trace_info.response_preview is None",
+   "new": "(trace_info.response_preview is not None)",
+   "id": 82
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 24,
+   "op": "statement",
+   "start": 928,
+   "end": 1019,
+   "old": "trace_info.response_preview = _get_truncated_preview(trace_data.response, role=\"assistant\")",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 31,
+   "op": "comparison",
+   "start": 1197,
+   "end": 1224,
+   "old": "request_or_response is None",
+   "new": "(request_or_response is not None)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 32,
+   "op": "return",
+   "start": 1234,
+   "end": 1243,
+   "old": "return \"\"",
+   "new": "return None",
+   "id": 85
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1369,
+   "end": 1394,
+   "old": "obj = request_or_response",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1403,
+   "end": 1456,
+   "old": "request_or_response = json.dumps(request_or_response)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 47,
+   "op": "comparison",
+   "start": 1629,
+   "end": 1644,
+   "old": "obj is not None",
+   "new": "(obj is None)",
+   "id": 88
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 52,
+   "op": "boolean",
+   "start": 1827,
+   "end": 1857,
+   "old": "content or request_or_response",
+   "new": "(content and request_or_response)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 54,
+   "op": "comparison",
+   "start": 1866,
+   "end": 1892,
+   "old": "len(content) <= max_length",
+   "new": "(len(content) < max_length)",
+   "id": 90
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 55,
+   "op": "return",
+   "start": 1902,
+   "end": 1916,
+   "old": "return content",
+   "new": "return None",
+   "id": 91
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "arithmetic",
+   "start": 1929,
+   "end": 1962,
+   "old": "content[: max_length - 3] + \"...\"",
+   "new": "(content[:max_length - 3] - '...')",
+   "id": 92
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1709,
+   "end": 1753,
+   "old": "msg = _get_last_message(messages, role=role)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1766,
+   "end": 1811,
+   "old": "content = _get_text_content_from_message(msg)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "constant",
+   "start": 1957,
+   "end": 1962,
+   "old": "\"...\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1529,
+   "end": 1566,
+   "old": "obj = json.loads(request_or_response)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 22,
+   "op": "constant",
+   "start": 868,
+   "end": 874,
+   "old": "\"user\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 24,
+   "op": "constant",
+   "start": 1007,
+   "end": 1018,
+   "old": "\"assistant\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "constant",
+   "start": 1952,
+   "end": 1953,
+   "old": "3",
+   "new": "(4)",
+   "id": 99
+  }
+ ]
+}

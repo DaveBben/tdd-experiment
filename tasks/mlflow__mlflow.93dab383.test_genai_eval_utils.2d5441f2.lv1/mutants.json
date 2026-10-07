@@ -1,0 +1,686 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_genai_eval_utils.2d5441f2.lv1",
+ "pool": 68,
+ "mutants": [
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 120,
+   "op": "statement",
+   "start": 3090,
+   "end": 3111,
+   "old": "resolved_scorers = []",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 121,
+   "op": "statement",
+   "start": 3116,
+   "end": 3151,
+   "old": "builtin_scorers = get_all_scorers()",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 123,
+   "op": "statement",
+   "start": 3224,
+   "end": 3247,
+   "old": "builtin_scorer_map = {}",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 161,
+   "op": "return",
+   "start": 5032,
+   "end": 5055,
+   "old": "return resolved_scorers",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 182,
+   "op": "statement",
+   "start": 5810,
+   "end": 5826,
+   "old": "output_data = []",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 232,
+   "op": "return",
+   "start": 7578,
+   "end": 7596,
+   "old": "return output_data",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 247,
+   "op": "statement",
+   "start": 8024,
+   "end": 8052,
+   "old": "assessment_names_set = set()",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 254,
+   "op": "statement",
+   "start": 8304,
+   "end": 8351,
+   "old": "assessment_names = sorted(assessment_names_set)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 256,
+   "op": "statement",
+   "start": 8357,
+   "end": 8398,
+   "old": "headers = [\"trace_id\"] + assessment_names",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 257,
+   "op": "statement",
+   "start": 8403,
+   "end": 8418,
+   "old": "table_data = []",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 277,
+   "op": "return",
+   "start": 9107,
+   "end": 9159,
+   "old": "return TableOutput(headers=headers, rows=table_data)",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 126,
+   "op": "statement",
+   "start": 3346,
+   "end": 3400,
+   "old": "builtin_scorer_map[scorer.__class__.__name__] = scorer",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 158,
+   "op": "boolean",
+   "start": 4944,
+   "end": 4964,
+   "old": "not resolved_scorers",
+   "new": "(resolved_scorers)",
+   "id": 12
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 159,
+   "op": "statement",
+   "start": 4974,
+   "end": 5026,
+   "old": "raise click.UsageError(\"No valid scorers specified\")",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 185,
+   "op": "statement",
+   "start": 5877,
+   "end": 5918,
+   "old": "trace_id = row.get(\"trace_id\", \"unknown\")",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 186,
+   "op": "statement",
+   "start": 5927,
+   "end": 5948,
+   "old": "assessments_list = []",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 230,
+   "op": "statement",
+   "start": 7493,
+   "end": 7572,
+   "old": "output_data.append(EvalResult(trace_id=trace_id, assessments=assessments_list))",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 256,
+   "op": "arithmetic",
+   "start": 8367,
+   "end": 8398,
+   "old": "[\"trace_id\"] + assessment_names",
+   "new": "(['trace_id'] - assessment_names)",
+   "id": 17
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 261,
+   "op": "statement",
+   "start": 8507,
+   "end": 8548,
+   "old": "row = [Cell(value=trace_result.trace_id)]",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 264,
+   "op": "statement",
+   "start": 8628,
+   "end": 8814,
+   "old": "assessment_map = {\n            assessment.name: assessment\n            for assessment in trace_result.assessments\n            if assessment.name and assessment.name != NA_VALUE\n        }",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 275,
+   "op": "statement",
+   "start": 9079,
+   "end": 9101,
+   "old": "table_data.append(row)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 128,
+   "op": "comparison",
+   "start": 3482,
+   "end": 3505,
+   "old": "scorer.name is not None",
+   "new": "(scorer.name is None)",
+   "id": 21
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 129,
+   "op": "statement",
+   "start": 3519,
+   "end": 3559,
+   "old": "builtin_scorer_map[scorer.name] = scorer",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 132,
+   "op": "comparison",
+   "start": 3609,
+   "end": 3642,
+   "old": "scorer_name in builtin_scorer_map",
+   "new": "(scorer_name not in builtin_scorer_map)",
+   "id": 23
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 133,
+   "op": "statement",
+   "start": 3656,
+   "end": 3712,
+   "old": "resolved_scorers.append(builtin_scorer_map[scorer_name])",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 190,
+   "op": "statement",
+   "start": 6085,
+   "end": 6131,
+   "old": "metadata = assessment_dict.get(\"metadata\", {})",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 191,
+   "op": "statement",
+   "start": 6144,
+   "end": 6209,
+   "old": "source_run_id = metadata.get(AssessmentMetadataKey.SOURCE_RUN_ID)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 196,
+   "op": "statement",
+   "start": 6300,
+   "end": 6356,
+   "old": "assessment_name = assessment_dict.get(\"assessment_name\")",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 197,
+   "op": "statement",
+   "start": 6369,
+   "end": 6393,
+   "old": "assessment_result = None",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 198,
+   "op": "statement",
+   "start": 6406,
+   "end": 6433,
+   "old": "assessment_rationale = None",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 199,
+   "op": "statement",
+   "start": 6446,
+   "end": 6469,
+   "old": "assessment_error = None",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 210,
+   "op": "statement",
+   "start": 6848,
+   "end": 7116,
+   "old": "assessments_list.append(\n                Assessment(\n                    name=assessment_name,\n                    result=assessment_result,\n                    rationale=assessment_rationale,\n                    error=assessment_error,\n                )\n            )",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 220,
+   "op": "boolean",
+   "start": 7202,
+   "end": 7222,
+   "old": "not assessments_list",
+   "new": "(assessments_list)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 221,
+   "op": "statement",
+   "start": 7236,
+   "end": 7483,
+   "old": "assessments_list.append(\n                Assessment(\n                    name=NA_VALUE,\n                    result=None,\n                    rationale=None,\n                    error=\"No assessments found on trace\",\n                )\n            )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 272,
+   "op": "statement",
+   "start": 8957,
+   "end": 9032,
+   "old": "cell_content = _format_assessment_cell(assessment_map.get(assessment_name))",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 273,
+   "op": "statement",
+   "start": 9045,
+   "end": 9069,
+   "old": "row.append(cell_content)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 137,
+   "op": "statement",
+   "start": 3811,
+   "end": 3888,
+   "old": "registered_scorer = get_scorer(name=scorer_name, experiment_id=experiment_id)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 138,
+   "op": "statement",
+   "start": 3905,
+   "end": 3947,
+   "old": "resolved_scorers.append(registered_scorer)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 159,
+   "op": "constant",
+   "start": 4997,
+   "end": 5025,
+   "old": "\"No valid scorers specified\"",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 185,
+   "op": "constant",
+   "start": 5896,
+   "end": 5906,
+   "old": "\"trace_id\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 185,
+   "op": "constant",
+   "start": 5908,
+   "end": 5917,
+   "old": "\"unknown\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 188,
+   "op": "constant",
+   "start": 5989,
+   "end": 6002,
+   "old": "\"assessments\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 193,
+   "op": "comparison",
+   "start": 6226,
+   "end": 6260,
+   "old": "source_run_id != evaluation_run_id",
+   "new": "(source_run_id == evaluation_run_id)",
+   "id": 42
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 194,
+   "op": "statement",
+   "start": 6278,
+   "end": 6286,
+   "old": "continue",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 201,
+   "op": "boolean",
+   "start": 6486,
+   "end": 6562,
+   "old": "(feedback := assessment_dict.get(\"feedback\")) and isinstance(feedback, dict)",
+   "new": "((feedback := assessment_dict.get('feedback')) or isinstance(feedback, dict))",
+   "id": 44
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 202,
+   "op": "statement",
+   "start": 6580,
+   "end": 6621,
+   "old": "assessment_result = feedback.get(\"value\")",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 205,
+   "op": "statement",
+   "start": 6701,
+   "end": 6733,
+   "old": "assessment_rationale = rationale",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 208,
+   "op": "statement",
+   "start": 6805,
+   "end": 6834,
+   "old": "assessment_error = str(error)",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 250,
+   "op": "boolean",
+   "start": 8157,
+   "end": 8204,
+   "old": "assessment.name and assessment.name != NA_VALUE",
+   "new": "(assessment.name or assessment.name != NA_VALUE)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 251,
+   "op": "statement",
+   "start": 8222,
+   "end": 8263,
+   "old": "assessment_names_set.add(assessment.name)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 256,
+   "op": "constant",
+   "start": 8368,
+   "end": 8378,
+   "old": "\"trace_id\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4005,
+   "end": 4027,
+   "old": "error_message = str(e)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 190,
+   "op": "constant",
+   "start": 6116,
+   "end": 6126,
+   "old": "\"metadata\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 196,
+   "op": "constant",
+   "start": 6338,
+   "end": 6355,
+   "old": "\"assessment_name\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 250,
+   "op": "comparison",
+   "start": 8177,
+   "end": 8204,
+   "old": "assessment.name != NA_VALUE",
+   "new": "(assessment.name == NA_VALUE)",
+   "id": 54
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 267,
+   "op": "boolean",
+   "start": 8757,
+   "end": 8804,
+   "old": "assessment.name and assessment.name != NA_VALUE",
+   "new": "(assessment.name or assessment.name != NA_VALUE)",
+   "id": 55
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 141,
+   "op": "comparison",
+   "start": 4047,
+   "end": 4083,
+   "old": "\"not found\" in error_message.lower()",
+   "new": "('not found' not in error_message.lower())",
+   "id": 56
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4105,
+   "end": 4247,
+   "old": "available_builtin = \", \".join(\n                        sorted({scorer.__class__.__name__ for scorer in builtin_scorers})\n                    )",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 145,
+   "op": "statement",
+   "start": 4268,
+   "end": 4702,
+   "old": "raise click.UsageError(\n                        f\"Could not identify Scorer '{scorer_name}'. \"\n                        f\"Only built-in or registered scorers can be resolved. \"\n                        f\"Available built-in scorers: {available_builtin}. \"\n                        f\"To use a custom scorer, register it first in experiment {experiment_id} \"\n                        f\"using the register_scorer() API.\"\n                    )",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 153,
+   "op": "statement",
+   "start": 4745,
+   "end": 4935,
+   "old": "raise click.UsageError(\n                        f\"An error occurred when retrieving information for Scorer \"\n                        f\"`{scorer_name}`: {error_message}\"\n                    )",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 202,
+   "op": "constant",
+   "start": 6613,
+   "end": 6620,
+   "old": "\"value\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 204,
+   "op": "constant",
+   "start": 6671,
+   "end": 6682,
+   "old": "\"rationale\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 207,
+   "op": "constant",
+   "start": 6779,
+   "end": 6786,
+   "old": "\"error\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 267,
+   "op": "comparison",
+   "start": 8777,
+   "end": 8804,
+   "old": "assessment.name != NA_VALUE",
+   "new": "(assessment.name == NA_VALUE)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 141,
+   "op": "constant",
+   "start": 4047,
+   "end": 4058,
+   "old": "\"not found\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 201,
+   "op": "constant",
+   "start": 6519,
+   "end": 6529,
+   "old": "\"feedback\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 226,
+   "op": "constant",
+   "start": 7419,
+   "end": 7450,
+   "old": "\"No assessments found on trace\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "mlflow/cli/genai_eval_utils.py",
+   "line": 142,
+   "op": "constant",
+   "start": 4125,
+   "end": 4129,
+   "old": "\", \"",
+   "new": "('XX')",
+   "id": 67
+  }
+ ]
+}

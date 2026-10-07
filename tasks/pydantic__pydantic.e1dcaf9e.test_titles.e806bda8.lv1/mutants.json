@@ -1,0 +1,1006 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_titles.e806bda8.lv1",
+ "pool": 196,
+ "mutants": [
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 223,
+   "op": "return",
+   "start": 8752,
+   "end": 8790,
+   "old": "return dataclasses.field(**field_args)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 212,
+   "op": "boolean",
+   "start": 8227,
+   "end": 8297,
+   "old": "sys.version_info >= (3, 14) and pydantic_field.description is not None",
+   "new": "(sys.version_info >= (3, 14) or pydantic_field.description is not None)",
+   "id": 1
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 213,
+   "op": "statement",
+   "start": 8307,
+   "end": 8353,
+   "old": "field_args['doc'] = pydantic_field.description",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 209,
+   "op": "constant",
+   "start": 8079,
+   "end": 8088,
+   "old": "'default'",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 212,
+   "op": "comparison",
+   "start": 8259,
+   "end": 8297,
+   "old": "pydantic_field.description is not None",
+   "new": "(pydantic_field.description is None)",
+   "id": 4
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 216,
+   "op": "comparison",
+   "start": 8469,
+   "end": 8496,
+   "old": "sys.version_info >= (3, 10)",
+   "new": "(sys.version_info > (3, 10))",
+   "id": 5
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 220,
+   "op": "constant",
+   "start": 8692,
+   "end": 8696,
+   "old": "True",
+   "new": "(False)",
+   "id": 6
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 217,
+   "op": "constant",
+   "start": 8544,
+   "end": 8553,
+   "old": "'kw_only'",
+   "new": "('XX')",
+   "id": 7
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 315,
+   "op": "statement",
+   "start": 13122,
+   "end": 13157,
+   "old": "fields[field_name] = original_field",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 212,
+   "op": "constant",
+   "start": 8251,
+   "end": 8253,
+   "old": "14",
+   "new": "(15)",
+   "id": 9
+  },
+  {
+   "path": "pydantic/_internal/_dataclasses.py",
+   "line": 216,
+   "op": "constant",
+   "start": 8490,
+   "end": 8491,
+   "old": "3",
+   "new": "(4)",
+   "id": 10
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 845,
+   "op": "boolean",
+   "start": 33108,
+   "end": 33152,
+   "old": "ismethoddescriptor(f) or isdatadescriptor(f)",
+   "new": "(ismethoddescriptor(f) and isdatadescriptor(f))",
+   "id": 11
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 848,
+   "op": "return",
+   "start": 33189,
+   "end": 33207,
+   "old": "return property(f)",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "pydantic/_internal/_decorators.py",
+   "line": 858,
+   "op": "return",
+   "start": 33509,
+   "end": 33528,
+   "old": "return signature(f)",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4665,
+   "end": 4712,
+   "old": "title = title_generator(field_name, field_info)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 127,
+   "op": "boolean",
+   "start": 4724,
+   "end": 4750,
+   "old": "not isinstance(title, str)",
+   "new": "(isinstance(title, str))",
+   "id": 15
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 29239,
+   "end": 29279,
+   "old": "parameters[0].default is Parameter.empty",
+   "new": "(parameters[0].default is not Parameter.empty)",
+   "id": 16
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29196,
+   "end": 29197,
+   "old": "1",
+   "new": "(2)",
+   "id": 17
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29231,
+   "end": 29232,
+   "old": "0",
+   "new": "(1)",
+   "id": 18
+  },
+  {
+   "path": "pydantic/_internal/_fields.py",
+   "line": 671,
+   "op": "constant",
+   "start": 29250,
+   "end": 29251,
+   "old": "0",
+   "new": "(1)",
+   "id": 19
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2154,
+   "op": "statement",
+   "start": 99557,
+   "end": 99611,
+   "old": "return_type_schema = self.generate_schema(return_type)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2156,
+   "op": "statement",
+   "start": 99681,
+   "end": 99868,
+   "old": "return_type_schema = self._apply_field_serializers(\n            return_type_schema,\n            filter_field_decorator_info_by_field(field_serializers.values(), d.cls_var_name),\n        )",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2161,
+   "op": "statement",
+   "start": 99878,
+   "end": 99968,
+   "old": "pydantic_js_updates, pydantic_js_extra = _extract_json_schema_info_from_field_info(d.info)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2162,
+   "op": "statement",
+   "start": 99977,
+   "end": 100011,
+   "old": "core_metadata: dict[str, Any] = {}",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2163,
+   "op": "statement",
+   "start": 100020,
+   "end": 100235,
+   "old": "update_core_metadata(\n            core_metadata,\n            pydantic_js_updates={'readOnly': True, **(pydantic_js_updates if pydantic_js_updates else {})},\n            pydantic_js_extra=pydantic_js_extra,\n        )",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2134,
+   "op": "statement",
+   "start": 98336,
+   "end": 98368,
+   "old": "return_type = d.info.return_type",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2140,
+   "op": "statement",
+   "start": 98685,
+   "end": 98781,
+   "old": "return_type = _decorators.get_callable_return_type(d.func, localns=self._types_namespace.locals)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2145,
+   "op": "constant",
+   "start": 98991,
+   "end": 99171,
+   "old": "'Computed field is missing return type annotation or specifying `return_type`'\n                ' to the `@computed_field` decorator (e.g. `@computed_field(return_type=int | str)`)'",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2165,
+   "op": "constant",
+   "start": 100114,
+   "end": 100118,
+   "old": "True",
+   "new": "(False)",
+   "id": 28
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1606,
+   "op": "statement",
+   "start": 71152,
+   "end": 71174,
+   "old": "wrapped_name: str = ''",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "return",
+   "start": 71428,
+   "end": 71501,
+   "old": "return wrapped_name.startswith('_') and not wrapped_name.startswith('__')",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1566,
+   "op": "statement",
+   "start": 69015,
+   "end": 69099,
+   "old": "title_generator = self.field_title_generator or config_wrapper.field_title_generator",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1812,
+   "op": "statement",
+   "start": 78713,
+   "end": 78747,
+   "old": "f = _decorators.ensure_property(f)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1813,
+   "op": "statement",
+   "start": 78756,
+   "end": 78825,
+   "old": "alias_priority = (alias_priority or 2) if alias is not None else None",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1833,
+   "op": "return",
+   "start": 79282,
+   "end": 79337,
+   "old": "return _decorators.PydanticDescriptorProxy(f, dec_info)",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1838,
+   "op": "return",
+   "start": 79397,
+   "end": 79413,
+   "old": "return dec(func)",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1566,
+   "op": "boolean",
+   "start": 69033,
+   "end": 69099,
+   "old": "self.field_title_generator or config_wrapper.field_title_generator",
+   "new": "(self.field_title_generator and config_wrapper.field_title_generator)",
+   "id": 36
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1567,
+   "op": "boolean",
+   "start": 69111,
+   "end": 69161,
+   "old": "title_generator is not None and self.title is None",
+   "new": "(title_generator is not None or self.title is None)",
+   "id": 37
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1568,
+   "op": "statement",
+   "start": 69175,
+   "end": 69215,
+   "old": "self.title = title_generator(name, self)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1613,
+   "op": "boolean",
+   "start": 71468,
+   "end": 71501,
+   "old": "not wrapped_name.startswith('__')",
+   "new": "(wrapped_name.startswith('__'))",
+   "id": 39
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1805,
+   "op": "boolean",
+   "start": 78364,
+   "end": 78405,
+   "old": "description is None and unwrapped.__doc__",
+   "new": "(description is None or unwrapped.__doc__)",
+   "id": 40
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1808,
+   "op": "boolean",
+   "start": 78481,
+   "end": 78540,
+   "old": "deprecated is None and hasattr(unwrapped, '__deprecated__')",
+   "new": "(deprecated is None or hasattr(unwrapped, '__deprecated__'))",
+   "id": 41
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1809,
+   "op": "statement",
+   "start": 78554,
+   "end": 78591,
+   "old": "deprecated = unwrapped.__deprecated__",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1818,
+   "op": "statement",
+   "start": 78950,
+   "end": 78962,
+   "old": "repr_ = repr",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1567,
+   "op": "comparison",
+   "start": 69111,
+   "end": 69138,
+   "old": "title_generator is not None",
+   "new": "(title_generator is None)",
+   "id": 44
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1567,
+   "op": "comparison",
+   "start": 69143,
+   "end": 69161,
+   "old": "self.title is None",
+   "new": "(self.title is not None)",
+   "id": 45
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1609,
+   "op": "constant",
+   "start": 71263,
+   "end": 71273,
+   "old": "'__name__'",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1805,
+   "op": "comparison",
+   "start": 78364,
+   "end": 78383,
+   "old": "description is None",
+   "new": "(description is not None)",
+   "id": 47
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1808,
+   "op": "comparison",
+   "start": 78481,
+   "end": 78499,
+   "old": "deprecated is None",
+   "new": "(deprecated is not None)",
+   "id": 48
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1808,
+   "op": "constant",
+   "start": 78523,
+   "end": 78539,
+   "old": "'__deprecated__'",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "pydantic/fields.py",
+   "line": 1813,
+   "op": "constant",
+   "start": 78792,
+   "end": 78793,
+   "old": "2",
+   "new": "(3)",
+   "id": 50
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2844,
+   "op": "return",
+   "start": 123295,
+   "end": 123304,
+   "old": "return {}",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1458,
+   "op": "statement",
+   "start": 64136,
+   "end": 64169,
+   "old": "total = schema.get('total', True)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1466,
+   "op": "statement",
+   "start": 64581,
+   "end": 64604,
+   "old": "cls = schema.get('cls')",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1467,
+   "op": "statement",
+   "start": 64613,
+   "end": 64649,
+   "old": "config = _get_typed_dict_config(cls)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1496,
+   "op": "return",
+   "start": 66142,
+   "end": 66160,
+   "old": "return json_schema",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1592,
+   "op": "return",
+   "start": 69817,
+   "end": 69868,
+   "old": "return self.generate_inner(schema['return_schema'])",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1787,
+   "op": "statement",
+   "start": 78302,
+   "end": 78542,
+   "old": "named_required_fields: list[tuple[str, bool, CoreSchemaField]] = [\n            (field['name'], self.field_is_required(field, total=True), field)\n            for field in schema['fields']\n            if self.field_is_present(field)\n        ]",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1794,
+   "op": "return",
+   "start": 78705,
+   "end": 78769,
+   "old": "return self._named_required_fields_schema(named_required_fields)",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1807,
+   "op": "statement",
+   "start": 79136,
+   "end": 79155,
+   "old": "cls = schema['cls']",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1808,
+   "op": "statement",
+   "start": 79164,
+   "end": 79244,
+   "old": "config: ConfigDict = getattr(cls, '__pydantic_config__', cast('ConfigDict', {}))",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2627,
+   "op": "return",
+   "start": 114679,
+   "end": 114754,
+   "old": "return tuple(sorted((k, _make_json_hashable(v)) for k, v in value.items()))",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2839,
+   "op": "comparison",
+   "start": 123129,
+   "end": 123144,
+   "old": "cls is not None",
+   "new": "(cls is None)",
+   "id": 62
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2859,
+   "op": "return",
+   "start": 123879,
+   "end": 123937,
+   "old": "return _get_ser_schema_for_default_value(schema['schema'])",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1465,
+   "op": "statement",
+   "start": 64472,
+   "end": 64572,
+   "old": "named_required_fields.extend(self._name_required_computed_fields(schema.get('computed_fields', [])))",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1478,
+   "op": "statement",
+   "start": 65245,
+   "end": 65288,
+   "old": "json_schema['additionalProperties'] = False",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1822,
+   "op": "statement",
+   "start": 79798,
+   "end": 79838,
+   "old": "json_schema['description'] = description",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2629,
+   "op": "return",
+   "start": 114797,
+   "end": 114848,
+   "old": "return tuple(_make_json_hashable(v) for v in value)",
+   "new": "return None",
+   "id": 67
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 656,
+   "op": "constant",
+   "start": 31155,
+   "end": 31161,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1464,
+   "op": "constant",
+   "start": 64443,
+   "end": 64458,
+   "old": "'serialization'",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1477,
+   "op": "constant",
+   "start": 65223,
+   "end": 65231,
+   "old": "'forbid'",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1479,
+   "op": "comparison",
+   "start": 65302,
+   "end": 65341,
+   "old": "schema.get('extra_behavior') == 'allow'",
+   "new": "(schema.get('extra_behavior') != 'allow')",
+   "id": 71
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1807,
+   "op": "constant",
+   "start": 79149,
+   "end": 79154,
+   "old": "'cls'",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1808,
+   "op": "constant",
+   "start": 79198,
+   "end": 79219,
+   "old": "'__pydantic_config__'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "boolean",
+   "start": 65358,
+   "end": 65430,
+   "old": "'extras_schema' in schema and schema['extras_schema'] != {'type': 'any'}",
+   "new": "('extras_schema' in schema or schema['extras_schema'] != {'type': 'any'})",
+   "id": 74
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1489,
+   "op": "constant",
+   "start": 65828,
+   "end": 65850,
+   "old": "'additionalProperties'",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1502,
+   "op": "constant",
+   "start": 66367,
+   "end": 66371,
+   "old": "True",
+   "new": "(False)",
+   "id": 76
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1559,
+   "op": "constant",
+   "start": 68795,
+   "end": 68803,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1808,
+   "op": "constant",
+   "start": 79226,
+   "end": 79238,
+   "old": "'ConfigDict'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1820,
+   "op": "comparison",
+   "start": 79707,
+   "end": 79726,
+   "old": "cls.__doc__ is None",
+   "new": "(cls.__doc__ is not None)",
+   "id": 79
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1822,
+   "op": "constant",
+   "start": 79810,
+   "end": 79823,
+   "old": "'description'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2841,
+   "op": "constant",
+   "start": 123220,
+   "end": 123241,
+   "old": "'__pydantic_config__'",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1479,
+   "op": "constant",
+   "start": 65313,
+   "end": 65329,
+   "old": "'extra_behavior'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "comparison",
+   "start": 65358,
+   "end": 65383,
+   "old": "'extras_schema' in schema",
+   "new": "('extras_schema' not in schema)",
+   "id": 83
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "comparison",
+   "start": 65388,
+   "end": 65430,
+   "old": "schema['extras_schema'] != {'type': 'any'}",
+   "new": "(schema['extras_schema'] == {'type': 'any'})",
+   "id": 84
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1490,
+   "op": "constant",
+   "start": 65920,
+   "end": 65943,
+   "old": "'extra_fields_behavior'",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1493,
+   "op": "comparison",
+   "start": 66056,
+   "end": 66072,
+   "old": "extra == 'allow'",
+   "new": "(extra != 'allow')",
+   "id": 86
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1502,
+   "op": "constant",
+   "start": 66349,
+   "end": 66364,
+   "old": "'property_name'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "constant",
+   "start": 65358,
+   "end": 65373,
+   "old": "'extras_schema'",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1481,
+   "op": "constant",
+   "start": 65460,
+   "end": 65482,
+   "old": "'additionalProperties'",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1483,
+   "op": "constant",
+   "start": 65577,
+   "end": 65599,
+   "old": "'additionalProperties'",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1492,
+   "op": "constant",
+   "start": 66007,
+   "end": 66029,
+   "old": "'additionalProperties'",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1493,
+   "op": "constant",
+   "start": 66065,
+   "end": 66072,
+   "old": "'allow'",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1793,
+   "op": "constant",
+   "start": 78672,
+   "end": 78689,
+   "old": "'computed_fields'",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "constant",
+   "start": 65395,
+   "end": 65410,
+   "old": "'extras_schema'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "constant",
+   "start": 65416,
+   "end": 65422,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1480,
+   "op": "constant",
+   "start": 65424,
+   "end": 65429,
+   "old": "'any'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1811,
+   "op": "constant",
+   "start": 79353,
+   "end": 79361,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 1814,
+   "op": "statement",
+   "start": 83857,
+   "end": 83898,
+   "old": "__getattr__ = getattr_migration(__name__)",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 282,
+   "op": "return",
+   "start": 13510,
+   "end": 13565,
+   "old": "return getattr(cls, '__pydantic_computed_fields__', {})",
+   "new": "return None",
+   "id": 99
+  }
+ ]
+}

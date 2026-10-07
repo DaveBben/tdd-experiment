@@ -1,0 +1,1006 @@
+{
+ "task": "scikit-learn__scikit-learn.5741bac9.test_arff_parser.ecde431a.lv1",
+ "pool": 242,
+ "mutants": [
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 104,
+   "op": "return",
+   "start": 3332,
+   "end": 3343,
+   "old": "return X, y",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3177,
+   "end": 3199,
+   "old": "len(target_names) >= 2",
+   "new": "(len(target_names) > 2)",
+   "id": 1
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 522,
+   "op": "comparison",
+   "start": 18568,
+   "end": 18589,
+   "old": "parser == \"liac-arff\"",
+   "new": "(parser != 'liac-arff')",
+   "id": 2
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3198,
+   "end": 3199,
+   "old": "2",
+   "new": "(3)",
+   "id": 3
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 100,
+   "op": "comparison",
+   "start": 3242,
+   "end": 3264,
+   "old": "len(target_names) == 1",
+   "new": "(len(target_names) != 1)",
+   "id": 4
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 522,
+   "op": "constant",
+   "start": 18578,
+   "end": 18589,
+   "old": "\"liac-arff\"",
+   "new": "('XX')",
+   "id": 5
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 100,
+   "op": "constant",
+   "start": 3263,
+   "end": 3264,
+   "old": "1",
+   "new": "(2)",
+   "id": 6
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 531,
+   "op": "constant",
+   "start": 18827,
+   "end": 18835,
+   "old": "\"pandas\"",
+   "new": "('XX')",
+   "id": 7
+  },
+  {
+   "path": "sklearn/datasets/_arff_parser.py",
+   "line": 101,
+   "op": "constant",
+   "start": 3297,
+   "end": 3298,
+   "old": "0",
+   "new": "(1)",
+   "id": 8
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 292,
+   "op": "statement",
+   "start": 10277,
+   "end": 10333,
+   "old": "values, errors = zip(*_RE_DENSE_VALUES.findall(',' + s))",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 288,
+   "op": "return",
+   "start": 10119,
+   "end": 10204,
+   "old": "return [None if s in ('?', '') else s\n                for s in next(csv.reader([s]))]",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 293,
+   "op": "boolean",
+   "start": 10341,
+   "end": 10356,
+   "old": "not any(errors)",
+   "new": "(any(errors))",
+   "id": 11
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 294,
+   "op": "return",
+   "start": 10366,
+   "end": 10402,
+   "old": "return [_unquote(v) for v in values]",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 638,
+   "op": "comparison",
+   "start": 21868,
+   "end": 21888,
+   "old": "matrix_type == DENSE",
+   "new": "(matrix_type != DENSE)",
+   "id": 13
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 704,
+   "op": "statement",
+   "start": 24100,
+   "end": 24122,
+   "old": "_, v = s.split(' ', 1)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 705,
+   "op": "statement",
+   "start": 24131,
+   "end": 24144,
+   "old": "v = v.strip()",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 711,
+   "op": "return",
+   "start": 24265,
+   "end": 24275,
+   "old": "return res",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 782,
+   "op": "statement",
+   "start": 26575,
+   "end": 26723,
+   "old": "obj: ArffContainerType = {\n            'description': '',\n            'relation': '',\n            'attributes': [],\n            'data': []\n        }",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 788,
+   "op": "statement",
+   "start": 26732,
+   "end": 26752,
+   "old": "attribute_names = {}",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 791,
+   "op": "statement",
+   "start": 26802,
+   "end": 26851,
+   "old": "data = _get_data_object_for_decoding(matrix_type)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 795,
+   "op": "statement",
+   "start": 26918,
+   "end": 26929,
+   "old": "s = iter(s)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 872,
+   "op": "statement",
+   "start": 30035,
+   "end": 30093,
+   "old": "obj['data'] = data.decode_rows(stream(), self._conversors)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 297,
+   "op": "return",
+   "start": 10461,
+   "end": 10554,
+   "old": "return {int(k): _unquote(v)\n                    for k, v in _RE_SPARSE_KEY_VALUES.findall(s)}",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 479,
+   "op": "statement",
+   "start": 16657,
+   "end": 16803,
+   "old": "values = [None if value is None else conversor(value)\n                      for conversor, value\n                      in zip(conversors, values)]",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 594,
+   "op": "statement",
+   "start": 20471,
+   "end": 20498,
+   "old": "values = _parse_values(row)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 708,
+   "op": "statement",
+   "start": 24196,
+   "end": 24221,
+   "old": "raise BadRelationFormat()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 746,
+   "op": "statement",
+   "start": 25463,
+   "end": 25489,
+   "old": "raise BadAttributeFormat()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 797,
+   "op": "arithmetic",
+   "start": 26964,
+   "end": 26987,
+   "old": "self._current_line += 1",
+   "new": "self._current_line -= 1",
+   "id": 27
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 799,
+   "op": "statement",
+   "start": 27033,
+   "end": 27057,
+   "old": "row = row.strip(' \\r\\n')",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 596,
+   "op": "boolean",
+   "start": 20515,
+   "end": 20543,
+   "old": "not isinstance(values, dict)",
+   "new": "(isinstance(values, dict))",
+   "id": 29
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 704,
+   "op": "constant",
+   "start": 24120,
+   "end": 24121,
+   "old": "1",
+   "new": "(2)",
+   "id": 30
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 755,
+   "op": "comparison",
+   "start": 25705,
+   "end": 25722,
+   "old": "type_[-1:] == \"}\"",
+   "new": "(type_[-1:] != '}')",
+   "id": 31
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 767,
+   "op": "statement",
+   "start": 26142,
+   "end": 26166,
+   "old": "raise BadAttributeType()",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 784,
+   "op": "constant",
+   "start": 26645,
+   "end": 26655,
+   "old": "'relation'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 786,
+   "op": "constant",
+   "start": 26703,
+   "end": 26709,
+   "old": "'data'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 806,
+   "op": "statement",
+   "start": 27300,
+   "end": 27354,
+   "old": "obj['description'] += self._decode_comment(row) + '\\n'",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 865,
+   "op": "statement",
+   "start": 29790,
+   "end": 29813,
+   "old": "self._current_line += 1",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 872,
+   "op": "constant",
+   "start": 30039,
+   "end": 30045,
+   "old": "'data'",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 897,
+   "op": "statement",
+   "start": 31182,
+   "end": 31209,
+   "old": "e.line = self._current_line",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 288,
+   "op": "comparison",
+   "start": 10135,
+   "end": 10149,
+   "old": "s in ('?', '')",
+   "new": "(s not in ('?', ''))",
+   "id": 39
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 292,
+   "op": "arithmetic",
+   "start": 10324,
+   "end": 10331,
+   "old": "',' + s",
+   "new": "(',' - s)",
+   "id": 40
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 604,
+   "op": "statement",
+   "start": 20873,
+   "end": 20878,
+   "old": "raise",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 607,
+   "op": "statement",
+   "start": 20967,
+   "end": 20991,
+   "old": "raise BadDataFormat(row)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 644,
+   "op": "comparison",
+   "start": 22029,
+   "end": 22053,
+   "old": "matrix_type == DENSE_GEN",
+   "new": "(matrix_type != DENSE_GEN)",
+   "id": 43
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 755,
+   "op": "constant",
+   "start": 25697,
+   "end": 25700,
+   "old": "\"{\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 799,
+   "op": "constant",
+   "start": 27049,
+   "end": 27056,
+   "old": "' \\r\\n'",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 814,
+   "op": "statement",
+   "start": 27665,
+   "end": 27685,
+   "old": "STATE = _TK_RELATION",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 865,
+   "op": "constant",
+   "start": 29812,
+   "end": 29813,
+   "old": "1",
+   "new": "(2)",
+   "id": 47
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 869,
+   "op": "statement",
+   "start": 29984,
+   "end": 29993,
+   "old": "yield row",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 292,
+   "op": "constant",
+   "start": 10324,
+   "end": 10327,
+   "old": "','",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 304,
+   "op": "constant",
+   "start": 10831,
+   "end": 10854,
+   "old": "'Unknown parsing error'",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 649,
+   "op": "statement",
+   "start": 22176,
+   "end": 22244,
+   "old": "raise ValueError(\"Matrix type %s not supported.\" % str(matrix_type))",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 766,
+   "op": "constant",
+   "start": 26096,
+   "end": 26102,
+   "old": "'REAL'",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 766,
+   "op": "constant",
+   "start": 26104,
+   "end": 26113,
+   "old": "'INTEGER'",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 806,
+   "op": "constant",
+   "start": 27350,
+   "end": 27354,
+   "old": "'\\n'",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 811,
+   "op": "comparison",
+   "start": 27584,
+   "end": 27608,
+   "old": "STATE != _TK_DESCRIPTION",
+   "new": "(STATE == _TK_DESCRIPTION)",
+   "id": 55
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 825,
+   "op": "statement",
+   "start": 28121,
+   "end": 28155,
+   "old": "attr = self._decode_attribute(row)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 844,
+   "op": "statement",
+   "start": 28994,
+   "end": 29028,
+   "old": "self._conversors.append(conversor)",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 602,
+   "op": "constant",
+   "start": 20788,
+   "end": 20797,
+   "old": "'float: '",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 779,
+   "op": "constant",
+   "start": 26505,
+   "end": 26511,
+   "old": "'\\r\\n'",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 815,
+   "op": "constant",
+   "start": 27706,
+   "end": 27716,
+   "old": "'relation'",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 820,
+   "op": "boolean",
+   "start": 27977,
+   "end": 28025,
+   "old": "STATE != _TK_RELATION and STATE != _TK_ATTRIBUTE",
+   "new": "(STATE != _TK_RELATION or STATE != _TK_ATTRIBUTE)",
+   "id": 61
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 827,
+   "op": "statement",
+   "start": 28223,
+   "end": 28280,
+   "old": "raise BadAttributeName(attr[0], attribute_names[attr[0]])",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 874,
+   "op": "constant",
+   "start": 30194,
+   "end": 30195,
+   "old": "1",
+   "new": "(2)",
+   "id": 63
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 302,
+   "op": "constant",
+   "start": 10727,
+   "end": 10728,
+   "old": "1",
+   "new": "(2)",
+   "id": 64
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 649,
+   "op": "arithmetic",
+   "start": 22193,
+   "end": 22243,
+   "old": "\"Matrix type %s not supported.\" % str(matrix_type)",
+   "new": "('Matrix type %s not supported.' * str(matrix_type))",
+   "id": 65
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 755,
+   "op": "constant",
+   "start": 25712,
+   "end": 25713,
+   "old": "1",
+   "new": "(2)",
+   "id": 66
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 834,
+   "op": "statement",
+   "start": 28535,
+   "end": 28579,
+   "old": "conversor = EncodedNominalConversor(attr[1])",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 850,
+   "op": "statement",
+   "start": 29298,
+   "end": 29315,
+   "old": "raise BadLayout()",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 303,
+   "op": "constant",
+   "start": 10767,
+   "end": 10785,
+   "old": "'Error parsing %r'",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 826,
+   "op": "constant",
+   "start": 28180,
+   "end": 28181,
+   "old": "0",
+   "new": "(1)",
+   "id": 70
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 832,
+   "op": "constant",
+   "start": 28452,
+   "end": 28453,
+   "old": "1",
+   "new": "(2)",
+   "id": 71
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 842,
+   "op": "constant",
+   "start": 28973,
+   "end": 28974,
+   "old": "1",
+   "new": "(2)",
+   "id": 72
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 827,
+   "op": "constant",
+   "start": 28276,
+   "end": 28277,
+   "old": "0",
+   "new": "(1)",
+   "id": 73
+  },
+  {
+   "path": "sklearn/externals/_arff.py",
+   "line": 836,
+   "op": "constant",
+   "start": 28664,
+   "end": 28665,
+   "old": "1",
+   "new": "(2)",
+   "id": 74
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 168,
+   "op": "statement",
+   "start": 5039,
+   "end": 5096,
+   "old": "chunk_n_rows = int(working_memory * (2**20) // row_bytes)",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 178,
+   "op": "return",
+   "start": 5437,
+   "end": 5456,
+   "old": "return chunk_n_rows",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 17,
+   "op": "constant",
+   "start": 466,
+   "end": 470,
+   "old": "True",
+   "new": "(False)",
+   "id": 77
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 18,
+   "op": "statement",
+   "start": 480,
+   "end": 516,
+   "old": "chunk = list(islice(gen, chunksize))",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 165,
+   "op": "comparison",
+   "start": 4954,
+   "end": 4976,
+   "old": "working_memory is None",
+   "new": "(working_memory is not None)",
+   "id": 79
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 166,
+   "op": "statement",
+   "start": 4986,
+   "end": 5033,
+   "old": "working_memory = get_config()[\"working_memory\"]",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 169,
+   "op": "comparison",
+   "start": 5104,
+   "end": 5126,
+   "old": "max_n_rows is not None",
+   "new": "(max_n_rows is None)",
+   "id": 81
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 171,
+   "op": "comparison",
+   "start": 5188,
+   "end": 5204,
+   "old": "chunk_n_rows < 1",
+   "new": "(chunk_n_rows <= 1)",
+   "id": 82
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 20,
+   "op": "statement",
+   "start": 547,
+   "end": 558,
+   "old": "yield chunk",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 168,
+   "op": "arithmetic",
+   "start": 5058,
+   "end": 5095,
+   "old": "working_memory * (2**20) // row_bytes",
+   "new": "(working_memory * 2 ** 20 / row_bytes)",
+   "id": 84
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 173,
+   "op": "arithmetic",
+   "start": 5241,
+   "end": 5397,
+   "old": "\"Could not adhere to working_memory config. \"\n            \"Currently %.0fMiB, %.0fMiB required.\"\n            % (working_memory, np.ceil(row_bytes * 2**-20))",
+   "new": "('Could not adhere to working_memory config. Currently %.0fMiB, %.0fMiB required.' * (working_memory, np.ceil(row_bytes * 2 ** (-20))))",
+   "id": 85
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 175,
+   "op": "constant",
+   "start": 5389,
+   "end": 5390,
+   "old": "2",
+   "new": "(3)",
+   "id": 86
+  },
+  {
+   "path": "sklearn/utils/_chunking.py",
+   "line": 175,
+   "op": "constant",
+   "start": 5393,
+   "end": 5395,
+   "old": "20",
+   "new": "(21)",
+   "id": 87
+  },
+  {
+   "path": "sklearn/utils/_optional_dependencies.py",
+   "line": 44,
+   "op": "return",
+   "start": 1181,
+   "end": 1194,
+   "old": "return pandas",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "sklearn/utils/_optional_dependencies.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1232,
+   "end": 1299,
+   "old": "raise ImportError(\"{} requires pandas.\".format(caller_name)) from e",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7556,
+   "end": 7611,
+   "old": "pd_version = parse_version(pd.__version__).base_version",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 227,
+   "op": "comparison",
+   "start": 7619,
+   "end": 7667,
+   "old": "parse_version(pd_version) < parse_version(\"2.2\")",
+   "new": "(parse_version(pd_version) <= parse_version('2.2'))",
+   "id": 91
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 228,
+   "op": "statement",
+   "start": 7677,
+   "end": 7711,
+   "old": "frame = frame.fillna(value=np.nan)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 233,
+   "op": "comparison",
+   "start": 7863,
+   "end": 7911,
+   "old": "parse_version(pd_version) < parse_version(\"3.0\")",
+   "new": "(parse_version(pd_version) <= parse_version('3.0'))",
+   "id": 93
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 227,
+   "op": "constant",
+   "start": 7661,
+   "end": 7666,
+   "old": "\"2.2\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 235,
+   "op": "statement",
+   "start": 8003,
+   "end": 8075,
+   "old": "frame = frame.fillna(value=np.nan).infer_objects(**infer_objects_kwargs)",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 231,
+   "op": "constant",
+   "start": 7827,
+   "end": 7833,
+   "old": "\"copy\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 231,
+   "op": "constant",
+   "start": 7835,
+   "end": 7840,
+   "old": "False",
+   "new": "(True)",
+   "id": 97
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 233,
+   "op": "constant",
+   "start": 7905,
+   "end": 7910,
+   "old": "\"3.0\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "sklearn/utils/fixes.py",
+   "line": 234,
+   "op": "constant",
+   "start": 7980,
+   "end": 7984,
+   "old": "True",
+   "new": "(False)",
+   "id": 99
+  }
+ ]
+}

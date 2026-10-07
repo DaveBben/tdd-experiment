@@ -1,0 +1,59 @@
+{
+ "task": "sympy__sympy.c1097516.test_inverse.c240ffe7.lv1",
+ "image": "libercoders/featurebench-specs_sympy-instance_3d889fef@sha256:207ff124011e74d2b6abbdce2f8d3244546949cd0abfb7949d7dd414368f8935",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 49 passed in 0.23s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 67 passed, 1 xfailed in 0.97s ========================="
+ },
+ "mutant_pool": 819,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 67 passed, 1 xfailed in 1.00s ========================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/assumptions/refine.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/core/relational.py": {
+   "lines": 4,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/matrices/reductions.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/dense.py": {
+   "lines": 3,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/matrices/domainmatrix.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/polys/polyutils.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/opt/miniconda3/envs/pytorch_base/lib/python3.11/site-packages/sympy/simplify/simplify.py": {
+   "lines": 8,
+   "tracked": false
+  },
+  "/testbed/sympy/assumptions/refine.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

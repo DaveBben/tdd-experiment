@@ -1,0 +1,1006 @@
+{
+ "task": "sympy__sympy.c1097516.test_nullspace.f14fc970.lv1",
+ "pool": 430,
+ "mutants": [
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 260,
+   "op": "return",
+   "start": 8737,
+   "end": 8759,
+   "old": "return self._new(p, q)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 327,
+   "op": "statement",
+   "start": 10751,
+   "end": 10781,
+   "old": "x = gcd(self.numerator, other)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 247,
+   "op": "statement",
+   "start": 8331,
+   "end": 8348,
+   "old": "p = ap*bq - aq*bp",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 251,
+   "op": "statement",
+   "start": 8447,
+   "end": 8474,
+   "old": "p, q = ap*q2 - bp*q1, q1*q2",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 256,
+   "op": "statement",
+   "start": 8659,
+   "end": 8679,
+   "old": "q = self.denominator",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 250,
+   "op": "arithmetic",
+   "start": 8425,
+   "end": 8430,
+   "old": "bq//g",
+   "new": "(bq / g)",
+   "id": 5
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 251,
+   "op": "arithmetic",
+   "start": 8462,
+   "end": 8467,
+   "old": "bp*q1",
+   "new": "(bp / q1)",
+   "id": 6
+  },
+  {
+   "path": "sympy/polys/densebasic.py",
+   "line": 709,
+   "op": "constant",
+   "start": 14735,
+   "end": 14744,
+   "old": "'dup[Es]'",
+   "new": "('XX')",
+   "id": 7
+  },
+  {
+   "path": "sympy/polys/densetools.py",
+   "line": 1376,
+   "op": "statement",
+   "start": 30852,
+   "end": 30908,
+   "old": "f = [K0.numer(c)*K1.quo(common, K0.denom(c)) for c in f]",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sympy/polys/densetools.py",
+   "line": 707,
+   "op": "return",
+   "start": 15256,
+   "end": 15295,
+   "old": "return cont, dup_quo_ground(f, cont, K)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "sympy/polys/densetools.py",
+   "line": 1357,
+   "op": "comparison",
+   "start": 30420,
+   "end": 30430,
+   "old": "K1 is None",
+   "new": "(K1 is not None)",
+   "id": 10
+  },
+  {
+   "path": "sympy/polys/densetools.py",
+   "line": 1369,
+   "op": "boolean",
+   "start": 30648,
+   "end": 30659,
+   "old": "not convert",
+   "new": "(convert)",
+   "id": 11
+  },
+  {
+   "path": "sympy/polys/domains/domain.py",
+   "line": 1194,
+   "op": "return",
+   "start": 38099,
+   "end": 38119,
+   "old": "return a == self.one",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 183,
+   "op": "statement",
+   "start": 6068,
+   "end": 6081,
+   "old": "n = len(a[0])",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 186,
+   "op": "statement",
+   "start": 6097,
+   "end": 6108,
+   "old": "pivots = []",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 236,
+   "op": "return",
+   "start": 7507,
+   "end": 7520,
+   "old": "return pivots",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 215,
+   "op": "statement",
+   "start": 7008,
+   "end": 7024,
+   "old": "aijinv = aij**-1",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 229,
+   "op": "statement",
+   "start": 7408,
+   "end": 7424,
+   "old": "pivots.append(j)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 230,
+   "op": "arithmetic",
+   "start": 7433,
+   "end": 7439,
+   "old": "i += 1",
+   "new": "i -= 1",
+   "id": 18
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 86,
+   "op": "statement",
+   "start": 2530,
+   "end": 2545,
+   "old": "ai[j] = aij * b",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 202,
+   "op": "boolean",
+   "start": 6684,
+   "end": 6691,
+   "old": "not aij",
+   "new": "(aij)",
+   "id": 20
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 217,
+   "op": "arithmetic",
+   "start": 7067,
+   "end": 7082,
+   "old": "ai[l] *= aijinv",
+   "new": "ai[l] /= aijinv",
+   "id": 21
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 224,
+   "op": "arithmetic",
+   "start": 7279,
+   "end": 7291,
+   "old": "ak[j] -= akj",
+   "new": "ak[j] += akj",
+   "id": 22
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 233,
+   "op": "comparison",
+   "start": 7476,
+   "end": 7482,
+   "old": "i >= m",
+   "new": "(i > m)",
+   "id": 23
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 207,
+   "op": "statement",
+   "start": 6832,
+   "end": 6857,
+   "old": "a[i], a[ip] = a[ip], a[i]",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 221,
+   "op": "boolean",
+   "start": 7207,
+   "end": 7216,
+   "old": "not ak[j]",
+   "new": "(ak[j])",
+   "id": 25
+  },
+  {
+   "path": "sympy/polys/matrices/dense.py",
+   "line": 226,
+   "op": "arithmetic",
+   "start": 7368,
+   "end": 7379,
+   "old": "akj * ai[l]",
+   "new": "(akj / ai[l])",
+   "id": 26
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 989,
+   "op": "return",
+   "start": 27733,
+   "end": 27761,
+   "old": "return self.rep.to_flat_nz()",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1569,
+   "op": "return",
+   "start": 41931,
+   "end": 41962,
+   "old": "return A.from_rep(A.rep.mul(b))",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1827,
+   "op": "statement",
+   "start": 48671,
+   "end": 48703,
+   "old": "elems0, data = self.to_flat_nz()",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1897,
+   "op": "statement",
+   "start": 50504,
+   "end": 50516,
+   "old": "dod_num = {}",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1910,
+   "op": "statement",
+   "start": 50905,
+   "end": 50937,
+   "old": "den = self.diag(diagonals, Kden)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2087,
+   "op": "statement",
+   "start": 56259,
+   "end": 56307,
+   "old": "M_numers = M.from_flat_nz(list(numers), data, K)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2147,
+   "op": "statement",
+   "start": 57643,
+   "end": 57686,
+   "old": "content, prims = dup_primitive(elements, K)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2497,
+   "op": "statement",
+   "start": 71028,
+   "end": 71036,
+   "old": "A = self",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2537,
+   "op": "statement",
+   "start": 72227,
+   "end": 72285,
+   "old": "null_rep, nonpivots = self.rep.nullspace_from_rref(pivots)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1617,
+   "op": "return",
+   "start": 43026,
+   "end": 43070,
+   "old": "return DomainMatrix.zeros(A.shape, A.domain)",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1899,
+   "op": "statement",
+   "start": 50565,
+   "end": 50600,
+   "old": "indices, elems = zip(*rowi.items())",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1901,
+   "op": "statement",
+   "start": 50691,
+   "end": 50731,
+   "old": "rowi_num = dict(zip(indices, elems_num))",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2151,
+   "op": "constant",
+   "start": 57809,
+   "end": 57815,
+   "old": "'auto'",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2510,
+   "op": "statement",
+   "start": 71456,
+   "end": 71481,
+   "old": "u = K.canonical_unit(den)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 3797,
+   "op": "statement",
+   "start": 110589,
+   "end": 110606,
+   "old": "N = len(diagonal)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1366,
+   "op": "comparison",
+   "start": 37098,
+   "end": 37111,
+   "old": "B in A.domain",
+   "new": "(B not in A.domain)",
+   "id": 42
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1616,
+   "op": "boolean",
+   "start": 42988,
+   "end": 43011,
+   "old": "not (A.domain.is_EXRAW)",
+   "new": "(A.domain.is_EXRAW)",
+   "id": 43
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2511,
+   "op": "comparison",
+   "start": 71497,
+   "end": 71507,
+   "old": "u != K.one",
+   "new": "(u == K.one)",
+   "id": 44
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1372,
+   "op": "return",
+   "start": 37287,
+   "end": 37308,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 1626,
+   "op": "constant",
+   "start": 43309,
+   "end": 43314,
+   "old": "False",
+   "new": "(True)",
+   "id": 46
+  },
+  {
+   "path": "sympy/polys/matrices/domainmatrix.py",
+   "line": 2501,
+   "op": "constant",
+   "start": 71132,
+   "end": 71175,
+   "old": "\"Cannot normalize vectors over a non-field\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 223,
+   "op": "return",
+   "start": 7942,
+   "end": 7984,
+   "old": "return M.from_rep(M_rref_sdm), den, pivots",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 302,
+   "op": "statement",
+   "start": 11124,
+   "end": 11164,
+   "old": "numers, denoms = _dm_QQ_numers_denoms(M)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 404,
+   "op": "statement",
+   "start": 15049,
+   "end": 15077,
+   "old": "elements, _ = M.to_flat_nz()",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 405,
+   "op": "return",
+   "start": 15082,
+   "end": 15097,
+   "old": "return elements",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 410,
+   "op": "statement",
+   "start": 15211,
+   "end": 15238,
+   "old": "elements = _dm_elements(Mq)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 194,
+   "op": "comparison",
+   "start": 6937,
+   "end": 6958,
+   "old": "M.rep.fmt == 'sparse'",
+   "new": "(M.rep.fmt != 'sparse')",
+   "id": 53
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 293,
+   "op": "comparison",
+   "start": 10779,
+   "end": 10804,
+   "old": "density < min(5, ncols/2)",
+   "new": "(density <= min(5, ncols / 2))",
+   "id": 54
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 307,
+   "op": "statement",
+   "start": 11284,
+   "end": 11316,
+   "old": "denom_lcm = ZZ.lcm(denom_lcm, d)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 65,
+   "op": "comparison",
+   "start": 2665,
+   "end": 2679,
+   "old": "method == 'FF'",
+   "new": "(method != 'FF')",
+   "id": 56
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 320,
+   "op": "constant",
+   "start": 11990,
+   "end": 11992,
+   "old": "50",
+   "new": "(51)",
+   "id": 57
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 56,
+   "op": "constant",
+   "start": 2448,
+   "end": 2453,
+   "old": "False",
+   "new": "(True)",
+   "id": 58
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 65,
+   "op": "constant",
+   "start": 2675,
+   "end": 2679,
+   "old": "'FF'",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 68,
+   "op": "arithmetic",
+   "start": 2805,
+   "end": 2830,
+   "old": "_to_field(M_rref_f) / den",
+   "new": "(_to_field(M_rref_f) * den)",
+   "id": 60
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 74,
+   "op": "statement",
+   "start": 3048,
+   "end": 3082,
+   "old": "M_rref = _to_field(M_rref_f) / den",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 77,
+   "op": "statement",
+   "start": 3102,
+   "end": 3156,
+   "old": "raise ValueError(f\"Unknown method for rref: {method}\")",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 293,
+   "op": "constant",
+   "start": 10793,
+   "end": 10794,
+   "old": "5",
+   "new": "(6)",
+   "id": 63
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 293,
+   "op": "arithmetic",
+   "start": 10796,
+   "end": 10803,
+   "old": "ncols/2",
+   "new": "(ncols * 2)",
+   "id": 64
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 303,
+   "op": "constant",
+   "start": 11228,
+   "end": 11229,
+   "old": "1",
+   "new": "(2)",
+   "id": 65
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2851,
+   "end": 2855,
+   "old": "'CD'",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "sympy/polys/matrices/rref.py",
+   "line": 308,
+   "op": "constant",
+   "start": 11353,
+   "end": 11354,
+   "old": "5",
+   "new": "(6)",
+   "id": 67
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1934,
+   "op": "statement",
+   "start": 55976,
+   "end": 55999,
+   "old": "col_to_row_reduced = {}",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1937,
+   "op": "statement",
+   "start": 56074,
+   "end": 56113,
+   "old": "unreduced = col_to_row_unreduced.keys()",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1941,
+   "op": "statement",
+   "start": 56185,
+   "end": 56197,
+   "old": "denom = None",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1948,
+   "op": "statement",
+   "start": 56525,
+   "end": 56564,
+   "old": "A_rows = sorted(rows_in_order, key=min)",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1608,
+   "op": "statement",
+   "start": 44184,
+   "end": 44224,
+   "old": "Csdm = sdm_scalar_mul_exraw(A, b, op, K)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1928,
+   "op": "statement",
+   "start": 55817,
+   "end": 55830,
+   "old": "exquo = K.quo",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1963,
+   "op": "statement",
+   "start": 57328,
+   "end": 57342,
+   "old": "Ai_cancel = {}",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2011,
+   "op": "statement",
+   "start": 58722,
+   "end": 58737,
+   "old": "Aij = Ai.pop(j)",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2076,
+   "op": "statement",
+   "start": 60735,
+   "end": 60750,
+   "old": "divisor = denom",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2079,
+   "op": "statement",
+   "start": 60782,
+   "end": 60795,
+   "old": "denom = K.one",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1968,
+   "op": "statement",
+   "start": 57500,
+   "end": 57515,
+   "old": "Aij = Ai.pop(j)",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1970,
+   "op": "statement",
+   "start": 57529,
+   "end": 57570,
+   "old": "Aj = A_rref_rows[col_to_row_unreduced[j]]",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1990,
+   "op": "statement",
+   "start": 58185,
+   "end": 58206,
+   "old": "Ai[k] = -Ai_cancel[k]",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2030,
+   "op": "statement",
+   "start": 59430,
+   "end": 59445,
+   "old": "Akj = Ak.pop(j)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2061,
+   "op": "statement",
+   "start": 60371,
+   "end": 60398,
+   "old": "col_to_row_unreduced[j] = i",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2063,
+   "op": "statement",
+   "start": 60425,
+   "end": 60450,
+   "old": "col_to_row_reduced[j] = i",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2066,
+   "op": "boolean",
+   "start": 60497,
+   "end": 60514,
+   "old": "not K.is_one(Aij)",
+   "new": "(K.is_one(Aij))",
+   "id": 84
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2072,
+   "op": "comparison",
+   "start": 60633,
+   "end": 60652,
+   "old": "divisor is not None",
+   "new": "(divisor is None)",
+   "id": 85
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1973,
+   "op": "statement",
+   "start": 57626,
+   "end": 57655,
+   "old": "Aik_cancel = Ai_cancel.get(k)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2055,
+   "op": "statement",
+   "start": 60211,
+   "end": 60239,
+   "old": "col_to_row_unreduced.pop(pk)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2056,
+   "op": "statement",
+   "start": 60256,
+   "end": 60282,
+   "old": "col_to_row_reduced[pk] = k",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2067,
+   "op": "comparison",
+   "start": 60531,
+   "end": 60544,
+   "old": "denom is None",
+   "new": "(denom is not None)",
+   "id": 89
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1974,
+   "op": "comparison",
+   "start": 57675,
+   "end": 57693,
+   "old": "Aik_cancel is None",
+   "new": "(Aik_cancel is not None)",
+   "id": 90
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1975,
+   "op": "statement",
+   "start": 57715,
+   "end": 57739,
+   "old": "Ai_cancel[k] = Aij * Ajk",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2024,
+   "op": "statement",
+   "start": 59250,
+   "end": 59265,
+   "old": "Akl = Akl * Aij",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2036,
+   "op": "comparison",
+   "start": 59596,
+   "end": 59615,
+   "old": "divisor is not None",
+   "new": "(divisor is None)",
+   "id": 93
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2052,
+   "op": "statement",
+   "start": 60161,
+   "end": 60170,
+   "old": "Ak.pop(l)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 1979,
+   "op": "statement",
+   "start": 57877,
+   "end": 57902,
+   "old": "Ai_cancel[k] = Aik_cancel",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2024,
+   "op": "arithmetic",
+   "start": 59256,
+   "end": 59265,
+   "old": "Akl * Aij",
+   "new": "(Akl / Aij)",
+   "id": 96
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2025,
+   "op": "comparison",
+   "start": 59289,
+   "end": 59308,
+   "old": "divisor is not None",
+   "new": "(divisor is None)",
+   "id": 97
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2026,
+   "op": "statement",
+   "start": 59334,
+   "end": 59359,
+   "old": "Akl = exquo(Akl, divisor)",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "sympy/polys/matrices/sdm.py",
+   "line": 2048,
+   "op": "comparison",
+   "start": 60016,
+   "end": 60035,
+   "old": "divisor is not None",
+   "new": "(divisor is None)",
+   "id": 99
+  }
+ ]
+}

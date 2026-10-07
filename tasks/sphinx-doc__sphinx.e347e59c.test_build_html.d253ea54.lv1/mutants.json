@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_build_html.d253ea54.lv1",
+ "pool": 2764,
+ "mutants": [
+  {
+   "path": "sphinx/application.py",
+   "line": 1781,
+   "op": "comparison",
+   "start": 63768,
+   "end": 63781,
+   "old": "typ == 'read'",
+   "new": "(typ != 'read')",
+   "id": 0
+  },
+  {
+   "path": "sphinx/application.py",
+   "line": 1804,
+   "op": "comparison",
+   "start": 64833,
+   "end": 64848,
+   "old": "allowed is None",
+   "new": "(allowed is not None)",
+   "id": 1
+  },
+  {
+   "path": "sphinx/application.py",
+   "line": 1784,
+   "op": "constant",
+   "start": 63882,
+   "end": 64092,
+   "old": "'the %s extension does not declare if it '\n                'is safe for parallel reading, assuming '\n                \"it isn't - please ask the extension author \"\n                'to check and make it explicit'",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "sphinx/application.py",
+   "line": 1790,
+   "op": "constant",
+   "start": 64214,
+   "end": 64221,
+   "old": "'write'",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "sphinx/directives/admonitions.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1129,
+   "end": 1163,
+   "old": "(admonition_node,) = super().run()",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 91,
+   "op": "statement",
+   "start": 2753,
+   "end": 2794,
+   "old": "caption_node.source = literal_node.source",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7017,
+   "end": 7039,
+   "old": "self.options = options",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 377,
+   "op": "comparison",
+   "start": 13357,
+   "end": 13374,
+   "old": "inclusive is True",
+   "new": "(inclusive is not True)",
+   "id": 7
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 492,
+   "op": "boolean",
+   "start": 17841,
+   "end": 17885,
+   "old": "self.options['caption'] or self.arguments[0]",
+   "new": "(self.options['caption'] and self.arguments[0])",
+   "id": 8
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 283,
+   "op": "arithmetic",
+   "start": 10049,
+   "end": 10058,
+   "old": "start - 1",
+   "new": "(start + 1)",
+   "id": 9
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 449,
+   "op": "constant",
+   "start": 15838,
+   "end": 15863,
+   "old": "'File insertion disabled'",
+   "new": "('XX')",
+   "id": 10
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 458,
+   "op": "constant",
+   "start": 16248,
+   "end": 16249,
+   "old": "0",
+   "new": "(1)",
+   "id": 11
+  },
+  {
+   "path": "sphinx/directives/code.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16830,
+   "end": 16840,
+   "old": "'language'",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "sphinx/directives/other.py",
+   "line": 399,
+   "op": "statement",
+   "start": 14494,
+   "end": 14548,
+   "old": "include_lines = text.splitlines() + include_lines[-2:]",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/directives/other.py",
+   "line": 108,
+   "op": "comparison",
+   "start": 3790,
+   "end": 3821,
+   "old": "url_re.match(entry) is not None",
+   "new": "(url_re.match(entry) is None)",
+   "id": 14
+  },
+  {
+   "path": "sphinx/directives/other.py",
+   "line": 163,
+   "op": "statement",
+   "start": 6050,
+   "end": 6058,
+   "old": "continue",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sphinx/directives/other.py",
+   "line": 156,
+   "op": "constant",
+   "start": 5762,
+   "end": 5817,
+   "old": "'toctree contains reference to nonexisting document %r'",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "sphinx/directives/other.py",
+   "line": 152,
+   "op": "constant",
+   "start": 5577,
+   "end": 5582,
+   "old": "False",
+   "new": "(True)",
+   "id": 17
+  },
+  {
+   "path": "sphinx/domains/c/_ast.py",
+   "line": 1917,
+   "op": "comparison",
+   "start": 63636,
+   "end": 63665,
+   "old": "self._newest_id_cache is None",
+   "new": "(self._newest_id_cache is not None)",
+   "id": 18
+  },
+  {
+   "path": "sphinx/domains/changeset.py",
+   "line": 97,
+   "op": "statement",
+   "start": 2960,
+   "end": 3024,
+   "old": "para.insert(0, nodes.inline('', '%s: ' % text, classes=classes))",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sphinx/domains/changeset.py",
+   "line": 103,
+   "op": "arithmetic",
+   "start": 3220,
+   "end": 3233,
+   "old": "'%s: ' % text",
+   "new": "('%s: ' * text)",
+   "id": 20
+  },
+  {
+   "path": "sphinx/domains/cpp/_ast.py",
+   "line": 4431,
+   "op": "comparison",
+   "start": 151068,
+   "end": 151090,
+   "old": "self.templates is None",
+   "new": "(self.templates is not None)",
+   "id": 21
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2770,
+   "end": 2783,
+   "old": "name = member",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 149,
+   "op": "statement",
+   "start": 5099,
+   "end": 5131,
+   "old": "modname = sig_node.get('module')",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 253,
+   "op": "statement",
+   "start": 9323,
+   "end": 9336,
+   "old": "parens = '()'",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 80,
+   "op": "constant",
+   "start": 2685,
+   "end": 2696,
+   "old": "'js:object'",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3536,
+   "end": 3537,
+   "old": "0",
+   "new": "(1)",
+   "id": 26
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 252,
+   "op": "constant",
+   "start": 9300,
+   "end": 9308,
+   "old": "'method'",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 189,
+   "op": "constant",
+   "start": 6687,
+   "end": 6698,
+   "old": "'attribute'",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 404,
+   "op": "statement",
+   "start": 16390,
+   "end": 16458,
+   "old": "type_params['multi_line_parameter_list'] = multi_line_parameter_list",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 213,
+   "op": "statement",
+   "start": 8445,
+   "end": 8467,
+   "old": "subscript = node.slice",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 400,
+   "op": "constant",
+   "start": 16215,
+   "end": 16219,
+   "old": "True",
+   "new": "(False)",
+   "id": 31
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4444,
+   "end": 4490,
+   "old": "result = [addnodes.desc_sig_operator('', '*')]",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 431,
+   "op": "arithmetic",
+   "start": 17623,
+   "end": 17669,
+   "old": "node += addnodes.desc_sig_punctuation('', ':')",
+   "new": "node -= addnodes.desc_sig_punctuation('', ':')",
+   "id": 33
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 557,
+   "op": "constant",
+   "start": 22749,
+   "end": 22776,
+   "old": "'multi_line_parameter_list'",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 447,
+   "op": "arithmetic",
+   "start": 18517,
+   "end": 18538,
+   "old": "node += type_ann_expr",
+   "new": "node -= type_ann_expr",
+   "id": 35
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 447,
+   "op": "statement",
+   "start": 18517,
+   "end": 18538,
+   "old": "node += type_ann_expr",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 475,
+   "op": "comparison",
+   "start": 19539,
+   "end": 19574,
+   "old": "param.kind != param.POSITIONAL_ONLY",
+   "new": "(param.kind == param.POSITIONAL_ONLY)",
+   "id": 37
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 502,
+   "op": "arithmetic",
+   "start": 20790,
+   "end": 20833,
+   "old": "node += addnodes.desc_sig_operator('', '=')",
+   "new": "node -= addnodes.desc_sig_operator('', '=')",
+   "id": 38
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 605,
+   "op": "arithmetic",
+   "start": 24995,
+   "end": 25009,
+   "old": "ends_open -= 1",
+   "new": "ends_open += 1",
+   "id": 39
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 225,
+   "op": "constant",
+   "start": 8896,
+   "end": 8900,
+   "old": "'id'",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 444,
+   "op": "statement",
+   "start": 18375,
+   "end": 18396,
+   "old": "node += type_ann_expr",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sphinx/domains/python/_annotations.py",
+   "line": 243,
+   "op": "statement",
+   "start": 9548,
+   "end": 9560,
+   "old": "result.pop()",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 315,
+   "op": "statement",
+   "start": 10236,
+   "end": 10279,
+   "old": "sig_prefix = self.get_signature_prefix(sig)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 424,
+   "op": "statement",
+   "start": 14531,
+   "end": 14570,
+   "old": "domain = self.env.domains.python_domain",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 267,
+   "op": "boolean",
+   "start": 8322,
+   "end": 8392,
+   "old": "prefix and (prefix == classname or prefix.startswith(f'{classname}.'))",
+   "new": "(prefix or (prefix == classname or prefix.startswith(f'{classname}.')))",
+   "id": 45
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 391,
+   "op": "constant",
+   "start": 13287,
+   "end": 13299,
+   "old": "'annotation'",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 403,
+   "op": "constant",
+   "start": 13705,
+   "end": 13715,
+   "old": "'fullname'",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "sphinx/domains/python/_object.py",
+   "line": 267,
+   "op": "comparison",
+   "start": 8334,
+   "end": 8353,
+   "old": "prefix == classname",
+   "new": "(prefix != classname)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/environment/adapters/toctree.py",
+   "line": 574,
+   "op": "boolean",
+   "start": 18903,
+   "end": 18937,
+   "old": "d in parent and d not in ancestors",
+   "new": "(d in parent or d not in ancestors)",
+   "id": 49
+  },
+  {
+   "path": "sphinx/environment/collectors/asset.py",
+   "line": 130,
+   "op": "constant",
+   "start": 4973,
+   "end": 4980,
+   "old": "'image'",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "sphinx/environment/collectors/toctree.py",
+   "line": 270,
+   "op": "statement",
+   "start": 12546,
+   "end": 12563,
+   "old": "assigned.add(ref)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/environment/collectors/toctree.py",
+   "line": 253,
+   "op": "constant",
+   "start": 11863,
+   "end": 11869,
+   "old": "'self'",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "sphinx/environment/collectors/toctree.py",
+   "line": 264,
+   "op": "constant",
+   "start": 12302,
+   "end": 12307,
+   "old": "'toc'",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "sphinx/ext/autodoc/_directive_options.py",
+   "line": 90,
+   "op": "comparison",
+   "start": 2643,
+   "end": 2656,
+   "old": "v is not None",
+   "new": "(v is None)",
+   "id": 54
+  },
+  {
+   "path": "sphinx/ext/autodoc/_directive_options.py",
+   "line": 205,
+   "op": "constant",
+   "start": 6528,
+   "end": 6531,
+   "old": "'+'",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 270,
+   "op": "statement",
+   "start": 8972,
+   "end": 9173,
+   "old": "docstring = _get_doc(\n        obj,\n        props=props,\n        inherit_docstrings=inherit_docstrings,\n        _new_docstrings=_new_docstrings,\n        parent=parent,\n        tab_width=tab_width,\n    )",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 170,
+   "op": "statement",
+   "start": 5765,
+   "end": 5994,
+   "old": "docstring = _get_doc(\n            obj,\n            props=props,\n            inherit_docstrings=inherit_docstrings,\n            _new_docstrings=_new_docstrings,\n            parent=parent,\n            tab_width=tab_width,\n        )",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 126,
+   "op": "comparison",
+   "start": 4068,
+   "end": 4095,
+   "old": "_new_docstrings is not None",
+   "new": "(_new_docstrings is None)",
+   "id": 58
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 127,
+   "op": "return",
+   "start": 4109,
+   "end": 4160,
+   "old": "return tuple(tuple(doc) for doc in _new_docstrings)",
+   "new": "return None",
+   "id": 59
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 181,
+   "op": "comparison",
+   "start": 6121,
+   "end": 6144,
+   "old": "props.name == '__new__'",
+   "new": "(props.name != '__new__')",
+   "id": 60
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 146,
+   "op": "statement",
+   "start": 4865,
+   "end": 4886,
+   "old": "init_docstring = None",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 179,
+   "op": "comparison",
+   "start": 6047,
+   "end": 6082,
+   "old": "docstring == _OBJECT_INIT_DOCSTRING",
+   "new": "(docstring != _OBJECT_INIT_DOCSTRING)",
+   "id": 62
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 136,
+   "op": "constant",
+   "start": 4467,
+   "end": 4473,
+   "old": "'init'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "sphinx/ext/autodoc/_docstrings.py",
+   "line": 241,
+   "op": "constant",
+   "start": 8207,
+   "end": 8216,
+   "old": "'autodoc'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sphinx/ext/autodoc/_sentinels.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3322,
+   "end": 3374,
+   "old": "UNINITIALIZED_ATTR = _Sentinel('UNINITIALIZED_ATTR')",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "sphinx/ext/autodoc/directive.py",
+   "line": 115,
+   "op": "statement",
+   "start": 3652,
+   "end": 3690,
+   "old": "doccls = registry.documenters[objtype]",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 885,
+   "op": "statement",
+   "start": 30885,
+   "end": 30926,
+   "old": "class_doc_from = config.autoclass_content",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 942,
+   "op": "statement",
+   "start": 32707,
+   "end": 33027,
+   "old": "logger.warning(\n            __(\n                \"don't know which module to import for autodocumenting \"\n                '%r (try placing a \"module\" or \"currentmodule\" directive '\n                'in the document, or giving an explicit module name)'\n            ),\n            name,\n            type='autodoc',\n        )",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1188,
+   "op": "statement",
+   "start": 41535,
+   "end": 41570,
+   "old": "signatures = [(args, retann or '')]",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1447,
+   "op": "comparison",
+   "start": 51579,
+   "end": 51604,
+   "old": "props._docstrings is None",
+   "new": "(props._docstrings is not None)",
+   "id": 70
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1051,
+   "op": "statement",
+   "start": 36462,
+   "end": 36488,
+   "old": "mod_cls = path.rstrip('.')",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 981,
+   "op": "constant",
+   "start": 33994,
+   "end": 34042,
+   "old": "\"signature arguments given for automodule: '%s'\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1220,
+   "op": "constant",
+   "start": 42569,
+   "end": 42580,
+   "old": "'attribute'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1220,
+   "op": "constant",
+   "start": 42582,
+   "end": 42592,
+   "old": "'property'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1247,
+   "op": "statement",
+   "start": 43619,
+   "end": 43676,
+   "old": "logger.debug('[autodoc] module analyzer failed: %s', exc)",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 577,
+   "op": "constant",
+   "start": 18979,
+   "end": 18986,
+   "old": "'class'",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 659,
+   "op": "statement",
+   "start": 22382,
+   "end": 22806,
+   "old": "props = _FunctionDefProperties(\n            obj_type=objtype,\n            module_name=module_name,\n            parts=parts,\n            docstring_lines=(),\n            properties=frozenset(obj_properties),\n            _obj=obj,\n            _obj___module__=get_attr(obj, '__module__', None),\n            _obj___name__=getattr(obj, '__name__', None),\n            _obj___qualname__=getattr(obj, '__qualname__', None),\n        )",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 960,
+   "op": "constant",
+   "start": 33381,
+   "end": 33384,
+   "old": "'.'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1233,
+   "op": "constant",
+   "start": 43020,
+   "end": 43021,
+   "old": "2",
+   "new": "(3)",
+   "id": 79
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1274,
+   "op": "statement",
+   "start": 44627,
+   "end": 44635,
+   "old": "continue",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1278,
+   "op": "boolean",
+   "start": 44828,
+   "end": 44845,
+   "old": "not dispatch_func",
+   "new": "(dispatch_func)",
+   "id": 81
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 643,
+   "op": "constant",
+   "start": 21701,
+   "end": 21709,
+   "old": "'method'",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 1230,
+   "op": "constant",
+   "start": 42893,
+   "end": 42894,
+   "old": "0",
+   "new": "(1)",
+   "id": 83
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 618,
+   "op": "constant",
+   "start": 20611,
+   "end": 20621,
+   "old": "'__name__'",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 694,
+   "op": "statement",
+   "start": 23878,
+   "end": 23934,
+   "old": "update_annotations_using_type_comments(app, func, False)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 697,
+   "op": "statement",
+   "start": 23995,
+   "end": 24110,
+   "old": "signature = inspect.signature(\n                    func, type_aliases=config.autodoc_type_aliases\n                )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 746,
+   "op": "constant",
+   "start": 26002,
+   "end": 26009,
+   "old": "'short'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "sphinx/ext/autodoc/importer.py",
+   "line": 803,
+   "op": "comparison",
+   "start": 27958,
+   "end": 28000,
+   "old": "config.autodoc_typehints_format == 'short'",
+   "new": "(config.autodoc_typehints_format != 'short')",
+   "id": 88
+  },
+  {
+   "path": "sphinx/ext/autodoc/type_comment.py",
+   "line": 118,
+   "op": "statement",
+   "start": 3756,
+   "end": 3809,
+   "old": "type_comment = getattr(subject, 'type_comment', None)",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "sphinx/highlighting.py",
+   "line": 193,
+   "op": "statement",
+   "start": 6179,
+   "end": 6203,
+   "old": "source = source.decode()",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/code.py",
+   "line": 86,
+   "op": "statement",
+   "start": 2581,
+   "end": 2636,
+   "old": "node['linenos'] = lines >= setting.lineno_threshold - 1",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/code.py",
+   "line": 123,
+   "op": "constant",
+   "start": 3918,
+   "end": 3927,
+   "old": "'python3'",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "sphinx/util/i18n.py",
+   "line": 339,
+   "op": "statement",
+   "start": 11799,
+   "end": 11838,
+   "old": "_, abspath = env.relfn2path(translated)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "sphinx/util/i18n.py",
+   "line": 300,
+   "op": "constant",
+   "start": 10597,
+   "end": 10601,
+   "old": "'%X'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "sphinx/util/matching.py",
+   "line": 100,
+   "op": "return",
+   "start": 2906,
+   "end": 2940,
+   "old": "return _pat_cache[pat].match(name)",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 357,
+   "op": "statement",
+   "start": 12778,
+   "end": 12799,
+   "old": "raise ValueError(msg)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 693,
+   "op": "statement",
+   "start": 23680,
+   "end": 23709,
+   "old": "dst.line = get_node_line(src)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 428,
+   "op": "constant",
+   "start": 14981,
+   "end": 14986,
+   "old": "False",
+   "new": "(True)",
+   "id": 98
+  },
+  {
+   "path": "sphinx/util/nodes.py",
+   "line": 470,
+   "op": "statement",
+   "start": 16351,
+   "end": 16413,
+   "old": "indexentries.append((index_type, value, targetid, main, None))",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

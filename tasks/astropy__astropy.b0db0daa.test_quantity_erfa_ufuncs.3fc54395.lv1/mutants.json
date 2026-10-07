@@ -1,0 +1,1006 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_quantity_erfa_ufuncs.3fc54395.lv1",
+ "pool": 148,
+ "mutants": [
+  {
+   "path": "astropy/units/core.py",
+   "line": 512,
+   "op": "statement",
+   "start": 16513,
+   "end": 16549,
+   "old": "unit_str = unit.to_string(\"generic\")",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 518,
+   "op": "return",
+   "start": 16774,
+   "end": 16789,
+   "old": "return unit_str",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 514,
+   "op": "comparison",
+   "start": 16612,
+   "end": 16638,
+   "old": "physical_type != \"unknown\"",
+   "new": "(physical_type == 'unknown')",
+   "id": 2
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 515,
+   "op": "statement",
+   "start": 16656,
+   "end": 16700,
+   "old": "unit_str = f\"'{unit_str}' ({physical_type})\"",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "astropy/units/core.py",
+   "line": 517,
+   "op": "statement",
+   "start": 16735,
+   "end": 16761,
+   "old": "unit_str = f\"'{unit_str}'\"",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "arithmetic",
+   "start": 22099,
+   "end": 22138,
+   "old": "__doc__ += \"\\n\\n\" + \"\\n\".join(doclines)",
+   "new": "__doc__ -= '\\n\\n' + '\\n'.join(doclines)",
+   "id": 5
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 275,
+   "op": "return",
+   "start": 10468,
+   "end": 10499,
+   "old": "return f\"PhysicalType({names})\"",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 271,
+   "op": "comparison",
+   "start": 10297,
+   "end": 10326,
+   "old": "len(self._physical_type) == 1",
+   "new": "(len(self._physical_type) != 1)",
+   "id": 7
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "statement",
+   "start": 10409,
+   "end": 10459,
+   "old": "names = \"{\" + str(self._physical_type)[1:-1] + \"}\"",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 610,
+   "op": "constant",
+   "start": 22110,
+   "end": 22116,
+   "old": "\"\\n\\n\"",
+   "new": "('XX')",
+   "id": 9
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 271,
+   "op": "constant",
+   "start": 10325,
+   "end": 10326,
+   "old": "1",
+   "new": "(2)",
+   "id": 10
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 272,
+   "op": "arithmetic",
+   "start": 10348,
+   "end": 10382,
+   "old": "\"'\" + self._physical_type[0] + \"'\"",
+   "new": "(\"'\" + self._physical_type[0] - \"'\")",
+   "id": 11
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 272,
+   "op": "constant",
+   "start": 10379,
+   "end": 10382,
+   "old": "\"'\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "arithmetic",
+   "start": 10417,
+   "end": 10453,
+   "old": "\"{\" + str(self._physical_type)[1:-1]",
+   "new": "('{' - str(self._physical_type)[1:-1])",
+   "id": 13
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "constant",
+   "start": 10456,
+   "end": 10459,
+   "old": "\"}\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 272,
+   "op": "constant",
+   "start": 10348,
+   "end": 10351,
+   "old": "\"'\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "constant",
+   "start": 10417,
+   "end": 10420,
+   "old": "\"{\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 272,
+   "op": "constant",
+   "start": 10374,
+   "end": 10375,
+   "old": "0",
+   "new": "(1)",
+   "id": 17
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "constant",
+   "start": 10448,
+   "end": 10449,
+   "old": "1",
+   "new": "(2)",
+   "id": 18
+  },
+  {
+   "path": "astropy/units/physical.py",
+   "line": 274,
+   "op": "constant",
+   "start": 10451,
+   "end": 10452,
+   "old": "1",
+   "new": "(2)",
+   "id": 19
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 33,
+   "op": "statement",
+   "start": 1257,
+   "end": 1284,
+   "old": "dtype_fields = dtype.fields",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1747,
+   "end": 1780,
+   "old": "dtype = getattr(erfa, dtype_name)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 35,
+   "op": "return",
+   "start": 1314,
+   "end": 1585,
+   "old": "return (\n            isinstance(unit, StructuredUnit)\n            and len(unit) == len(dtype_fields)\n            and all(\n                has_matching_structure(u, df_v[0])\n                for (u, df_v) in zip(unit.values(), dtype_fields.values())\n            )\n        )",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 44,
+   "op": "return",
+   "start": 1604,
+   "end": 1647,
+   "old": "return not isinstance(unit, StructuredUnit)",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 52,
+   "op": "boolean",
+   "start": 1788,
+   "end": 1827,
+   "old": "not has_matching_structure(unit, dtype)",
+   "new": "(has_matching_structure(unit, dtype))",
+   "id": 24
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1837,
+   "end": 1902,
+   "old": "name = dtype_name.removeprefix(\"dt_\").removeprefix(\"era\").lower()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1911,
+   "end": 1982,
+   "old": "raise UnitTypeError(f\"{name} input needs unit matching dtype={dtype}.\")",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 533,
+   "op": "constant",
+   "start": 15370,
+   "end": 15382,
+   "old": "\"erfa.ufunc\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 36,
+   "op": "boolean",
+   "start": 1335,
+   "end": 1575,
+   "old": "isinstance(unit, StructuredUnit)\n            and len(unit) == len(dtype_fields)\n            and all(\n                has_matching_structure(u, df_v[0])\n                for (u, df_v) in zip(unit.values(), dtype_fields.values())\n            )",
+   "new": "(isinstance(unit, StructuredUnit) or len(unit) == len(dtype_fields) or all((has_matching_structure(u, df_v[0]) for u, df_v in zip(unit.values(), dtype_fields.values()))))",
+   "id": 28
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 44,
+   "op": "boolean",
+   "start": 1611,
+   "end": 1647,
+   "old": "not isinstance(unit, StructuredUnit)",
+   "new": "(isinstance(unit, StructuredUnit))",
+   "id": 29
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 37,
+   "op": "comparison",
+   "start": 1384,
+   "end": 1414,
+   "old": "len(unit) == len(dtype_fields)",
+   "new": "(len(unit) != len(dtype_fields))",
+   "id": 30
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 276,
+   "op": "arithmetic",
+   "start": 8210,
+   "end": 8218,
+   "old": "AU / day",
+   "new": "(AU // day)",
+   "id": 31
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 53,
+   "op": "constant",
+   "start": 1888,
+   "end": 1893,
+   "old": "\"era\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 39,
+   "op": "constant",
+   "start": 1483,
+   "end": 1484,
+   "old": "0",
+   "new": "(1)",
+   "id": 33
+  },
+  {
+   "path": "astropy/units/quantity_helper/erfa.py",
+   "line": 53,
+   "op": "constant",
+   "start": 1868,
+   "end": 1873,
+   "old": "\"dt_\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 257,
+   "op": "statement",
+   "start": 10816,
+   "end": 10879,
+   "old": "subok = args[2] if len(args) > 2 else kwargs.pop(\"subok\", True)",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 259,
+   "op": "return",
+   "start": 10921,
+   "end": 10976,
+   "old": "return (a.view(np.ndarray),) + args, kwargs, unit, None",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 478,
+   "op": "statement",
+   "start": 17814,
+   "end": 17854,
+   "old": "arrays, unit = _quantities2arrays(*args)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 479,
+   "op": "return",
+   "start": 17859,
+   "end": 17891,
+   "old": "return arrays, kwargs, unit, out",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 475,
+   "op": "comparison",
+   "start": 17713,
+   "end": 17728,
+   "old": "out is not None",
+   "new": "(out is None)",
+   "id": 39
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 476,
+   "op": "statement",
+   "start": 17738,
+   "end": 17781,
+   "old": "kwargs[\"out\"] = _quantity_out_as_array(out)",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 954,
+   "op": "comparison",
+   "start": 32976,
+   "end": 32991,
+   "old": "out is not None",
+   "new": "(out is None)",
+   "id": 41
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 257,
+   "op": "comparison",
+   "start": 10835,
+   "end": 10848,
+   "old": "len(args) > 2",
+   "new": "(len(args) >= 2)",
+   "id": 42
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 960,
+   "op": "arithmetic",
+   "start": 33231,
+   "end": 33253,
+   "old": "(subscripts,) + arrays",
+   "new": "((subscripts,) - arrays)",
+   "id": 43
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 257,
+   "op": "constant",
+   "start": 10865,
+   "end": 10872,
+   "old": "\"subok\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 257,
+   "op": "constant",
+   "start": 10874,
+   "end": 10878,
+   "old": "True",
+   "new": "(False)",
+   "id": 45
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 952,
+   "op": "constant",
+   "start": 32913,
+   "end": 32966,
+   "old": "'only \"subscripts\" string mode supported for einsum.'",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "astropy/units/quantity_helper/function_helpers.py",
+   "line": 955,
+   "op": "constant",
+   "start": 33008,
+   "end": 33013,
+   "old": "\"out\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1113,
+   "end": 1124,
+   "old": "result = []",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 66,
+   "op": "return",
+   "start": 2004,
+   "end": 2024,
+   "old": "return tuple(result)",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 576,
+   "op": "return",
+   "start": 20448,
+   "end": 20502,
+   "old": "return StructuredUnit(tuple(units), names=dtype.names)",
+   "new": "return None",
+   "id": 50
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 306,
+   "op": "return",
+   "start": 11284,
+   "end": 11389,
+   "old": "return self._recursively_apply(\n            operator.attrgetter(\"physical_type\"), cls=Structure\n        )",
+   "new": "return None",
+   "id": 51
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 416,
+   "op": "return",
+   "start": 15517,
+   "end": 15585,
+   "old": "return self.get_converter(other, equivalencies=equivalencies)(value)",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 435,
+   "op": "statement",
+   "start": 16101,
+   "end": 16159,
+   "old": "parts = [part.to_string(format) for part in self.values()]",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 469,
+   "op": "return",
+   "start": 17293,
+   "end": 17319,
+   "old": "return self.__mul__(other)",
+   "new": "return None",
+   "id": 54
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 495,
+   "op": "return",
+   "start": 18030,
+   "end": 18066,
+   "old": "return f'Unit(\"{self.to_string()}\")'",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1212,
+   "end": 1231,
+   "old": "result.append(name)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 412,
+   "op": "comparison",
+   "start": 15314,
+   "end": 15334,
+   "old": "value is np._NoValue",
+   "new": "(value is not np._NoValue)",
+   "id": 57
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 418,
+   "op": "constant",
+   "start": 15618,
+   "end": 15627,
+   "old": "\"generic\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 439,
+   "op": "statement",
+   "start": 16328,
+   "end": 16366,
+   "old": "parts = [part[1:-1] for part in parts]",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 455,
+   "op": "statement",
+   "start": 16815,
+   "end": 16872,
+   "old": "new_units = tuple(part * other for part in self.values())",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 464,
+   "op": "return",
+   "start": 17159,
+   "end": 17192,
+   "old": "return Quantity(other, unit=self)",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 487,
+   "op": "return",
+   "start": 17832,
+   "end": 17880,
+   "old": "return Quantity(m, self, copy=False, subok=True)",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 44,
+   "op": "comparison",
+   "start": 1185,
+   "end": 1198,
+   "old": "len(name) > 0",
+   "new": "(len(name) >= 0)",
+   "id": 63
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 47,
+   "op": "boolean",
+   "start": 1259,
+   "end": 1462,
+   "old": "isinstance(name, list)\n            and len(name) == 2\n            and isinstance(name[0], str)\n            and len(name[0]) > 0\n            and isinstance(name[1], tuple)\n            and len(name[1]) > 0",
+   "new": "(isinstance(name, list) or len(name) == 2 or isinstance(name[0], str) or (len(name[0]) > 0) or isinstance(name[1], tuple) or (len(name[1]) > 0))",
+   "id": 64
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1486,
+   "end": 1537,
+   "old": "result.append([name[0], _normalize_names(name[1])])",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 436,
+   "op": "comparison",
+   "start": 16188,
+   "end": 16201,
+   "old": "len(self) > 1",
+   "new": "(len(self) >= 1)",
+   "id": 66
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 436,
+   "op": "constant",
+   "start": 16178,
+   "end": 16184,
+   "old": "\"({})\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 436,
+   "op": "constant",
+   "start": 16207,
+   "end": 16214,
+   "old": "\"({},)\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 437,
+   "op": "constant",
+   "start": 16244,
+   "end": 16251,
+   "old": "\"latex\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 440,
+   "op": "arithmetic",
+   "start": 16389,
+   "end": 16408,
+   "old": "\"$\" + out_fmt + \"$\"",
+   "new": "('$' + out_fmt - '$')",
+   "id": 70
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 466,
+   "op": "return",
+   "start": 17231,
+   "end": 17252,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 489,
+   "op": "return",
+   "start": 17919,
+   "end": 17940,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 72
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 44,
+   "op": "constant",
+   "start": 1197,
+   "end": 1198,
+   "old": "0",
+   "new": "(1)",
+   "id": 73
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 48,
+   "op": "comparison",
+   "start": 1298,
+   "end": 1312,
+   "old": "len(name) == 2",
+   "new": "(len(name) != 2)",
+   "id": 74
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 50,
+   "op": "comparison",
+   "start": 1370,
+   "end": 1386,
+   "old": "len(name[0]) > 0",
+   "new": "(len(name[0]) >= 0)",
+   "id": 75
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 52,
+   "op": "comparison",
+   "start": 1446,
+   "end": 1462,
+   "old": "len(name[1]) > 0",
+   "new": "(len(name[1]) >= 0)",
+   "id": 76
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 57,
+   "op": "statement",
+   "start": 1653,
+   "end": 1726,
+   "old": "name = \"\".join([(i[0] if isinstance(i, list) else i) for i in new_tuple])",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 58,
+   "op": "statement",
+   "start": 1739,
+   "end": 1771,
+   "old": "result.append([name, new_tuple])",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1798,
+   "end": 1998,
+   "old": "raise ValueError(\n                f\"invalid entry {name!r}. Should be a name, \"\n                \"tuple of names, or 2-element list of the \"\n                \"form [name, tuple of names].\"\n            )",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 307,
+   "op": "constant",
+   "start": 11348,
+   "end": 11363,
+   "old": "\"physical_type\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 436,
+   "op": "constant",
+   "start": 16200,
+   "end": 16201,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 440,
+   "op": "arithmetic",
+   "start": 16389,
+   "end": 16402,
+   "old": "\"$\" + out_fmt",
+   "new": "('$' - out_fmt)",
+   "id": 82
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 440,
+   "op": "constant",
+   "start": 16405,
+   "end": 16408,
+   "old": "\"$\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1385,
+   "end": 1386,
+   "old": "0",
+   "new": "(1)",
+   "id": 84
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1461,
+   "end": 1462,
+   "old": "0",
+   "new": "(1)",
+   "id": 85
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 55,
+   "op": "comparison",
+   "start": 1579,
+   "end": 1592,
+   "old": "len(name) > 0",
+   "new": "(len(name) >= 0)",
+   "id": 86
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 440,
+   "op": "constant",
+   "start": 16389,
+   "end": 16392,
+   "old": "\"$\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 441,
+   "op": "constant",
+   "start": 16439,
+   "end": 16443,
+   "old": "\", \"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 487,
+   "op": "constant",
+   "start": 17875,
+   "end": 17879,
+   "old": "True",
+   "new": "(False)",
+   "id": 89
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1345,
+   "end": 1346,
+   "old": "0",
+   "new": "(1)",
+   "id": 90
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 51,
+   "op": "constant",
+   "start": 1419,
+   "end": 1420,
+   "old": "1",
+   "new": "(2)",
+   "id": 91
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 55,
+   "op": "constant",
+   "start": 1591,
+   "end": 1592,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 439,
+   "op": "constant",
+   "start": 16342,
+   "end": 16343,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 451,
+   "op": "constant",
+   "start": 16685,
+   "end": 16693,
+   "old": "\"silent\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1379,
+   "end": 1380,
+   "old": "0",
+   "new": "(1)",
+   "id": 95
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1455,
+   "end": 1456,
+   "old": "1",
+   "new": "(2)",
+   "id": 96
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 439,
+   "op": "constant",
+   "start": 16345,
+   "end": 16346,
+   "old": "1",
+   "new": "(2)",
+   "id": 97
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 54,
+   "op": "constant",
+   "start": 1532,
+   "end": 1533,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "astropy/units/structured.py",
+   "line": 57,
+   "op": "constant",
+   "start": 1672,
+   "end": 1673,
+   "old": "0",
+   "new": "(1)",
+   "id": 99
+  }
+ ]
+}

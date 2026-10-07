@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_client.42de781c.lv1",
+ "pool": 140,
+ "mutants": [
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 29,
+   "op": "statement",
+   "start": 758,
+   "end": 880,
+   "old": "self.info = asdict(\n            TelemetryInfo(session_id=_MLFLOW_TELEMETRY_SESSION_ID.get() or uuid.uuid4().hex)\n        )",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 32,
+   "op": "statement",
+   "start": 889,
+   "end": 953,
+   "old": "self._queue: Queue[list[Record]] = Queue(maxsize=MAX_QUEUE_SIZE)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 33,
+   "op": "statement",
+   "start": 962,
+   "end": 992,
+   "old": "self._lock = threading.RLock()",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 36,
+   "op": "statement",
+   "start": 1042,
+   "end": 1066,
+   "old": "self._is_stopped = False",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1075,
+   "end": 1098,
+   "old": "self._is_active = False",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 38,
+   "op": "statement",
+   "start": 1107,
+   "end": 1147,
+   "old": "self._atexit_callback_registered = False",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1157,
+   "end": 1186,
+   "old": "self._batch_size = BATCH_SIZE",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1195,
+   "end": 1250,
+   "old": "self._batch_time_interval = BATCH_TIME_INTERVAL_SECONDS",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1259,
+   "end": 1299,
+   "old": "self._pending_records: list[Record] = []",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1308,
+   "end": 1343,
+   "old": "self._last_batch_time = time.time()",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1444,
+   "end": 1471,
+   "old": "self._consumer_threads = []",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 52,
+   "op": "return",
+   "start": 1573,
+   "end": 1584,
+   "old": "return self",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2120,
+   "end": 2260,
+   "old": "self._config_thread = threading.Thread(\n            target=_fetch,\n            name=\"GetTelemetryConfig\",\n            daemon=True,\n        )",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2269,
+   "end": 2296,
+   "old": "self._config_thread.start()",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 81,
+   "op": "statement",
+   "start": 2410,
+   "end": 2454,
+   "old": "mlflow_version = self.info[\"mlflow_version\"]",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4346,
+   "end": 4381,
+   "old": "self._last_batch_time = time.time()",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 332,
+   "op": "statement",
+   "start": 12088,
+   "end": 12114,
+   "old": "self.flush(terminate=True)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 367,
+   "op": "return",
+   "start": 13112,
+   "end": 13143,
+   "old": "return _MLFLOW_TELEMETRY_CLIENT",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 36,
+   "op": "constant",
+   "start": 1061,
+   "end": 1066,
+   "old": "False",
+   "new": "(True)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1093,
+   "end": 1098,
+   "old": "False",
+   "new": "(True)",
+   "id": 19
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1142,
+   "end": 1147,
+   "old": "False",
+   "new": "(True)",
+   "id": 20
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 48,
+   "op": "constant",
+   "start": 1506,
+   "end": 1511,
+   "old": "False",
+   "new": "(True)",
+   "id": 21
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 117,
+   "op": "boolean",
+   "start": 3801,
+   "end": 3819,
+   "old": "not self.is_active",
+   "new": "(self.is_active)",
+   "id": 22
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 118,
+   "op": "statement",
+   "start": 3833,
+   "end": 3848,
+   "old": "self.activate()",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 124,
+   "op": "statement",
+   "start": 3942,
+   "end": 3978,
+   "old": "self._pending_records.append(record)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 133,
+   "op": "boolean",
+   "start": 4291,
+   "end": 4316,
+   "old": "not self._pending_records",
+   "new": "(self._pending_records)",
+   "id": 25
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4408,
+   "end": 4459,
+   "old": "self._queue.put(self._pending_records, block=False)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4472,
+   "end": 4498,
+   "old": "self._pending_records = []",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 242,
+   "op": "statement",
+   "start": 8807,
+   "end": 8829,
+   "old": "self._set_up_threads()",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 254,
+   "op": "statement",
+   "start": 9281,
+   "end": 9302,
+   "old": "self.is_active = True",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 295,
+   "op": "boolean",
+   "start": 10727,
+   "end": 10745,
+   "old": "not self.is_active",
+   "new": "(self.is_active)",
+   "id": 30
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 300,
+   "op": "statement",
+   "start": 10880,
+   "end": 10903,
+   "old": "self._is_stopped = True",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 301,
+   "op": "statement",
+   "start": 10916,
+   "end": 10938,
+   "old": "self.is_active = False",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 305,
+   "op": "statement",
+   "start": 11020,
+   "end": 11055,
+   "old": "self._config_thread.join(timeout=1)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1752,
+   "end": 1770,
+   "old": "self._get_config()",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 81,
+   "op": "constant",
+   "start": 2437,
+   "end": 2453,
+   "old": "\"mlflow_version\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2546,
+   "end": 2592,
+   "old": "response = requests.get(config_url, timeout=1)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 105,
+   "op": "statement",
+   "start": 3347,
+   "end": 3528,
+   "old": "self.config = TelemetryConfig(\n                    ingestion_url=config[\"ingestion_url\"],\n                    disable_events=set(config.get(\"disable_events\", [])),\n                )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 128,
+   "op": "comparison",
+   "start": 4120,
+   "end": 4166,
+   "old": "len(self._pending_records) >= self._batch_size",
+   "new": "(len(self._pending_records) > self._batch_size)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4184,
+   "end": 4202,
+   "old": "self._send_batch()",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 249,
+   "op": "boolean",
+   "start": 9069,
+   "end": 9105,
+   "old": "not self._atexit_callback_registered",
+   "new": "(self._atexit_callback_registered)",
+   "id": 40
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 251,
+   "op": "statement",
+   "start": 9172,
+   "end": 9211,
+   "old": "atexit.register(self._at_exit_callback)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 252,
+   "op": "statement",
+   "start": 9228,
+   "end": 9267,
+   "old": "self._atexit_callback_registered = True",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 254,
+   "op": "constant",
+   "start": 9298,
+   "end": 9302,
+   "old": "True",
+   "new": "(False)",
+   "id": 43
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 269,
+   "op": "statement",
+   "start": 9705,
+   "end": 9891,
+   "old": "consumer_thread = threading.Thread(\n                    target=self._consumer,\n                    name=f\"MLflowTelemetryConsumer-{i}\",\n                    daemon=True,\n                )",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 283,
+   "op": "statement",
+   "start": 10326,
+   "end": 10357,
+   "old": "warnings.simplefilter(\"ignore\")",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 284,
+   "op": "statement",
+   "start": 10374,
+   "end": 10400,
+   "old": "self.flush(terminate=True)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 286,
+   "op": "statement",
+   "start": 10444,
+   "end": 10508,
+   "old": "_log_error(f\"Failed to flush telemetry during termination: {e}\")",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 300,
+   "op": "constant",
+   "start": 10899,
+   "end": 10903,
+   "old": "True",
+   "new": "(False)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 301,
+   "op": "constant",
+   "start": 10933,
+   "end": 10938,
+   "old": "False",
+   "new": "(True)",
+   "id": 49
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 61,
+   "op": "comparison",
+   "start": 1790,
+   "end": 1809,
+   "old": "self.config is None",
+   "new": "(self.config is not None)",
+   "id": 50
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 62,
+   "op": "statement",
+   "start": 1831,
+   "end": 1854,
+   "old": "self._is_stopped = True",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 63,
+   "op": "statement",
+   "start": 1875,
+   "end": 1902,
+   "old": "_set_telemetry_client(None)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 66,
+   "op": "statement",
+   "start": 1996,
+   "end": 2019,
+   "old": "self._is_stopped = True",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2036,
+   "end": 2066,
+   "old": "self._is_config_fetched = True",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2083,
+   "end": 2110,
+   "old": "_set_telemetry_client(None)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2204,
+   "end": 2224,
+   "old": "\"GetTelemetryConfig\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 73,
+   "op": "constant",
+   "start": 2245,
+   "end": 2249,
+   "old": "True",
+   "new": "(False)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 85,
+   "op": "comparison",
+   "start": 2612,
+   "end": 2639,
+   "old": "response.status_code != 200",
+   "new": "(response.status_code == 200)",
+   "id": 58
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 95,
+   "op": "comparison",
+   "start": 2985,
+   "end": 3041,
+   "old": "get_source_sdk().value in config.get(\"disable_sdks\", [])",
+   "new": "(get_source_sdk().value not in config.get('disable_sdks', []))",
+   "id": 59
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3090,
+   "end": 3134,
+   "old": "sys.platform in config.get(\"disable_os\", [])",
+   "new": "(sys.platform not in config.get('disable_os', []))",
+   "id": 60
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 102,
+   "op": "comparison",
+   "start": 3258,
+   "end": 3301,
+   "old": "random.randint(0, 100) > rollout_percentage",
+   "new": "(random.randint(0, 100) >= rollout_percentage)",
+   "id": 61
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 110,
+   "op": "statement",
+   "start": 3580,
+   "end": 3630,
+   "old": "_log_error(f\"Failed to get telemetry config: {e}\")",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 252,
+   "op": "constant",
+   "start": 9263,
+   "end": 9267,
+   "old": "True",
+   "new": "(False)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 309,
+   "op": "boolean",
+   "start": 11166,
+   "end": 11228,
+   "old": "self._pending_records and self.config and not self._is_stopped",
+   "new": "(self._pending_records or self.config or (not self._is_stopped))",
+   "id": 64
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 310,
+   "op": "statement",
+   "start": 11250,
+   "end": 11268,
+   "old": "self._send_batch()",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 332,
+   "op": "constant",
+   "start": 12109,
+   "end": 12113,
+   "old": "True",
+   "new": "(False)",
+   "id": 66
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 30,
+   "op": "boolean",
+   "start": 815,
+   "end": 869,
+   "old": "_MLFLOW_TELEMETRY_SESSION_ID.get() or uuid.uuid4().hex",
+   "new": "(_MLFLOW_TELEMETRY_SESSION_ID.get() and uuid.uuid4().hex)",
+   "id": 67
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 62,
+   "op": "constant",
+   "start": 1850,
+   "end": 1854,
+   "old": "True",
+   "new": "(False)",
+   "id": 68
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 66,
+   "op": "constant",
+   "start": 2015,
+   "end": 2019,
+   "old": "True",
+   "new": "(False)",
+   "id": 69
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 67,
+   "op": "constant",
+   "start": 2062,
+   "end": 2066,
+   "old": "True",
+   "new": "(False)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 85,
+   "op": "constant",
+   "start": 2636,
+   "end": 2639,
+   "old": "200",
+   "new": "(201)",
+   "id": 71
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 89,
+   "op": "comparison",
+   "start": 2750,
+   "end": 2796,
+   "old": "config.get(\"mlflow_version\") != mlflow_version",
+   "new": "(config.get('mlflow_version') == mlflow_version)",
+   "id": 72
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 91,
+   "op": "comparison",
+   "start": 2883,
+   "end": 2918,
+   "old": "config.get(\"ingestion_url\") is None",
+   "new": "(config.get('ingestion_url') is not None)",
+   "id": 73
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 101,
+   "op": "constant",
+   "start": 3234,
+   "end": 3237,
+   "old": "100",
+   "new": "(101)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 139,
+   "op": "constant",
+   "start": 4453,
+   "end": 4458,
+   "old": "False",
+   "new": "(True)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 283,
+   "op": "constant",
+   "start": 10348,
+   "end": 10356,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 309,
+   "op": "boolean",
+   "start": 11208,
+   "end": 11228,
+   "old": "not self._is_stopped",
+   "new": "(self._is_stopped)",
+   "id": 77
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3022,
+   "end": 3036,
+   "old": "\"disable_sdks\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3117,
+   "end": 3129,
+   "old": "\"disable_os\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 102,
+   "op": "constant",
+   "start": 3276,
+   "end": 3279,
+   "old": "100",
+   "new": "(101)",
+   "id": 80
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 284,
+   "op": "constant",
+   "start": 10395,
+   "end": 10399,
+   "old": "True",
+   "new": "(False)",
+   "id": 81
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2761,
+   "end": 2777,
+   "old": "\"mlflow_version\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 90,
+   "op": "constant",
+   "start": 2831,
+   "end": 2850,
+   "old": "\"disable_telemetry\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 91,
+   "op": "constant",
+   "start": 2894,
+   "end": 2909,
+   "old": "\"ingestion_url\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3419,
+   "end": 3434,
+   "old": "\"ingestion_url\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/telemetry/client.py",
+   "line": 107,
+   "op": "constant",
+   "start": 3487,
+   "end": 3503,
+   "old": "\"disable_events\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "mlflow/telemetry/track.py",
+   "line": 118,
+   "op": "statement",
+   "start": 4156,
+   "end": 4231,
+   "old": "_log_error(f\"Failed to check telemetry status for event {event.name}: {e}\")",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "mlflow/telemetry/track.py",
+   "line": 108,
+   "op": "return",
+   "start": 3738,
+   "end": 3787,
+   "old": "return event.name in client.config.disable_events",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "mlflow/telemetry/track.py",
+   "line": 116,
+   "op": "constant",
+   "start": 4116,
+   "end": 4120,
+   "old": "True",
+   "new": "(False)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/telemetry/track.py",
+   "line": 119,
+   "op": "constant",
+   "start": 4247,
+   "end": 4251,
+   "old": "True",
+   "new": "(False)",
+   "id": 90
+  },
+  {
+   "path": "mlflow/telemetry/track.py",
+   "line": 108,
+   "op": "comparison",
+   "start": 3745,
+   "end": 3787,
+   "old": "event.name in client.config.disable_events",
+   "new": "(event.name not in client.config.disable_events)",
+   "id": 91
+  },
+  {
+   "path": "mlflow/telemetry/utils.py",
+   "line": 89,
+   "op": "statement",
+   "start": 3519,
+   "end": 3549,
+   "old": "version_obj = Version(version)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "mlflow/telemetry/utils.py",
+   "line": 97,
+   "op": "return",
+   "start": 3800,
+   "end": 3837,
+   "old": "return f\"{CONFIG_URL}/{version}.json\"",
+   "new": "return None",
+   "id": 93
+  },
+  {
+   "path": "mlflow/telemetry/utils.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3780,
+   "end": 3784,
+   "old": "\"rc\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/telemetry/utils.py",
+   "line": 104,
+   "op": "constant",
+   "start": 3975,
+   "end": 3979,
+   "old": "True",
+   "new": "(False)",
+   "id": 95
+  },
+  {
+   "path": "mlflow/telemetry/utils.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3774,
+   "end": 3775,
+   "old": "0",
+   "new": "(1)",
+   "id": 96
+  },
+  {
+   "path": "mlflow/utils/logging_utils.py",
+   "line": 197,
+   "op": "statement",
+   "start": 5985,
+   "end": 6025,
+   "old": "should_suppress_logs_in_thread.set(True)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "mlflow/utils/logging_utils.py",
+   "line": 198,
+   "op": "statement",
+   "start": 6034,
+   "end": 6039,
+   "old": "yield",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "mlflow/utils/logging_utils.py",
+   "line": 197,
+   "op": "constant",
+   "start": 6020,
+   "end": 6024,
+   "old": "True",
+   "new": "(False)",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,4459 @@
+=== seaborn/_compat.py
+from __future__ import annotations
+from typing import Literal
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+from matplotlib.figure import Figure
+from seaborn.utils import _version_predates
+
+
+def norm_from_scale(scale, norm):
+    """Produce a Normalize object given a Scale and min/max domain limits."""
+    # This is an internal maplotlib function that simplifies things to access
+    # It is likely to become part of the matplotlib API at some point:
+    # https://github.com/matplotlib/matplotlib/issues/20329
+    if isinstance(norm, mpl.colors.Normalize):
+        return norm
+
+    if scale is None:
+        return None
+
+    if norm is None:
+        vmin = vmax = None
+    else:
+        vmin, vmax = norm  # TODO more helpful error if this fails?
+
+    class ScaledNorm(mpl.colors.Normalize):
+
+        def __call__(self, value, clip=None):
+            # From github.com/matplotlib/matplotlib/blob/v3.4.2/lib/matplotlib/colors.py
+            # See github.com/matplotlib/matplotlib/tree/v3.4.2/LICENSE
+            value, is_scalar = self.process_value(value)
+            self.autoscale_None(value)
+            if self.vmin > self.vmax:
+                raise ValueError("vmin must be less or equal to vmax")
+            if self.vmin == self.vmax:
+                return np.full_like(value, 0)
+            if clip is None:
+                clip = self.clip
+            if clip:
+                value = np.clip(value, self.vmin, self.vmax)
+            # ***** Seaborn changes start ****
+            t_value = self.transform(value).reshape(np.shape(value))
+            t_vmin, t_vmax = self.transform([self.vmin, self.vmax])
+            # ***** Seaborn changes end *****
+            if not np.isfinite([t_vmin, t_vmax]).all():
+                raise ValueError("Invalid vmin or vmax")
+            t_value -= t_vmin
+            t_value /= (t_vmax - t_vmin)
+            t_value = np.ma.masked_invalid(t_value, copy=False)
+            return t_value[0] if is_scalar else t_value
+
+    new_norm = ScaledNorm(vmin, vmax)
+    new_norm.transform = scale.get_transform().transform
+
+    return new_norm
+
+
+
+
+
+
+
+
+
+
+def register_colormap(name, cmap):
+    """Handle changes to matplotlib colormap interface in 3.6."""
+    try:
+        if name not in mpl.colormaps:
+            mpl.colormaps.register(cmap, name=name)
+    except AttributeError:
+        mpl.cm.register_cmap(name, cmap)
+
+
+def set_layout_engine(
+    fig: Figure,
+    engine: Literal["constrained", "compressed", "tight", "none"],
+) -> None:
+    """Handle changes to auto layout engine interface in 3.6"""
+    if hasattr(fig, "set_layout_engine"):
+        fig.set_layout_engine(engine)
+    else:
+        # _version_predates(mpl, 3.6)
+        if engine == "tight":
+            fig.set_tight_layout(True)  # type: ignore  # predates typing
+        elif engine == "constrained":
+            fig.set_constrained_layout(True)  # type: ignore
+        elif engine == "none":
+            fig.set_tight_layout(False)  # type: ignore
+            fig.set_constrained_layout(False)  # type: ignore
+
+
+def get_layout_engine(fig: Figure) -> mpl.layout_engine.LayoutEngine | None:
+    """Handle changes to auto layout engine interface in 3.6"""
+    if hasattr(fig, "get_layout_engine"):
+        return fig.get_layout_engine()
+    else:
+        # _version_predates(mpl, 3.6)
+        return None
+
+
+def share_axis(ax0, ax1, which):
+    """Handle changes to post-hoc axis sharing."""
+    if _version_predates(mpl, "3.5"):
+        group = getattr(ax0, f"get_shared_{which}_axes")()
+        group.join(ax1, ax0)
+    else:
+        getattr(ax1, f"share{which}")(ax0)
+
+
+def get_legend_handles(legend):
+    """Handle legendHandles attribute rename."""
+    if _version_predates(mpl, "3.7"):
+        return legend.legendHandles
+    else:
+        return legend.legend_handles
+
+
+def groupby_apply_include_groups(val):
+    if _version_predates(pd, "2.2.0"):
+        return {}
+    return {"include_groups": val}
+
+
+def get_converter(axis):
+    if _version_predates(mpl, "3.10.0"):
+        return axis.converter
+    return axis.get_converter()
+
+
+def get_colormap(name):
+    """
+    Retrieve a matplotlib colormap object by name, handling API changes across matplotlib versions.
+
+    This function provides a compatibility layer for accessing matplotlib colormaps
+    across installations that expose different colormap registry interfaces.
+
+    Parameters
+    ----------
+    name : str
+        The name of the colormap to retrieve. This should be a valid matplotlib
+        colormap name (e.g., 'viridis', 'plasma', 'coolwarm', etc.).
+
+    Returns
+    -------
+    matplotlib.colors.Colormap
+        The requested colormap object that can be used for color mapping operations.
+
+    Notes
+    -----
+    - Use the active colormap registry when it is available and fall back on installations
+      that do not expose that registry
+    - Invalid colormap names will raise the same exceptions as the underlying
+      matplotlib interface
+    """
+    raise NotImplementedError
+
+=== seaborn/axisgrid.py
+from __future__ import annotations
+from itertools import product
+from inspect import signature
+import warnings
+from textwrap import dedent
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+from ._base import VectorPlotter, variable_type, categorical_order
+from ._core.data import handle_data_source
+from ._compat import share_axis, get_legend_handles
+from . import utils
+from .utils import adjust_legend_subtitles, set_hls_values, _check_argument, _disable_autolayout
+
+
+
+
+
+
+from .palettes import color_palette, blend_palette
+from ._docstrings import (
+    DocstringComponents,
+    _core_docs,
+)
+
+__all__ = ["FacetGrid", "PairGrid", "JointGrid", "pairplot", "jointplot"]
+
+
+_param_docs = DocstringComponents.from_nested_components(
+    core=_core_docs["params"],
+)
+
+
+class _BaseGrid:
+    """Base class for grids of subplots."""
+
+    def set(self, **kwargs):
+        """Set attributes on each subplot Axes."""
+        for ax in self.axes.flat:
+            if ax is not None:  # Handle removed axes
+                ax.set(**kwargs)
+        return self
+
+    @property
+    def fig(self):
+        """DEPRECATED: prefer the `figure` property."""
+        # Grid.figure is preferred because it matches the Axes attribute name.
+        # But as the maintanace burden on having this property is minimal,
+        # let's be slow about formally deprecating it. For now just note its deprecation
+        # in the docstring; add a warning in version 0.13, and eventually remove it.
+        return self._figure
+
+    @property
+    def figure(self):
+        """Access the :class:`matplotlib.figure.Figure` object underlying the grid."""
+        return self._figure
+
+    def apply(self, func, *args, **kwargs):
+        """
+        Pass the grid to a user-supplied function and return self.
+
+        The `func` must accept an object of this type for its first
+        positional argument. Additional arguments are passed through.
+        The return value of `func` is ignored; this method returns self.
+        See the `pipe` method if you want the return value.
+
+        Added in v0.12.0.
+
+        """
+        func(self, *args, **kwargs)
+        return self
+
+    def pipe(self, func, *args, **kwargs):
+        """
+        Pass the grid to a user-supplied function and return its value.
+
+        The `func` must accept an object of this type for its first
+        positional argument. Additional arguments are passed through.
+        The return value of `func` becomes the return value of this method.
+        See the `apply` method if you want to return self instead.
+
+        Added in v0.12.0.
+
+        """
+        return func(self, *args, **kwargs)
+
+    def savefig(self, *args, **kwargs):
+        """
+        Save an image of the plot.
+
+        This wraps :meth:`matplotlib.figure.Figure.savefig`, using bbox_inches="tight"
+        by default. Parameters are passed through to the matplotlib function.
+
+        """
+        kwargs = kwargs.copy()
+        kwargs.setdefault("bbox_inches", "tight")
+        self.figure.savefig(*args, **kwargs)
+
+
+class Grid(_BaseGrid):
+    """A grid that can have multiple subplots and an external legend."""
+    _margin_titles = False
+    _legend_out = True
+
+    def __init__(self):
+
+        self._tight_layout_rect = [0, 0, 1, 1]
+        self._tight_layout_pad = None
+
+        # This attribute is set externally and is a hack to handle newer functions that
+        # don't add proxy artists onto the Axes. We need an overall cleaner approach.
+        self._extract_legend_handles = False
+
+    def tight_layout(self, *args, **kwargs):
+        """Call fig.tight_layout within rect that exclude the legend."""
+        kwargs = kwargs.copy()
+        kwargs.setdefault("rect", self._tight_layout_rect)
+        if self._tight_layout_pad is not None:
+            kwargs.setdefault("pad", self._tight_layout_pad)
+        self._figure.tight_layout(*args, **kwargs)
+        return self
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _update_legend_data(self, ax):
+        """Extract the legend data from an axes object and save it."""
+        data = {}
+
+        # Get data directly from the legend, which is necessary
+        # for newer functions that don't add labeled proxy artists
+        if ax.legend_ is not None and self._extract_legend_handles:
+            handles = get_legend_handles(ax.legend_)
+            labels = [t.get_text() for t in ax.legend_.texts]
+            data.update({label: handle for handle, label in zip(handles, labels)})
+
+        handles, labels = ax.get_legend_handles_labels()
+        data.update({label: handle for handle, label in zip(handles, labels)})
+
+        self._legend_data.update(data)
+
+        # Now clear the legend
+        ax.legend_ = None
+
+    def _get_palette(self, data, hue, hue_order, palette):
+        """Get a list of colors for the hue variable."""
+        if hue is None:
+            palette = color_palette(n_colors=1)
+
+        else:
+            hue_names = categorical_order(data[hue], hue_order)
+            n_colors = len(hue_names)
+
+            # By default use either the current color palette or HUSL
+            if palette is None:
+                current_palette = utils.get_color_cycle()
+                if n_colors > len(current_palette):
+                    colors = color_palette("husl", n_colors)
+                else:
+                    colors = color_palette(n_colors=n_colors)
+
+            # Allow for palette to map from hue variable names
+            elif isinstance(palette, dict):
+                color_names = [palette[h] for h in hue_names]
+                colors = color_palette(color_names, n_colors)
+
+            # Otherwise act as if we just got a list of colors
+            else:
+                colors = color_palette(palette, n_colors)
+
+            palette = color_palette(colors, n_colors)
+
+        return palette
+
+    @property
+    def legend(self):
+        """The :class:`matplotlib.legend.Legend` object, if present."""
+        try:
+            return self._legend
+        except AttributeError:
+            return None
+
+    def tick_params(self, axis='both', **kwargs):
+        """Modify the ticks, tick labels, and gridlines.
+
+        Parameters
+        ----------
+        axis : {'x', 'y', 'both'}
+            The axis on which to apply the formatting.
+        kwargs : keyword arguments
+            Additional keyword arguments to pass to
+            :meth:`matplotlib.axes.Axes.tick_params`.
+
+        Returns
+        -------
+        self : Grid instance
+            Returns self for easy chaining.
+
+        """
+        for ax in self.figure.axes:
+            ax.tick_params(axis=axis, **kwargs)
+        return self
+
+
+_facet_docs = dict(
+
+    data=dedent("""\
+    data : DataFrame
+        Tidy ("long-form") dataframe where each column is a variable and each
+        row is an observation.\
+    """),
+    rowcol=dedent("""\
+    row, col : vectors or keys in ``data``
+        Variables that define subsets to plot on different facets.\
+    """),
+    rowcol_order=dedent("""\
+    {row,col}_order : vector of strings
+        Specify the order in which levels of the ``row`` and/or ``col`` variables
+        appear in the grid of subplots.\
+    """),
+    col_wrap=dedent("""\
+    col_wrap : int
+        "Wrap" the column variable at this width, so that the column facets
+        span multiple rows. Incompatible with a ``row`` facet.\
+    """),
+    share_xy=dedent("""\
+    share{x,y} : bool, 'col', or 'row' optional
+        If true, the facets will share y axes across columns and/or x axes
+        across rows.\
+    """),
+    height=dedent("""\
+    height : scalar
+        Height (in inches) of each facet. See also: ``aspect``.\
+    """),
+    aspect=dedent("""\
+    aspect : scalar
+        Aspect ratio of each facet, so that ``aspect * height`` gives the width
+        of each facet in inches.\
+    """),
+    palette=dedent("""\
+    palette : palette name, list, or dict
+        Colors to use for the different levels of the ``hue`` variable. Should
+        be something that can be interpreted by :func:`color_palette`, or a
+        dictionary mapping hue levels to matplotlib colors.\
+    """),
+    legend_out=dedent("""\
+    legend_out : bool
+        If ``True``, the figure size will be extended, and the legend will be
+        drawn outside the plot on the center right.\
+    """),
+    margin_titles=dedent("""\
+    margin_titles : bool
+        If ``True``, the titles for the row variable are drawn to the right of
+        the last column. This option is experimental and may not work in all
+        cases.\
+    """),
+    facet_kws=dedent("""\
+    facet_kws : dict
+        Additional parameters passed to :class:`FacetGrid`.
+    """),
+)
+
+
+class FacetGrid(Grid):
+    """Multi-plot grid for plotting conditional relationships."""
+
+    def __init__(
+        self, data, *,
+        row=None, col=None, hue=None, col_wrap=None,
+        sharex=True, sharey=True, height=3, aspect=1, palette=None,
+        row_order=None, col_order=None, hue_order=None, hue_kws=None,
+        dropna=False, legend_out=True, despine=True,
+        margin_titles=False, xlim=None, ylim=None, subplot_kws=None,
+        gridspec_kws=None,
+    ):
+
+        super().__init__()
+        data = handle_data_source(data)
+
+        # Determine the hue facet layer information
+        hue_var = hue
+        if hue is None:
+            hue_names = None
+        else:
+            hue_names = categorical_order(data[hue], hue_order)
+
+        colors = self._get_palette(data, hue, hue_order, palette)
+
+        # Set up the lists of names for the row and column facet variables
+        if row is None:
+            row_names = []
+        else:
+            row_names = categorical_order(data[row], row_order)
+
+        if col is None:
+            col_names = []
+        else:
+            col_names = categorical_order(data[col], col_order)
+
+        # Additional dict of kwarg -> list of values for mapping the hue var
+        hue_kws = hue_kws if hue_kws is not None else {}
+
+        # Make a boolean mask that is True anywhere there is an NA
+        # value in one of the faceting variables, but only if dropna is True
+        none_na = np.zeros(len(data), bool)
+        if dropna:
+            row_na = none_na if row is None else data[row].isnull()
+            col_na = none_na if col is None else data[col].isnull()
+            hue_na = none_na if hue is None else data[hue].isnull()
+            not_na = ~(row_na | col_na | hue_na)
+        else:
+            not_na = ~none_na
+
+        # Compute the grid shape
+        ncol = 1 if col is None else len(col_names)
+        nrow = 1 if row is None else len(row_names)
+        self._n_facets = ncol * nrow
+
+        self._col_wrap = col_wrap
+        if col_wrap is not None:
+            if row is not None:
+                err = "Cannot use `row` and `col_wrap` together."
+                raise ValueError(err)
+            ncol = col_wrap
+            nrow = int(np.ceil(len(col_names) / col_wrap))
+        self._ncol = ncol
+        self._nrow = nrow
+
+        # Calculate the base figure size
+        # This can get stretched later by a legend
+        # TODO this doesn't account for axis labels
+        figsize = (ncol * height * aspect, nrow * height)
+
+        # Validate some inputs
+        if col_wrap is not None:
+            margin_titles = False
+
+        # Build the subplot keyword dictionary
+        subplot_kws = {} if subplot_kws is None else subplot_kws.copy()
+        gridspec_kws = {} if gridspec_kws is None else gridspec_kws.copy()
+        if xlim is not None:
+            subplot_kws["xlim"] = xlim
+        if ylim is not None:
+            subplot_kws["ylim"] = ylim
+
+        # --- Initialize the subplot grid
+
+        with _disable_autolayout():
+            fig = plt.figure(figsize=figsize)
+
+        if col_wrap is None:
+
+            kwargs = dict(squeeze=False,
+                          sharex=sharex, sharey=sharey,
+                          subplot_kw=subplot_kws,
+                          gridspec_kw=gridspec_kws)
+
+            axes = fig.subplots(nrow, ncol, **kwargs)
+
+            if col is None and row is None:
+                axes_dict = {}
+            elif col is None:
+                axes_dict = dict(zip(row_names, axes.flat))
+            elif row is None:
+                axes_dict = dict(zip(col_names, axes.flat))
+            else:
+                facet_product = product(row_names, col_names)
+                axes_dict = dict(zip(facet_product, axes.flat))
+
+        else:
+
+            # If wrapping the col variable we need to make the grid ourselves
+            if gridspec_kws:
+                warnings.warn("`gridspec_kws` ignored when using `col_wrap`")
+
+            n_axes = len(col_names)
+            axes = np.empty(n_axes, object)
+            axes[0] = fig.add_subplot(nrow, ncol, 1, **subplot_kws)
+            if sharex:
+                subplot_kws["sharex"] = axes[0]
+            if sharey:
+                subplot_kws["sharey"] = axes[0]
+            for i in range(1, n_axes):
+                axes[i] = fig.add_subplot(nrow, ncol, i + 1, **subplot_kws)
+
+            axes_dict = dict(zip(col_names, axes))
+
+        # --- Set up the class attributes
+
+        # Attributes that are part of the public API but accessed through
+        # a  property so that Sphinx adds them to the auto class doc
+        self._figure = fig
+        self._axes = axes
+        self._axes_dict = axes_dict
+        self._legend = None
+
+        # Public attributes that aren't explicitly documented
+        # (It's not obvious that having them be public was a good idea)
+        self.data = data
+        self.row_names = row_names
+        self.col_names = col_names
+        self.hue_names = hue_names
+        self.hue_kws = hue_kws
+
+        # Next the private variables
+        self._nrow = nrow
+        self._row_var = row
+        self._ncol = ncol
+        self._col_var = col
+
+        self._margin_titles = margin_titles
+        self._margin_titles_texts = []
+        self._col_wrap = col_wrap
+        self._hue_var = hue_var
+        self._colors = colors
+        self._legend_out = legend_out
+        self._legend_data = {}
+        self._x_var = None
+        self._y_var = None
+        self._sharex = sharex
+        self._sharey = sharey
+        self._dropna = dropna
+        self._not_na = not_na
+
+        # --- Make the axes look good
+
+        self.set_titles()
+        self.tight_layout()
+
+        if despine:
+            self.despine()
+
+        if sharex in [True, 'col']:
+            for ax in self._not_bottom_axes:
+                for label in ax.get_xticklabels():
+                    label.set_visible(False)
+                ax.xaxis.offsetText.set_visible(False)
+                ax.xaxis.label.set_visible(False)
+
+        if sharey in [True, 'row']:
+            for ax in self._not_left_axes:
+                for label in ax.get_yticklabels():
+                    label.set_visible(False)
+                ax.yaxis.offsetText.set_visible(False)
+                ax.yaxis.label.set_visible(False)
+
+    __init__.__doc__ = dedent("""\
+        Initialize the matplotlib figure and FacetGrid object.
+
+        This class maps a dataset onto multiple axes arrayed in a grid of rows
+        and columns that correspond to *levels* of variables in the dataset.
+        The plots it produces are often called "lattice", "trellis", or
+        "small-multiple" graphics.
+
+        It can also represent levels of a third variable with the ``hue``
+        parameter, which plots different subsets of data in different colors.
+        This uses color to resolve elements on a third dimension, but only
+        draws subsets on top of each other and will not tailor the ``hue``
+        parameter for the specific visualization the way that axes-level
+        functions that accept ``hue`` will.
+
+        The basic workflow is to initialize the :class:`FacetGrid` object with
+        the dataset and the variables that are used to structure the grid. Then
+        one or more plotting functions can be applied to each subset by calling
+        :meth:`FacetGrid.map` or :meth:`FacetGrid.map_dataframe`. Finally, the
+        plot can be tweaked with other methods to do things like change the
+        axis labels, use different ticks, or add a legend. See the detailed
+        code examples below for more information.
+
+        .. warning::
+
+            When using seaborn functions that infer semantic mappings from a
+            dataset, care must be taken to synchronize those mappings across
+            facets (e.g., by defining the ``hue`` mapping with a palette dict or
+            setting the data type of the variables to ``category``). In most cases,
+            it will be better to use a figure-level function (e.g. :func:`relplot`
+            or :func:`catplot`) than to use :class:`FacetGrid` directly.
+
+        See the :ref:`tutorial <grid_tutorial>` for more information.
+
+        Parameters
+        ----------
+        {data}
+        row, col, hue : strings
+            Variables that define subsets of the data, which will be drawn on
+            separate facets in the grid. See the ``{{var}}_order`` parameters to
+            control the order of levels of this variable.
+        {col_wrap}
+        {share_xy}
+        {height}
+        {aspect}
+        {palette}
+        {{row,col,hue}}_order : lists
+            Order for the levels of the faceting variables. By default, this
+            will be the order that the levels appear in ``data`` or, if the
+            variables are pandas categoricals, the category order.
+        hue_kws : dictionary of param -> list of values mapping
+            Other keyword arguments to insert into the plotting call to let
+            other plot attributes vary across levels of the hue variable (e.g.
+            the markers in a scatterplot).
+        {legend_out}
+        despine : boolean
+            Remove the top and right spines from the plots.
+        {margin_titles}
+        {{x, y}}lim: tuples
+            Limits for each of the axes on each facet (only relevant when
+            share{{x, y}} is True).
+        subplot_kws : dict
+            Dictionary of keyword arguments passed to matplotlib subplot(s)
+            methods.
+        gridspec_kws : dict
+            Dictionary of keyword arguments passed to
+            :class:`matplotlib.gridspec.GridSpec`
+            (via :meth:`matplotlib.figure.Figure.subplots`).
+            Ignored if ``col_wrap`` is not ``None``.
+
+        See Also
+        --------
+        PairGrid : Subplot grid for plotting pairwise relationships
+        relplot : Combine a relational plot and a :class:`FacetGrid`
+        displot : Combine a distribution plot and a :class:`FacetGrid`
+        catplot : Combine a categorical plot and a :class:`FacetGrid`
+        lmplot : Combine a regression plot and a :class:`FacetGrid`
+
+        Examples
+        --------
+
+        .. note::
+
+            These examples use seaborn functions to demonstrate some of the
+            advanced features of the class, but in most cases you will want
+            to use figue-level functions (e.g. :func:`displot`, :func:`relplot`)
+            to make the plots shown here.
+
+        .. include:: ../docstrings/FacetGrid.rst
+
+        """).format(**_facet_docs)
+
+    def facet_data(self):
+        """Generator for name indices and data subsets for each facet.
+
+        Yields
+        ------
+        (i, j, k), data_ijk : tuple of ints, DataFrame
+            The ints provide an index into the {row, col, hue}_names attribute,
+            and the dataframe contains a subset of the full data corresponding
+            to each facet. The generator yields subsets that correspond with
+            the self.axes.flat iterator, or self.axes[i, j] when `col_wrap`
+            is None.
+
+        """
+        data = self.data
+
+        # Construct masks for the row variable
+        if self.row_names:
+            row_masks = [data[self._row_var] == n for n in self.row_names]
+        else:
+            row_masks = [np.repeat(True, len(self.data))]
+
+        # Construct masks for the column variable
+        if self.col_names:
+            col_masks = [data[self._col_var] == n for n in self.col_names]
+        else:
+            col_masks = [np.repeat(True, len(self.data))]
+
+        # Construct masks for the hue variable
+        if self.hue_names:
+            hue_masks = [data[self._hue_var] == n for n in self.hue_names]
+        else:
+            hue_masks = [np.repeat(True, len(self.data))]
+
+        # Here is the main generator loop
+        for (i, row), (j, col), (k, hue) in product(enumerate(row_masks),
+                                                    enumerate(col_masks),
+                                                    enumerate(hue_masks)):
+            data_ijk = data[row & col & hue & self._not_na]
+            yield (i, j, k), data_ijk
+
+    def map(self, func, *args, **kwargs):
+        """Apply a plotting function to each facet's subset of the data.
+
+        Parameters
+        ----------
+        func : callable
+            A plotting function that takes data and keyword arguments. It
+            must plot to the currently active matplotlib Axes and take a
+            `color` keyword argument. If faceting on the `hue` dimension,
+            it must also take a `label` keyword argument.
+        args : strings
+            Column names in self.data that identify variables with data to
+            plot. The data for each variable is passed to `func` in the
+            order the variables are specified in the call.
+        kwargs : keyword arguments
+            All keyword arguments are passed to the plotting function.
+
+        Returns
+        -------
+        self : object
+            Returns self.
+
+        """
+        # If color was a keyword argument, grab it here
+        kw_color = kwargs.pop("color", None)
+
+        # How we use the function depends on where it comes from
+        func_module = str(getattr(func, "__module__", ""))
+
+        # Check for categorical plots without order information
+        if func_module == "seaborn.categorical":
+            if "order" not in kwargs:
+                warning = ("Using the {} function without specifying "
+                           "`order` is likely to produce an incorrect "
+                           "plot.".format(func.__name__))
+                warnings.warn(warning)
+            if len(args) == 3 and "hue_order" not in kwargs:
+                warning = ("Using the {} function without specifying "
+                           "`hue_order` is likely to produce an incorrect "
+                           "plot.".format(func.__name__))
+                warnings.warn(warning)
+
+        # Iterate over the data subsets
+        for (row_i, col_j, hue_k), data_ijk in self.facet_data():
+
+            # If this subset is null, move on
+            if not data_ijk.values.size:
+                continue
+
+            # Get the current axis
+            modify_state = not func_module.startswith("seaborn")
+            ax = self.facet_axis(row_i, col_j, modify_state)
+
+            # Decide what color to plot with
+            kwargs["color"] = self._facet_color(hue_k, kw_color)
+
+            # Insert the other hue aesthetics if appropriate
+            for kw, val_list in self.hue_kws.items():
+                kwargs[kw] = val_list[hue_k]
+
+            # Insert a label in the keyword arguments for the legend
+            if self._hue_var is not None:
+                kwargs["label"] = utils.to_utf8(self.hue_names[hue_k])
+
+            # Get the actual data we are going to plot with
+            plot_data = data_ijk[list(args)]
+            if self._dropna:
+                plot_data = plot_data.dropna()
+            plot_args = [v for k, v in plot_data.items()]
+
+            # Some matplotlib functions don't handle pandas objects correctly
+            if func_module.startswith("matplotlib"):
+                plot_args = [v.values for v in plot_args]
+
+            # Draw the plot
+            self._facet_plot(func, ax, plot_args, kwargs)
+
+        # Finalize the annotations and layout
+        self._finalize_grid(args[:2])
+
+        return self
+
+    def map_dataframe(self, func, *args, **kwargs):
+        """Like ``.map`` but passes args as strings and inserts data in kwargs.
+
+        This method is suitable for plotting with functions that accept a
+        long-form DataFrame as a `data` keyword argument and access the
+        data in that DataFrame using string variable names.
+
+        Parameters
+        ----------
+        func : callable
+            A plotting function that takes data and keyword arguments. Unlike
+            the `map` method, a function used here must "understand" Pandas
+            objects. It also must plot to the currently active matplotlib Axes
+            and take a `color` keyword argument. If faceting on the `hue`
+            dimension, it must also take a `label` keyword argument.
+        args : strings
+            Column names in self.data that identify variables with data to
+            plot. The data for each variable is passed to `func` in the
+            order the variables are specified in the call.
+        kwargs : keyword arguments
+            All keyword arguments are passed to the plotting function.
+
+        Returns
+        -------
+        self : object
+            Returns self.
+
+        """
+
+        # If color was a keyword argument, grab it here
+        kw_color = kwargs.pop("color", None)
+
+        # Iterate over the data subsets
+        for (row_i, col_j, hue_k), data_ijk in self.facet_data():
+
+            # If this subset is null, move on
+            if not data_ijk.values.size:
+                continue
+
+            # Get the current axis
+            modify_state = not str(func.__module__).startswith("seaborn")
+            ax = self.facet_axis(row_i, col_j, modify_state)
+
+            # Decide what color to plot with
+            kwargs["color"] = self._facet_color(hue_k, kw_color)
+
+            # Insert the other hue aesthetics if appropriate
+            for kw, val_list in self.hue_kws.items():
+                kwargs[kw] = val_list[hue_k]
+
+            # Insert a label in the keyword arguments for the legend
+            if self._hue_var is not None:
+                kwargs["label"] = self.hue_names[hue_k]
+
+            # Stick the facet dataframe into the kwargs
+            if self._dropna:
+                data_ijk = data_ijk.dropna()
+            kwargs["data"] = data_ijk
+
+            # Draw the plot
+            self._facet_plot(func, ax, args, kwargs)
+
+        # For axis labels, prefer to use positional args for backcompat
+        # but also extract the x/y kwargs and use if no corresponding arg
+        axis_labels = [kwargs.get("x", None), kwargs.get("y", None)]
+        for i, val in enumerate(args[:2]):
+            axis_labels[i] = val
+        self._finalize_grid(axis_labels)
+
+        return self
+
+    def _facet_color(self, hue_index, kw_color):
+
+        color = self._colors[hue_index]
+        if kw_color is not None:
+            return kw_color
+        elif color is not None:
+            return color
+
+    def _facet_plot(self, func, ax, plot_args, plot_kwargs):
+
+        # Draw the plot
+        if str(func.__module__).startswith("seaborn"):
+            plot_kwargs = plot_kwargs.copy()
+            semantics = ["x", "y", "hue", "size", "style"]
+            for key, val in zip(semantics, plot_args):
+                plot_kwargs[key] = val
+            plot_args = []
+            plot_kwargs["ax"] = ax
+        func(*plot_args, **plot_kwargs)
+
+        # Sort out the supporting information
+        self._update_legend_data(ax)
+
+    def _finalize_grid(self, axlabels):
+        """Finalize the annotations and layout."""
+        self.set_axis_labels(*axlabels)
+        self.tight_layout()
+
+    def facet_axis(self, row_i, col_j, modify_state=True):
+        """Make the axis identified by these indices active and return it."""
+
+        # Calculate the actual indices of the axes to plot on
+        if self._col_wrap is not None:
+            ax = self.axes.flat[col_j]
+        else:
+            ax = self.axes[row_i, col_j]
+
+        # Get a reference to the axes object we want, and make it active
+        if modify_state:
+            plt.sca(ax)
+        return ax
+
+    def despine(self, **kwargs):
+        """Remove axis spines from the facets."""
+        utils.despine(self._figure, **kwargs)
+        return self
+
+    def set_axis_labels(self, x_var=None, y_var=None, clear_inner=True, **kwargs):
+        """Set axis labels on the left column and bottom row of the grid."""
+        if x_var is not None:
+            self._x_var = x_var
+            self.set_xlabels(x_var, clear_inner=clear_inner, **kwargs)
+        if y_var is not None:
+            self._y_var = y_var
+            self.set_ylabels(y_var, clear_inner=clear_inner, **kwargs)
+
+        return self
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def set_xticklabels(self, labels=None, step=None, **kwargs):
+        """Set x axis tick labels of the grid."""
+        for ax in self.axes.flat:
+            curr_ticks = ax.get_xticks()
+            ax.set_xticks(curr_ticks)
+            if labels is None:
+                curr_labels = [label.get_text() for label in ax.get_xticklabels()]
+                if step is not None:
+                    xticks = ax.get_xticks()[::step]
+                    curr_labels = curr_labels[::step]
+                    ax.set_xticks(xticks)
+                ax.set_xticklabels(curr_labels, **kwargs)
+            else:
+                ax.set_xticklabels(labels, **kwargs)
+        return self
+
+    def set_yticklabels(self, labels=None, **kwargs):
+        """Set y axis tick labels on the left column of the grid."""
+        for ax in self.axes.flat:
+            curr_ticks = ax.get_yticks()
+            ax.set_yticks(curr_ticks)
+            if labels is None:
+                curr_labels = [label.get_text() for label in ax.get_yticklabels()]
+                ax.set_yticklabels(curr_labels, **kwargs)
+            else:
+                ax.set_yticklabels(labels, **kwargs)
+        return self
+
+    def set_titles(self, template=None, row_template=None, col_template=None, **kwargs):
+        """Draw titles either above each facet or on the grid margins.
+
+        Parameters
+        ----------
+        template : string
+            Template for all titles with the formatting keys {col_var} and
+            {col_name} (if using a `col` faceting variable) and/or {row_var}
+            and {row_name} (if using a `row` faceting variable).
+        row_template:
+            Template for the row variable when titles are drawn on the grid
+            margins. Must have {row_var} and {row_name} formatting keys.
+        col_template:
+            Template for the column variable when titles are drawn on the grid
+            margins. Must have {col_var} and {col_name} formatting keys.
+
+        Returns
+        -------
+        self: object
+            Returns self.
+
+        """
+        args = dict(row_var=self._row_var, col_var=self._col_var)
+        kwargs["size"] = kwargs.pop("size", mpl.rcParams["axes.labelsize"])
+
+        # Establish default templates
+        if row_template is None:
+            row_template = "{row_var} = {row_name}"
+        if col_template is None:
+            col_template = "{col_var} = {col_name}"
+        if template is None:
+            if self._row_var is None:
+                template = col_template
+            elif self._col_var is None:
+                template = row_template
+            else:
+                template = " | ".join([row_template, col_template])
+
+        row_template = utils.to_utf8(row_template)
+        col_template = utils.to_utf8(col_template)
+        template = utils.to_utf8(template)
+
+        if self._margin_titles:
+
+            # Remove any existing title texts
+            for text in self._margin_titles_texts:
+                text.remove()
+            self._margin_titles_texts = []
+
+            if self.row_names is not None:
+                # Draw the row titles on the right edge of the grid
+                for i, row_name in enumerate(self.row_names):
+                    ax = self.axes[i, -1]
+                    args.update(dict(row_name=row_name))
+                    title = row_template.format(**args)
+                    text = ax.annotate(
+                        title, xy=(1.02, .5), xycoords="axes fraction",
+                        rotation=270, ha="left", va="center",
+                        **kwargs
+                    )
+                    self._margin_titles_texts.append(text)
+
+            if self.col_names is not None:
+                # Draw the column titles  as normal titles
+                for j, col_name in enumerate(self.col_names):
+                    args.update(dict(col_name=col_name))
+                    title = col_template.format(**args)
+                    self.axes[0, j].set_title(title, **kwargs)
+
+            return self
+
+        # Otherwise title each facet with all the necessary information
+        if (self._row_var is not None) and (self._col_var is not None):
+            for i, row_name in enumerate(self.row_names):
+                for j, col_name in enumerate(self.col_names):
+                    args.update(dict(row_name=row_name, col_name=col_name))
+                    title = template.format(**args)
+                    self.axes[i, j].set_title(title, **kwargs)
+        elif self.row_names is not None and len(self.row_names):
+            for i, row_name in enumerate(self.row_names):
+                args.update(dict(row_name=row_name))
+                title = template.format(**args)
+                self.axes[i, 0].set_title(title, **kwargs)
+        elif self.col_names is not None and len(self.col_names):
+            for i, col_name in enumerate(self.col_names):
+                args.update(dict(col_name=col_name))
+                title = template.format(**args)
+                # Index the flat array so col_wrap works
+                self.axes.flat[i].set_title(title, **kwargs)
+        return self
+
+    def refline(self, *, x=None, y=None, color='.5', linestyle='--', **line_kws):
+        """Add a reference line(s) to each facet.
+
+        Parameters
+        ----------
+        x, y : numeric
+            Value(s) to draw the line(s) at.
+        color : :mod:`matplotlib color <matplotlib.colors>`
+            Specifies the color of the reference line(s). Pass ``color=None`` to
+            use ``hue`` mapping.
+        linestyle : str
+            Specifies the style of the reference line(s).
+        line_kws : key, value mappings
+            Other keyword arguments are passed to :meth:`matplotlib.axes.Axes.axvline`
+            when ``x`` is not None and :meth:`matplotlib.axes.Axes.axhline` when ``y``
+            is not None.
+
+        Returns
+        -------
+        :class:`FacetGrid` instance
+            Returns ``self`` for easy method chaining.
+
+        """
+        line_kws['color'] = color
+        line_kws['linestyle'] = linestyle
+
+        if x is not None:
+            self.map(plt.axvline, x=x, **line_kws)
+
+        if y is not None:
+            self.map(plt.axhline, y=y, **line_kws)
+
+        return self
+
+    # ------ Properties that are part of the public API and documented by Sphinx
+
+    @property
+    def axes(self):
+        """An array of the :class:`matplotlib.axes.Axes` objects in the grid."""
+        return self._axes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # ------ Private properties, that require some computation to get
+
+    @property
+    def _inner_axes(self):
+        """Return a flat array of the inner axes."""
+        if self._col_wrap is None:
+            return self.axes[:-1, 1:].flat
+        else:
+            axes = []
+            n_empty = self._nrow * self._ncol - self._n_facets
+            for i, ax in enumerate(self.axes):
+                append = (
+                    i % self._ncol
+                    and i < (self._ncol * (self._nrow - 1))
+                    and i < (self._ncol * (self._nrow - 1) - n_empty)
+                )
+                if append:
+                    axes.append(ax)
+            return np.array(axes, object).flat
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def _not_left_axes(self):
+        """Return a flat array of axes that aren't on the left column."""
+        if self._col_wrap is None:
+            return self.axes[:, 1:].flat
+        else:
+            axes = []
+            for i, ax in enumerate(self.axes):
+                if i % self._ncol:
+                    axes.append(ax)
+            return np.array(axes, object).flat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @property
+    def _not_bottom_axes(self):
+        """Return a flat array of axes that aren't on the bottom row."""
+        if self._col_wrap is None:
+            return self.axes[:-1, :].flat
+        else:
+            axes = []
+            n_empty = self._nrow * self._ncol - self._n_facets
+            for i, ax in enumerate(self.axes):
+                append = (
+                    i < (self._ncol * (self._nrow - 1))
+                    and i < (self._ncol * (self._nrow - 1) - n_empty)
+                )
+                if append:
+                    axes.append(ax)
+            return np.array(axes, object).flat
+
+    @property
+    def ax(self):
+        """
+        The :class:`matplotlib.axes.Axes` when the grid has shape `(1, 1)`.
+
+        This property provides access to the single Axes object when the FacetGrid
+        contains only one subplot. This is tested from the axes shape, so a facet
+        variable with only one realized level can also produce an accessible axis.
+
+        Returns
+        -------
+        matplotlib.axes.Axes
+            The single Axes object in the grid.
+
+        Raises
+        ------
+        AttributeError
+            If the axes array does not have shape `(1, 1)`. In this case, use the
+            `.axes` attribute to access the array of Axes objects.
+
+        Notes
+        -----
+        This is a convenience property based solely on the realized axes shape. A
+        facet variable is compatible with this property when it realizes one level;
+        any grid whose axes shape differs from `(1, 1)` is rejected.
+
+        Examples
+        --------
+        Access the single Axes when no faceting is used:
+
+            g = FacetGrid(data)
+            ax = g.ax
+            ax.set_title("Single plot title")
+
+        This will raise an error when faceting realizes multiple axes:
+
+            g = FacetGrid(data, col="category")
+            ax = g.ax  # Raises AttributeError
+
+        See Also
+        --------
+        axes : Array of all Axes objects in the grid
+        axes_dict : Dictionary mapping facet names to Axes objects
+        """
+        raise NotImplementedError
+
+    @property
+    def axes_dict(self):
+        """
+        A mapping of facet names to corresponding :class:`matplotlib.axes.Axes`.
+
+        If only one of ``row`` or ``col`` is assigned, each key is a level value
+        of that variable. If both facet dimensions are assigned, each key is a
+        ``({row_level}, {col_level})`` tuple. Level values need not be strings.
+
+        Returns
+        -------
+        dict
+            Dictionary mapping facet identifiers to matplotlib Axes objects.
+            Keys are the actual facet level values for a single facet variable, or
+            tuples of actual row/column level values when both are used; they are not
+            restricted to strings. Values are the corresponding Axes objects.
+
+        Notes
+        -----
+        This property provides a convenient way to access specific subplots in the
+        grid when you need to customize individual facets beyond what the mapping
+        methods provide. The dictionary structure depends on which faceting variables
+        were specified during initialization.
+
+        Examples
+        --------
+        Access a specific subplot when only using column faceting:
+
+            g = FacetGrid(data, col="category")
+            ax = g.axes_dict["A"]  # Get axes for category "A"
+
+        Access a specific subplot when using both row and column faceting:
+
+            g = FacetGrid(data, row="group", col="category") 
+            ax = g.axes_dict[("group1", "A")]  # Get axes for group1, category A
+        """
+        raise NotImplementedError
+
+
+class PairGrid(Grid):
+    """Subplot grid for plotting pairwise relationships in a dataset.
+
+    This object maps each variable in a dataset onto a column and row in a
+    grid of multiple axes. Different axes-level plotting functions can be
+    used to draw bivariate plots in the upper and lower triangles, and the
+    marginal distribution of each variable can be shown on the diagonal.
+
+    Several different common plots can be generated in a single line using
+    :func:`pairplot`. Use :class:`PairGrid` when you need more flexibility.
+
+    See the :ref:`tutorial <grid_tutorial>` for more information.
+
+    """
+    def __init__(
+        self, data, *, hue=None, vars=None, x_vars=None, y_vars=None,
+        hue_order=None, palette=None, hue_kws=None, corner=False, diag_sharey=True,
+        height=2.5, aspect=1, layout_pad=.5, despine=True, dropna=False,
+    ):
+        """Initialize the plot figure and PairGrid object.
+
+        Parameters
+        ----------
+        data : DataFrame
+            Tidy (long-form) dataframe where each column is a variable and
+            each row is an observation.
+        hue : string (variable name)
+            Variable in ``data`` to map plot aspects to different colors. This
+            variable will be excluded from the default x and y variables.
+        vars : list of variable names
+            Variables within ``data`` to use, otherwise use every column with
+            a numeric datatype.
+        {x, y}_vars : lists of variable names
+            Variables within ``data`` to use separately for the rows and
+            columns of the figure; i.e. to make a non-square plot.
+        hue_order : list of strings
+            Order for the levels of the hue variable in the palette
+        palette : dict or seaborn color palette
+            Set of colors for mapping the ``hue`` variable. If a dict, keys
+            should be values  in the ``hue`` variable.
+        hue_kws : dictionary of param -> list of values mapping
+            Other keyword arguments to insert into the plotting call to let
+            other plot attributes vary across levels of the hue variable (e.g.
+            the markers in a scatterplot).
+        corner : bool
+            If True, don't add axes to the upper (off-diagonal) triangle of the
+            grid, making this a "corner" plot.
+        height : scalar
+            Height (in inches) of each facet.
+        aspect : scalar
+            Aspect * height gives the width (in inches) of each facet.
+        layout_pad : scalar
+            Padding between axes; passed to ``fig.tight_layout``.
+        despine : boolean
+            Remove the top and right spines from the plots.
+        dropna : boolean
+            Drop missing values from the data before plotting.
+
+        See Also
+        --------
+        pairplot : Easily drawing common uses of :class:`PairGrid`.
+        FacetGrid : Subplot grid for plotting conditional relationships.
+
+        Examples
+        --------
+
+        .. include:: ../docstrings/PairGrid.rst
+
+        """
+
+        super().__init__()
+        data = handle_data_source(data)
+
+        # Sort out the variables that define the grid
+        numeric_cols = self._find_numeric_cols(data)
+        if hue in numeric_cols:
+            numeric_cols.remove(hue)
+        if vars is not None:
+            x_vars = list(vars)
+            y_vars = list(vars)
+        if x_vars is None:
+            x_vars = numeric_cols
+        if y_vars is None:
+            y_vars = numeric_cols
+
+        if np.isscalar(x_vars):
+            x_vars = [x_vars]
+        if np.isscalar(y_vars):
+            y_vars = [y_vars]
+
+        self.x_vars = x_vars = list(x_vars)
+        self.y_vars = y_vars = list(y_vars)
+        self.square_grid = self.x_vars == self.y_vars
+
+        if not x_vars:
+            raise ValueError("No variables found for grid columns.")
+        if not y_vars:
+            raise ValueError("No variables found for grid rows.")
+
+        # Create the figure and the array of subplots
+        figsize = len(x_vars) * height * aspect, len(y_vars) * height
+
+        with _disable_autolayout():
+            fig = plt.figure(figsize=figsize)
+
+        axes = fig.subplots(len(y_vars), len(x_vars),
+                            sharex="col", sharey="row",
+                            squeeze=False)
+
+        # Possibly remove upper axes to make a corner grid
+        # Note: setting up the axes is usually the most time-intensive part
+        # of using the PairGrid. We are foregoing the speed improvement that
+        # we would get by just not setting up the hidden axes so that we can
+        # avoid implementing fig.subplots ourselves. But worth thinking about.
+        self._corner = corner
+        if corner:
+            hide_indices = np.triu_indices_from(axes, 1)
+            for i, j in zip(*hide_indices):
+                axes[i, j].remove()
+                axes[i, j] = None
+
+        self._figure = fig
+        self.axes = axes
+        self.data = data
+
+        # Save what we are going to do with the diagonal
+        self.diag_sharey = diag_sharey
+        self.diag_vars = None
+        self.diag_axes = None
+
+        self._dropna = dropna
+
+        # Label the axes
+        self._add_axis_labels()
+
+        # Sort out the hue variable
+        self._hue_var = hue
+        if hue is None:
+            self.hue_names = hue_order = ["_nolegend_"]
+            self.hue_vals = pd.Series(["_nolegend_"] * len(data),
+                                      index=data.index)
+        else:
+            # We need hue_order and hue_names because the former is used to control
+            # the order of drawing and the latter is used to control the order of
+            # the legend. hue_names can become string-typed while hue_order must
+            # retain the type of the input data. This is messy but results from
+            # the fact that PairGrid can implement the hue-mapping logic itself
+            # (and was originally written exclusively that way) but now can delegate
+            # to the axes-level functions, while always handling legend creation.
+            # See GH2307
+            hue_names = hue_order = categorical_order(data[hue], hue_order)
+            if dropna:
+                # Filter NA from the list of unique hue names
+                hue_names = list(filter(pd.notnull, hue_names))
+            self.hue_names = hue_names
+            self.hue_vals = data[hue]
+
+        # Additional dict of kwarg -> list of values for mapping the hue var
+        self.hue_kws = hue_kws if hue_kws is not None else {}
+
+        self._orig_palette = palette
+        self._hue_order = hue_order
+        self.palette = self._get_palette(data, hue, hue_order, palette)
+        self._legend_data = {}
+
+        # Make the plot look nice
+        for ax in axes[:-1, :].flat:
+            if ax is None:
+                continue
+            for label in ax.get_xticklabels():
+                label.set_visible(False)
+            ax.xaxis.offsetText.set_visible(False)
+            ax.xaxis.label.set_visible(False)
+
+        for ax in axes[:, 1:].flat:
+            if ax is None:
+                continue
+            for label in ax.get_yticklabels():
+                label.set_visible(False)
+            ax.yaxis.offsetText.set_visible(False)
+            ax.yaxis.label.set_visible(False)
+
+        self._tight_layout_rect = [.01, .01, .99, .99]
+        self._tight_layout_pad = layout_pad
+        self._despine = despine
+        if despine:
+            utils.despine(fig=fig)
+        self.tight_layout(pad=layout_pad)
+
+    def map(self, func, **kwargs):
+        """Plot with the same function in every subplot.
+
+        Parameters
+        ----------
+        func : callable plotting function
+            Must take x, y arrays as positional arguments and draw onto the
+            "currently active" matplotlib Axes. Also needs to accept kwargs
+            called ``color`` and  ``label``.
+
+        """
+        row_indices, col_indices = np.indices(self.axes.shape)
+        indices = zip(row_indices.flat, col_indices.flat)
+        self._map_bivariate(func, indices, **kwargs)
+
+        return self
+
+    def map_lower(self, func, **kwargs):
+        """Plot with a bivariate function on the lower diagonal subplots.
+
+        Parameters
+        ----------
+        func : callable plotting function
+            Must take x, y arrays as positional arguments and draw onto the
+            "currently active" matplotlib Axes. Also needs to accept kwargs
+            called ``color`` and  ``label``.
+
+        """
+        indices = zip(*np.tril_indices_from(self.axes, -1))
+        self._map_bivariate(func, indices, **kwargs)
+        return self
+
+    def map_upper(self, func, **kwargs):
+        """Plot with a bivariate function on the upper diagonal subplots.
+
+        Parameters
+        ----------
+        func : callable plotting function
+            Must take x, y arrays as positional arguments and draw onto the
+            "currently active" matplotlib Axes. Also needs to accept kwargs
+            called ``color`` and  ``label``.
+
+        """
+        indices = zip(*np.triu_indices_from(self.axes, 1))
+        self._map_bivariate(func, indices, **kwargs)
+        return self
+
+    def map_offdiag(self, func, **kwargs):
+        """Plot with a bivariate function on the off-diagonal subplots.
+
+        Parameters
+        ----------
+        func : callable plotting function
+            Must take x, y arrays as positional arguments and draw onto the
+            "currently active" matplotlib Axes. Also needs to accept kwargs
+            called ``color`` and  ``label``.
+
+        """
+        if self.square_grid:
+            self.map_lower(func, **kwargs)
+            if not self._corner:
+                self.map_upper(func, **kwargs)
+        else:
+            indices = []
+            for i, (y_var) in enumerate(self.y_vars):
+                for j, (x_var) in enumerate(self.x_vars):
+                    if x_var != y_var:
+                        indices.append((i, j))
+            self._map_bivariate(func, indices, **kwargs)
+        return self
+
+    def map_diag(self, func, **kwargs):
+        """Plot with a univariate function on each diagonal subplot.
+
+        Parameters
+        ----------
+        func : callable plotting function
+            Must take an x array as a positional argument and draw onto the
+            "currently active" matplotlib Axes. Also needs to accept kwargs
+            called ``color`` and  ``label``.
+
+        """
+        # Add special diagonal axes for the univariate plot
+        if self.diag_axes is None:
+            diag_vars = []
+            diag_axes = []
+            for i, y_var in enumerate(self.y_vars):
+                for j, x_var in enumerate(self.x_vars):
+                    if x_var == y_var:
+
+                        # Make the density axes
+                        diag_vars.append(x_var)
+                        ax = self.axes[i, j]
+                        diag_ax = ax.twinx()
+                        diag_ax.set_axis_off()
+                        diag_axes.append(diag_ax)
+
+                        # Work around matplotlib bug
+                        # https://github.com/matplotlib/matplotlib/issues/15188
+                        if not plt.rcParams.get("ytick.left", True):
+                            for tick in ax.yaxis.majorTicks:
+                                tick.tick1line.set_visible(False)
+
+                        # Remove main y axis from density axes in a corner plot
+                        if self._corner:
+                            ax.yaxis.set_visible(False)
+                            if self._despine:
+                                utils.despine(ax=ax, left=True)
+                            # TODO add optional density ticks (on the right)
+                            # when drawing a corner plot?
+
+            if self.diag_sharey and diag_axes:
+                for ax in diag_axes[1:]:
+                    share_axis(diag_axes[0], ax, "y")
+
+            self.diag_vars = diag_vars
+            self.diag_axes = diag_axes
+
+        if "hue" not in signature(func).parameters:
+            return self._map_diag_iter_hue(func, **kwargs)
+
+        # Loop over diagonal variables and axes, making one plot in each
+        for var, ax in zip(self.diag_vars, self.diag_axes):
+
+            plot_kwargs = kwargs.copy()
+            if str(func.__module__).startswith("seaborn"):
+                plot_kwargs["ax"] = ax
+            else:
+                plt.sca(ax)
+
+            vector = self.data[var]
+            if self._hue_var is not None:
+                hue = self.data[self._hue_var]
+            else:
+                hue = None
+
+            if self._dropna:
+                not_na = vector.notna()
+                if hue is not None:
+                    not_na &= hue.notna()
+                vector = vector[not_na]
+                if hue is not None:
+                    hue = hue[not_na]
+
+            plot_kwargs.setdefault("hue", hue)
+            plot_kwargs.setdefault("hue_order", self._hue_order)
+            plot_kwargs.setdefault("palette", self._orig_palette)
+            func(x=vector, **plot_kwargs)
+            ax.legend_ = None
+
+        self._add_axis_labels()
+        return self
+
+    def _map_diag_iter_hue(self, func, **kwargs):
+        """Put marginal plot on each diagonal axes, iterating over hue."""
+        # Plot on each of the diagonal axes
+        fixed_color = kwargs.pop("color", None)
+
+        for var, ax in zip(self.diag_vars, self.diag_axes):
+            hue_grouped = self.data[var].groupby(self.hue_vals, observed=True)
+
+            plot_kwargs = kwargs.copy()
+            if str(func.__module__).startswith("seaborn"):
+                plot_kwargs["ax"] = ax
+            else:
+                plt.sca(ax)
+
+            for k, label_k in enumerate(self._hue_order):
+
+                # Attempt to get data for this level, allowing for empty
+                try:
+                    data_k = hue_grouped.get_group(label_k)
+                except KeyError:
+                    data_k = pd.Series([], dtype=float)
+
+                if fixed_color is None:
+                    color = self.palette[k]
+                else:
+                    color = fixed_color
+
+                if self._dropna:
+                    data_k = utils.remove_na(data_k)
+
+                if str(func.__module__).startswith("seaborn"):
+                    func(x=data_k, label=label_k, color=color, **plot_kwargs)
+                else:
+                    func(data_k, label=label_k, color=color, **plot_kwargs)
+
+        self._add_axis_labels()
+
+        return self
+
+    def _map_bivariate(self, func, indices, **kwargs):
+        """Draw a bivariate plot on the indicated axes."""
+        # This is a hack to handle the fact that new distribution plots don't add
+        # their artists onto the axes. This is probably superior in general, but
+        # we'll need a better way to handle it in the axisgrid functions.
+        from .distributions import histplot, kdeplot
+        if func is histplot or func is kdeplot:
+            self._extract_legend_handles = True
+
+        kws = kwargs.copy()  # Use copy as we insert other kwargs
+        for i, j in indices:
+            x_var = self.x_vars[j]
+            y_var = self.y_vars[i]
+            ax = self.axes[i, j]
+            if ax is None:  # i.e. we are in corner mode
+                continue
+            self._plot_bivariate(x_var, y_var, ax, func, **kws)
+        self._add_axis_labels()
+
+        if "hue" in signature(func).parameters:
+            self.hue_names = list(self._legend_data)
+
+    def _plot_bivariate(self, x_var, y_var, ax, func, **kwargs):
+        """Draw a bivariate plot on the specified axes."""
+        if "hue" not in signature(func).parameters:
+            self._plot_bivariate_iter_hue(x_var, y_var, ax, func, **kwargs)
+            return
+
+        kwargs = kwargs.copy()
+        if str(func.__module__).startswith("seaborn"):
+            kwargs["ax"] = ax
+        else:
+            plt.sca(ax)
+
+        if x_var == y_var:
+            axes_vars = [x_var]
+        else:
+            axes_vars = [x_var, y_var]
+
+        if self._hue_var is not None and self._hue_var not in axes_vars:
+            axes_vars.append(self._hue_var)
+
+        data = self.data[axes_vars]
+        if self._dropna:
+            data = data.dropna()
+
+        x = data[x_var]
+        y = data[y_var]
+        if self._hue_var is None:
+            hue = None
+        else:
+            hue = data.get(self._hue_var)
+
+        if "hue" not in kwargs:
+            kwargs.update({
+                "hue": hue, "hue_order": self._hue_order, "palette": self._orig_palette,
+            })
+        func(x=x, y=y, **kwargs)
+
+        self._update_legend_data(ax)
+
+    def _plot_bivariate_iter_hue(self, x_var, y_var, ax, func, **kwargs):
+        """Draw a bivariate plot while iterating over hue subsets."""
+        kwargs = kwargs.copy()
+        if str(func.__module__).startswith("seaborn"):
+            kwargs["ax"] = ax
+        else:
+            plt.sca(ax)
+
+        if x_var == y_var:
+            axes_vars = [x_var]
+        else:
+            axes_vars = [x_var, y_var]
+
+        hue_grouped = self.data.groupby(self.hue_vals, observed=True)
+        for k, label_k in enumerate(self._hue_order):
+
+            kws = kwargs.copy()
+
+            # Attempt to get data for this level, allowing for empty
+            try:
+                data_k = hue_grouped.get_group(label_k)
+            except KeyError:
+                data_k = pd.DataFrame(columns=axes_vars,
+                                      dtype=float)
+
+            if self._dropna:
+                data_k = data_k[axes_vars].dropna()
+
+            x = data_k[x_var]
+            y = data_k[y_var]
+
+            for kw, val_list in self.hue_kws.items():
+                kws[kw] = val_list[k]
+            kws.setdefault("color", self.palette[k])
+            if self._hue_var is not None:
+                kws["label"] = label_k
+
+            if str(func.__module__).startswith("seaborn"):
+                func(x=x, y=y, **kws)
+            else:
+                func(x, y, **kws)
+
+        self._update_legend_data(ax)
+
+    def _add_axis_labels(self):
+        """Add labels to the left and bottom Axes."""
+        for ax, label in zip(self.axes[-1, :], self.x_vars):
+            ax.set_xlabel(label)
+        for ax, label in zip(self.axes[:, 0], self.y_vars):
+            ax.set_ylabel(label)
+
+    def _find_numeric_cols(self, data):
+        """Find which variables in a DataFrame are numeric."""
+        numeric_cols = []
+        for col in data:
+            if variable_type(data[col]) == "numeric":
+                numeric_cols.append(col)
+        return numeric_cols
+
+
+class JointGrid(_BaseGrid):
+    """Grid for drawing a bivariate plot with marginal univariate plots.
+
+    Many plots can be drawn by using the figure-level interface :func:`jointplot`.
+    Use this class directly when you need more flexibility.
+
+    """
+
+    def __init__(
+        self, data=None, *,
+        x=None, y=None, hue=None,
+        height=6, ratio=5, space=.2,
+        palette=None, hue_order=None, hue_norm=None,
+        dropna=False, xlim=None, ylim=None, marginal_ticks=False,
+    ):
+
+        # Set up the subplot grid
+        f = plt.figure(figsize=(height, height))
+        gs = plt.GridSpec(ratio + 1, ratio + 1)
+
+        ax_joint = f.add_subplot(gs[1:, :-1])
+        ax_marg_x = f.add_subplot(gs[0, :-1], sharex=ax_joint)
+        ax_marg_y = f.add_subplot(gs[1:, -1], sharey=ax_joint)
+
+        self._figure = f
+        self.ax_joint = ax_joint
+        self.ax_marg_x = ax_marg_x
+        self.ax_marg_y = ax_marg_y
+
+        # Turn off tick visibility for the measure axis on the marginal plots
+        plt.setp(ax_marg_x.get_xticklabels(), visible=False)
+        plt.setp(ax_marg_y.get_yticklabels(), visible=False)
+        plt.setp(ax_marg_x.get_xticklabels(minor=True), visible=False)
+        plt.setp(ax_marg_y.get_yticklabels(minor=True), visible=False)
+
+        # Turn off the ticks on the density axis for the marginal plots
+        if not marginal_ticks:
+            plt.setp(ax_marg_x.yaxis.get_majorticklines(), visible=False)
+            plt.setp(ax_marg_x.yaxis.get_minorticklines(), visible=False)
+            plt.setp(ax_marg_y.xaxis.get_majorticklines(), visible=False)
+            plt.setp(ax_marg_y.xaxis.get_minorticklines(), visible=False)
+            plt.setp(ax_marg_x.get_yticklabels(), visible=False)
+            plt.setp(ax_marg_y.get_xticklabels(), visible=False)
+            plt.setp(ax_marg_x.get_yticklabels(minor=True), visible=False)
+            plt.setp(ax_marg_y.get_xticklabels(minor=True), visible=False)
+            ax_marg_x.yaxis.grid(False)
+            ax_marg_y.xaxis.grid(False)
+
+        # Process the input variables
+        p = VectorPlotter(data=data, variables=dict(x=x, y=y, hue=hue))
+        plot_data = p.plot_data.loc[:, p.plot_data.notna().any()]
+
+        # Possibly drop NA
+        if dropna:
+            plot_data = plot_data.dropna()
+
+        def get_var(var):
+            vector = plot_data.get(var, None)
+            if vector is not None:
+                vector = vector.rename(p.variables.get(var, None))
+            return vector
+
+        self.x = get_var("x")
+        self.y = get_var("y")
+        self.hue = get_var("hue")
+
+        for axis in "xy":
+            name = p.variables.get(axis, None)
+            if name is not None:
+                getattr(ax_joint, f"set_{axis}label")(name)
+
+        if xlim is not None:
+            ax_joint.set_xlim(xlim)
+        if ylim is not None:
+            ax_joint.set_ylim(ylim)
+
+        # Store the semantic mapping parameters for axes-level functions
+        self._hue_params = dict(palette=palette, hue_order=hue_order, hue_norm=hue_norm)
+
+        # Make the grid look nice
+        utils.despine(f)
+        if not marginal_ticks:
+            utils.despine(ax=ax_marg_x, left=True)
+            utils.despine(ax=ax_marg_y, bottom=True)
+        for axes in [ax_marg_x, ax_marg_y]:
+            for axis in [axes.xaxis, axes.yaxis]:
+                axis.label.set_visible(False)
+        f.tight_layout()
+        f.subplots_adjust(hspace=space, wspace=space)
+
+    def _inject_kwargs(self, func, kws, params):
+        """Add params to kws if they are accepted by func."""
+        func_params = signature(func).parameters
+        for key, val in params.items():
+            if key in func_params:
+                kws.setdefault(key, val)
+
+    def plot(self, joint_func, marginal_func, **kwargs):
+        """Draw the plot by passing functions for joint and marginal axes.
+
+        This method passes the ``kwargs`` dictionary to both functions. If you
+        need more control, call :meth:`JointGrid.plot_joint` and
+        :meth:`JointGrid.plot_marginals` directly with specific parameters.
+
+        Parameters
+        ----------
+        joint_func, marginal_func : callables
+            Functions to draw the bivariate and univariate plots. See methods
+            referenced above for information about the required characteristics
+            of these functions.
+        kwargs
+            Additional keyword arguments are passed to both functions.
+
+        Returns
+        -------
+        :class:`JointGrid` instance
+            Returns ``self`` for easy method chaining.
+
+        """
+        self.plot_marginals(marginal_func, **kwargs)
+        self.plot_joint(joint_func, **kwargs)
+        return self
+
+    def plot_joint(self, func, **kwargs):
+        """Draw a bivariate plot on the joint axes of the grid.
+
+        Parameters
+        ----------
+        func : plotting callable
+            If a seaborn function, it should accept ``x`` and ``y``. Otherwise,
+            it must accept ``x`` and ``y`` vectors of data as the first two
+            positional arguments, and it must plot on the "current" axes.
+            If ``hue`` was defined in the class constructor, the function must
+            accept ``hue`` as a parameter.
+        kwargs
+            Keyword argument are passed to the plotting function.
+
+        Returns
+        -------
+        :class:`JointGrid` instance
+            Returns ``self`` for easy method chaining.
+
+        """
+        kwargs = kwargs.copy()
+        if str(func.__module__).startswith("seaborn"):
+            kwargs["ax"] = self.ax_joint
+        else:
+            plt.sca(self.ax_joint)
+        if self.hue is not None:
+            kwargs["hue"] = self.hue
+            self._inject_kwargs(func, kwargs, self._hue_params)
+
+        if str(func.__module__).startswith("seaborn"):
+            func(x=self.x, y=self.y, **kwargs)
+        else:
+            func(self.x, self.y, **kwargs)
+
+        return self
+
+    def plot_marginals(self, func, **kwargs):
+        """Draw univariate plots on each marginal axes.
+
+        Parameters
+        ----------
+        func : plotting callable
+            If a seaborn function, it should  accept ``x`` and ``y`` and plot
+            when only one of them is defined. Otherwise, it must accept a vector
+            of data as the first positional argument and determine its orientation
+            using the ``vertical`` parameter, and it must plot on the "current" axes.
+            If ``hue`` was defined in the class constructor, it must accept ``hue``
+            as a parameter.
+        kwargs
+            Keyword argument are passed to the plotting function.
+
+        Returns
+        -------
+        :class:`JointGrid` instance
+            Returns ``self`` for easy method chaining.
+
+        """
+        seaborn_func = (
+            str(func.__module__).startswith("seaborn")
+            # deprecated distplot has a legacy API, special case it
+            and not func.__name__ == "distplot"
+        )
+        func_params = signature(func).parameters
+        kwargs = kwargs.copy()
+        if self.hue is not None:
+            kwargs["hue"] = self.hue
+            self._inject_kwargs(func, kwargs, self._hue_params)
+
+        if "legend" in func_params:
+            kwargs.setdefault("legend", False)
+
+        if "orientation" in func_params:
+            # e.g. plt.hist
+            orient_kw_x = {"orientation": "vertical"}
+            orient_kw_y = {"orientation": "horizontal"}
+        elif "vertical" in func_params:
+            # e.g. sns.distplot (also how did this get backwards?)
+            orient_kw_x = {"vertical": False}
+            orient_kw_y = {"vertical": True}
+
+        if seaborn_func:
+            func(x=self.x, ax=self.ax_marg_x, **kwargs)
+        else:
+            plt.sca(self.ax_marg_x)
+            func(self.x, **orient_kw_x, **kwargs)
+
+        if seaborn_func:
+            func(y=self.y, ax=self.ax_marg_y, **kwargs)
+        else:
+            plt.sca(self.ax_marg_y)
+            func(self.y, **orient_kw_y, **kwargs)
+
+        self.ax_marg_x.yaxis.get_label().set_visible(False)
+        self.ax_marg_y.xaxis.get_label().set_visible(False)
+
+        return self
+
+    def refline(
+        self, *, x=None, y=None, joint=True, marginal=True,
+        color='.5', linestyle='--', **line_kws
+    ):
+        """Add a reference line(s) to joint and/or marginal axes.
+
+        Parameters
+        ----------
+        x, y : numeric
+            Value(s) to draw the line(s) at.
+        joint, marginal : bools
+            Whether to add the reference line(s) to the joint/marginal axes.
+        color : :mod:`matplotlib color <matplotlib.colors>`
+            Specifies the color of the reference line(s).
+        linestyle : str
+            Specifies the style of the reference line(s).
+        line_kws : key, value mappings
+            Other keyword arguments are passed to :meth:`matplotlib.axes.Axes.axvline`
+            when ``x`` is not None and :meth:`matplotlib.axes.Axes.axhline` when ``y``
+            is not None.
+
+        Returns
+        -------
+        :class:`JointGrid` instance
+            Returns ``self`` for easy method chaining.
+
+        """
+        line_kws['color'] = color
+        line_kws['linestyle'] = linestyle
+
+        if x is not None:
+            if joint:
+                self.ax_joint.axvline(x, **line_kws)
+            if marginal:
+                self.ax_marg_x.axvline(x, **line_kws)
+
+        if y is not None:
+            if joint:
+                self.ax_joint.axhline(y, **line_kws)
+            if marginal:
+                self.ax_marg_y.axhline(y, **line_kws)
+
+        return self
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JointGrid.__init__.__doc__ = """\
+Set up the grid of subplots and store data internally for easy plotting.
+
+Parameters
+----------
+{params.core.data}
+{params.core.xy}
+height : number
+    Size of each side of the figure in inches (it will be square).
+ratio : number
+    Ratio of joint axes height to marginal axes height.
+space : number
+    Space between the joint and marginal axes
+dropna : bool
+    If True, remove missing observations before plotting.
+{{x, y}}lim : pairs of numbers
+    Set axis limits to these values before plotting.
+marginal_ticks : bool
+    If False, suppress ticks on the count/density axis of the marginal plots.
+{params.core.hue}
+    Note: unlike in :class:`FacetGrid` or :class:`PairGrid`, the axes-level
+    functions must support ``hue`` to use it in :class:`JointGrid`.
+{params.core.palette}
+{params.core.hue_order}
+{params.core.hue_norm}
+
+See Also
+--------
+{seealso.jointplot}
+{seealso.pairgrid}
+{seealso.pairplot}
+
+Examples
+--------
+
+.. include:: ../docstrings/JointGrid.rst
+
+""".format(
+    params=_param_docs,
+    seealso=_core_docs["seealso"],
+)
+
+
+def pairplot(
+    data, *,
+    hue=None, hue_order=None, palette=None,
+    vars=None, x_vars=None, y_vars=None,
+    kind="scatter", diag_kind="auto", markers=None,
+    height=2.5, aspect=1, corner=False, dropna=False,
+    plot_kws=None, diag_kws=None, grid_kws=None, size=None,
+):
+    """Plot pairwise relationships in a dataset.
+
+    By default, this function will create a grid of Axes such that each numeric
+    variable in ``data`` will by shared across the y-axes across a single row and
+    the x-axes across a single column. The diagonal plots are treated
+    differently: a univariate distribution plot is drawn to show the marginal
+    distribution of the data in each column.
+
+    It is also possible to show a subset of variables or plot different
+    variables on the rows and columns.
+
+    This is a high-level interface for :class:`PairGrid` that is intended to
+    make it easy to draw a few common styles. You should use :class:`PairGrid`
+    directly if you need more flexibility.
+
+    Parameters
+    ----------
+    data : `pandas.DataFrame`
+        Tidy (long-form) dataframe where each column is a variable and
+        each row is an observation.
+    hue : name of variable in ``data``
+        Variable in ``data`` to map plot aspects to different colors.
+    hue_order : list of strings
+        Order for the levels of the hue variable in the palette
+    palette : dict or seaborn color palette
+        Set of colors for mapping the ``hue`` variable. If a dict, keys
+        should be values  in the ``hue`` variable.
+    vars : list of variable names
+        Variables within ``data`` to use, otherwise use every column with
+        a numeric datatype.
+    {x, y}_vars : lists of variable names
+        Variables within ``data`` to use separately for the rows and
+        columns of the figure; i.e. to make a non-square plot.
+    kind : {'scatter', 'kde', 'hist', 'reg'}
+        Kind of plot to make.
+    diag_kind : {'auto', 'hist', 'kde', None}
+        Kind of plot for the diagonal subplots. If 'auto', choose based on
+        whether or not ``hue`` is used.
+    markers : single matplotlib marker code or list
+        Either the marker to use for all scatterplot points or a list of markers
+        with a length the same as the number of levels in the hue variable so that
+        differently colored points will also have different scatterplot
+        markers.
+    height : scalar
+        Height (in inches) of each facet.
+    aspect : scalar
+        Aspect * height gives the width (in inches) of each facet.
+    corner : bool
+        If True, don't add axes to the upper (off-diagonal) triangle of the
+        grid, making this a "corner" plot.
+    dropna : boolean
+        Drop missing values from the data before plotting.
+    {plot, diag, grid}_kws : dicts
+        Dictionaries of keyword arguments. ``plot_kws`` are passed to the
+        bivariate plotting function, ``diag_kws`` are passed to the univariate
+        plotting function, and ``grid_kws`` are passed to the :class:`PairGrid`
+        constructor.
+
+    Returns
+    -------
+    grid : :class:`PairGrid`
+        Returns the underlying :class:`PairGrid` instance for further tweaking.
+
+    See Also
+    --------
+    PairGrid : Subplot grid for more flexible plotting of pairwise relationships.
+    JointGrid : Grid for plotting joint and marginal distributions of two variables.
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/pairplot.rst
+
+    """
+    # Avoid circular import
+    from .distributions import histplot, kdeplot
+
+    # Handle deprecations
+    if size is not None:
+        height = size
+        msg = ("The `size` parameter has been renamed to `height`; "
+               "please update your code.")
+        warnings.warn(msg, UserWarning)
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError(
+            f"'data' must be pandas DataFrame object, not: {type(data)}")
+
+    plot_kws = {} if plot_kws is None else plot_kws.copy()
+    diag_kws = {} if diag_kws is None else diag_kws.copy()
+    grid_kws = {} if grid_kws is None else grid_kws.copy()
+
+    # Resolve "auto" diag kind
+    if diag_kind == "auto":
+        if hue is None:
+            diag_kind = "kde" if kind == "kde" else "hist"
+        else:
+            diag_kind = "hist" if kind == "hist" else "kde"
+
+    # Set up the PairGrid
+    grid_kws.setdefault("diag_sharey", diag_kind == "hist")
+    grid = PairGrid(data, vars=vars, x_vars=x_vars, y_vars=y_vars, hue=hue,
+                    hue_order=hue_order, palette=palette, corner=corner,
+                    height=height, aspect=aspect, dropna=dropna, **grid_kws)
+
+    # Add the markers here as PairGrid has figured out how many levels of the
+    # hue variable are needed and we don't want to duplicate that process
+    if markers is not None:
+        if kind == "reg":
+            # Needed until regplot supports style
+            if grid.hue_names is None:
+                n_markers = 1
+            else:
+                n_markers = len(grid.hue_names)
+            if not isinstance(markers, list):
+                markers = [markers] * n_markers
+            if len(markers) != n_markers:
+                raise ValueError("markers must be a singleton or a list of "
+                                 "markers for each level of the hue variable")
+            grid.hue_kws = {"marker": markers}
+        elif kind == "scatter":
+            if isinstance(markers, str):
+                plot_kws["marker"] = markers
+            elif hue is not None:
+                plot_kws["style"] = data[hue]
+                plot_kws["markers"] = markers
+
+    # Draw the marginal plots on the diagonal
+    diag_kws = diag_kws.copy()
+    diag_kws.setdefault("legend", False)
+    if diag_kind == "hist":
+        grid.map_diag(histplot, **diag_kws)
+    elif diag_kind == "kde":
+        diag_kws.setdefault("fill", True)
+        diag_kws.setdefault("warn_singular", False)
+        grid.map_diag(kdeplot, **diag_kws)
+
+    # Maybe plot on the off-diagonals
+    if diag_kind is not None:
+        plotter = grid.map_offdiag
+    else:
+        plotter = grid.map
+
+    if kind == "scatter":
+        from .relational import scatterplot  # Avoid circular import
+        plotter(scatterplot, **plot_kws)
+    elif kind == "reg":
+        from .regression import regplot  # Avoid circular import
+        plotter(regplot, **plot_kws)
+    elif kind == "kde":
+        from .distributions import kdeplot  # Avoid circular import
+        plot_kws.setdefault("warn_singular", False)
+        plotter(kdeplot, **plot_kws)
+    elif kind == "hist":
+        from .distributions import histplot  # Avoid circular import
+        plotter(histplot, **plot_kws)
+
+    # Add a legend
+    if hue is not None:
+        grid.add_legend()
+
+    grid.tight_layout()
+
+    return grid
+
+
+def jointplot(
+    data=None, *, x=None, y=None, hue=None, kind="scatter",
+    height=6, ratio=5, space=.2, dropna=False, xlim=None, ylim=None,
+    color=None, palette=None, hue_order=None, hue_norm=None, marginal_ticks=False,
+    joint_kws=None, marginal_kws=None,
+    **kwargs
+):
+    # Avoid circular imports
+    from .relational import scatterplot
+    from .regression import regplot, residplot
+    from .distributions import histplot, kdeplot, _freedman_diaconis_bins
+
+    if kwargs.pop("ax", None) is not None:
+        msg = "Ignoring `ax`; jointplot is a figure-level function."
+        warnings.warn(msg, UserWarning, stacklevel=2)
+
+    # Set up empty default kwarg dicts
+    joint_kws = {} if joint_kws is None else joint_kws.copy()
+    joint_kws.update(kwargs)
+    marginal_kws = {} if marginal_kws is None else marginal_kws.copy()
+
+    # Handle deprecations of distplot-specific kwargs
+    distplot_keys = [
+        "rug", "fit", "hist_kws", "norm_hist" "hist_kws", "rug_kws",
+    ]
+    unused_keys = []
+    for key in distplot_keys:
+        if key in marginal_kws:
+            unused_keys.append(key)
+            marginal_kws.pop(key)
+    if unused_keys and kind != "kde":
+        msg = (
+            "The marginal plotting function has changed to `histplot`,"
+            " which does not accept the following argument(s): {}."
+        ).format(", ".join(unused_keys))
+        warnings.warn(msg, UserWarning)
+
+    # Validate the plot kind
+    plot_kinds = ["scatter", "hist", "hex", "kde", "reg", "resid"]
+    _check_argument("kind", plot_kinds, kind)
+
+    # Raise early if using `hue` with a kind that does not support it
+    if hue is not None and kind in ["hex", "reg", "resid"]:
+        msg = f"Use of `hue` with `kind='{kind}'` is not currently supported."
+        raise ValueError(msg)
+
+    # Make a colormap based off the plot color
+    # (Currently used only for kind="hex")
+    if color is None:
+        color = "C0"
+    color_rgb = mpl.colors.colorConverter.to_rgb(color)
+    colors = [set_hls_values(color_rgb, l=val) for val in np.linspace(1, 0, 12)]
+    cmap = blend_palette(colors, as_cmap=True)
+
+    # Matplotlib's hexbin plot is not na-robust
+    if kind == "hex":
+        dropna = True
+
+    # Initialize the JointGrid object
+    grid = JointGrid(
+        data=data, x=x, y=y, hue=hue,
+        palette=palette, hue_order=hue_order, hue_norm=hue_norm,
+        dropna=dropna, height=height, ratio=ratio, space=space,
+        xlim=xlim, ylim=ylim, marginal_ticks=marginal_ticks,
+    )
+
+    if grid.hue is not None:
+        marginal_kws.setdefault("legend", False)
+
+    # Plot the data using the grid
+    if kind.startswith("scatter"):
+
+        joint_kws.setdefault("color", color)
+        grid.plot_joint(scatterplot, **joint_kws)
+
+        if grid.hue is None:
+            marg_func = histplot
+        else:
+            marg_func = kdeplot
+            marginal_kws.setdefault("warn_singular", False)
+            marginal_kws.setdefault("fill", True)
+
+        marginal_kws.setdefault("color", color)
+        grid.plot_marginals(marg_func, **marginal_kws)
+
+    elif kind.startswith("hist"):
+
+        # TODO process pair parameters for bins, etc. and pass
+        # to both joint and marginal plots
+
+        joint_kws.setdefault("color", color)
+        grid.plot_joint(histplot, **joint_kws)
+
+        marginal_kws.setdefault("kde", False)
+        marginal_kws.setdefault("color", color)
+
+        marg_x_kws = marginal_kws.copy()
+        marg_y_kws = marginal_kws.copy()
+
+        pair_keys = "bins", "binwidth", "binrange"
+        for key in pair_keys:
+            if isinstance(joint_kws.get(key), tuple):
+                x_val, y_val = joint_kws[key]
+                marg_x_kws.setdefault(key, x_val)
+                marg_y_kws.setdefault(key, y_val)
+
+        histplot(data=data, x=x, hue=hue, **marg_x_kws, ax=grid.ax_marg_x)
+        histplot(data=data, y=y, hue=hue, **marg_y_kws, ax=grid.ax_marg_y)
+
+    elif kind.startswith("kde"):
+
+        joint_kws.setdefault("color", color)
+        joint_kws.setdefault("warn_singular", False)
+        grid.plot_joint(kdeplot, **joint_kws)
+
+        marginal_kws.setdefault("color", color)
+        if "fill" in joint_kws:
+            marginal_kws.setdefault("fill", joint_kws["fill"])
+
+        grid.plot_marginals(kdeplot, **marginal_kws)
+
+    elif kind.startswith("hex"):
+
+        x_bins = min(_freedman_diaconis_bins(grid.x), 50)
+        y_bins = min(_freedman_diaconis_bins(grid.y), 50)
+        gridsize = int(np.mean([x_bins, y_bins]))
+
+        joint_kws.setdefault("gridsize", gridsize)
+        joint_kws.setdefault("cmap", cmap)
+        grid.plot_joint(plt.hexbin, **joint_kws)
+
+        marginal_kws.setdefault("kde", False)
+        marginal_kws.setdefault("color", color)
+        grid.plot_marginals(histplot, **marginal_kws)
+
+    elif kind.startswith("reg"):
+
+        marginal_kws.setdefault("color", color)
+        marginal_kws.setdefault("kde", True)
+        grid.plot_marginals(histplot, **marginal_kws)
+
+        joint_kws.setdefault("color", color)
+        grid.plot_joint(regplot, **joint_kws)
+
+    elif kind.startswith("resid"):
+
+        joint_kws.setdefault("color", color)
+        grid.plot_joint(residplot, **joint_kws)
+
+        x, y = grid.ax_joint.collections[0].get_offsets().T
+        marginal_kws.setdefault("color", color)
+        histplot(x=x, hue=hue, ax=grid.ax_marg_x, **marginal_kws)
+        histplot(y=y, hue=hue, ax=grid.ax_marg_y, **marginal_kws)
+
+    # Make the main axes active in the matplotlib state machine
+    plt.sca(grid.ax_joint)
+
+    return grid
+
+
+jointplot.__doc__ = """\
+Draw a plot of two variables with bivariate and univariate graphs.
+
+This function provides a convenient interface to the :class:`JointGrid`
+class, with several canned plot kinds. This is intended to be a fairly
+lightweight wrapper; if you need more flexibility, you should use
+:class:`JointGrid` directly.
+
+Parameters
+----------
+{params.core.data}
+{params.core.xy}
+{params.core.hue}
+kind : {{ "scatter" | "kde" | "hist" | "hex" | "reg" | "resid" }}
+    Kind of plot to draw. See the examples for references to the underlying functions.
+height : numeric
+    Size of the figure (it will be square).
+ratio : numeric
+    Ratio of joint axes height to marginal axes height.
+space : numeric
+    Space between the joint and marginal axes
+dropna : bool
+    If True, remove observations that are missing from ``x`` and ``y``.
+{{x, y}}lim : pairs of numbers
+    Axis limits to set before plotting.
+{params.core.color}
+{params.core.palette}
+{params.core.hue_order}
+{params.core.hue_norm}
+marginal_ticks : bool
+    If False, suppress ticks on the count/density axis of the marginal plots.
+{{joint, marginal}}_kws : dicts
+    Additional keyword arguments for the plot components.
+kwargs
+    Additional keyword arguments are passed to the function used to
+    draw the plot on the joint Axes, superseding items in the
+    ``joint_kws`` dictionary.
+
+Returns
+-------
+{returns.jointgrid}
+
+See Also
+--------
+{seealso.jointgrid}
+{seealso.pairgrid}
+{seealso.pairplot}
+
+Examples
+--------
+
+.. include:: ../docstrings/jointplot.rst
+
+""".format(
+    params=_param_docs,
+    returns=_core_docs["returns"],
+    seealso=_core_docs["seealso"],
+)
+
+=== seaborn/palettes.py
+import colorsys
+from itertools import cycle
+
+import numpy as np
+import matplotlib as mpl
+
+from .external import husl
+
+from .utils import desaturate
+from .colors import xkcd_rgb, crayons
+
+
+
+__all__ = ["color_palette", "hls_palette", "husl_palette", "mpl_palette",
+           "dark_palette", "light_palette", "diverging_palette",
+           "blend_palette", "xkcd_palette", "crayon_palette",
+           "cubehelix_palette", "set_color_codes"]
+
+
+SEABORN_PALETTES = dict(
+    deep=["#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B3",
+          "#937860", "#DA8BC3", "#8C8C8C", "#CCB974", "#64B5CD"],
+    deep6=["#4C72B0", "#55A868", "#C44E52",
+           "#8172B3", "#CCB974", "#64B5CD"],
+    muted=["#4878D0", "#EE854A", "#6ACC64", "#D65F5F", "#956CB4",
+           "#8C613C", "#DC7EC0", "#797979", "#D5BB67", "#82C6E2"],
+    muted6=["#4878D0", "#6ACC64", "#D65F5F",
+            "#956CB4", "#D5BB67", "#82C6E2"],
+    pastel=["#A1C9F4", "#FFB482", "#8DE5A1", "#FF9F9B", "#D0BBFF",
+            "#DEBB9B", "#FAB0E4", "#CFCFCF", "#FFFEA3", "#B9F2F0"],
+    pastel6=["#A1C9F4", "#8DE5A1", "#FF9F9B",
+             "#D0BBFF", "#FFFEA3", "#B9F2F0"],
+    bright=["#023EFF", "#FF7C00", "#1AC938", "#E8000B", "#8B2BE2",
+            "#9F4800", "#F14CC1", "#A3A3A3", "#FFC400", "#00D7FF"],
+    bright6=["#023EFF", "#1AC938", "#E8000B",
+             "#8B2BE2", "#FFC400", "#00D7FF"],
+    dark=["#001C7F", "#B1400D", "#12711C", "#8C0800", "#591E71",
+          "#592F0D", "#A23582", "#3C3C3C", "#B8850A", "#006374"],
+    dark6=["#001C7F", "#12711C", "#8C0800",
+           "#591E71", "#B8850A", "#006374"],
+    colorblind=["#0173B2", "#DE8F05", "#029E73", "#D55E00", "#CC78BC",
+                "#CA9161", "#FBAFE4", "#949494", "#ECE133", "#56B4E9"],
+    colorblind6=["#0173B2", "#029E73", "#D55E00",
+                 "#CC78BC", "#ECE133", "#56B4E9"]
+)
+
+
+MPL_QUAL_PALS = {
+    "tab10": 10, "tab20": 20, "tab20b": 20, "tab20c": 20,
+    "Set1": 9, "Set2": 8, "Set3": 12,
+    "Accent": 8, "Paired": 12,
+    "Pastel1": 9, "Pastel2": 8, "Dark2": 8,
+}
+
+
+QUAL_PALETTE_SIZES = MPL_QUAL_PALS.copy()
+QUAL_PALETTE_SIZES.update({k: len(v) for k, v in SEABORN_PALETTES.items()})
+QUAL_PALETTES = list(QUAL_PALETTE_SIZES.keys())
+
+
+class _ColorPalette(list):
+    """Set the color palette in a with statement, otherwise be a list."""
+    def __enter__(self):
+        """Open the context."""
+        from .rcmod import set_palette
+        self._orig_palette = color_palette()
+        set_palette(self)
+        return self
+
+    def __exit__(self, *args):
+        """Close the context."""
+        from .rcmod import set_palette
+        set_palette(self._orig_palette)
+
+    def as_hex(self):
+        """Return a color palette with hex codes instead of RGB values."""
+        hex = [mpl.colors.rgb2hex(rgb) for rgb in self]
+        return _ColorPalette(hex)
+
+    def _repr_html_(self):
+        """Rich display of the color palette in an HTML frontend."""
+        s = 55
+        n = len(self)
+        html = f'<svg  width="{n * s}" height="{s}">'
+        for i, c in enumerate(self.as_hex()):
+            html += (
+                f'<rect x="{i * s}" y="0" width="{s}" height="{s}" style="fill:{c};'
+                'stroke-width:2;stroke:rgb(255,255,255)"/>'
+            )
+        html += '</svg>'
+        return html
+
+
+def _patch_colormap_display():
+    """Simplify the rich display of matplotlib color maps in a notebook."""
+    def _repr_png_(self):
+        """Generate a PNG representation of the Colormap."""
+        import io
+        from PIL import Image
+        import numpy as np
+        IMAGE_SIZE = (400, 50)
+        X = np.tile(np.linspace(0, 1, IMAGE_SIZE[0]), (IMAGE_SIZE[1], 1))
+        pixels = self(X, bytes=True)
+        png_bytes = io.BytesIO()
+        Image.fromarray(pixels).save(png_bytes, format='png')
+        return png_bytes.getvalue()
+
+    def _repr_html_(self):
+        """Generate an HTML representation of the Colormap."""
+        import base64
+        png_bytes = self._repr_png_()
+        png_base64 = base64.b64encode(png_bytes).decode('ascii')
+        return ('<img '
+                + 'alt="' + self.name + ' color map" '
+                + 'title="' + self.name + '"'
+                + 'src="data:image/png;base64,' + png_base64 + '">')
+
+    mpl.colors.Colormap._repr_png_ = _repr_png_
+    mpl.colors.Colormap._repr_html_ = _repr_html_
+
+
+def color_palette(palette=None, n_colors=None, desat=None, as_cmap=False):
+    """Return a list of colors or continuous colormap defining a palette.
+
+    Possible ``palette`` values include:
+        - Name of a seaborn palette (deep, muted, bright, pastel, dark, colorblind)
+        - Name of matplotlib colormap
+        - 'husl' or 'hls'
+        - 'ch:<cubehelix arguments>'
+        - 'light:<color>', 'dark:<color>', 'blend:<color>,<color>',
+        - A sequence of colors in any format matplotlib accepts
+
+    Calling this function with ``palette=None`` will return the current
+    matplotlib color cycle.
+
+    This function can also be used in a ``with`` statement to temporarily
+    set the color cycle for a plot or set of plots.
+
+    See the :ref:`tutorial <palette_tutorial>` for more information.
+
+    Parameters
+    ----------
+    palette : None, string, or sequence, optional
+        Name of palette or None to return current palette. If a sequence, input
+        colors are used but possibly cycled and desaturated.
+    n_colors : int, optional
+        Number of colors in the palette. If ``None``, the default will depend
+        on how ``palette`` is specified. Named palettes default to 6 colors,
+        but grabbing the current palette or passing in a list of colors will
+        not change the number of colors unless this is specified. Asking for
+        more colors than exist in the palette will cause it to cycle. Ignored
+        when ``as_cmap`` is True.
+    desat : float, optional
+        Proportion to desaturate each color by.
+    as_cmap : bool
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+
+    Returns
+    -------
+    list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    set_palette : Set the default color cycle for all plots.
+    set_color_codes : Reassign color codes like ``"b"``, ``"g"``, etc. to
+                      colors from one of the seaborn palettes.
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/color_palette.rst
+
+    """
+    if palette is None:
+        palette = get_color_cycle()
+        if n_colors is None:
+            n_colors = len(palette)
+
+    elif not isinstance(palette, str):
+        palette = palette
+        if n_colors is None:
+            n_colors = len(palette)
+    else:
+
+        if n_colors is None:
+            # Use all colors in a qualitative palette or 6 of another kind
+            n_colors = QUAL_PALETTE_SIZES.get(palette, 6)
+
+        if palette in SEABORN_PALETTES:
+            # Named "seaborn variant" of matplotlib default color cycle
+            palette = SEABORN_PALETTES[palette]
+
+        elif palette == "hls":
+            # Evenly spaced colors in cylindrical RGB space
+            palette = hls_palette(n_colors, as_cmap=as_cmap)
+
+        elif palette == "husl":
+            # Evenly spaced colors in cylindrical Lab space
+            palette = husl_palette(n_colors, as_cmap=as_cmap)
+
+        elif palette.lower() == "jet":
+            # Paternalism
+            raise ValueError("No.")
+
+        elif palette.startswith("ch:"):
+            # Cubehelix palette with params specified in string
+            args, kwargs = _parse_cubehelix_args(palette)
+            palette = cubehelix_palette(n_colors, *args, **kwargs, as_cmap=as_cmap)
+
+        elif palette.startswith("light:"):
+            # light palette to color specified in string
+            _, color = palette.split(":")
+            reverse = color.endswith("_r")
+            if reverse:
+                color = color[:-2]
+            palette = light_palette(color, n_colors, reverse=reverse, as_cmap=as_cmap)
+
+        elif palette.startswith("dark:"):
+            # light palette to color specified in string
+            _, color = palette.split(":")
+            reverse = color.endswith("_r")
+            if reverse:
+                color = color[:-2]
+            palette = dark_palette(color, n_colors, reverse=reverse, as_cmap=as_cmap)
+
+        elif palette.startswith("blend:"):
+            # blend palette between colors specified in string
+            _, colors = palette.split(":")
+            colors = colors.split(",")
+            palette = blend_palette(colors, n_colors, as_cmap=as_cmap)
+
+        else:
+            try:
+                # Perhaps a named matplotlib colormap?
+                palette = mpl_palette(palette, n_colors, as_cmap=as_cmap)
+            except (ValueError, KeyError):  # Error class changed in mpl36
+                raise ValueError(f"{palette!r} is not a valid palette name")
+
+    if desat is not None:
+        palette = [desaturate(c, desat) for c in palette]
+
+    if not as_cmap:
+
+        # Always return as many colors as we asked for
+        pal_cycle = cycle(palette)
+        palette = [next(pal_cycle) for _ in range(n_colors)]
+
+        # Always return in r, g, b tuple format
+        try:
+            palette = map(mpl.colors.colorConverter.to_rgb, palette)
+            palette = _ColorPalette(palette)
+        except ValueError:
+            raise ValueError(f"Could not generate a palette for {palette}")
+
+    return palette
+
+
+def hls_palette(n_colors=6, h=.01, l=.6, s=.65, as_cmap=False):  # noqa
+    """
+    Return hues with constant lightness and saturation in the HLS system.
+
+    The hues are evenly sampled along a circular path. The resulting palette will be
+    appropriate for categorical or cyclical data.
+
+    The `h`, `l`, and `s` values should be between 0 and 1.
+
+    .. note::
+        While the separation of the resulting colors will be mathematically
+        constant, the HLS system does not construct a perceptually-uniform space,
+        so their apparent intensity will vary.
+
+    Parameters
+    ----------
+    n_colors : int
+        Number of colors in the palette.
+    h : float
+        The value of the first hue.
+    l : float
+        The lightness value.
+    s : float
+        The saturation intensity.
+    as_cmap : bool
+        If True, return a matplotlib colormap object.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    husl_palette : Make a palette using evenly spaced hues in the HUSL system.
+
+    Examples
+    --------
+    .. include:: ../docstrings/hls_palette.rst
+
+    """
+    if as_cmap:
+        n_colors = 256
+    hues = np.linspace(0, 1, int(n_colors) + 1)[:-1]
+    hues += h
+    hues %= 1
+    hues -= hues.astype(int)
+    palette = [colorsys.hls_to_rgb(h_i, l, s) for h_i in hues]
+    if as_cmap:
+        return mpl.colors.ListedColormap(palette, "hls")
+    else:
+        return _ColorPalette(palette)
+
+
+def husl_palette(n_colors=6, h=.01, s=.9, l=.65, as_cmap=False):  # noqa
+    """
+    Return hues with constant lightness and saturation in the HUSL system.
+
+    The hues are evenly sampled along a circular path. The resulting palette will be
+    appropriate for categorical or cyclical data.
+
+    The `h`, `l`, and `s` values should be between 0 and 1.
+
+    This function is similar to :func:`hls_palette`, but it uses a nonlinear color
+    space that is more perceptually uniform.
+
+    Parameters
+    ----------
+    n_colors : int
+        Number of colors in the palette.
+    h : float
+        The value of the first hue.
+    l : float
+        The lightness value.
+    s : float
+        The saturation intensity.
+    as_cmap : bool
+        If True, return a matplotlib colormap object.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    hls_palette : Make a palette using evenly spaced hues in the HSL system.
+
+    Examples
+    --------
+    .. include:: ../docstrings/husl_palette.rst
+
+    """
+    if as_cmap:
+        n_colors = 256
+    hues = np.linspace(0, 1, int(n_colors) + 1)[:-1]
+    hues += h
+    hues %= 1
+    hues *= 359
+    s *= 99
+    l *= 99  # noqa
+    palette = [_color_to_rgb((h_i, s, l), input="husl") for h_i in hues]
+    if as_cmap:
+        return mpl.colors.ListedColormap(palette, "hsl")
+    else:
+        return _ColorPalette(palette)
+
+
+def mpl_palette(name, n_colors=6, as_cmap=False):
+    """
+    Return a palette or colormap from the matplotlib registry.
+
+    For continuous palettes, evenly-spaced discrete samples are chosen while
+    excluding the minimum and maximum value in the colormap to provide better
+    contrast at the extremes.
+
+    For qualitative palettes (e.g. those from colorbrewer), exact values are
+    indexed (rather than interpolated), but fewer than `n_colors` can be returned
+    if the palette does not define that many.
+
+    Parameters
+    ----------
+    name : string
+        Name of the palette. This should be a named matplotlib colormap.
+    n_colors : int
+        Number of discrete colors in the palette.
+
+    Returns
+    -------
+    list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    Examples
+    --------
+    .. include:: ../docstrings/mpl_palette.rst
+
+    """
+    if name.endswith("_d"):
+        sub_name = name[:-2]
+        if sub_name.endswith("_r"):
+            reverse = True
+            sub_name = sub_name[:-2]
+        else:
+            reverse = False
+        pal = color_palette(sub_name, 2) + ["#333333"]
+        if reverse:
+            pal = pal[::-1]
+        cmap = blend_palette(pal, n_colors, as_cmap=True)
+    else:
+        cmap = get_colormap(name)
+
+    if name in MPL_QUAL_PALS:
+        bins = np.linspace(0, 1, MPL_QUAL_PALS[name])[:n_colors]
+    else:
+        bins = np.linspace(0, 1, int(n_colors) + 2)[1:-1]
+    palette = list(map(tuple, cmap(bins)[:, :3]))
+
+    if as_cmap:
+        return cmap
+    else:
+        return _ColorPalette(palette)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def dark_palette(color, n_colors=6, reverse=False, as_cmap=False, input="rgb"):
+    """Make a sequential palette that blends from dark to ``color``.
+
+    This kind of palette is good for data that range between relatively
+    uninteresting low values and interesting high values.
+
+    The ``color`` parameter can be specified in a number of ways, including
+    all options for defining a color in matplotlib and several additional
+    color spaces that are handled by seaborn. You can also use the database
+    of named colors from the XKCD color survey.
+
+    If you are using the IPython notebook, you can also choose this palette
+    interactively with the :func:`choose_dark_palette` function.
+
+    Parameters
+    ----------
+    color : base color for high values
+        hex, rgb-tuple, or html color name
+    n_colors : int, optional
+        number of colors in the palette
+    reverse : bool, optional
+        if True, reverse the direction of the blend
+    as_cmap : bool, optional
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+    input : {'rgb', 'hls', 'husl', xkcd'}
+        Color space to interpret the input color. The first three options
+        apply to tuple inputs and the latter applies to string inputs.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    light_palette : Create a sequential palette with bright low values.
+    diverging_palette : Create a diverging palette with two colors.
+
+    Examples
+    --------
+    .. include:: ../docstrings/dark_palette.rst
+
+    """
+    rgb = _color_to_rgb(color, input)
+    hue, sat, _ = husl.rgb_to_husl(*rgb)
+    gray_s, gray_l = .15 * sat, 15
+    gray = _color_to_rgb((hue, gray_s, gray_l), input="husl")
+    colors = [rgb, gray] if reverse else [gray, rgb]
+    return blend_palette(colors, n_colors, as_cmap)
+
+
+def light_palette(color, n_colors=6, reverse=False, as_cmap=False, input="rgb"):
+    """Make a sequential palette that blends from light to ``color``.
+
+    The ``color`` parameter can be specified in a number of ways, including
+    all options for defining a color in matplotlib and several additional
+    color spaces that are handled by seaborn. You can also use the database
+    of named colors from the XKCD color survey.
+
+    If you are using a Jupyter notebook, you can also choose this palette
+    interactively with the :func:`choose_light_palette` function.
+
+    Parameters
+    ----------
+    color : base color for high values
+        hex code, html color name, or tuple in `input` space.
+    n_colors : int, optional
+        number of colors in the palette
+    reverse : bool, optional
+        if True, reverse the direction of the blend
+    as_cmap : bool, optional
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+    input : {'rgb', 'hls', 'husl', xkcd'}
+        Color space to interpret the input color. The first three options
+        apply to tuple inputs and the latter applies to string inputs.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    dark_palette : Create a sequential palette with dark low values.
+    diverging_palette : Create a diverging palette with two colors.
+
+    Examples
+    --------
+    .. include:: ../docstrings/light_palette.rst
+
+    """
+    rgb = _color_to_rgb(color, input)
+    hue, sat, _ = husl.rgb_to_husl(*rgb)
+    gray_s, gray_l = .15 * sat, 95
+    gray = _color_to_rgb((hue, gray_s, gray_l), input="husl")
+    colors = [rgb, gray] if reverse else [gray, rgb]
+    return blend_palette(colors, n_colors, as_cmap)
+
+
+def diverging_palette(h_neg, h_pos, s=75, l=50, sep=1, n=6,  # noqa
+                      center="light", as_cmap=False):
+    """Make a diverging palette between two HUSL colors.
+
+    If you are using the IPython notebook, you can also choose this palette
+    interactively with the :func:`choose_diverging_palette` function.
+
+    Parameters
+    ----------
+    h_neg, h_pos : float in [0, 359]
+        Anchor hues for negative and positive extents of the map.
+    s : float in [0, 100], optional
+        Anchor saturation for both extents of the map.
+    l : float in [0, 100], optional
+        Anchor lightness for both extents of the map.
+    sep : int, optional
+        Size of the intermediate region.
+    n : int, optional
+        Number of colors in the palette (if not returning a cmap)
+    center : {"light", "dark"}, optional
+        Whether the center of the palette is light or dark
+    as_cmap : bool, optional
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    dark_palette : Create a sequential palette with dark values.
+    light_palette : Create a sequential palette with light values.
+
+    Examples
+    --------
+    .. include: ../docstrings/diverging_palette.rst
+
+    """
+    palfunc = dict(dark=dark_palette, light=light_palette)[center]
+    n_half = int(128 - (sep // 2))
+    neg = palfunc((h_neg, s, l), n_half, reverse=True, input="husl")
+    pos = palfunc((h_pos, s, l), n_half, input="husl")
+    midpoint = dict(light=[(.95, .95, .95)], dark=[(.133, .133, .133)])[center]
+    mid = midpoint * sep
+    pal = blend_palette(np.concatenate([neg, mid, pos]), n, as_cmap=as_cmap)
+    return pal
+
+
+def blend_palette(colors, n_colors=6, as_cmap=False, input="rgb"):
+    """Make a palette that blends between a list of colors.
+
+    Parameters
+    ----------
+    colors : sequence of colors in various formats interpreted by `input`
+        hex code, html color name, or tuple in `input` space.
+    n_colors : int, optional
+        Number of colors in the palette.
+    as_cmap : bool, optional
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    Examples
+    --------
+    .. include: ../docstrings/blend_palette.rst
+
+    """
+    colors = [_color_to_rgb(color, input) for color in colors]
+    name = "blend"
+    pal = mpl.colors.LinearSegmentedColormap.from_list(name, colors)
+    if not as_cmap:
+        rgb_array = pal(np.linspace(0, 1, int(n_colors)))[:, :3]  # no alpha
+        pal = _ColorPalette(map(tuple, rgb_array))
+    return pal
+
+
+def xkcd_palette(colors):
+    """Make a palette with color names from the xkcd color survey.
+
+    See xkcd for the full list of colors: https://xkcd.com/color/rgb/
+
+    This is just a simple wrapper around the `seaborn.xkcd_rgb` dictionary.
+
+    Parameters
+    ----------
+    colors : list of strings
+        List of keys in the `seaborn.xkcd_rgb` dictionary.
+
+    Returns
+    -------
+    palette
+        A list of colors as RGB tuples.
+
+    See Also
+    --------
+    crayon_palette : Make a palette with Crayola crayon colors.
+
+    """
+    palette = [xkcd_rgb[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+
+def crayon_palette(colors):
+    """Make a palette with color names from Crayola crayons.
+
+    Colors are taken from here:
+    https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors
+
+    This is just a simple wrapper around the `seaborn.crayons` dictionary.
+
+    Parameters
+    ----------
+    colors : list of strings
+        List of keys in the `seaborn.crayons` dictionary.
+
+    Returns
+    -------
+    palette
+        A list of colors as RGB tuples.
+
+    See Also
+    --------
+    xkcd_palette : Make a palette with named colors from the XKCD color survey.
+
+    """
+    palette = [crayons[name] for name in colors]
+    return color_palette(palette, len(palette))
+
+
+def cubehelix_palette(n_colors=6, start=0, rot=.4, gamma=1.0, hue=0.8,
+                      light=.85, dark=.15, reverse=False, as_cmap=False):
+    """Make a sequential palette from the cubehelix system.
+
+    This produces a colormap with linearly-decreasing (or increasing)
+    brightness. That means that information will be preserved if printed to
+    black and white or viewed by someone who is colorblind.  "cubehelix" is
+    also available as a matplotlib-based palette, but this function gives the
+    user more control over the look of the palette and has a different set of
+    defaults.
+
+    In addition to using this function, it is also possible to generate a
+    cubehelix palette generally in seaborn using a string starting with
+    `ch:` and containing other parameters (e.g. `"ch:s=.25,r=-.5"`).
+
+    Parameters
+    ----------
+    n_colors : int
+        Number of colors in the palette.
+    start : float, 0 <= start <= 3
+        The hue value at the start of the helix.
+    rot : float
+        Rotations around the hue wheel over the range of the palette.
+    gamma : float 0 <= gamma
+        Nonlinearity to emphasize dark (gamma < 1) or light (gamma > 1) colors.
+    hue : float, 0 <= hue <= 1
+        Saturation of the colors.
+    dark : float 0 <= dark <= 1
+        Intensity of the darkest color in the palette.
+    light : float 0 <= light <= 1
+        Intensity of the lightest color in the palette.
+    reverse : bool
+        If True, the palette will go from dark to light.
+    as_cmap : bool
+        If True, return a :class:`matplotlib.colors.ListedColormap`.
+
+    Returns
+    -------
+    palette
+        list of RGB tuples or :class:`matplotlib.colors.ListedColormap`
+
+    See Also
+    --------
+    choose_cubehelix_palette : Launch an interactive widget to select cubehelix
+                               palette parameters.
+    dark_palette : Create a sequential palette with dark low values.
+    light_palette : Create a sequential palette with bright low values.
+
+    References
+    ----------
+    Green, D. A. (2011). "A colour scheme for the display of astronomical
+    intensity images". Bulletin of the Astromical Society of India, Vol. 39,
+    p. 289-295.
+
+    Examples
+    --------
+    .. include:: ../docstrings/cubehelix_palette.rst
+
+    """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    cdict = {
+        "red": get_color_function(-0.14861, 1.78277),
+        "green": get_color_function(-0.29227, -0.90649),
+        "blue": get_color_function(1.97294, 0.0),
+    }
+
+    cmap = mpl.colors.LinearSegmentedColormap("cubehelix", cdict)
+
+    x = np.linspace(light, dark, int(n_colors))
+    pal = cmap(x)[:, :3].tolist()
+    if reverse:
+        pal = pal[::-1]
+
+    if as_cmap:
+        x_256 = np.linspace(light, dark, 256)
+        if reverse:
+            x_256 = x_256[::-1]
+        pal_256 = cmap(x_256)
+        cmap = mpl.colors.ListedColormap(pal_256, "seaborn_cubehelix")
+        return cmap
+    else:
+        return _ColorPalette(pal)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def set_color_codes(palette="deep"):
+    """Change how matplotlib color shorthands are interpreted.
+
+    Calling this will change how shorthand codes like "b" or "g"
+    are interpreted by matplotlib in subsequent plots.
+
+    Parameters
+    ----------
+    palette : {deep, muted, pastel, dark, bright, colorblind}
+        Named seaborn palette to use as the source of colors.
+
+    See Also
+    --------
+    set : Color codes can be set through the high-level seaborn style
+          manager.
+    set_palette : Color codes can also be set through the function that
+                  sets the matplotlib color cycle.
+
+    """
+    if palette == "reset":
+        colors = [
+            (0., 0., 1.),
+            (0., .5, 0.),
+            (1., 0., 0.),
+            (.75, 0., .75),
+            (.75, .75, 0.),
+            (0., .75, .75),
+            (0., 0., 0.)
+        ]
+    elif not isinstance(palette, str):
+        err = "set_color_codes requires a named seaborn palette"
+        raise TypeError(err)
+    elif palette in SEABORN_PALETTES:
+        if not palette.endswith("6"):
+            palette = palette + "6"
+        colors = SEABORN_PALETTES[palette] + [(.1, .1, .1)]
+    else:
+        err = f"Cannot set colors with palette '{palette}'"
+        raise ValueError(err)
+
+    for code, color in zip("bgrmyck", colors):
+        rgb = mpl.colors.colorConverter.to_rgb(color)
+        mpl.colors.colorConverter.colors[code] = rgb
+
+
+def _parse_cubehelix_args(argstr):
+    """
+    Parse a cubehelix palette specification string into arguments and keyword arguments.
+
+    This function takes a string representation of cubehelix palette parameters and converts
+    it into the appropriate positional arguments and keyword arguments that can be passed
+    to the cubehelix_palette function.
+
+    Parameters
+    ----------
+    argstr : str
+        A string specifying cubehelix palette parameters. The string can have the following formats:
+        - "ch:" followed by comma-separated parameters
+        - Parameters can be positional (numeric values) or keyword-based (key=value pairs)
+        - May end with "_r" to indicate reverse direction
+        - Supports abbreviated parameter names: s (start), r (rot), g (gamma), 
+          h (hue), l (light), d (dark)
+        - Example: "ch:s=0.5,r=0.8,l=0.9" or "ch:0.2,0.5,g=1.2"
+
+    Returns
+    -------
+    tuple
+        A 2-tuple containing:
+        - args (list): List of positional arguments as floats
+        - kwargs (dict): Dictionary of keyword arguments with full parameter names
+          and float values. For a non-empty specification, `reverse` is included only
+          when the `_r` suffix is present. An empty specification returns the key with
+          the corresponding True/False value.
+
+    Notes
+    -----
+    - The function automatically maps abbreviated parameter names to their full forms:
+      s -> start, r -> rot, g -> gamma, h -> hue, l -> light, d -> dark
+    - If the input string is empty after removing prefixes/suffixes, returns an empty
+      args list and a kwargs dict containing only the reverse flag
+    - All numeric values are converted to floats
+    - Ordinary space characters around parameter names and values are stripped
+    """
+    raise NotImplementedError
+
+=== seaborn/utils.py
+"""Utility functions, mostly for internal use."""
+import os
+import inspect
+import warnings
+import colorsys
+from contextlib import contextmanager
+from urllib.request import urlopen, urlretrieve
+from types import ModuleType
+
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+from matplotlib.colors import to_rgb
+import matplotlib.pyplot as plt
+from matplotlib.cbook import normalize_kwargs
+
+from seaborn._core.typing import deprecated
+from seaborn.external.version import Version
+from seaborn.external.appdirs import user_cache_dir
+
+__all__ = ["desaturate", "saturate", "set_hls_values", "move_legend",
+           "despine", "get_dataset_names", "get_data_home", "load_dataset"]
+
+DATASET_SOURCE = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master"
+DATASET_NAMES_URL = f"{DATASET_SOURCE}/dataset_names.txt"
+
+
+def ci_to_errsize(cis, heights):
+    """Convert intervals to error arguments relative to plot heights.
+
+    Parameters
+    ----------
+    cis : 2 x n sequence
+        sequence of confidence interval limits
+    heights : n sequence
+        sequence of plot heights
+
+    Returns
+    -------
+    errsize : 2 x n array
+        sequence of error size relative to height values in correct
+        format as argument for plt.bar
+
+    """
+    cis = np.atleast_2d(cis).reshape(2, -1)
+    heights = np.atleast_1d(heights)
+    errsize = []
+    for i, (low, high) in enumerate(np.transpose(cis)):
+        h = heights[i]
+        elow = h - low
+        ehigh = high - h
+        errsize.append([elow, ehigh])
+
+    errsize = np.asarray(errsize).T
+    return errsize
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def desaturate(color, prop):
+    """Decrease the saturation channel of a color by some percent.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+    prop : float
+        saturation channel of color will be multiplied by this value
+
+    Returns
+    -------
+    new_color : rgb tuple
+        desaturated color code in RGB tuple representation
+
+    """
+    # Check inputs
+    if not 0 <= prop <= 1:
+        raise ValueError("prop must be between 0 and 1")
+
+    # Get rgb tuple rep
+    rgb = to_rgb(color)
+
+    # Short circuit to avoid floating point issues
+    if prop == 1:
+        return rgb
+
+    # Convert to hls
+    h, l, s = colorsys.rgb_to_hls(*rgb)
+
+    # Desaturate the saturation channel
+    s *= prop
+
+    # Convert back to rgb
+    new_color = colorsys.hls_to_rgb(h, l, s)
+
+    return new_color
+
+
+def saturate(color):
+    """Return a fully saturated color with the same hue.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+
+    Returns
+    -------
+    new_color : rgb tuple
+        saturated color code in RGB tuple representation
+
+    """
+    return set_hls_values(color, s=1)
+
+
+def set_hls_values(color, h=None, l=None, s=None):  # noqa
+    """Independently manipulate the h, l, or s channels of a color.
+
+    Parameters
+    ----------
+    color : matplotlib color
+        hex, rgb-tuple, or html color name
+    h, l, s : floats between 0 and 1, or None
+        new values for each channel in hls space
+
+    Returns
+    -------
+    new_color : rgb tuple
+        new color code in RGB tuple representation
+
+    """
+    # Get an RGB tuple representation
+    rgb = to_rgb(color)
+    vals = list(colorsys.rgb_to_hls(*rgb))
+    for i, val in enumerate([h, l, s]):
+        if val is not None:
+            vals[i] = val
+
+    rgb = colorsys.hls_to_rgb(*vals)
+    return rgb
+
+
+def axlabel(xlabel, ylabel, **kwargs):
+    """Grab current axis and label it.
+
+    DEPRECATED: will be removed in a future version.
+
+    """
+    msg = "This function is deprecated and will be removed in a future version"
+    warnings.warn(msg, FutureWarning)
+    ax = plt.gca()
+    ax.set_xlabel(xlabel, **kwargs)
+    ax.set_ylabel(ylabel, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def despine(fig=None, ax=None, top=True, right=True, left=False,
+            bottom=False, offset=None, trim=False):
+    """Remove the top and right spines from plot(s).
+
+    fig : matplotlib figure, optional
+        Figure to despine all axes of, defaults to the current figure.
+    ax : matplotlib axes, optional
+        Specific axes object to despine. Ignored if fig is provided.
+    top, right, left, bottom : boolean, optional
+        If True, remove that spine.
+    offset : int or dict, optional
+        Absolute distance, in points, spines should be moved away
+        from the axes (negative values move spines inward). A single value
+        applies to all spines; a dict can be used to set offset values per
+        side.
+    trim : bool, optional
+        If True, limit spines to the smallest and largest major tick
+        on each non-despined axis.
+
+    Returns
+    -------
+    None
+
+    """
+    # Get references to the axes we want
+    if fig is None and ax is None:
+        axes = plt.gcf().axes
+    elif fig is not None:
+        axes = fig.axes
+    elif ax is not None:
+        axes = [ax]
+
+    for ax_i in axes:
+        for side in ["top", "right", "left", "bottom"]:
+            # Toggle the spine objects
+            is_visible = not locals()[side]
+            ax_i.spines[side].set_visible(is_visible)
+            if offset is not None and is_visible:
+                try:
+                    val = offset.get(side, 0)
+                except AttributeError:
+                    val = offset
+                ax_i.spines[side].set_position(('outward', val))
+
+        # Potentially move the ticks
+        if left and not right:
+            maj_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.yaxis.majorTicks
+            )
+            min_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.yaxis.minorTicks
+            )
+            ax_i.yaxis.set_ticks_position("right")
+            for t in ax_i.yaxis.majorTicks:
+                t.tick2line.set_visible(maj_on)
+            for t in ax_i.yaxis.minorTicks:
+                t.tick2line.set_visible(min_on)
+
+        if bottom and not top:
+            maj_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.xaxis.majorTicks
+            )
+            min_on = any(
+                t.tick1line.get_visible()
+                for t in ax_i.xaxis.minorTicks
+            )
+            ax_i.xaxis.set_ticks_position("top")
+            for t in ax_i.xaxis.majorTicks:
+                t.tick2line.set_visible(maj_on)
+            for t in ax_i.xaxis.minorTicks:
+                t.tick2line.set_visible(min_on)
+
+        if trim:
+            # clip off the parts of the spines that extend past major ticks
+            xticks = np.asarray(ax_i.get_xticks())
+            if xticks.size:
+                firsttick = np.compress(xticks >= min(ax_i.get_xlim()),
+                                        xticks)[0]
+                lasttick = np.compress(xticks <= max(ax_i.get_xlim()),
+                                       xticks)[-1]
+                ax_i.spines['bottom'].set_bounds(firsttick, lasttick)
+                ax_i.spines['top'].set_bounds(firsttick, lasttick)
+                newticks = xticks.compress(xticks <= lasttick)
+                newticks = newticks.compress(newticks >= firsttick)
+                ax_i.set_xticks(newticks)
+
+            yticks = np.asarray(ax_i.get_yticks())
+            if yticks.size:
+                firsttick = np.compress(yticks >= min(ax_i.get_ylim()),
+                                        yticks)[0]
+                lasttick = np.compress(yticks <= max(ax_i.get_ylim()),
+                                       yticks)[-1]
+                ax_i.spines['left'].set_bounds(firsttick, lasttick)
+                ax_i.spines['right'].set_bounds(firsttick, lasttick)
+                newticks = yticks.compress(yticks <= lasttick)
+                newticks = newticks.compress(newticks >= firsttick)
+                ax_i.set_yticks(newticks)
+
+
+def move_legend(obj, loc, **kwargs):
+    """
+    Recreate a plot's legend at a new location.
+
+    The name is a slight misnomer. Matplotlib legends do not expose public
+    control over their position parameters. So this function creates a new legend,
+    copying over the data from the original object, which is then removed.
+
+    Parameters
+    ----------
+    obj : the object with the plot
+        This argument can be either a seaborn or matplotlib object:
+
+        - :class:`seaborn.FacetGrid` or :class:`seaborn.PairGrid`
+        - :class:`matplotlib.axes.Axes` or :class:`matplotlib.figure.Figure`
+
+    loc : str or int
+        Location argument, as in :meth:`matplotlib.axes.Axes.legend`.
+
+    kwargs
+        Other keyword arguments are passed to :meth:`matplotlib.axes.Axes.legend`.
+
+    Examples
+    --------
+
+    .. include:: ../docstrings/move_legend.rst
+
+    """
+    # This is a somewhat hackish solution that will hopefully be obviated by
+    # upstream improvements to matplotlib legends that make them easier to
+    # modify after creation.
+
+    from seaborn.axisgrid import Grid  # Avoid circular import
+
+    # Locate the legend object and a method to recreate the legend
+    if isinstance(obj, Grid):
+        old_legend = obj.legend
+        legend_func = obj.figure.legend
+    elif isinstance(obj, mpl.axes.Axes):
+        old_legend = obj.legend_
+        legend_func = obj.legend
+    elif isinstance(obj, mpl.figure.Figure):
+        if obj.legends:
+            old_legend = obj.legends[-1]
+        else:
+            old_legend = None
+        legend_func = obj.legend
+    else:
+        err = "`obj` must be a seaborn Grid or matplotlib Axes or Figure instance."
+        raise TypeError(err)
+
+    if old_legend is None:
+        err = f"{obj} has no legend attached."
+        raise ValueError(err)
+
+    # Extract the components of the legend we need to reuse
+    # Import here to avoid a circular import
+    from seaborn._compat import get_legend_handles
+    handles = get_legend_handles(old_legend)
+    labels = [t.get_text() for t in old_legend.get_texts()]
+
+    # Handle the case where the user is trying to override the labels
+    if (new_labels := kwargs.pop("labels", None)) is not None:
+        if len(new_labels) != len(labels):
+            err = "Length of new labels does not match existing legend."
+            raise ValueError(err)
+        labels = new_labels
+
+    # Extract legend properties that can be passed to the recreation method
+    # (Vexingly, these don't all round-trip)
+    legend_kws = inspect.signature(mpl.legend.Legend).parameters
+    props = {k: v for k, v in old_legend.properties().items() if k in legend_kws}
+
+    # Delegate default bbox_to_anchor rules to matplotlib
+    props.pop("bbox_to_anchor")
+
+    # Try to propagate the existing title and font properties; respect new ones too
+    title = props.pop("title")
+    if "title" in kwargs:
+        title.set_text(kwargs.pop("title"))
+    title_kwargs = {k: v for k, v in kwargs.items() if k.startswith("title_")}
+    for key, val in title_kwargs.items():
+        title.set(**{key[6:]: val})
+        kwargs.pop(key)
+
+    # Try to respect the frame visibility
+    kwargs.setdefault("frameon", old_legend.legendPatch.get_visible())
+
+    # Remove the old legend and create the new one
+    props.update(kwargs)
+    old_legend.remove()
+    new_legend = legend_func(handles, labels, loc=loc, **props)
+    new_legend.set_title(title.get_text(), title.get_fontproperties())
+
+    # Let the Grid object continue to track the correct legend object
+    if isinstance(obj, Grid):
+        obj._legend = new_legend
+
+
+
+
+
+
+
+
+
+
+
+def ci(a, which=95, axis=None):
+    """Return a percentile range from an array of values."""
+    p = 50 - which / 2, 50 + which / 2
+    return np.nanpercentile(a, p, axis)
+
+
+def get_dataset_names():
+    """Report available example datasets, useful for reporting issues.
+
+    Requires an internet connection.
+
+    """
+    with urlopen(DATASET_NAMES_URL) as resp:
+        txt = resp.read()
+
+    dataset_names = [name.strip() for name in txt.decode().split("\n")]
+    return list(filter(None, dataset_names))
+
+
+def get_data_home(data_home=None):
+    """Return a path to the cache directory for example datasets.
+
+    This directory is used by :func:`load_dataset`.
+
+    If the ``data_home`` argument is not provided, it will use a directory
+    specified by the `SEABORN_DATA` environment variable (if it exists)
+    or otherwise default to an OS-appropriate user cache location.
+
+    """
+    if data_home is None:
+        data_home = os.environ.get("SEABORN_DATA", user_cache_dir("seaborn"))
+    data_home = os.path.expanduser(data_home)
+    if not os.path.exists(data_home):
+        os.makedirs(data_home)
+    return data_home
+
+
+def load_dataset(name, cache=True, data_home=None, **kws):
+    """Load an example dataset from the online repository (requires internet).
+
+    This function provides quick access to a small number of example datasets
+    that are useful for documenting seaborn or generating reproducible examples
+    for bug reports. It is not necessary for normal usage.
+
+    Note that some of the datasets have a small amount of preprocessing applied
+    to define a proper ordering for categorical variables.
+
+    Use :func:`get_dataset_names` to see a list of available datasets.
+
+    Parameters
+    ----------
+    name : str
+        Name of the dataset (``{name}.csv`` on
+        https://github.com/mwaskom/seaborn-data).
+    cache : boolean, optional
+        If True, try to load from the local cache first, and save to the cache
+        if a download is required.
+    data_home : string, optional
+        The directory in which to cache data; see :func:`get_data_home`.
+    kws : keys and values, optional
+        Additional keyword arguments are passed to passed through to
+        :func:`pandas.read_csv`.
+
+    Returns
+    -------
+    df : :class:`pandas.DataFrame`
+        Tabular data, possibly with some preprocessing applied.
+
+    """
+    # A common beginner mistake is to assume that one's personal data needs
+    # to be passed through this function to be usable with seaborn.
+    # Let's provide a more helpful error than you would otherwise get.
+    if isinstance(name, pd.DataFrame):
+        err = (
+            "This function accepts only strings (the name of an example dataset). "
+            "You passed a pandas DataFrame. If you have your own dataset, "
+            "it is not necessary to use this function before plotting."
+        )
+        raise TypeError(err)
+
+    url = f"{DATASET_SOURCE}/{name}.csv"
+
+    if cache:
+        cache_path = os.path.join(get_data_home(data_home), os.path.basename(url))
+        if not os.path.exists(cache_path):
+            if name not in get_dataset_names():
+                raise ValueError(f"'{name}' is not one of the example datasets.")
+            urlretrieve(url, cache_path)
+        full_path = cache_path
+    else:
+        full_path = url
+
+    df = pd.read_csv(full_path, **kws)
+
+    if df.iloc[-1].isnull().all():
+        df = df.iloc[:-1]
+
+    # Set some columns as a categorical type with ordered levels
+
+    if name == "tips":
+        df["day"] = pd.Categorical(df["day"], ["Thur", "Fri", "Sat", "Sun"])
+        df["sex"] = pd.Categorical(df["sex"], ["Male", "Female"])
+        df["time"] = pd.Categorical(df["time"], ["Lunch", "Dinner"])
+        df["smoker"] = pd.Categorical(df["smoker"], ["Yes", "No"])
+
+    elif name == "flights":
+        months = df["month"].str[:3]
+        df["month"] = pd.Categorical(months, months.unique())
+
+    elif name == "exercise":
+        df["time"] = pd.Categorical(df["time"], ["1 min", "15 min", "30 min"])
+        df["kind"] = pd.Categorical(df["kind"], ["rest", "walking", "running"])
+        df["diet"] = pd.Categorical(df["diet"], ["no fat", "low fat"])
+
+    elif name == "titanic":
+        df["class"] = pd.Categorical(df["class"], ["First", "Second", "Third"])
+        df["deck"] = pd.Categorical(df["deck"], list("ABCDEFG"))
+
+    elif name == "penguins":
+        df["sex"] = df["sex"].str.title()
+
+    elif name == "diamonds":
+        df["color"] = pd.Categorical(
+            df["color"], ["D", "E", "F", "G", "H", "I", "J"],
+        )
+        df["clarity"] = pd.Categorical(
+            df["clarity"], ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"],
+        )
+        df["cut"] = pd.Categorical(
+            df["cut"], ["Ideal", "Premium", "Very Good", "Good", "Fair"],
+        )
+
+    elif name == "taxis":
+        df["pickup"] = pd.to_datetime(df["pickup"])
+        df["dropoff"] = pd.to_datetime(df["dropoff"])
+
+    elif name == "seaice":
+        df["Date"] = pd.to_datetime(df["Date"])
+
+    elif name == "dowjones":
+        df["Date"] = pd.to_datetime(df["Date"])
+
+    return df
+
+
+def axis_ticklabels_overlap(labels):
+    """Return a boolean for whether the list of ticklabels have overlaps.
+
+    Parameters
+    ----------
+    labels : list of matplotlib ticklabels
+
+    Returns
+    -------
+    overlap : boolean
+        True if any of the labels overlap.
+
+    """
+    if not labels:
+        return False
+    try:
+        bboxes = [l.get_window_extent() for l in labels]
+        overlaps = [b.count_overlaps(bboxes) for b in bboxes]
+        return max(overlaps) > 1
+    except RuntimeError:
+        # Issue on macos backend raises an error in the above code
+        return False
+
+
+def axes_ticklabels_overlap(ax):
+    """Return booleans for whether the x and y ticklabels on an Axes overlap.
+
+    Parameters
+    ----------
+    ax : matplotlib Axes
+
+    Returns
+    -------
+    x_overlap, y_overlap : booleans
+        True when the labels on that axis overlap.
+
+    """
+    return (axis_ticklabels_overlap(ax.get_xticklabels()),
+            axis_ticklabels_overlap(ax.get_yticklabels()))
+
+
+def locator_to_legend_entries(locator, limits, dtype):
+    """Return levels and formatted levels for brief numeric legends."""
+    raw_levels = locator.tick_values(*limits).astype(dtype)
+
+    # The locator can return ticks outside the limits, clip them here
+    raw_levels = [l for l in raw_levels if l >= limits[0] and l <= limits[1]]
+
+    class dummy_axis:
+        def get_view_interval(self):
+            return limits
+
+    if isinstance(locator, mpl.ticker.LogLocator):
+        formatter = mpl.ticker.LogFormatter()
+    else:
+        formatter = mpl.ticker.ScalarFormatter()
+        # Avoid having an offset/scientific notation which we don't currently
+        # have any way of representing in the legend
+        formatter.set_useOffset(False)
+        formatter.set_scientific(False)
+    formatter.axis = dummy_axis()
+
+    formatted_levels = formatter.format_ticks(raw_levels)
+
+    return raw_levels, formatted_levels
+
+
+def relative_luminance(color):
+    """Calculate the relative luminance of a color according to W3C standards
+
+    Parameters
+    ----------
+    color : matplotlib color or sequence of matplotlib colors
+        Hex code, rgb-tuple, or html color name.
+
+    Returns
+    -------
+    luminance : float(s) between 0 and 1
+
+    """
+    rgb = mpl.colors.colorConverter.to_rgba_array(color)[:, :3]
+    rgb = np.where(rgb <= .03928, rgb / 12.92, ((rgb + .055) / 1.055) ** 2.4)
+    lum = rgb.dot([.2126, .7152, .0722])
+    try:
+        return lum.item()
+    except ValueError:
+        return lum
+
+
+def to_utf8(obj):
+    """Return a string representing a Python object.
+
+    Strings (i.e. type ``str``) are returned unchanged.
+
+    Byte strings (i.e. type ``bytes``) are returned as UTF-8-decoded strings.
+
+    For other objects, the method ``__str__()`` is called, and the result is
+    returned as a string.
+
+    Parameters
+    ----------
+    obj : object
+        Any Python object
+
+    Returns
+    -------
+    s : str
+        UTF-8-decoded string representation of ``obj``
+
+    """
+    if isinstance(obj, str):
+        return obj
+    try:
+        return obj.decode(encoding="utf-8")
+    except AttributeError:  # obj is not bytes-like
+        return str(obj)
+
+
+def _check_argument(param, options, value, prefix=False):
+    """Raise if value for param is not in options."""
+    if prefix and value is not None:
+        failure = not any(value.startswith(p) for p in options if isinstance(p, str))
+    else:
+        failure = value not in options
+    if failure:
+        raise ValueError(
+            f"The value for `{param}` must be one of {options}, "
+            f"but {repr(value)} was passed."
+        )
+    return value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def adjust_legend_subtitles(legend):
+    """
+    Make invisible-handle "subtitles" entries look more like titles.
+
+    Note: This function is not part of the public API and may be changed or removed.
+
+    """
+    # Legend title not in rcParams until 3.0
+    font_size = plt.rcParams.get("legend.title_fontsize", None)
+    hpackers = legend.findobj(mpl.offsetbox.VPacker)[0].get_children()
+    for hpack in hpackers:
+        draw_area, text_area = hpack.get_children()
+        handles = draw_area.get_children()
+        if not all(artist.get_visible() for artist in handles):
+            draw_area.set_width(0)
+            for text in text_area.get_children():
+                if font_size is not None:
+                    text.set_size(font_size)
+
+
+def _deprecate_ci(errorbar, ci):
+    """
+    Warn on usage of ci= and convert to appropriate errorbar= arg.
+
+    ci was deprecated when errorbar was added in 0.12. It should not be removed
+    completely for some time, but it can be moved out of function definitions
+    (and extracted from kwargs) after one cycle.
+
+    """
+    if ci is not deprecated and ci != "deprecated":
+        if ci is None:
+            errorbar = None
+        elif ci == "sd":
+            errorbar = "sd"
+        else:
+            errorbar = ("ci", ci)
+        msg = (
+            "\n\nThe `ci` parameter is deprecated. "
+            f"Use `errorbar={repr(errorbar)}` for the same effect.\n"
+        )
+        warnings.warn(msg, FutureWarning, stacklevel=3)
+
+    return errorbar
+
+
+
+
+
+
+
+
+
+@contextmanager
+def _disable_autolayout():
+    """Context manager for preventing rc-controlled auto-layout behavior."""
+    # This is a workaround for an issue in matplotlib, for details see
+    # https://github.com/mwaskom/seaborn/issues/2914
+    # The only affect of this rcParam is to set the default value for
+    # layout= in plt.figure, so we could just do that instead.
+    # But then we would need to own the complexity of the transition
+    # from tight_layout=True -> layout="tight". This seems easier,
+    # but can be removed when (if) that is simpler on the matplotlib side,
+    # or if the layout algorithms are improved to handle figure legends.
+    orig_val = mpl.rcParams["figure.autolayout"]
+    try:
+        mpl.rcParams["figure.autolayout"] = False
+        yield
+    finally:
+        mpl.rcParams["figure.autolayout"] = orig_val
+
+
+def _version_predates(lib: ModuleType, version: str) -> bool:
+    """Helper function for checking version compatibility."""
+    return Version(lib.__version__) < Version(version)
+
+
+def _scatter_legend_artist(**kws):
+
+    kws = normalize_kwargs(kws, mpl.collections.PathCollection)
+
+    edgecolor = kws.pop("edgecolor", None)
+    rc = mpl.rcParams
+    line_kws = {
+        "linestyle": "",
+        "marker": kws.pop("marker", "o"),
+        "markersize": np.sqrt(kws.pop("s", rc["lines.markersize"] ** 2)),
+        "markerfacecolor": kws.pop("facecolor", kws.get("color")),
+        "markeredgewidth": kws.pop("linewidth", 0),
+        **kws,
+    }
+
+    if edgecolor is not None:
+        if edgecolor == "face":
+            line_kws["markeredgecolor"] = line_kws["markerfacecolor"]
+        else:
+            line_kws["markeredgecolor"] = edgecolor
+
+    return mpl.lines.Line2D([], [], **line_kws)
+
+
+def _get_patch_legend_artist(fill):
+
+    def legend_artist(**kws):
+
+        color = kws.pop("color", None)
+        if color is not None:
+            if fill:
+                kws["facecolor"] = color
+            else:
+                kws["edgecolor"] = color
+                kws["facecolor"] = "none"
+
+        return mpl.patches.Rectangle((0, 0), 0, 0, **kws)
+
+    return legend_artist
+
+
+def get_color_cycle():
+    """
+    Return the list of colors in the current matplotlib color cycle.
+
+    This function retrieves the colors from matplotlib's current property cycle,
+    which determines the default colors used for plotting multiple data series.
+    The color cycle is controlled by the 'axes.prop_cycle' rcParam setting.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    colors : list
+        List of matplotlib colors from the `color` key in the current cycle. If
+        that key is absent, returns a list containing a single dark gray color
+        [".15"].
+
+    Notes
+    -----
+    The returned colors follow the order defined in matplotlib's property cycle.
+    This function is useful for maintaining consistency with matplotlib's default
+    color scheme or for programmatically accessing the current color palette.
+
+    The fallback color ".15" represents a dark gray that provides good contrast
+    for visualization when no color cycle is available.
+    """
+    raise NotImplementedError

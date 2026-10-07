@@ -1,0 +1,1006 @@
+{
+ "task": "pypa__packaging.013f3b03.test_metadata.e00b5801.lv1",
+ "pool": 586,
+ "mutants": [
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 69,
+   "op": "statement",
+   "start": 1694,
+   "end": 1717,
+   "old": "tokenizer.consume(\"WS\")",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 71,
+   "op": "statement",
+   "start": 1723,
+   "end": 1842,
+   "old": "name_token = tokenizer.expect(\n        \"IDENTIFIER\", expected=\"package name at the start of dependency specifier\"\n    )",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 77,
+   "op": "statement",
+   "start": 1903,
+   "end": 1936,
+   "old": "extras = _parse_extras(tokenizer)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 78,
+   "op": "statement",
+   "start": 1941,
+   "end": 1964,
+   "old": "tokenizer.consume(\"WS\")",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 154,
+   "op": "statement",
+   "start": 4121,
+   "end": 4154,
+   "old": "marker = _parse_marker(tokenizer)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 102,
+   "op": "statement",
+   "start": 2555,
+   "end": 2585,
+   "old": "url_start = tokenizer.position",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 119,
+   "op": "statement",
+   "start": 3138,
+   "end": 3174,
+   "old": "specifier_start = tokenizer.position",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 120,
+   "op": "statement",
+   "start": 3183,
+   "end": 3222,
+   "old": "specifier = _parse_specifier(tokenizer)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 186,
+   "op": "return",
+   "start": 4874,
+   "end": 4887,
+   "old": "return extras",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 191,
+   "op": "statement",
+   "start": 4955,
+   "end": 4978,
+   "old": "tokenizer.consume(\"WS\")",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 198,
+   "op": "statement",
+   "start": 5206,
+   "end": 5229,
+   "old": "tokenizer.consume(\"WS\")",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 230,
+   "op": "arithmetic",
+   "start": 6092,
+   "end": 6134,
+   "old": "parsed_specifiers += tokenizer.read().text",
+   "new": "parsed_specifiers -= tokenizer.read().text",
+   "id": 11
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 69,
+   "op": "constant",
+   "start": 1712,
+   "end": 1716,
+   "old": "\"WS\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 100,
+   "op": "constant",
+   "start": 2540,
+   "end": 2544,
+   "old": "\"WS\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 107,
+   "op": "constant",
+   "start": 2769,
+   "end": 2773,
+   "old": "\"WS\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 168,
+   "op": "constant",
+   "start": 4459,
+   "end": 4473,
+   "old": "\"LEFT_BRACKET\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 218,
+   "op": "constant",
+   "start": 5810,
+   "end": 5814,
+   "old": "\"WS\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 192,
+   "op": "constant",
+   "start": 5025,
+   "end": 5029,
+   "old": "True",
+   "new": "(False)",
+   "id": 17
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 193,
+   "op": "constant",
+   "start": 5073,
+   "end": 5109,
+   "old": "\"Expected comma between extra names\"",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "src/packaging/_parser.py",
+   "line": 103,
+   "op": "constant",
+   "start": 2633,
+   "end": 2646,
+   "old": "\"URL after @\"",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 522,
+   "op": "statement",
+   "start": 19824,
+   "end": 19906,
+   "old": "_MetadataVersion = Literal[\"1.0\", \"1.1\", \"1.2\", \"2.1\", \"2.2\", \"2.3\", \"2.4\", \"2.5\"]",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 191,
+   "op": "statement",
+   "start": 5128,
+   "end": 5137,
+   "old": "urls = {}",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 537,
+   "op": "statement",
+   "start": 20399,
+   "end": 20408,
+   "old": "name: str",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 865,
+   "op": "statement",
+   "start": 33628,
+   "end": 33664,
+   "old": "name: _Validator[str] = _Validator()",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 876,
+   "op": "statement",
+   "start": 34140,
+   "end": 34194,
+   "old": "platforms: _Validator[list[str] | None] = _Validator()",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 886,
+   "op": "statement",
+   "start": 34812,
+   "end": 34865,
+   "old": "keywords: _Validator[list[str] | None] = _Validator()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 891,
+   "op": "statement",
+   "start": 35089,
+   "end": 35137,
+   "old": "\"\"\":external:ref:`core-metadata-download-url`\"\"\"",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 896,
+   "op": "statement",
+   "start": 35348,
+   "end": 35408,
+   "old": "maintainer: _Validator[str | None] = _Validator(added=\"1.2\")",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 899,
+   "op": "statement",
+   "start": 35535,
+   "end": 35587,
+   "old": "\"\"\":external:ref:`core-metadata-maintainer-email`\"\"\"",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 900,
+   "op": "statement",
+   "start": 35592,
+   "end": 35638,
+   "old": "license: _Validator[str | None] = _Validator()",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 901,
+   "op": "statement",
+   "start": 35643,
+   "end": 35686,
+   "old": "\"\"\":external:ref:`core-metadata-license`\"\"\"",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 907,
+   "op": "statement",
+   "start": 35935,
+   "end": 35983,
+   "old": "\"\"\":external:ref:`core-metadata-license-file`\"\"\"",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 922,
+   "op": "statement",
+   "start": 36695,
+   "end": 36768,
+   "old": "project_urls: _Validator[dict[str, str] | None] = _Validator(added=\"1.2\")",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 926,
+   "op": "statement",
+   "start": 36943,
+   "end": 37045,
+   "old": "provides_extra: _Validator[list[utils.NormalizedName] | None] = _Validator(\n        added=\"2.1\",\n    )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 931,
+   "op": "statement",
+   "start": 37179,
+   "end": 37228,
+   "old": "\"\"\":external:ref:`core-metadata-provides-dist`\"\"\"",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 211,
+   "op": "statement",
+   "start": 6258,
+   "end": 6303,
+   "old": "parts.extend([\"\"] * (max(0, 2 - len(parts))))",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 236,
+   "op": "return",
+   "start": 7345,
+   "end": 7359,
+   "old": "return payload",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 491,
+   "op": "statement",
+   "start": 18604,
+   "end": 18640,
+   "old": "payload = _get_payload(parsed, data)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 550,
+   "op": "statement",
+   "start": 20681,
+   "end": 20724,
+   "old": "self.raw_name = _RAW_TO_EMAIL_MAPPING[name]",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 557,
+   "op": "statement",
+   "start": 21064,
+   "end": 21100,
+   "old": "value = instance._raw.get(self.name)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 577,
+   "op": "return",
+   "start": 21846,
+   "end": 21867,
+   "old": "return cast(T, value)",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 861,
+   "op": "constant",
+   "start": 33403,
+   "end": 33512,
+   "old": "\"\"\":external:ref:`core-metadata-metadata-version`\n    (required; validated to be a valid metadata version)\"\"\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 866,
+   "op": "constant",
+   "start": 33669,
+   "end": 33817,
+   "old": "\"\"\":external:ref:`core-metadata-name`\n    (required; validated using :func:`~packaging.utils.canonicalize_name` and its\n    *validate* parameter)\"\"\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 874,
+   "op": "constant",
+   "start": 34027,
+   "end": 34135,
+   "old": "\"\"\":external:ref:`core-metadata-dynamic`\n    (validated against core metadata field names and lowercased)\"\"\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 877,
+   "op": "constant",
+   "start": 34199,
+   "end": 34243,
+   "old": "\"\"\":external:ref:`core-metadata-platform`\"\"\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 883,
+   "op": "constant",
+   "start": 34604,
+   "end": 34651,
+   "old": "\"\"\":external:ref:`core-metadata-description`\"\"\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 891,
+   "op": "constant",
+   "start": 35089,
+   "end": 35137,
+   "old": "\"\"\":external:ref:`core-metadata-download-url`\"\"\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 917,
+   "op": "constant",
+   "start": 36378,
+   "end": 36429,
+   "old": "\"\"\":external:ref:`core-metadata-requires-python`\"\"\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 931,
+   "op": "constant",
+   "start": 37179,
+   "end": 37228,
+   "old": "\"\"\":external:ref:`core-metadata-provides-dist`\"\"\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 941,
+   "op": "constant",
+   "start": 37797,
+   "end": 37828,
+   "old": "\"\"\"``Provides`` (deprecated)\"\"\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1036,
+   "end": 1064,
+   "old": "self.exceptions = exceptions",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 309,
+   "op": "arithmetic",
+   "start": 9961,
+   "end": 9974,
+   "old": "len(name) + 2",
+   "new": "(len(name) - 2)",
+   "id": 51
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 424,
+   "op": "boolean",
+   "start": 15267,
+   "end": 15285,
+   "old": "not valid_encoding",
+   "new": "(valid_encoding)",
+   "id": 52
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 426,
+   "op": "statement",
+   "start": 15334,
+   "end": 15342,
+   "old": "continue",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 522,
+   "op": "constant",
+   "start": 19879,
+   "end": 19884,
+   "old": "\"2.2\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 524,
+   "op": "constant",
+   "start": 19937,
+   "end": 19955,
+   "old": "\"metadata_version\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 591,
+   "op": "statement",
+   "start": 22331,
+   "end": 22405,
+   "old": "raise self._invalid_metadata(f\"{value!r} is not a valid metadata version\")",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 798,
+   "op": "arithmetic",
+   "start": 30727,
+   "end": 30766,
+   "old": "fields_to_check -= {\"metadata_version\"}",
+   "new": "fields_to_check += {'metadata_version'}",
+   "id": 57
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 333,
+   "op": "constant",
+   "start": 10729,
+   "end": 10736,
+   "old": "\"utf-8\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 448,
+   "op": "comparison",
+   "start": 16363,
+   "end": 16389,
+   "old": "raw_name in _STRING_FIELDS",
+   "new": "(raw_name not in _STRING_FIELDS)",
+   "id": 59
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 453,
+   "op": "boolean",
+   "start": 16681,
+   "end": 16725,
+   "old": "raw_name == \"import_names\" and value == [\"\"]",
+   "new": "(raw_name == 'import_names' or value == [''])",
+   "id": 60
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 619,
+   "op": "constant",
+   "start": 23444,
+   "end": 23448,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 624,
+   "op": "constant",
+   "start": 23648,
+   "end": 23660,
+   "old": "\"text/plain\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 626,
+   "op": "constant",
+   "start": 23756,
+   "end": 23770,
+   "old": "\"content-type\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 647,
+   "op": "constant",
+   "start": 24627,
+   "end": 24632,
+   "old": "\"GFM\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 658,
+   "op": "statement",
+   "start": 25152,
+   "end": 25274,
+   "old": "raise self._invalid_metadata(\n                    f\"{dynamic_field!r} is not allowed as a dynamic field\"\n                )",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 722,
+   "op": "statement",
+   "start": 27492,
+   "end": 27620,
+   "old": "raise self._invalid_metadata(\n                    f\"{path!r} is invalid for {{field}}, paths must be resolved\"\n                )",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 878,
+   "op": "constant",
+   "start": 34317,
+   "end": 34322,
+   "old": "\"1.1\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 903,
+   "op": "constant",
+   "start": 35786,
+   "end": 35791,
+   "old": "\"2.4\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 920,
+   "op": "constant",
+   "start": 36626,
+   "end": 36631,
+   "old": "\"1.2\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 934,
+   "op": "constant",
+   "start": 37425,
+   "end": 37430,
+   "old": "\"2.5\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 959,
+   "op": "statement",
+   "start": 38446,
+   "end": 38473,
+   "old": "value = getattr(self, name)",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 453,
+   "op": "comparison",
+   "start": 16681,
+   "end": 16707,
+   "old": "raw_name == \"import_names\"",
+   "new": "(raw_name != 'import_names')",
+   "id": 72
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 500,
+   "op": "constant",
+   "start": 18999,
+   "end": 19012,
+   "old": "\"description\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 506,
+   "op": "statement",
+   "start": 19283,
+   "end": 19322,
+   "old": "unparsed[\"description\"].append(payload)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 620,
+   "op": "constant",
+   "start": 23500,
+   "end": 23531,
+   "old": "\"{field} must be a single line\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 743,
+   "op": "constant",
+   "start": 28430,
+   "end": 28433,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 744,
+   "op": "boolean",
+   "start": 28455,
+   "end": 28484,
+   "old": "not identifier.isidentifier()",
+   "new": "(identifier.isidentifier())",
+   "id": 77
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 791,
+   "op": "statement",
+   "start": 30370,
+   "end": 30409,
+   "old": "exceptions.append(metadata_version_exc)",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 798,
+   "op": "constant",
+   "start": 30747,
+   "end": 30765,
+   "old": "\"metadata_version\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 844,
+   "op": "comparison",
+   "start": 32730,
+   "end": 32767,
+   "old": "unparsed_key in _EMAIL_TO_RAW_MAPPING",
+   "new": "(unparsed_key not in _EMAIL_TO_RAW_MAPPING)",
+   "id": 80
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 847,
+   "op": "statement",
+   "start": 32878,
+   "end": 32927,
+   "old": "message = f\"unrecognized field: {unparsed_key!r}\"",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 958,
+   "op": "comparison",
+   "start": 38407,
+   "end": 38428,
+   "old": "name != \"description\"",
+   "new": "(name == 'description')",
+   "id": 82
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 404,
+   "op": "statement",
+   "start": 14404,
+   "end": 14432,
+   "old": "bin.decode(\"utf8\", \"strict\")",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 410,
+   "op": "constant",
+   "start": 14675,
+   "end": 14681,
+   "old": "\"utf8\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 814,
+   "op": "comparison",
+   "start": 31532,
+   "end": 31556,
+   "old": "field_age > metadata_age",
+   "new": "(field_age >= metadata_age)",
+   "id": 85
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 816,
+   "op": "statement",
+   "start": 31649,
+   "end": 31900,
+   "old": "exc = InvalidMetadata(\n                                field,\n                                f\"{field} introduced in metadata version \"\n                                f\"{field_metadata_version}, not {metadata_version}\",\n                            )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 964,
+   "op": "statement",
+   "start": 38706,
+   "end": 38745,
+   "old": "message[email_name] = f\"{label}, {url}\"",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 465,
+   "op": "constant",
+   "start": 17359,
+   "end": 17369,
+   "old": "\"keywords\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 476,
+   "op": "constant",
+   "start": 17955,
+   "end": 17969,
+   "old": "\"project_urls\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 478,
+   "op": "statement",
+   "start": 18004,
+   "end": 18046,
+   "old": "raw[raw_name] = _parse_project_urls(value)",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 810,
+   "op": "statement",
+   "start": 31351,
+   "end": 31359,
+   "old": "continue",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 967,
+   "op": "constant",
+   "start": 38898,
+   "end": 38911,
+   "old": "\"import-name\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "src/packaging/metadata.py",
+   "line": 971,
+   "op": "statement",
+   "start": 39099,
+   "end": 39130,
+   "old": "message[email_name] = str(item)",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1373,
+   "end": 1414,
+   "old": "self.url: str | None = parsed.url or None",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1480,
+   "end": 1541,
+   "old": "self.specifier: SpecifierSet = SpecifierSet(parsed.specifier)",
+   "new": "pass",
+   "id": 95
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1550,
+   "end": 1583,
+   "old": "self.marker: Marker | None = None",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1683,
+   "end": 1744,
+   "old": "self.marker._markers = _normalize_extra_values(parsed.marker)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 38,
+   "op": "statement",
+   "start": 1287,
+   "end": 1326,
+   "old": "raise InvalidRequirement(str(e)) from e",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "src/packaging/requirements.py",
+   "line": 62,
+   "op": "statement",
+   "start": 2115,
+   "end": 2124,
+   "old": "yield \" \"",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

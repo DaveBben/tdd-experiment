@@ -1,0 +1,35 @@
+{
+ "task": "pypa__hatch.ff4b4040.test_fmt.782c88a8.lv1",
+ "image": "libercoders/featurebench-specs_hatch-instance_02086956@sha256:70c443280ebe701fe0b6ca24d22c139f3b5c92817a5c1c16c2fc5762b67a4fb1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 19 passed in 0.49s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 144 passed in 0.47s =============================="
+ },
+ "mutant_pool": 1005,
+ "stub_compiles": true,
+ "stub_imports": false,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 144 passed in 0.50s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/hatchling/utils/context.py": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/testbed/backend/src/hatchling/utils/context.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

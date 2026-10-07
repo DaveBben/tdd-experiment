@@ -1,0 +1,796 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_judge_tool_search_traces.cad8fc4b.lv1",
+ "pool": 79,
+ "mutants": [
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5583,
+   "end": 5643,
+   "old": "self._source_type = AssessmentSourceType._parse(source_type)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5712,
+   "end": 5745,
+   "old": "source_type = source_type.upper()",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 183,
+   "op": "return",
+   "start": 6454,
+   "end": 6472,
+   "old": "return source_type",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 186,
+   "op": "return",
+   "start": 6505,
+   "end": 6529,
+   "old": "return self._source_type",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 190,
+   "op": "return",
+   "start": 6604,
+   "end": 6649,
+   "old": "return str(AssessmentSourceType(source_type))",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 194,
+   "op": "return",
+   "start": 6727,
+   "end": 6790,
+   "old": "return ProtoAssessmentSource.SourceType.Name(proto_source_type)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 168,
+   "op": "comparison",
+   "start": 5841,
+   "end": 5885,
+   "old": "source_type == AssessmentSourceType.AI_JUDGE",
+   "new": "(source_type != AssessmentSourceType.AI_JUDGE)",
+   "id": 6
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 169,
+   "op": "statement",
+   "start": 5899,
+   "end": 6024,
+   "old": "warnings.warn(\n                \"AI_JUDGE is deprecated. Use LLM_JUDGE instead.\",\n                FutureWarning,\n            )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 173,
+   "op": "statement",
+   "start": 6037,
+   "end": 6081,
+   "old": "source_type = AssessmentSourceType.LLM_JUDGE",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 175,
+   "op": "comparison",
+   "start": 6094,
+   "end": 6147,
+   "old": "source_type not in AssessmentSourceType._SOURCE_TYPES",
+   "new": "(source_type in AssessmentSourceType._SOURCE_TYPES)",
+   "id": 9
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 176,
+   "op": "statement",
+   "start": 6161,
+   "end": 6445,
+   "old": "raise MlflowException(\n                message=(\n                    f\"Invalid assessment source type: {source_type}. \"\n                    f\"Valid source types: {AssessmentSourceType._SOURCE_TYPES}\"\n                ),\n                error_code=INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5930,
+   "end": 5978,
+   "old": "\"AI_JUDGE is deprecated. Use LLM_JUDGE instead.\"",
+   "new": "('XX')",
+   "id": 11
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 77,
+   "op": "return",
+   "start": 3189,
+   "end": 3246,
+   "old": "return span._span.attributes.get(SpanAttributeKey.INPUTS)",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 84,
+   "op": "return",
+   "start": 3452,
+   "end": 3510,
+   "old": "return span._span.attributes.get(SpanAttributeKey.OUTPUTS)",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 69,
+   "op": "comparison",
+   "start": 2873,
+   "end": 2895,
+   "old": "span.parent_id is None",
+   "new": "(span.parent_id is not None)",
+   "id": 14
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 70,
+   "op": "return",
+   "start": 2913,
+   "end": 2924,
+   "old": "return span",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1144,
+   "end": 1207,
+   "old": "tool_types: list[JudgeToolExpectation | JudgeToolFeedback] = []",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 66,
+   "op": "return",
+   "start": 2523,
+   "end": 2540,
+   "old": "return tool_types",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 105,
+   "op": "return",
+   "start": 3739,
+   "end": 3803,
+   "old": "return trace.info.trace_location.mlflow_experiment.experiment_id",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 82,
+   "op": "boolean",
+   "start": 2845,
+   "end": 2874,
+   "old": "not trace.info.trace_location",
+   "new": "(trace.info.trace_location)",
+   "id": 19
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2884,
+   "end": 3053,
+   "old": "raise MlflowException(\n            \"Current trace has no trace location. Cannot determine experiment context.\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 88,
+   "op": "comparison",
+   "start": 3062,
+   "end": 3131,
+   "old": "trace.info.trace_location.type != TraceLocationType.MLFLOW_EXPERIMENT",
+   "new": "(trace.info.trace_location.type == TraceLocationType.MLFLOW_EXPERIMENT)",
+   "id": 21
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 89,
+   "op": "statement",
+   "start": 3141,
+   "end": 3424,
+   "old": "raise MlflowException(\n            f\"Current trace is not from an MLflow experiment \"\n            f\"(type: {trace.info.trace_location.type}). \"\n            \"Traces can only be retrieved for traces within MLflow experiments.\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 96,
+   "op": "boolean",
+   "start": 3433,
+   "end": 3566,
+   "old": "not (\n        trace.info.trace_location.mlflow_experiment\n        and trace.info.trace_location.mlflow_experiment.experiment_id\n    )",
+   "new": "(trace.info.trace_location.mlflow_experiment and trace.info.trace_location.mlflow_experiment.experiment_id)",
+   "id": 23
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 100,
+   "op": "statement",
+   "start": 3576,
+   "end": 3733,
+   "old": "raise MlflowException(\n            \"Current trace has no experiment_id. Cannot search for traces.\",\n            error_code=INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 121,
+   "op": "return",
+   "start": 4320,
+   "end": 4351,
+   "old": "return ToolNames._SEARCH_TRACES",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 124,
+   "op": "return",
+   "start": 4409,
+   "end": 8515,
+   "old": "return ToolDefinition(\n            function=FunctionToolDefinition(\n                name=ToolNames._SEARCH_TRACES,\n                description=(\n                    \"Search for traces within the same MLflow experiment as the current trace. \"\n                    \"Returns trace metadata including trace_id, request_time, state, request, \"\n                    \"response, execution_duration, and assessments. Supports filtering with \"\n                    \"MLflow search syntax (e.g., 'attributes.status = \\\"OK\\\"'), custom ordering \"\n                    \"(e.g., ['timestamp DESC']), and result limits. Use this to analyze patterns \"\n                    \"across traces or find specific traces matching criteria.\"\n                ),\n                parameters=ToolParamsSchema(\n                    type=\"object\",\n                    properties={\n                        \"filter_string\": {\n                            \"type\": \"string\",\n                            \"description\": (\n                                \"Optional filter string using SQL-like search syntax. \"\n                                \"If not specified, all traces are returned.\\n\\n\"\n                                \"SUPPORTED FIELDS:\\n\"\n                                \"- Attributes: request_id, timestamp_ms, execution_time_ms, \"\n                                \"status, name, run_id\\n\"\n                                \"- Tags: Use 'tags.' or 'tag.' prefix \"\n                                \"(e.g., tags.operation_type, tag.model_name)\\n\"\n                                \"- Metadata: Use 'metadata.' prefix (e.g., metadata.run_id)\\n\"\n                                \"- Use backticks for special characters: tags.`model-name`\\n\\n\"\n                                \"VALUE SYNTAX:\\n\"\n                                \"- String values MUST be quoted: status = 'OK'\\n\"\n                                \"- Numeric values don't need quotes: execution_time_ms > 1000\\n\"\n                                \"- Tag and metadata values MUST be quoted as strings\\n\\n\"\n                                \"COMPARATORS:\\n\"\n                                \"- Numeric (timestamp_ms, execution_time_ms): \"\n                                \">, >=, =, !=, <, <=\\n\"\n                                \"- String (name, status, request_id): =, !=, IN, NOT IN\\n\"\n                                \"- Tags/Metadata: =, !=\\n\\n\"\n                                \"STATUS VALUES: 'OK', 'ERROR', 'IN_PROGRESS'\\n\\n\"\n                                \"EXAMPLES:\\n\"\n                                \"- status = 'OK'\\n\"\n                                \"- execution_time_ms > 1000\\n\"\n                                \"- tags.model_name = 'gpt-4'\\n\"\n                                \"- tags.`model-version` = 'v2' AND status = 'OK'\\n\"\n                                \"- timestamp_ms >= 1234567890000 AND execution_time_ms < 5000\\n\"\n                                \"- status IN ('OK', 'ERROR')\\n\"\n                                \"- tags.environment = 'production' AND status = 'ERROR' \"\n                                \"AND execution_time_ms > 500\\n\"\n                                \"- status = 'OK' AND tag.importance = 'high'\"\n                            ),\n                            \"default\": None,\n                        },\n                        \"order_by\": {\n                            \"type\": \"array\",\n                            \"items\": {\"type\": \"string\"},\n                            \"description\": (\n                                \"Optional list of order by expressions (e.g., ['timestamp DESC']). \"\n                                \"Defaults to ['timestamp ASC'] for chronological order.\"\n                            ),\n                            \"default\": [\"timestamp ASC\"],\n                        },\n                        \"max_results\": {\n                            \"type\": \"integer\",\n                            \"description\": \"Maximum number of traces to return (default: 20)\",\n                            \"default\": 20,\n                        },\n                    },\n                    required=[],\n                ),\n            ),\n            type=\"function\",\n        )",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 219,
+   "op": "statement",
+   "start": 9534,
+   "end": 9575,
+   "old": "experiment_id = _get_experiment_id(trace)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 220,
+   "op": "statement",
+   "start": 9584,
+   "end": 9611,
+   "old": "locations = [experiment_id]",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 226,
+   "op": "statement",
+   "start": 9733,
+   "end": 10098,
+   "old": "_logger.debug(\n            \"Searching for traces with properties:\\n\\n\"\n            + \"\\n\".join(\n                [\n                    f\"* experiment_id={experiment_id}\",\n                    f\"* filter_string={filter_string}\",\n                    f\"* order_by={order_by}\",\n                    f\"* max_results={max_results}\",\n                ]\n            )\n        )",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 253,
+   "op": "statement",
+   "start": 10561,
+   "end": 10572,
+   "old": "traces = []",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 271,
+   "op": "statement",
+   "start": 11337,
+   "end": 11385,
+   "old": "_logger.debug(f\"Retrieved {len(traces)} traces\")",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 272,
+   "op": "return",
+   "start": 11394,
+   "end": 11407,
+   "old": "return traces",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1303,
+   "end": 1695,
+   "old": "tool_types.append(\n                JudgeToolExpectation(\n                    name=assessment.name,\n                    source=assessment.source.source_type,\n                    rationale=assessment.rationale,\n                    span_id=assessment.span_id,\n                    assessment_id=assessment.assessment_id,\n                    value=assessment.value,\n                )\n            )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 97,
+   "op": "boolean",
+   "start": 3447,
+   "end": 3560,
+   "old": "trace.info.trace_location.mlflow_experiment\n        and trace.info.trace_location.mlflow_experiment.experiment_id",
+   "new": "(trace.info.trace_location.mlflow_experiment or trace.info.trace_location.mlflow_experiment.experiment_id)",
+   "id": 34
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 199,
+   "op": "constant",
+   "start": 8681,
+   "end": 8683,
+   "old": "20",
+   "new": "(21)",
+   "id": 35
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 223,
+   "op": "comparison",
+   "start": 9665,
+   "end": 9681,
+   "old": "order_by is None",
+   "new": "(order_by is not None)",
+   "id": 36
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 224,
+   "op": "statement",
+   "start": 9695,
+   "end": 9723,
+   "old": "order_by = [\"timestamp ASC\"]",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 239,
+   "op": "statement",
+   "start": 10125,
+   "end": 10367,
+   "old": "trace_objs = mlflow.search_traces(\n                locations=locations,\n                filter_string=filter_string,\n                order_by=order_by,\n                max_results=max_results,\n                return_type=\"list\",\n            )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1755,
+   "end": 2518,
+   "old": "tool_types.append(\n                JudgeToolFeedback(\n                    name=assessment.name,\n                    source=assessment.source.source_type,\n                    rationale=assessment.rationale,\n                    span_id=assessment.span_id,\n                    assessment_id=assessment.assessment_id,\n                    value=assessment.value,\n                    error_code=assessment.error.error_code if assessment.error else None,\n                    error_message=assessment.error.error_message if assessment.error else None,\n                    stack_trace=assessment.error.stack_trace if assessment.error else None,\n                    overrides=assessment.overrides,\n                    valid=assessment.valid,\n                )\n            )",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 84,
+   "op": "constant",
+   "start": 2919,
+   "end": 2994,
+   "old": "\"Current trace has no trace location. Cannot determine experiment context.\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 101,
+   "op": "constant",
+   "start": 3611,
+   "end": 3674,
+   "old": "\"Current trace has no experiment_id. Cannot search for traces.\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 227,
+   "op": "arithmetic",
+   "start": 9760,
+   "end": 10088,
+   "old": "\"Searching for traces with properties:\\n\\n\"\n            + \"\\n\".join(\n                [\n                    f\"* experiment_id={experiment_id}\",\n                    f\"* filter_string={filter_string}\",\n                    f\"* order_by={order_by}\",\n                    f\"* max_results={max_results}\",\n                ]\n            )",
+   "new": "('Searching for traces with properties:\\n\\n' - '\\n'.join([f'* experiment_id={experiment_id}', f'* filter_string={filter_string}', f'* order_by={order_by}', f'* max_results={max_results}']))",
+   "id": 42
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 248,
+   "op": "statement",
+   "start": 10412,
+   "end": 10551,
+   "old": "raise MlflowException(\n                f\"Failed to search traces: {e!s}\",\n                error_code=\"INTERNAL_ERROR\",\n            ) from e",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 257,
+   "op": "statement",
+   "start": 10644,
+   "end": 11134,
+   "old": "trace_info = JudgeToolTraceInfo(\n                    trace_id=trace_obj.info.trace_id,\n                    request_time=trace_obj.info.request_time,\n                    state=trace_obj.info.state,\n                    request=trace_obj.data.request,\n                    response=trace_obj.data.response,\n                    execution_duration=trace_obj.info.execution_duration,\n                    assessments=_convert_assessments_to_tool_types(trace_obj.info.assessments),\n                )",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 266,
+   "op": "statement",
+   "start": 11151,
+   "end": 11176,
+   "old": "traces.append(trace_info)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 191,
+   "op": "constant",
+   "start": 8494,
+   "end": 8504,
+   "old": "\"function\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 224,
+   "op": "constant",
+   "start": 9707,
+   "end": 9722,
+   "old": "\"timestamp ASC\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 227,
+   "op": "constant",
+   "start": 9760,
+   "end": 9803,
+   "old": "\"Searching for traces with properties:\\n\\n\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 268,
+   "op": "statement",
+   "start": 11228,
+   "end": 11302,
+   "old": "_logger.warning(f\"Failed to process trace {trace_obj.info.trace_id}: {e}\")",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 269,
+   "op": "statement",
+   "start": 11319,
+   "end": 11327,
+   "old": "continue",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 244,
+   "op": "constant",
+   "start": 10346,
+   "end": 10352,
+   "old": "\"list\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4574,
+   "end": 5116,
+   "old": "\"Search for traces within the same MLflow experiment as the current trace. \"\n                    \"Returns trace metadata including trace_id, request_time, state, request, \"\n                    \"response, execution_duration, and assessments. Supports filtering with \"\n                    \"MLflow search syntax (e.g., 'attributes.status = \\\"OK\\\"'), custom ordering \"\n                    \"(e.g., ['timestamp DESC']), and result limits. Use this to analyze patterns \"\n                    \"across traces or find specific traces matching criteria.\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 228,
+   "op": "constant",
+   "start": 9818,
+   "end": 9822,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 250,
+   "op": "constant",
+   "start": 10513,
+   "end": 10529,
+   "old": "\"INTERNAL_ERROR\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 136,
+   "op": "constant",
+   "start": 5206,
+   "end": 5214,
+   "old": "\"object\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 138,
+   "op": "constant",
+   "start": 5273,
+   "end": 5288,
+   "old": "\"filter_string\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 173,
+   "op": "constant",
+   "start": 7667,
+   "end": 7677,
+   "old": "\"order_by\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 182,
+   "op": "constant",
+   "start": 8158,
+   "end": 8171,
+   "old": "\"max_results\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 139,
+   "op": "constant",
+   "start": 5320,
+   "end": 5326,
+   "old": "\"type\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 140,
+   "op": "constant",
+   "start": 5366,
+   "end": 5379,
+   "old": "\"description\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 171,
+   "op": "constant",
+   "start": 7599,
+   "end": 7608,
+   "old": "\"default\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 139,
+   "op": "constant",
+   "start": 5328,
+   "end": 5336,
+   "old": "\"string\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 141,
+   "op": "constant",
+   "start": 5415,
+   "end": 7539,
+   "old": "\"Optional filter string using SQL-like search syntax. \"\n                                \"If not specified, all traces are returned.\\n\\n\"\n                                \"SUPPORTED FIELDS:\\n\"\n                                \"- Attributes: request_id, timestamp_ms, execution_time_ms, \"\n                                \"status, name, run_id\\n\"\n                                \"- Tags: Use 'tags.' or 'tag.' prefix \"\n                                \"(e.g., tags.operation_type, tag.model_name)\\n\"\n                                \"- Metadata: Use 'metadata.' prefix (e.g., metadata.run_id)\\n\"\n                                \"- Use backticks for special characters: tags.`model-name`\\n\\n\"\n                                \"VALUE SYNTAX:\\n\"\n                                \"- String values MUST be quoted: status = 'OK'\\n\"\n                                \"- Numeric values don't need quotes: execution_time_ms > 1000\\n\"\n                                \"- Tag and metadata values MUST be quoted as strings\\n\\n\"\n                                \"COMPARATORS:\\n\"\n                                \"- Numeric (timestamp_ms, execution_time_ms): \"\n                                \">, >=, =, !=, <, <=\\n\"\n                                \"- String (name, status, request_id): =, !=, IN, NOT IN\\n\"\n                                \"- Tags/Metadata: =, !=\\n\\n\"\n                                \"STATUS VALUES: 'OK', 'ERROR', 'IN_PROGRESS'\\n\\n\"\n                                \"EXAMPLES:\\n\"\n                                \"- status = 'OK'\\n\"\n                                \"- execution_time_ms > 1000\\n\"\n                                \"- tags.model_name = 'gpt-4'\\n\"\n                                \"- tags.`model-version` = 'v2' AND status = 'OK'\\n\"\n                                \"- timestamp_ms >= 1234567890000 AND execution_time_ms < 5000\\n\"\n                                \"- status IN ('OK', 'ERROR')\\n\"\n                                \"- tags.environment = 'production' AND status = 'ERROR' \"\n                                \"AND execution_time_ms > 500\\n\"\n                                \"- status = 'OK' AND tag.importance = 'high'\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 174,
+   "op": "constant",
+   "start": 7709,
+   "end": 7715,
+   "old": "\"type\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 175,
+   "op": "constant",
+   "start": 7754,
+   "end": 7761,
+   "old": "\"items\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 176,
+   "op": "constant",
+   "start": 7811,
+   "end": 7824,
+   "old": "\"description\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 180,
+   "op": "constant",
+   "start": 8077,
+   "end": 8086,
+   "old": "\"default\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 174,
+   "op": "constant",
+   "start": 7717,
+   "end": 7724,
+   "old": "\"array\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 177,
+   "op": "constant",
+   "start": 7860,
+   "end": 8017,
+   "old": "\"Optional list of order by expressions (e.g., ['timestamp DESC']). \"\n                                \"Defaults to ['timestamp ASC'] for chronological order.\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 183,
+   "op": "constant",
+   "start": 8203,
+   "end": 8209,
+   "old": "\"type\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 184,
+   "op": "constant",
+   "start": 8250,
+   "end": 8263,
+   "old": "\"description\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 185,
+   "op": "constant",
+   "start": 8345,
+   "end": 8354,
+   "old": "\"default\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 183,
+   "op": "constant",
+   "start": 8211,
+   "end": 8220,
+   "old": "\"integer\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 184,
+   "op": "constant",
+   "start": 8265,
+   "end": 8315,
+   "old": "\"Maximum number of traces to return (default: 20)\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 185,
+   "op": "constant",
+   "start": 8356,
+   "end": 8358,
+   "old": "20",
+   "new": "(21)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 175,
+   "op": "constant",
+   "start": 7764,
+   "end": 7770,
+   "old": "\"type\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 175,
+   "op": "constant",
+   "start": 7772,
+   "end": 7780,
+   "old": "\"string\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "mlflow/genai/judges/tools/search_traces.py",
+   "line": 180,
+   "op": "constant",
+   "start": 8089,
+   "end": 8104,
+   "old": "\"timestamp ASC\"",
+   "new": "('XX')",
+   "id": 78
+  }
+ ]
+}

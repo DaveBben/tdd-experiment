@@ -1,0 +1,26 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_types_self.3ae7e16d.lv1",
+ "image": "libercoders/featurebench-specs_pydantic-instance_78693714@sha256:755c424c73170faf66d88006022ed2733f8e269446f330f301d762b0d0ab7d6b",
+ "test_cmd": "pytest -rA -v --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "        26 passed"
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "       141 passed"
+ },
+ "mutant_pool": 400,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 1,
+  "failing": [],
+  "summary": "        56 passed"
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": false
+}

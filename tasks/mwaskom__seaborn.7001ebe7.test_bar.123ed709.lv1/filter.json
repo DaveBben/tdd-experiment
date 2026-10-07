@@ -1,0 +1,39 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_bar.123ed709.lv1",
+ "image": "libercoders/featurebench-specs_seaborn-instance_52738fbb@sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 16 passed in 2.81s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 159 passed, 5 skipped in 3.53s ========================"
+ },
+ "mutant_pool": 139,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 159 passed, 5 skipped in 3.38s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/seaborn/_marks/base.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/seaborn/_marks/dot.py": {
+   "lines": 4,
+   "tracked": true
+  },
+  "/testbed/seaborn/_marks/line.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "scikit-learn__scikit-learn.5741bac9.test_public_functions.28421aef.lv1",
+ "pool": 303,
+ "mutants": [
+  {
+   "path": "sklearn/cluster/_affinity_propagation.py",
+   "line": 193,
+   "op": "constant",
+   "start": 5846,
+   "end": 5848,
+   "old": "15",
+   "new": "(16)",
+   "id": 0
+  },
+  {
+   "path": "sklearn/cluster/_affinity_propagation.py",
+   "line": 194,
+   "op": "constant",
+   "start": 5863,
+   "end": 5866,
+   "old": "200",
+   "new": "(201)",
+   "id": 1
+  },
+  {
+   "path": "sklearn/cluster/_affinity_propagation.py",
+   "line": 185,
+   "op": "constant",
+   "start": 5684,
+   "end": 5699,
+   "old": "\"return_n_iter\"",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "sklearn/cluster/_affinity_propagation.py",
+   "line": 184,
+   "op": "constant",
+   "start": 5661,
+   "end": 5673,
+   "old": "\"array-like\"",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 187,
+   "op": "statement",
+   "start": 7608,
+   "end": 7831,
+   "old": "est = DBSCAN(\n        eps=eps,\n        min_samples=min_samples,\n        metric=metric,\n        metric_params=metric_params,\n        algorithm=algorithm,\n        leaf_size=leaf_size,\n        p=p,\n        n_jobs=n_jobs,\n    )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 197,
+   "op": "statement",
+   "start": 7836,
+   "end": 7875,
+   "old": "est.fit(X, sample_weight=sample_weight)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 198,
+   "op": "return",
+   "start": 7880,
+   "end": 7924,
+   "old": "return est.core_sample_indices_, est.labels_",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 33,
+   "op": "constant",
+   "start": 854,
+   "end": 855,
+   "old": "5",
+   "new": "(6)",
+   "id": 7
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 34,
+   "op": "constant",
+   "start": 868,
+   "end": 879,
+   "old": "\"minkowski\"",
+   "new": "('XX')",
+   "id": 8
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 36,
+   "op": "constant",
+   "start": 919,
+   "end": 925,
+   "old": "\"auto\"",
+   "new": "('XX')",
+   "id": 9
+  },
+  {
+   "path": "sklearn/cluster/_dbscan.py",
+   "line": 38,
+   "op": "constant",
+   "start": 951,
+   "end": 952,
+   "old": "2",
+   "new": "(3)",
+   "id": 10
+  },
+  {
+   "path": "sklearn/cluster/_mean_shift.py",
+   "line": 244,
+   "op": "return",
+   "start": 8491,
+   "end": 8535,
+   "old": "return model.cluster_centers_, model.labels_",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "sklearn/cluster/_mean_shift.py",
+   "line": 141,
+   "op": "constant",
+   "start": 4920,
+   "end": 4921,
+   "old": "1",
+   "new": "(2)",
+   "id": 12
+  },
+  {
+   "path": "sklearn/cluster/_mean_shift.py",
+   "line": 579,
+   "op": "return",
+   "start": 20273,
+   "end": 20331,
+   "old": "return pairwise_distances_argmin(X, self.cluster_centers_)",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "sklearn/cluster/_spectral.py",
+   "line": 191,
+   "op": "constant",
+   "start": 6812,
+   "end": 6824,
+   "old": "\"array-like\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 360,
+   "op": "statement",
+   "start": 13091,
+   "end": 13137,
+   "old": "output = [model.covariance_, model.precision_]",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 246,
+   "op": "constant",
+   "start": 9091,
+   "end": 9096,
+   "old": "False",
+   "new": "(True)",
+   "id": 16
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 249,
+   "op": "constant",
+   "start": 9174,
+   "end": 9179,
+   "old": "False",
+   "new": "(True)",
+   "id": 17
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 362,
+   "op": "statement",
+   "start": 13167,
+   "end": 13194,
+   "old": "output.append(model.costs_)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 232,
+   "op": "constant",
+   "start": 8809,
+   "end": 8818,
+   "old": "\"emp_cov\"",
+   "new": "('XX')",
+   "id": 19
+  },
+  {
+   "path": "sklearn/covariance/_graph_lasso.py",
+   "line": 234,
+   "op": "constant",
+   "start": 8899,
+   "end": 8908,
+   "old": "\"boolean\"",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 458,
+   "op": "statement",
+   "start": 15569,
+   "end": 15708,
+   "old": "estimator = LedoitWolf(\n        assume_centered=assume_centered,\n        block_size=block_size,\n        store_precision=False,\n    ).fit(X)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 682,
+   "op": "statement",
+   "start": 23207,
+   "end": 23277,
+   "old": "estimator = OAS(\n        assume_centered=assume_centered,\n    ).fit(X)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 685,
+   "op": "return",
+   "start": 23282,
+   "end": 23332,
+   "old": "return estimator.covariance_, estimator.shrinkage_",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 407,
+   "op": "constant",
+   "start": 13977,
+   "end": 13981,
+   "old": "1000",
+   "new": "(1001)",
+   "id": 24
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 621,
+   "op": "constant",
+   "start": 21126,
+   "end": 21131,
+   "old": "False",
+   "new": "(True)",
+   "id": 25
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 405,
+   "op": "constant",
+   "start": 13912,
+   "end": 13917,
+   "old": "False",
+   "new": "(True)",
+   "id": 26
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 618,
+   "op": "constant",
+   "start": 21031,
+   "end": 21034,
+   "old": "\"X\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 404,
+   "op": "constant",
+   "start": 13862,
+   "end": 13874,
+   "old": "\"array-like\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "sklearn/covariance/_shrunk_covariance.py",
+   "line": 618,
+   "op": "constant",
+   "start": 21037,
+   "end": 21049,
+   "old": "\"array-like\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 682,
+   "op": "constant",
+   "start": 21548,
+   "end": 21551,
+   "old": "256",
+   "new": "(257)",
+   "id": 30
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 683,
+   "op": "constant",
+   "start": 21565,
+   "end": 21570,
+   "old": "False",
+   "new": "(True)",
+   "id": 31
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 688,
+   "op": "constant",
+   "start": 21667,
+   "end": 21672,
+   "old": "False",
+   "new": "(True)",
+   "id": 32
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 692,
+   "op": "constant",
+   "start": 21762,
+   "end": 21764,
+   "old": "10",
+   "new": "(11)",
+   "id": 33
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 879,
+   "op": "statement",
+   "start": 28414,
+   "end": 28437,
+   "old": "code = est.transform(X)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 897,
+   "op": "constant",
+   "start": 28814,
+   "end": 28817,
+   "old": "100",
+   "new": "(101)",
+   "id": 35
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 899,
+   "op": "constant",
+   "start": 28844,
+   "end": 28850,
+   "old": "\"lars\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 904,
+   "op": "constant",
+   "start": 28940,
+   "end": 28945,
+   "old": "False",
+   "new": "(True)",
+   "id": 37
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 906,
+   "op": "constant",
+   "start": 28988,
+   "end": 28993,
+   "old": "False",
+   "new": "(True)",
+   "id": 38
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 909,
+   "op": "constant",
+   "start": 29065,
+   "end": 29069,
+   "old": "1000",
+   "new": "(1001)",
+   "id": 39
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 853,
+   "op": "constant",
+   "start": 27699,
+   "end": 27707,
+   "old": "\"lasso_\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 666,
+   "op": "constant",
+   "start": 21153,
+   "end": 21156,
+   "old": "\"X\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 671,
+   "op": "constant",
+   "start": 21372,
+   "end": 21377,
+   "old": "False",
+   "new": "(True)",
+   "id": 42
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 888,
+   "op": "constant",
+   "start": 28624,
+   "end": 28641,
+   "old": "\"method_max_iter\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 667,
+   "op": "constant",
+   "start": 21198,
+   "end": 21207,
+   "old": "\"boolean\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "sklearn/decomposition/_dict_learning.py",
+   "line": 669,
+   "op": "constant",
+   "start": 21321,
+   "end": 21327,
+   "old": "\"left\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "sklearn/decomposition/_nmf.py",
+   "line": 904,
+   "op": "constant",
+   "start": 27506,
+   "end": 27510,
+   "old": "True",
+   "new": "(False)",
+   "id": 46
+  },
+  {
+   "path": "sklearn/decomposition/_nmf.py",
+   "line": 905,
+   "op": "constant",
+   "start": 27523,
+   "end": 27527,
+   "old": "\"cd\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "sklearn/decomposition/_nmf.py",
+   "line": 913,
+   "op": "constant",
+   "start": 27678,
+   "end": 27679,
+   "old": "0",
+   "new": "(1)",
+   "id": 48
+  },
+  {
+   "path": "sklearn/decomposition/_nmf.py",
+   "line": 890,
+   "op": "constant",
+   "start": 27192,
+   "end": 27195,
+   "old": "\"X\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "sklearn/utils/_available_if.py",
+   "line": 36,
+   "op": "boolean",
+   "start": 1101,
+   "end": 1117,
+   "old": "not check_result",
+   "new": "(check_result)",
+   "id": 50
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 250,
+   "op": "statement",
+   "start": 9278,
+   "end": 9299,
+   "old": "module = t.__module__",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 251,
+   "op": "statement",
+   "start": 9304,
+   "end": 9329,
+   "old": "qualname = t.__qualname__",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 258,
+   "op": "return",
+   "start": 9475,
+   "end": 9504,
+   "old": "return f\"{module}.{qualname}\"",
+   "new": "return None",
+   "id": 53
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 825,
+   "op": "statement",
+   "start": 26115,
+   "end": 26140,
+   "old": "raise NotImplementedError",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 252,
+   "op": "comparison",
+   "start": 9337,
+   "end": 9357,
+   "old": "module == \"builtins\"",
+   "new": "(module != 'builtins')",
+   "id": 55
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 253,
+   "op": "return",
+   "start": 9367,
+   "end": 9382,
+   "old": "return qualname",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 784,
+   "op": "return",
+   "start": 24847,
+   "end": 24894,
+   "old": "return f\"not {' or '.join(constraint.options)}\"",
+   "new": "return None",
+   "id": 57
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 787,
+   "op": "return",
+   "start": 24950,
+   "end": 24976,
+   "old": "return np.array([1, 2, 3])",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 790,
+   "op": "return",
+   "start": 25033,
+   "end": 25042,
+   "old": "return -1",
+   "new": "return None",
+   "id": 59
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 793,
+   "op": "return",
+   "start": 25095,
+   "end": 25133,
+   "old": "return type(\"HasNotMethods\", (), {})()",
+   "new": "return None",
+   "id": 60
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 844,
+   "op": "return",
+   "start": 26549,
+   "end": 26575,
+   "old": "return np.array([1, 2, 3])",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 850,
+   "op": "return",
+   "start": 26724,
+   "end": 26756,
+   "old": "return np.random.RandomState(42)",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 876,
+   "op": "return",
+   "start": 27508,
+   "end": 27521,
+   "old": "return np.nan",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 887,
+   "op": "return",
+   "start": 27850,
+   "end": 27866,
+   "old": "return [1, 2, 3]",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 897,
+   "op": "statement",
+   "start": 28110,
+   "end": 28131,
+   "old": "interval = constraint",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 796,
+   "op": "constant",
+   "start": 25202,
+   "end": 25212,
+   "old": "\"a string\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 801,
+   "op": "comparison",
+   "start": 25335,
+   "end": 25362,
+   "old": "constraint.type is Integral",
+   "new": "(constraint.type is not Integral)",
+   "id": 67
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 805,
+   "op": "return",
+   "start": 25496,
+   "end": 25523,
+   "old": "return constraint.right + 1",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 811,
+   "op": "comparison",
+   "start": 25704,
+   "end": 25731,
+   "old": "constraint.left is not None",
+   "new": "(constraint.left is None)",
+   "id": 69
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 813,
+   "op": "comparison",
+   "start": 25786,
+   "end": 25814,
+   "old": "constraint.right is not None",
+   "new": "(constraint.right is None)",
+   "id": 70
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 819,
+   "op": "comparison",
+   "start": 25984,
+   "end": 26024,
+   "old": "constraint.closed in (\"left\", \"neither\")",
+   "new": "(constraint.closed not in ('left', 'neither'))",
+   "id": 71
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 863,
+   "op": "comparison",
+   "start": 27124,
+   "end": 27159,
+   "old": "constraint.type in (Integral, Real)",
+   "new": "(constraint.type not in (Integral, Real))",
+   "id": 72
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 898,
+   "op": "boolean",
+   "start": 28143,
+   "end": 28191,
+   "old": "interval.left is None and interval.right is None",
+   "new": "(interval.left is None or interval.right is None)",
+   "id": 73
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 899,
+   "op": "return",
+   "start": 28205,
+   "end": 28213,
+   "old": "return 0",
+   "new": "return None",
+   "id": 74
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 805,
+   "op": "arithmetic",
+   "start": 25503,
+   "end": 25523,
+   "old": "constraint.right + 1",
+   "new": "(constraint.right - 1)",
+   "id": 75
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 865,
+   "op": "constant",
+   "start": 27261,
+   "end": 27262,
+   "old": "1",
+   "new": "(2)",
+   "id": 76
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 887,
+   "op": "constant",
+   "start": 27858,
+   "end": 27859,
+   "old": "1",
+   "new": "(2)",
+   "id": 77
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 887,
+   "op": "constant",
+   "start": 27861,
+   "end": 27862,
+   "old": "2",
+   "new": "(3)",
+   "id": 78
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 887,
+   "op": "constant",
+   "start": 27864,
+   "end": 27865,
+   "old": "3",
+   "new": "(4)",
+   "id": 79
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 898,
+   "op": "comparison",
+   "start": 28143,
+   "end": 28164,
+   "old": "interval.left is None",
+   "new": "(interval.left is not None)",
+   "id": 80
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 898,
+   "op": "comparison",
+   "start": 28169,
+   "end": 28191,
+   "old": "interval.right is None",
+   "new": "(interval.right is not None)",
+   "id": 81
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 787,
+   "op": "constant",
+   "start": 24970,
+   "end": 24971,
+   "old": "2",
+   "new": "(3)",
+   "id": 82
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 793,
+   "op": "constant",
+   "start": 25107,
+   "end": 25122,
+   "old": "\"HasNotMethods\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 803,
+   "op": "constant",
+   "start": 25441,
+   "end": 25442,
+   "old": "1",
+   "new": "(2)",
+   "id": 84
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 817,
+   "op": "constant",
+   "start": 25925,
+   "end": 25932,
+   "old": "\"right\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 819,
+   "op": "constant",
+   "start": 26006,
+   "end": 26012,
+   "old": "\"left\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 844,
+   "op": "constant",
+   "start": 26566,
+   "end": 26567,
+   "old": "1",
+   "new": "(2)",
+   "id": 87
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 844,
+   "op": "constant",
+   "start": 26569,
+   "end": 26570,
+   "old": "2",
+   "new": "(3)",
+   "id": 88
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 901,
+   "op": "arithmetic",
+   "start": 28269,
+   "end": 28287,
+   "old": "interval.right - 1",
+   "new": "(interval.right + 1)",
+   "id": 89
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 902,
+   "op": "comparison",
+   "start": 28301,
+   "end": 28323,
+   "old": "interval.right is None",
+   "new": "(interval.right is not None)",
+   "id": 90
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 847,
+   "op": "constant",
+   "start": 26653,
+   "end": 26654,
+   "old": "0",
+   "new": "(1)",
+   "id": 91
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 847,
+   "op": "constant",
+   "start": 26661,
+   "end": 26662,
+   "old": "1",
+   "new": "(2)",
+   "id": 92
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 901,
+   "op": "constant",
+   "start": 28286,
+   "end": 28287,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 903,
+   "op": "arithmetic",
+   "start": 28344,
+   "end": 28361,
+   "old": "interval.left + 1",
+   "new": "(interval.left - 1)",
+   "id": 94
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 906,
+   "op": "arithmetic",
+   "start": 28437,
+   "end": 28473,
+   "old": "(interval.left + interval.right) / 2",
+   "new": "((interval.left + interval.right) * 2)",
+   "id": 95
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 906,
+   "op": "arithmetic",
+   "start": 28438,
+   "end": 28468,
+   "old": "interval.left + interval.right",
+   "new": "(interval.left - interval.right)",
+   "id": 96
+  },
+  {
+   "path": "sklearn/utils/_param_validation.py",
+   "line": 908,
+   "op": "constant",
+   "start": 28531,
+   "end": 28532,
+   "old": "1",
+   "new": "(2)",
+   "id": 97
+  },
+  {
+   "path": "sklearn/utils/_set_output.py",
+   "line": 421,
+   "op": "return",
+   "start": 13641,
+   "end": 13652,
+   "old": "return self",
+   "new": "return None",
+   "id": 98
+  },
+  {
+   "path": "sklearn/utils/_set_output.py",
+   "line": 415,
+   "op": "return",
+   "start": 13457,
+   "end": 13468,
+   "old": "return self",
+   "new": "return None",
+   "id": 99
+  }
+ ]
+}

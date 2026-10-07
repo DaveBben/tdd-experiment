@@ -1,0 +1,26 @@
+{
+ "task": "pydata__xarray.97f3a746.test_backends_chunks.fa55f68a.lv1",
+ "image": "libercoders/featurebench-specs_xarray-instance_62de996a@sha256:075803e6495efc4aa64c015effcae52986a62352655127f69a262dfbedfbb7d7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 18 passed in 0.88s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "================== 101 passed, 6 skipped, 1 warning in 0.69s ==================="
+ },
+ "mutant_pool": 151,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "================== 101 passed, 6 skipped, 1 warning in 1.24s ==================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

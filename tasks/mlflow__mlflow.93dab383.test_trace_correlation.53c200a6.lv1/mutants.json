@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_trace_correlation.53c200a6.lv1",
+ "pool": 105,
+ "mutants": [
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 88,
+   "op": "statement",
+   "start": 2965,
+   "end": 2982,
+   "old": "n11 = joint_count",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 89,
+   "op": "statement",
+   "start": 3001,
+   "end": 3034,
+   "old": "n10 = filter1_count - joint_count",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 90,
+   "op": "statement",
+   "start": 3055,
+   "end": 3088,
+   "old": "n01 = filter2_count - joint_count",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 91,
+   "op": "statement",
+   "start": 3109,
+   "end": 3172,
+   "old": "n00 = total_count - filter1_count - filter2_count + joint_count",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 106,
+   "op": "return",
+   "start": 3727,
+   "end": 3795,
+   "old": "return NPMIResult(npmi=npmi_unsmoothed, npmi_smoothed=npmi_smoothed)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 132,
+   "op": "statement",
+   "start": 4453,
+   "end": 4476,
+   "old": "n11_s = n11 + smoothing",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 133,
+   "op": "statement",
+   "start": 4481,
+   "end": 4504,
+   "old": "n10_s = n10 + smoothing",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 134,
+   "op": "statement",
+   "start": 4509,
+   "end": 4532,
+   "old": "n01_s = n01 + smoothing",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 135,
+   "op": "statement",
+   "start": 4537,
+   "end": 4560,
+   "old": "n00_s = n00 + smoothing",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 137,
+   "op": "statement",
+   "start": 4566,
+   "end": 4599,
+   "old": "N = n11_s + n10_s + n01_s + n00_s",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 138,
+   "op": "statement",
+   "start": 4604,
+   "end": 4622,
+   "old": "n1 = n11_s + n10_s",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4650,
+   "end": 4668,
+   "old": "n2 = n11_s + n01_s",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 157,
+   "op": "statement",
+   "start": 5588,
+   "end": 5613,
+   "old": "log_n11 = math.log(n11_s)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 158,
+   "op": "statement",
+   "start": 5618,
+   "end": 5637,
+   "old": "log_N = math.log(N)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 159,
+   "op": "statement",
+   "start": 5642,
+   "end": 5663,
+   "old": "log_n1 = math.log(n1)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 160,
+   "op": "statement",
+   "start": 5668,
+   "end": 5689,
+   "old": "log_n2 = math.log(n2)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 162,
+   "op": "statement",
+   "start": 5695,
+   "end": 5738,
+   "old": "pmi = (log_n11 + log_N) - (log_n1 + log_n2)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5788,
+   "end": 5820,
+   "old": "denominator = -(log_n11 - log_N)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 167,
+   "op": "statement",
+   "start": 5841,
+   "end": 5865,
+   "old": "npmi = pmi / denominator",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 170,
+   "op": "return",
+   "start": 5926,
+   "end": 5958,
+   "old": "return max(-1.0, min(1.0, npmi))",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 199,
+   "op": "statement",
+   "start": 6836,
+   "end": 6853,
+   "old": "n11 = joint_count",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 200,
+   "op": "statement",
+   "start": 6858,
+   "end": 6891,
+   "old": "n10 = filter1_count - joint_count",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 201,
+   "op": "statement",
+   "start": 6896,
+   "end": 6929,
+   "old": "n01 = filter2_count - joint_count",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 202,
+   "op": "statement",
+   "start": 6934,
+   "end": 6997,
+   "old": "n00 = total_count - filter1_count - filter2_count + joint_count",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 207,
+   "op": "return",
+   "start": 7068,
+   "end": 7126,
+   "old": "return _calculate_npmi_core(n11, n10, n01, n00, smoothing)",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 81,
+   "op": "comparison",
+   "start": 2695,
+   "end": 2711,
+   "old": "total_count <= 0",
+   "new": "(total_count < 0)",
+   "id": 25
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 82,
+   "op": "return",
+   "start": 2721,
+   "end": 2785,
+   "old": "return NPMIResult(npmi=float(\"nan\"), npmi_smoothed=float(\"nan\"))",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 85,
+   "op": "boolean",
+   "start": 2845,
+   "end": 2885,
+   "old": "filter1_count == 0 or filter2_count == 0",
+   "new": "(filter1_count == 0 and filter2_count == 0)",
+   "id": 27
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 86,
+   "op": "return",
+   "start": 2895,
+   "end": 2959,
+   "old": "return NPMIResult(npmi=float(\"nan\"), npmi_smoothed=float(\"nan\"))",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 89,
+   "op": "arithmetic",
+   "start": 3007,
+   "end": 3034,
+   "old": "filter1_count - joint_count",
+   "new": "(filter1_count + joint_count)",
+   "id": 29
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 90,
+   "op": "arithmetic",
+   "start": 3061,
+   "end": 3088,
+   "old": "filter2_count - joint_count",
+   "new": "(filter2_count + joint_count)",
+   "id": 30
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 91,
+   "op": "arithmetic",
+   "start": 3115,
+   "end": 3172,
+   "old": "total_count - filter1_count - filter2_count + joint_count",
+   "new": "(total_count - filter1_count - filter2_count - joint_count)",
+   "id": 31
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 93,
+   "op": "comparison",
+   "start": 3192,
+   "end": 3219,
+   "old": "min(n11, n10, n01, n00) < 0",
+   "new": "(min(n11, n10, n01, n00) <= 0)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 95,
+   "op": "return",
+   "start": 3277,
+   "end": 3341,
+   "old": "return NPMIResult(npmi=float(\"nan\"), npmi_smoothed=float(\"nan\"))",
+   "new": "return None",
+   "id": 33
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "boolean",
+   "start": 3406,
+   "end": 3466,
+   "old": "joint_count == 0 and filter1_count > 0 and filter2_count > 0",
+   "new": "(joint_count == 0 or filter1_count > 0 or filter2_count > 0)",
+   "id": 34
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 99,
+   "op": "statement",
+   "start": 3476,
+   "end": 3498,
+   "old": "npmi_unsmoothed = -1.0",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 101,
+   "op": "statement",
+   "start": 3517,
+   "end": 3588,
+   "old": "npmi_unsmoothed = _calculate_npmi_core(n11, n10, n01, n00, smoothing=0)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 114,
+   "op": "constant",
+   "start": 3911,
+   "end": 3912,
+   "old": "0",
+   "new": "(1)",
+   "id": 37
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 132,
+   "op": "arithmetic",
+   "start": 4461,
+   "end": 4476,
+   "old": "n11 + smoothing",
+   "new": "(n11 - smoothing)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 133,
+   "op": "arithmetic",
+   "start": 4489,
+   "end": 4504,
+   "old": "n10 + smoothing",
+   "new": "(n10 - smoothing)",
+   "id": 39
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 134,
+   "op": "arithmetic",
+   "start": 4517,
+   "end": 4532,
+   "old": "n01 + smoothing",
+   "new": "(n01 - smoothing)",
+   "id": 40
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 135,
+   "op": "arithmetic",
+   "start": 4545,
+   "end": 4560,
+   "old": "n00 + smoothing",
+   "new": "(n00 - smoothing)",
+   "id": 41
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 137,
+   "op": "arithmetic",
+   "start": 4570,
+   "end": 4599,
+   "old": "n11_s + n10_s + n01_s + n00_s",
+   "new": "(n11_s + n10_s + n01_s - n00_s)",
+   "id": 42
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 138,
+   "op": "arithmetic",
+   "start": 4609,
+   "end": 4622,
+   "old": "n11_s + n10_s",
+   "new": "(n11_s - n10_s)",
+   "id": 43
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 139,
+   "op": "arithmetic",
+   "start": 4655,
+   "end": 4668,
+   "old": "n11_s + n01_s",
+   "new": "(n11_s - n01_s)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "boolean",
+   "start": 5105,
+   "end": 5137,
+   "old": "n1 <= 0 or n2 <= 0 or n11_s <= 0",
+   "new": "(n1 <= 0 and n2 <= 0 and (n11_s <= 0))",
+   "id": 45
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 147,
+   "op": "return",
+   "start": 5147,
+   "end": 5166,
+   "old": "return float(\"nan\")",
+   "new": "return None",
+   "id": 46
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "boolean",
+   "start": 5327,
+   "end": 5361,
+   "old": "n10 == 0 and n01 == 0 and n00 == 0",
+   "new": "(n10 == 0 or n01 == 0 or n00 == 0)",
+   "id": 47
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 153,
+   "op": "return",
+   "start": 5438,
+   "end": 5448,
+   "old": "return 1.0",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 162,
+   "op": "arithmetic",
+   "start": 5701,
+   "end": 5738,
+   "old": "(log_n11 + log_N) - (log_n1 + log_n2)",
+   "new": "(log_n11 + log_N + (log_n1 + log_n2))",
+   "id": 49
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 167,
+   "op": "arithmetic",
+   "start": 5848,
+   "end": 5865,
+   "old": "pmi / denominator",
+   "new": "(pmi * denominator)",
+   "id": 50
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 167,
+   "op": "arithmetic",
+   "start": 5848,
+   "end": 5865,
+   "old": "pmi / denominator",
+   "new": "(pmi // denominator)",
+   "id": 51
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 196,
+   "op": "comparison",
+   "start": 6785,
+   "end": 6801,
+   "old": "total_count <= 0",
+   "new": "(total_count < 0)",
+   "id": 52
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 200,
+   "op": "arithmetic",
+   "start": 6864,
+   "end": 6891,
+   "old": "filter1_count - joint_count",
+   "new": "(filter1_count + joint_count)",
+   "id": 53
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 201,
+   "op": "arithmetic",
+   "start": 6902,
+   "end": 6929,
+   "old": "filter2_count - joint_count",
+   "new": "(filter2_count + joint_count)",
+   "id": 54
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 202,
+   "op": "arithmetic",
+   "start": 6940,
+   "end": 6997,
+   "old": "total_count - filter1_count - filter2_count + joint_count",
+   "new": "(total_count - filter1_count - filter2_count - joint_count)",
+   "id": 55
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 204,
+   "op": "comparison",
+   "start": 7006,
+   "end": 7033,
+   "old": "min(n11, n10, n01, n00) < 0",
+   "new": "(min(n11, n10, n01, n00) <= 0)",
+   "id": 56
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 81,
+   "op": "constant",
+   "start": 2710,
+   "end": 2711,
+   "old": "0",
+   "new": "(1)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 85,
+   "op": "comparison",
+   "start": 2845,
+   "end": 2863,
+   "old": "filter1_count == 0",
+   "new": "(filter1_count != 0)",
+   "id": 58
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 85,
+   "op": "comparison",
+   "start": 2867,
+   "end": 2885,
+   "old": "filter2_count == 0",
+   "new": "(filter2_count != 0)",
+   "id": 59
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 91,
+   "op": "arithmetic",
+   "start": 3115,
+   "end": 3158,
+   "old": "total_count - filter1_count - filter2_count",
+   "new": "(total_count - filter1_count + filter2_count)",
+   "id": 60
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3218,
+   "end": 3219,
+   "old": "0",
+   "new": "(1)",
+   "id": 61
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3406,
+   "end": 3422,
+   "old": "joint_count == 0",
+   "new": "(joint_count != 0)",
+   "id": 62
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3427,
+   "end": 3444,
+   "old": "filter1_count > 0",
+   "new": "(filter1_count >= 0)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3449,
+   "end": 3466,
+   "old": "filter2_count > 0",
+   "new": "(filter2_count >= 0)",
+   "id": 64
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 137,
+   "op": "arithmetic",
+   "start": 4570,
+   "end": 4591,
+   "old": "n11_s + n10_s + n01_s",
+   "new": "(n11_s + n10_s - n01_s)",
+   "id": 65
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "comparison",
+   "start": 5105,
+   "end": 5112,
+   "old": "n1 <= 0",
+   "new": "(n1 < 0)",
+   "id": 66
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "comparison",
+   "start": 5116,
+   "end": 5123,
+   "old": "n2 <= 0",
+   "new": "(n2 < 0)",
+   "id": 67
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "comparison",
+   "start": 5127,
+   "end": 5137,
+   "old": "n11_s <= 0",
+   "new": "(n11_s < 0)",
+   "id": 68
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 5327,
+   "end": 5335,
+   "old": "n10 == 0",
+   "new": "(n10 != 0)",
+   "id": 69
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 5340,
+   "end": 5348,
+   "old": "n01 == 0",
+   "new": "(n01 != 0)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "comparison",
+   "start": 5353,
+   "end": 5361,
+   "old": "n00 == 0",
+   "new": "(n00 != 0)",
+   "id": 71
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 162,
+   "op": "arithmetic",
+   "start": 5702,
+   "end": 5717,
+   "old": "log_n11 + log_N",
+   "new": "(log_n11 - log_N)",
+   "id": 72
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 162,
+   "op": "arithmetic",
+   "start": 5722,
+   "end": 5737,
+   "old": "log_n1 + log_n2",
+   "new": "(log_n1 - log_n2)",
+   "id": 73
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 165,
+   "op": "arithmetic",
+   "start": 5804,
+   "end": 5819,
+   "old": "log_n11 - log_N",
+   "new": "(log_n11 + log_N)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 196,
+   "op": "constant",
+   "start": 6800,
+   "end": 6801,
+   "old": "0",
+   "new": "(1)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 202,
+   "op": "arithmetic",
+   "start": 6940,
+   "end": 6983,
+   "old": "total_count - filter1_count - filter2_count",
+   "new": "(total_count - filter1_count + filter2_count)",
+   "id": 76
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 204,
+   "op": "constant",
+   "start": 7032,
+   "end": 7033,
+   "old": "0",
+   "new": "(1)",
+   "id": 77
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 85,
+   "op": "constant",
+   "start": 2862,
+   "end": 2863,
+   "old": "0",
+   "new": "(1)",
+   "id": 78
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 85,
+   "op": "constant",
+   "start": 2884,
+   "end": 2885,
+   "old": "0",
+   "new": "(1)",
+   "id": 79
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 91,
+   "op": "arithmetic",
+   "start": 3115,
+   "end": 3142,
+   "old": "total_count - filter1_count",
+   "new": "(total_count + filter1_count)",
+   "id": 80
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3421,
+   "end": 3422,
+   "old": "0",
+   "new": "(1)",
+   "id": 81
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3443,
+   "end": 3444,
+   "old": "0",
+   "new": "(1)",
+   "id": 82
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3465,
+   "end": 3466,
+   "old": "0",
+   "new": "(1)",
+   "id": 83
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 137,
+   "op": "arithmetic",
+   "start": 4570,
+   "end": 4583,
+   "old": "n11_s + n10_s",
+   "new": "(n11_s - n10_s)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "constant",
+   "start": 5111,
+   "end": 5112,
+   "old": "0",
+   "new": "(1)",
+   "id": 85
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "constant",
+   "start": 5122,
+   "end": 5123,
+   "old": "0",
+   "new": "(1)",
+   "id": 86
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 146,
+   "op": "constant",
+   "start": 5136,
+   "end": 5137,
+   "old": "0",
+   "new": "(1)",
+   "id": 87
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 147,
+   "op": "constant",
+   "start": 5160,
+   "end": 5165,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "constant",
+   "start": 5334,
+   "end": 5335,
+   "old": "0",
+   "new": "(1)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "constant",
+   "start": 5347,
+   "end": 5348,
+   "old": "0",
+   "new": "(1)",
+   "id": 90
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 151,
+   "op": "constant",
+   "start": 5360,
+   "end": 5361,
+   "old": "0",
+   "new": "(1)",
+   "id": 91
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 202,
+   "op": "arithmetic",
+   "start": 6940,
+   "end": 6967,
+   "old": "total_count - filter1_count",
+   "new": "(total_count + filter1_count)",
+   "id": 92
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 205,
+   "op": "constant",
+   "start": 7056,
+   "end": 7061,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 82,
+   "op": "constant",
+   "start": 2750,
+   "end": 2755,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 82,
+   "op": "constant",
+   "start": 2778,
+   "end": 2783,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 86,
+   "op": "constant",
+   "start": 2924,
+   "end": 2929,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 86,
+   "op": "constant",
+   "start": 2952,
+   "end": 2957,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3306,
+   "end": 3311,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/store/analytics/trace_correlation.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3334,
+   "end": 3339,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

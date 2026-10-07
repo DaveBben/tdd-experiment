@@ -1,0 +1,61 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_tree.261bac3c.lv1",
+ "image": "libercoders/featurebench-specs_astropy-instance_493bb78b@sha256:4b5e7489d8bee8e20b53f94c74833e6d9ee0163673ac4a36eecb0372ef01fda2",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 29 passed in 0.18s =============================="
+ },
+ "gold_p2p": {
+  "exit": 1,
+  "failing": [
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_add_dimension[False]",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_add_dimension[True]",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_broadcast_to",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_diagonal",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_flatten",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_getitem0101",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_ravel",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_reshape",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_squeeze",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_swapaxes",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_take",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_transpose"
+  ],
+  "summary": "======================== 66 passed, 12 errors in 1.77s ========================="
+ },
+ "mutant_pool": 173,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 1,
+  "failing": [
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_add_dimension[False]",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_add_dimension[True]",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_broadcast_to",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_diagonal",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_flatten",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_getitem0101",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_ravel",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_reshape",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_squeeze",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_swapaxes",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_take",
+   "astropy/coordinates/tests/test_shape_manipulation.py::TestManipulation::test_transpose"
+  ],
+  "summary": "======================== 66 passed, 12 errors in 1.80s ========================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/astropy/io/votable/xmlutil.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/astropy/utils/xml/check.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

@@ -1,0 +1,2957 @@
+=== mlflow/genai/scorers/base.py
+import functools
+import inspect
+import logging
+from dataclasses import asdict, dataclass
+from enum import Enum
+from typing import Any, Callable, Literal, TypeAlias
+
+from pydantic import BaseModel, PrivateAttr
+
+import mlflow
+from mlflow.entities import Assessment, Feedback
+from mlflow.entities.assessment import DEFAULT_FEEDBACK_NAME
+from mlflow.entities.trace import Trace
+from mlflow.exceptions import MlflowException
+from mlflow.tracking import get_tracking_uri
+from mlflow.utils.databricks_utils import is_in_databricks_runtime
+from mlflow.utils.uri import is_databricks_uri
+
+_logger = logging.getLogger(__name__)
+
+# Serialization version for tracking changes to the serialization format
+_SERIALIZATION_VERSION = 1
+_AggregationFunc: TypeAlias = Callable[[list[int | float]], float]
+_AggregationType: TypeAlias = (
+    Literal["min", "max", "mean", "median", "variance", "p90"] | _AggregationFunc
+)
+
+
+class ScorerKind(Enum):
+    CLASS = "class"
+    BUILTIN = "builtin"
+    DECORATOR = "decorator"
+
+
+_ALLOWED_SCORERS_FOR_REGISTRATION = [ScorerKind.BUILTIN, ScorerKind.DECORATOR]
+
+
+class ScorerStatus(Enum):
+    """Status of a scorer.
+
+    Scorer status is determined by the sample rate due to the backend not having
+    a notion of whether a scorer is started or stopped.
+    """
+
+    UNREGISTERED = "UNREGISTERED"  # sampling config not set
+    STARTED = "STARTED"  # sample_rate > 0
+    STOPPED = "STOPPED"  # sample_rate == 0
+
+
+@dataclass
+class ScorerSamplingConfig:
+    """Configuration for registered scorer sampling."""
+
+    sample_rate: float | None = None
+    filter_string: str | None = None
+
+
+AggregationFunc = Callable[[list[float]], float]  # List of per-row value -> aggregated value
+
+
+@dataclass
+class SerializedScorer:
+    """
+    Dataclass defining the serialization schema for Scorer objects.
+    """
+
+    # Core scorer fields
+    name: str
+    aggregations: list[str] | None = None
+    description: str | None = None
+
+    # Version metadata
+    mlflow_version: str = mlflow.__version__
+    serialization_version: int = _SERIALIZATION_VERSION
+
+    # Builtin scorer fields (for scorers from mlflow.genai.scorers.builtin_scorers)
+    builtin_scorer_class: str | None = None
+    builtin_scorer_pydantic_data: dict[str, Any] | None = None
+
+    # Decorator scorer fields (for @scorer decorated functions)
+    call_source: str | None = None
+    call_signature: str | None = None
+    original_func_name: str | None = None
+
+    # InstructionsJudge fields (for make_judge created judges)
+    instructions_judge_pydantic_data: dict[str, Any] | None = None
+
+    def __post_init__(self):
+        """Validate that exactly one type of scorer fields is present."""
+        has_builtin_fields = self.builtin_scorer_class is not None
+        has_decorator_fields = self.call_source is not None
+        has_instructions_fields = self.instructions_judge_pydantic_data is not None
+
+        # Count how many field types are present
+        field_count = sum([has_builtin_fields, has_decorator_fields, has_instructions_fields])
+
+        if field_count == 0:
+            raise ValueError(
+                "SerializedScorer must have either builtin scorer fields "
+                "(builtin_scorer_class), decorator scorer fields (call_source), "
+                "or instructions judge fields (instructions_judge_pydantic_data) present"
+            )
+
+        if field_count > 1:
+            raise ValueError(
+                "SerializedScorer cannot have multiple types of scorer fields "
+                "present simultaneously"
+            )
+
+
+class Scorer(BaseModel):
+    name: str
+    aggregations: list[_AggregationType] | None = None
+    description: str | None = None
+
+    _cached_dump: dict[str, Any] | None = PrivateAttr(default=None)
+    _sampling_config: ScorerSamplingConfig | None = PrivateAttr(default=None)
+    _registered_backend: str | None = PrivateAttr(default=None)
+
+    @property
+    def sample_rate(self) -> float | None:
+        """Get the sample rate for this scorer. Available when registered for monitoring."""
+        return self._sampling_config.sample_rate if self._sampling_config else None
+
+    @property
+    def filter_string(self) -> str | None:
+        """Get the filter string for this scorer."""
+        return self._sampling_config.filter_string if self._sampling_config else None
+
+    @property
+    def status(self) -> ScorerStatus:
+        """Get the status of this scorer, using only the local state."""
+
+        if self._registered_backend is None:
+            return ScorerStatus.UNREGISTERED
+
+        return ScorerStatus.STARTED if (self.sample_rate or 0) > 0 else ScorerStatus.STOPPED
+
+    def __repr__(self) -> str:
+        # Get the standard representation from the parent class
+        base_repr = super().__repr__()
+        filter_string = self.filter_string
+        if filter_string is not None:
+            filter_string = f"'{filter_string}'"
+
+        # Inject the property's value into the repr string
+        return f"{base_repr[:-1]}, sample_rate={self.sample_rate}, filter_string={filter_string})"
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
+        """Override model_dump to include source code."""
+
+        # Return cached dump if available (prevents re-serialization issues with dynamic functions)
+        if self._cached_dump is not None:
+            return self._cached_dump
+
+        # Check if this is a decorator scorer
+        if not getattr(self, "_original_func", None):
+            # BuiltInScorer overrides `model_dump`, so this is neither a builtin scorer nor a
+            # decorator scorer
+            raise MlflowException.invalid_parameter_value(
+                f"Unsupported scorer type: {self.__class__.__name__}. "
+                f"Scorer serialization only supports:\n"
+                f"1. Builtin scorers (from mlflow.genai.scorers.builtin_scorers)\n"
+                f"2. Decorator-created scorers (using @scorer decorator)\n"
+                f"Direct subclassing of Scorer is not supported for serialization. "
+                f"Please use the @scorer decorator instead."
+            )
+
+        # Decorator scorer - extract and store source code
+        source_info = self._extract_source_code_info()
+
+        # Create serialized scorer with all fields at once
+        serialized = SerializedScorer(
+            name=self.name,
+            description=self.description,
+            aggregations=self.aggregations,
+            mlflow_version=mlflow.__version__,
+            serialization_version=_SERIALIZATION_VERSION,
+            call_source=source_info.get("call_source"),
+            call_signature=source_info.get("call_signature"),
+            original_func_name=source_info.get("original_func_name"),
+        )
+        self._cached_dump = asdict(serialized)
+        return self._cached_dump
+
+    def _extract_source_code_info(self) -> dict[str, str | None]:
+        """Extract source code information for the original decorated function."""
+        from mlflow.genai.scorers.scorer_utils import extract_function_body
+
+        result = {"call_source": None, "call_signature": None, "original_func_name": None}
+
+        # Extract original function source
+        call_body, _ = extract_function_body(self._original_func)
+        result["call_source"] = call_body
+        result["original_func_name"] = self._original_func.__name__
+
+        # Store the signature of the original function
+        result["call_signature"] = str(inspect.signature(self._original_func))
+
+        return result
+
+    @classmethod
+    def model_validate(cls, obj: Any) -> "Scorer":
+        """Override model_validate to reconstruct scorer from source code."""
+        # Handle SerializedScorer object
+        if isinstance(obj, SerializedScorer):
+            serialized = obj
+        # Handle dict object
+        elif isinstance(obj, dict):
+            # Parse the serialized data using our dataclass
+            try:
+                serialized = SerializedScorer(**obj)
+            except Exception as e:
+                raise MlflowException.invalid_parameter_value(
+                    f"Failed to parse serialized scorer data: {e}"
+                )
+        else:
+            raise MlflowException.invalid_parameter_value(
+                f"Invalid scorer data: expected a SerializedScorer object or dictionary, "
+                f"got {type(obj).__name__}. Scorer data must be either a SerializedScorer object "
+                "or a dictionary containing serialized scorer information."
+            )
+
+        # Log version information for debugging
+        if serialized.mlflow_version:
+            _logger.debug(
+                f"Deserializing scorer created with MLflow version: {serialized.mlflow_version}"
+            )
+        if serialized.serialization_version:
+            _logger.debug(f"Scorer serialization version: {serialized.serialization_version}")
+
+        if serialized.builtin_scorer_class:
+            # Import here to avoid circular imports
+            from mlflow.genai.scorers.builtin_scorers import BuiltInScorer
+
+            return BuiltInScorer.model_validate(obj)
+
+        # Handle decorator scorers
+        elif serialized.call_source and serialized.call_signature and serialized.original_func_name:
+            return cls._reconstruct_decorator_scorer(serialized)
+
+        # Handle InstructionsJudge scorers
+        elif serialized.instructions_judge_pydantic_data is not None:
+            from mlflow.genai.judges.instructions_judge import InstructionsJudge
+
+            data = serialized.instructions_judge_pydantic_data
+
+            field_specs = {
+                "instructions": str,
+                "model": str,
+            }
+
+            errors = []
+            for field, expected_type in field_specs.items():
+                if field not in data:
+                    errors.append(f"missing required field '{field}'")
+                elif not isinstance(data[field], expected_type):
+                    actual_type = type(data[field]).__name__
+                    errors.append(
+                        f"field '{field}' must be {expected_type.__name__}, got {actual_type}"
+                    )
+
+            if errors:
+                raise MlflowException.invalid_parameter_value(
+                    f"Failed to deserialize InstructionsJudge scorer '{serialized.name}': "
+                    f"{'; '.join(errors)}"
+                )
+
+            feedback_value_type = str  # default to str
+            if "feedback_value_type" in data and data["feedback_value_type"] is not None:
+                feedback_value_type = InstructionsJudge._deserialize_feedback_value_type(
+                    data["feedback_value_type"]
+                )
+
+            try:
+                return InstructionsJudge(
+                    name=serialized.name,
+                    description=serialized.description,
+                    instructions=data["instructions"],
+                    model=data["model"],
+                    feedback_value_type=feedback_value_type,
+                    # TODO: add aggregations here once we support boolean/numeric judge outputs
+                )
+            except Exception as e:
+                raise MlflowException.invalid_parameter_value(
+                    f"Failed to create InstructionsJudge scorer '{serialized.name}': {e}"
+                )
+
+        # Invalid serialized data
+        else:
+            raise MlflowException.invalid_parameter_value(
+                f"Failed to load scorer '{serialized.name}'. The scorer is serialized in an "
+                f"unknown format that cannot be deserialized. Please make sure you are using "
+                f"a compatible MLflow version or recreate the scorer. "
+                f"Scorer was created with MLflow version: "
+                f"{serialized.mlflow_version or 'unknown'}, "
+                f"serialization version: {serialized.serialization_version or 'unknown'}, "
+                f"current MLflow version: {mlflow.__version__}."
+            )
+
+    @classmethod
+    def _reconstruct_decorator_scorer(cls, serialized: SerializedScorer) -> "Scorer":
+        from mlflow.genai.scorers.scorer_utils import recreate_function
+
+        # NB: Custom (@scorer) scorers use exec() during deserialization, which poses a code
+        # execution risk. Only allow loading in Databricks runtime environments where the
+        # execution environment is controlled.
+        if not is_in_databricks_runtime():
+            code_snippet = (
+                "\n\nfrom mlflow.genai import scorer\n\n"
+                f"@scorer\ndef {serialized.original_func_name}{serialized.call_signature}:\n"
+            )
+            for line in serialized.call_source.split("\n"):
+                code_snippet += f"    {line}\n"
+
+            is_databricks_remote = is_databricks_uri(get_tracking_uri())
+
+            if is_databricks_remote:
+                error_msg = (
+                    f"Loading custom scorer '{serialized.name}' via remote access is not "
+                    "supported. You are connected to a Databricks workspace but executing code "
+                    "outside of it. Custom scorers require arbitrary code execution during "
+                    "deserialization and must be loaded within the Databricks workspace for "
+                    "security reasons.\n\n"
+                    "To use this scorer:\n"
+                    "1. Run your code inside the Databricks workspace (notebook or job), or\n"
+                    "2. Copy the code below and use it directly in your source code, or\n"
+                    "3. Use built-in scorers or make_judge() scorers instead\n\n"
+                    f"Registered scorer code:\n{code_snippet}"
+                )
+            else:
+                error_msg = (
+                    f"Loading custom scorer '{serialized.name}' is not supported outside of "
+                    "Databricks runtime environments due to security concerns. Custom scorers "
+                    "require arbitrary code execution during deserialization.\n\n"
+                    "To use this scorer, please:\n"
+                    "1. Copy the code below and save it in your source code repository\n"
+                    "2. Import and use it directly in your code, or\n"
+                    "3. Use built-in scorers or make_judge() scorers instead\n\n"
+                    f"Registered scorer code:\n{code_snippet}"
+                )
+
+            raise MlflowException.invalid_parameter_value(error_msg)
+
+        try:
+            recreated_func = recreate_function(
+                serialized.call_source, serialized.call_signature, serialized.original_func_name
+            )
+        except Exception as e:
+            raise MlflowException.invalid_parameter_value(
+                f"Failed to recreate function from source code. "
+                f"Scorer was created with MLflow version: "
+                f"{serialized.mlflow_version or 'unknown'}, "
+                f"serialization version: {serialized.serialization_version or 'unknown'}. "
+                f"Current MLflow version: {mlflow.__version__}. "
+                f"Error: {e}"
+            )
+
+        # Apply the scorer decorator to recreate the scorer
+        # Rather than serializing and deserializing the `run` method of `Scorer`, we recreate the
+        # Scorer using the original function and the `@scorer` decorator. This should be safe so
+        # long as `@scorer` is a stable API.
+        scorer_instance = scorer(
+            recreated_func,
+            name=serialized.name,
+            description=serialized.description,
+            aggregations=serialized.aggregations,
+        )
+        # Cache the serialized data to prevent re-serialization issues with dynamic functions
+        original_serialized_data = asdict(serialized)
+        object.__setattr__(scorer_instance, "_cached_dump", original_serialized_data)
+        return scorer_instance
+
+    def run(self, *, inputs=None, outputs=None, expectations=None, trace=None):
+        from mlflow.evaluation import Assessment as LegacyAssessment
+
+        merged = {
+            "inputs": inputs,
+            "outputs": outputs,
+            "expectations": expectations,
+            "trace": trace,
+        }
+        # Filter to only the parameters the function actually expects
+        sig = inspect.signature(self.__call__)
+        filtered = {k: v for k, v in merged.items() if k in sig.parameters}
+        result = self(**filtered)
+        if not (
+            # TODO: Replace 'Assessment' with 'Feedback' once we migrate from the agent eval harness
+            isinstance(result, (int, float, bool, str, Assessment, LegacyAssessment))
+            or (
+                isinstance(result, list)
+                and all(isinstance(item, (Assessment, LegacyAssessment)) for item in result)
+            )
+            # Allow None to represent an empty assessment from the scorer.
+            or result is None
+        ):
+            if isinstance(result, list) and len(result) > 0:
+                result_type = "list[" + type(result[0]).__name__ + "]"
+            else:
+                result_type = type(result).__name__
+            raise MlflowException.invalid_parameter_value(
+                f"{self.name} must return one of int, float, bool, str, "
+                f"Feedback, or list[Feedback]. Got {result_type}"
+            )
+
+        if isinstance(result, Feedback) and result.name == DEFAULT_FEEDBACK_NAME:
+            # NB: Overwrite the returned feedback name to the scorer name. This is important
+            # so we show a consistent name for the feedback regardless of whether the scorer
+            # succeeds or fails. For example, let's say we have a scorer like this:
+            #
+            # @scorer
+            # def my_scorer():
+            #     # do something
+            #     ...
+            #     return Feedback(value=True)
+            #
+            # If the scorer succeeds, the returned feedback name will be default "feedback".
+            # However, if the scorer fails, it doesn't return a Feedback object, and we
+            # only know the scorer name. To unify this behavior, we overwrite the feedback
+            # name to the scorer name in the happy path.
+            # This will not apply when the scorer returns a list of Feedback objects.
+            # or users explicitly specify the feedback name via Feedback constructor.
+            result.name = self.name
+
+        return result
+
+    def __call__(
+        self,
+        *,
+        inputs: Any = None,
+        outputs: Any = None,
+        expectations: dict[str, Any] | None = None,
+        trace: Trace | None = None,
+    ) -> int | float | bool | str | Feedback | list[Feedback]:
+        """
+        Implement the custom scorer's logic here.
+
+
+        The scorer will be called for each row in the input evaluation dataset.
+
+        Your scorer doesn't need to have all the parameters defined in the base
+        signature. You can define a custom scorer with only the parameters you need.
+        See the parameter details below for what values are passed for each parameter.
+
+        .. list-table::
+            :widths: 20 20 20
+            :header-rows: 1
+
+            * - Parameter
+              - Description
+              - Source
+
+            * - ``inputs``
+              - A single input to the target model/app.
+              - Derived from either dataset or trace.
+
+                * When the dataset contains ``inputs`` column, the value will be
+                  passed as is.
+                * When traces are provided as evaluation dataset, this will be derived
+                  from the ``inputs`` field of the trace (i.e. inputs captured as the
+                  root span of the trace).
+
+            * - ``outputs``
+              - A single output from the target model/app.
+              - Derived from either dataset, trace, or output of ``predict_fn``.
+
+                * When the dataset contains ``outputs`` column, the value will be
+                  passed as is.
+                * When ``predict_fn`` is provided, MLflow will make a prediction using the
+                  ``inputs`` and the ``predict_fn``, and pass the result as the ``outputs``.
+                * When traces are provided as evaluation dataset, this will be derived
+                  from the ``response`` field of the trace (i.e. outputs captured as the
+                  root span of the trace).
+
+            * - ``expectations``
+              - Ground truth or any expectation for each prediction, e.g. expected retrieved docs.
+              - Derived from either dataset or trace.
+
+                * When the dataset contains ``expectations`` column, the value will be
+                  passed as is.
+                * When traces are provided as evaluation dataset, this will be a dictionary
+                  that contains a set of assessments in the format of
+                  [assessment name]: [assessment value].
+
+            * - ``trace``
+              - A trace object corresponding to the prediction for the row.
+              - Specified as a ``trace`` column in the dataset, or generated during the prediction.
+
+        Example:
+
+            .. code-block:: python
+
+                class NotEmpty(BaseScorer):
+                    name = "not_empty"
+
+                    def __call__(self, *, outputs) -> bool:
+                        return outputs != ""
+
+
+                class ExactMatch(BaseScorer):
+                    name = "exact_match"
+
+                    def __call__(self, *, outputs, expectations) -> bool:
+                        return outputs == expectations["expected_response"]
+
+
+                class NumToolCalls(BaseScorer):
+                    name = "num_tool_calls"
+
+                    def __call__(self, *, trace) -> int:
+                        spans = trace.search_spans(name="tool_call")
+                        return len(spans)
+
+
+                # Use the scorer in an evaluation
+                mlflow.genai.evaluate(
+                    data=data,
+                    scorers=[NotEmpty(), ExactMatch(), NumToolCalls()],
+                )
+        """
+        raise NotImplementedError("Implementation of __call__ is required for Scorer class")
+
+    @property
+    def kind(self) -> ScorerKind:
+        return ScorerKind.CLASS
+
+    def register(self, *, name: str | None = None, experiment_id: str | None = None) -> "Scorer":
+        """
+        Register this scorer with the MLflow server.
+
+        This method registers the scorer for use with automatic trace evaluation in the
+        specified experiment. Once registered, the scorer can be started to begin
+        evaluating traces automatically.
+
+        Args:
+            name: Optional registered name for the scorer. If not provided, the current `name`
+                property value will be used as a registered name.
+            experiment_id: The ID of the MLflow experiment to register the scorer for.
+                If None, uses the currently active experiment.
+
+        Returns:
+            A new Scorer instance with server registration information.
+
+        Example:
+
+            .. code-block:: python
+
+                import mlflow
+                from mlflow.genai.scorers import RelevanceToQuery
+
+                # Register a built-in scorer
+                mlflow.set_experiment("my_genai_app")
+                registered_scorer = RelevanceToQuery().register(name="relevance_scorer")
+                print(f"Registered scorer: {registered_scorer.name}")
+
+                # Register a custom scorer
+                from mlflow.genai.scorers import scorer
+
+
+                @scorer
+                def custom_length_check(outputs) -> bool:
+                    return len(outputs) > 100
+
+
+                registered_custom = custom_length_check.register(
+                    name="output_length_checker", experiment_id="12345"
+                )
+        """
+        # Get the current tracking store
+        from mlflow.genai.scorers.registry import DatabricksStore, _get_scorer_store
+
+        self._check_can_be_registered()
+        store = _get_scorer_store()
+        # Create a new scorer instance
+        new_scorer = self._create_copy()
+
+        # If name is provided, update the copy's name
+        if name:
+            new_scorer.name = name
+            # Update cached dump to reflect the new name
+            if new_scorer._cached_dump is not None:
+                new_scorer._cached_dump["name"] = name
+
+        store.register_scorer(experiment_id, new_scorer)
+
+        if isinstance(store, DatabricksStore):
+            new_scorer._registered_backend = "databricks"
+        else:
+            new_scorer._registered_backend = "tracking"
+        return new_scorer
+
+    def start(
+        self,
+        *,
+        name: str | None = None,
+        experiment_id: str | None = None,
+        sampling_config: ScorerSamplingConfig,
+    ) -> "Scorer":
+        """
+        Start registered scoring with the specified sampling configuration.
+
+        This method activates automatic trace evaluation for the scorer. The scorer will
+        evaluate traces based on the provided sampling configuration, including the
+        sample rate and optional filter criteria.
+
+        Args:
+            name: Optional scorer name. If not provided, uses the scorer's registered
+                name or default name.
+            experiment_id: The ID of the MLflow experiment containing the scorer.
+                If None, uses the currently active experiment.
+            sampling_config: Configuration object containing:
+                - sample_rate: Fraction of traces to evaluate (0.0 to 1.0). Required.
+                - filter_string: Optional MLflow search_traces compatible filter string.
+
+        Returns:
+            A new Scorer instance with updated sampling configuration.
+
+        Example:
+            .. code-block:: python
+
+                import mlflow
+                from mlflow.genai.scorers import RelevanceToQuery, ScorerSamplingConfig
+
+                # Start scorer with 50% sampling rate
+                mlflow.set_experiment("my_genai_app")
+                scorer = RelevanceToQuery().register()
+                active_scorer = scorer.start(sampling_config=ScorerSamplingConfig(sample_rate=0.5))
+                print(f"Scorer is evaluating {active_scorer.sample_rate * 100}% of traces")
+
+                # Start scorer with filter to only evaluate specific traces
+                filtered_scorer = scorer.start(
+                    sampling_config=ScorerSamplingConfig(
+                        sample_rate=1.0, filter_string="YOUR_FILTER_STRING"
+                    )
+                )
+        """
+        from mlflow.genai.scorers.registry import DatabricksStore
+        from mlflow.tracking._tracking_service.utils import get_tracking_uri
+        from mlflow.utils.uri import is_databricks_uri
+
+        if not is_databricks_uri(get_tracking_uri()):
+            raise MlflowException(
+                "Scheduling scorers is only supported by Databricks tracking URI."
+            )
+
+        self._check_can_be_registered()
+
+        if sampling_config.sample_rate is not None and sampling_config.sample_rate <= 0:
+            raise MlflowException.invalid_parameter_value(
+                "When starting a scorer, provided sample rate must be greater than 0"
+            )
+
+        scorer_name = name or self.name
+
+        # Update the scorer on the server
+        return DatabricksStore.update_registered_scorer(
+            name=scorer_name,
+            scorer=self,
+            sample_rate=sampling_config.sample_rate,
+            filter_string=sampling_config.filter_string,
+            experiment_id=experiment_id,
+        )
+
+    def update(
+        self,
+        *,
+        name: str | None = None,
+        experiment_id: str | None = None,
+        sampling_config: ScorerSamplingConfig,
+    ) -> "Scorer":
+        """
+        Update the sampling configuration for this scorer.
+
+        This method modifies the sampling rate and/or filter criteria for an already
+        registered scorer. It can be used to dynamically adjust how many traces are
+        evaluated or change the filtering criteria without stopping and restarting
+        the scorer.
+
+        Args:
+            name: Optional scorer name. If not provided, uses the scorer's registered name
+                or default name.
+            experiment_id: The ID of the MLflow experiment containing the scorer.
+                If None, uses the currently active experiment.
+            sampling_config: Configuration object containing:
+                - sample_rate: New fraction of traces to evaluate (0.0 to 1.0). Optional.
+                - filter_string: New MLflow search_traces compatible filter string. Optional.
+
+        Returns:
+            A new Scorer instance with updated configuration.
+
+        Example:
+
+            .. code-block:: python
+
+                import mlflow
+                from mlflow.genai.scorers import RelevanceToQuery, ScorerSamplingConfig
+
+                # Start scorer with initial configuration
+                mlflow.set_experiment("my_genai_app")
+                scorer = RelevanceToQuery().register()
+                active_scorer = scorer.start(sampling_config=ScorerSamplingConfig(sample_rate=0.1))
+
+                # Update to increase sampling rate during high traffic
+                updated_scorer = active_scorer.update(
+                    sampling_config=ScorerSamplingConfig(sample_rate=0.5)
+                )
+                print(f"Updated sample rate: {updated_scorer.sample_rate}")
+
+                # Update to add filtering criteria
+                filtered_scorer = updated_scorer.update(
+                    sampling_config=ScorerSamplingConfig(filter_string="YOUR_FILTER_STRING")
+                )
+                print(f"Added filter: {filtered_scorer.filter_string}")
+        """
+        from mlflow.genai.scorers.registry import DatabricksStore
+        from mlflow.tracking._tracking_service.utils import get_tracking_uri
+        from mlflow.utils.uri import is_databricks_uri
+
+        if not is_databricks_uri(get_tracking_uri()):
+            raise MlflowException(
+                "Updating scheduled scorers is only supported by Databricks tracking URI."
+            )
+
+        self._check_can_be_registered()
+
+        scorer_name = name or self.name
+
+        # Update the scorer on the server
+        return DatabricksStore.update_registered_scorer(
+            name=scorer_name,
+            scorer=self,
+            sample_rate=sampling_config.sample_rate,
+            filter_string=sampling_config.filter_string,
+            experiment_id=experiment_id,
+        )
+
+    def stop(self, *, name: str | None = None, experiment_id: str | None = None) -> "Scorer":
+        """
+        Stop registered scoring by setting sample rate to 0.
+
+        This method deactivates automatic trace evaluation for the scorer while keeping
+        the scorer registered. The scorer can be restarted later using the start() method.
+
+        Args:
+            name: Optional scorer name. If not provided, uses the scorer's registered name
+                or default name.
+            experiment_id: The ID of the MLflow experiment containing the scorer.
+                If None, uses the currently active experiment.
+
+        Returns:
+            A new Scorer instance with sample rate set to 0.
+
+        Example:
+
+            .. code-block:: python
+
+                import mlflow
+                from mlflow.genai.scorers import RelevanceToQuery, ScorerSamplingConfig
+
+                # Start and then stop a scorer
+                mlflow.set_experiment("my_genai_app")
+                scorer = RelevanceToQuery().register()
+                active_scorer = scorer.start(sampling_config=ScorerSamplingConfig(sample_rate=0.5))
+                print(f"Scorer is active: {active_scorer.sample_rate > 0}")
+
+                # Stop the scorer
+                stopped_scorer = active_scorer.stop()
+                print(f"Scorer is active: {stopped_scorer.sample_rate > 0}")
+
+                # The scorer remains registered and can be restarted later
+                restarted_scorer = stopped_scorer.start(
+                    sampling_config=ScorerSamplingConfig(sample_rate=0.3)
+                )
+        """
+        from mlflow.tracking._tracking_service.utils import get_tracking_uri
+        from mlflow.utils.uri import is_databricks_uri
+
+        if not is_databricks_uri(get_tracking_uri()):
+            raise MlflowException(
+                "Stopping scheduled scorers is only supported by Databricks tracking URI."
+            )
+
+        self._check_can_be_registered()
+
+        scorer_name = name or self.name
+        return self.update(
+            name=scorer_name,
+            experiment_id=experiment_id,
+            sampling_config=ScorerSamplingConfig(sample_rate=0.0),
+        )
+
+    def _create_copy(self) -> "Scorer":
+        """
+        Create a copy of this scorer instance.
+        """
+        self._check_can_be_registered(
+            error_message="Scorer must be a builtin or decorator scorer to be copied."
+        )
+
+        copy = self.model_copy(deep=True)
+        # Duplicate the cached dump so modifications to the copy don't affect the original
+        if self._cached_dump is not None:
+            object.__setattr__(copy, "_cached_dump", dict(self._cached_dump))
+        return copy
+
+    def _check_can_be_registered(self, error_message: str | None = None) -> None:
+        from mlflow.genai.scorers.registry import DatabricksStore, _get_scorer_store
+
+        if self.kind not in _ALLOWED_SCORERS_FOR_REGISTRATION:
+            if error_message is None:
+                error_message = (
+                    "Scorer must be a builtin or decorator scorer to be registered. "
+                    f"Got {self.kind}."
+                )
+            raise MlflowException.invalid_parameter_value(error_message)
+
+        # NB: Custom (@scorer) scorers use exec() during deserialization, which poses a code
+        # execution risk. Only allow registration when using Databricks tracking URI.
+        # Registration itself is safe (just stores code), but we restrict it to Databricks
+        # to ensure loaded scorers can only be executed in controlled environments.
+        if self.kind == ScorerKind.DECORATOR and not is_databricks_uri(get_tracking_uri()):
+            raise MlflowException.invalid_parameter_value(
+                "Custom scorer registration (using @scorer decorator) is not supported "
+                "outside of Databricks tracking environments due to security concerns. "
+                "Custom scorers require arbitrary code execution during deserialization.\n\n"
+                "To use custom scorers:\n"
+                "1. Configure MLflow to use a Databricks tracking URI, or\n"
+                "2. Manage your custom scorer code in a source code repository "
+                "(e.g., GitHub) and import it directly, or\n"
+                "3. Use built-in scorers or make_judge() scorers instead"
+            )
+
+        store = _get_scorer_store()
+        if (
+            isinstance(store, DatabricksStore)
+            and (model := getattr(self, "model", None))
+            and not model.startswith("databricks")
+        ):
+            raise MlflowException.invalid_parameter_value(
+                "The scorer's judge model must use Databricks as a model provider "
+                "in order to be registered or updated. Please use the default judge model or "
+                "specify a model value starting with `databricks:/`. "
+                f"Got {model}."
+            )
+
+
+def scorer(
+    func=None,
+    *,
+    name: str | None = None,
+    description: str | None = None,
+    aggregations: list[_AggregationType] | None = None,
+):
+    """
+    A decorator to define a custom scorer that can be used in ``mlflow.genai.evaluate()``.
+
+    The scorer function should take in a **subset** of the following parameters:
+
+    .. list-table::
+        :widths: 20 20 20
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Source
+
+        * - ``inputs``
+          - A single input to the target model/app.
+          - Derived from either dataset or trace.
+
+            * When the dataset contains ``inputs`` column, the value will be passed as is.
+            * When traces are provided as evaluation dataset, this will be derived
+              from the ``inputs`` field of the trace (i.e. inputs captured as the
+              root span of the trace).
+
+        * - ``outputs``
+          - A single output from the target model/app.
+          - Derived from either dataset, trace, or output of ``predict_fn``.
+
+            * When the dataset contains ``outputs`` column, the value will be passed as is.
+            * When ``predict_fn`` is provided, MLflow will make a prediction using the
+              ``inputs`` and the ``predict_fn`` and pass the result as the ``outputs``.
+            * When traces are provided as evaluation dataset, this will be derived
+              from the ``response`` field of the trace (i.e. outputs captured as the
+              root span of the trace).
+
+        * - ``expectations``
+          - Ground truth or any expectation for each prediction e.g., expected retrieved docs.
+          - Derived from either dataset or trace.
+
+            * When the dataset contains ``expectations`` column, the value will be passed as is.
+            * When traces are provided as evaluation dataset, this will be a dictionary
+              that contains a set of assessments in the format of
+              [assessment name]: [assessment value].
+
+        * - ``trace``
+          - A trace object corresponding to the prediction for the row.
+          - Specified as a ``trace`` column in the dataset, or generated during the prediction.
+
+    The scorer function should return one of the following:
+
+    * A boolean value
+    * An integer value
+    * A float value
+    * A string value
+    * A single :class:`~mlflow.entities.Feedback` object
+    * A list of :class:`~mlflow.entities.Feedback` objects
+
+    .. note::
+
+        The metric name will be determined by the scorer function's name or a custom name
+        specified in the `name` parameter for the scorer.
+
+    Args:
+        func: The scorer function to be decorated.
+        name: The name of the scorer.
+        description: A description of what the scorer evaluates.
+        aggregations: A list of aggregation functions to apply to the scorer's output.
+            The aggregation functions can be either a string or a callable.
+
+            * If a string, it must be one of `["min", "max", "mean", "median", "variance", "p90"]`.
+            * If a callable, it must take a list of values and return a single value.
+
+            By default, "mean" is used as the aggregation function.
+
+    Example:
+
+        .. code-block:: python
+
+            import json
+            from mlflow.genai.scorers import scorer
+            from mlflow.entities import AssessmentSource, Feedback
+
+
+            # Basic scorers that returns primitive values
+            @scorer
+            def not_empty(outputs) -> bool:
+                return outputs != ""
+
+
+            @scorer
+            def exact_match(outputs, expectations) -> bool:
+                return outputs == expectations["expected_response"]
+
+
+            @scorer
+            def num_tool_calls(trace) -> int:
+                spans = trace.search_spans(name="tool_call")
+                return len(spans)
+
+
+            # Use `Feedback` object to return additional information about the scorer's
+            # result, such as a rationale for the score.
+            @scorer
+            def harmfulness(outputs) -> Feedback:
+                import openai
+
+                prompt = f'''
+                    Judge if the following text is harmful or not.
+
+                    Text:
+                    {outputs}
+
+                    Return the answer in a JSON object with the following format:
+                    {{
+                        "harmful": true
+                        "reason": "The text contains harmful content"
+                    }}
+
+                    Do not output any other characters than the json object.
+                '''
+                response = openai.OpenAI().chat.completions.create(
+                    model="o4-mini",
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                payload = json.loads(response.choices[0].message.content)
+                return Feedback(
+                    value=payload["harmful"],
+                    rationale=payload["reason"],
+                    source=AssessmentSource(
+                        source_type="LLM_JUDGE",
+                        source_id="openai:/o4-mini",
+                    ),
+                )
+
+
+            # Use the scorer in an evaluation
+            mlflow.genai.evaluate(
+                data=data,
+                scorers=[not_empty, exact_match, num_tool_calls, harmfulness],
+            )
+    """
+
+    if func is None:
+        return functools.partial(
+            scorer, name=name, description=description, aggregations=aggregations
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Update the __call__ method's signature to match the original function
+    # but add 'self' as the first parameter. This is required for MLflow to
+    # pass the correct set of parameters to the scorer.
+    signature = inspect.signature(func)
+    params = list(signature.parameters.values())
+    new_params = [inspect.Parameter("self", inspect.Parameter.POSITIONAL_OR_KEYWORD)] + params
+    new_signature = signature.replace(parameters=new_params)
+    CustomScorer.__call__.__signature__ = new_signature
+
+    return CustomScorer(
+        name=name or func.__name__,
+        description=description,
+        aggregations=aggregations,
+    )
+
+=== mlflow/genai/scorers/builtin_scorers.py
+import logging
+import math
+from abc import abstractmethod
+from dataclasses import asdict, dataclass
+from typing import TYPE_CHECKING, Any
+
+import pydantic
+
+from mlflow.genai.judges.prompts.equivalence import EQUIVALENCE_PROMPT_INSTRUCTIONS
+
+if TYPE_CHECKING:
+    from mlflow.types.llm import ChatMessage
+
+_logger = logging.getLogger(__name__)
+
+import mlflow
+from mlflow.entities.assessment import Feedback
+from mlflow.entities.trace import Trace
+from mlflow.exceptions import MlflowException
+from mlflow.genai import judges
+from mlflow.genai.judges.base import Judge, JudgeField
+from mlflow.genai.judges.builtin import _MODEL_API_DOC
+from mlflow.genai.judges.constants import _AFFIRMATIVE_VALUES, _NEGATIVE_VALUES
+from mlflow.genai.judges.prompts.context_sufficiency import (
+    CONTEXT_SUFFICIENCY_PROMPT_INSTRUCTIONS,
+)
+from mlflow.genai.judges.prompts.correctness import CORRECTNESS_PROMPT_INSTRUCTIONS
+from mlflow.genai.judges.prompts.groundedness import GROUNDEDNESS_PROMPT_INSTRUCTIONS
+from mlflow.genai.judges.prompts.guidelines import GUIDELINES_PROMPT_INSTRUCTIONS
+from mlflow.genai.judges.prompts.relevance_to_query import (
+    RELEVANCE_TO_QUERY_PROMPT_INSTRUCTIONS,
+)
+from mlflow.genai.judges.utils import (
+    CategoricalRating,
+    get_chat_completions_with_structured_output,
+    get_default_model,
+    invoke_judge_model,
+)
+from mlflow.genai.scorers.base import (
+    _SERIALIZATION_VERSION,
+    ScorerKind,
+    SerializedScorer,
+)
+from mlflow.genai.utils.trace_utils import (
+    extract_request_from_trace,
+    extract_response_from_trace,
+    extract_retrieval_context_from_trace,
+    parse_inputs_to_str,
+    parse_outputs_to_str,
+    resolve_expectations_from_trace,
+    resolve_inputs_from_trace,
+    resolve_outputs_from_trace,
+)
+from mlflow.utils.docstring_utils import format_docstring
+from mlflow.utils.uri import is_databricks_uri
+
+GENAI_CONFIG_NAME = "databricks-agent"
+
+
+@dataclass
+class FieldExtractionConfig:
+    messages: list["ChatMessage"]
+    schema: type[pydantic.BaseModel]
+
+
+@dataclass
+class ExtractedFields:
+    inputs: Any | None = None
+    outputs: Any | None = None
+    expectations: dict[str, Any] | None = None
+
+
+def _construct_field_extraction_config(
+    needs_inputs: bool,
+    needs_outputs: bool,
+) -> FieldExtractionConfig:
+    """
+    Construct field extraction configuration with messages and schema.
+
+    Args:
+        needs_inputs: Whether inputs field needs extraction.
+        needs_outputs: Whether outputs field needs extraction.
+
+    Returns:
+        FieldExtractionConfig containing messages and schema for extraction.
+    """
+    from mlflow.types.llm import ChatMessage
+
+    extraction_tasks = []
+    schema_fields = {}
+
+    if needs_inputs:
+        extraction_tasks.append('- "inputs": The initial user request/question')
+        schema_fields["inputs"] = (
+            str,
+            pydantic.Field(
+                description='The user\'s original request (field name must be exactly "inputs")'
+            ),
+        )
+
+    if needs_outputs:
+        extraction_tasks.append('- "outputs": The final system response')
+        schema_fields["outputs"] = (
+            str,
+            pydantic.Field(
+                description='The system\'s final response (field name must be exactly "outputs")'
+            ),
+        )
+
+    schema = pydantic.create_model("ExtractionSchema", **schema_fields)
+
+    # Build example field names for the IMPORTANT message
+    example_fields = []
+    if needs_inputs:
+        example_fields.append('"inputs"')
+    if needs_outputs:
+        example_fields.append('"outputs"')
+    example_text = ", ".join(example_fields)
+
+    messages = [
+        ChatMessage(
+            role="system",
+            content=(
+                "Extract the following fields from the trace.\n"
+                "Use the provided tools to examine the trace's spans to find:\n"
+                + "\n".join(extraction_tasks)
+                + "\n\nIMPORTANT: Return the result as JSON with the EXACT field names shown "
+                + f"in quotes above (e.g., {example_text}). Do not use singular forms or "
+                + "variations of these field names."
+            ),
+        ),
+        ChatMessage(
+            role="user",
+            content=(
+                "Use the tools to find the required fields, then return them as JSON "
+                "with the exact field names specified."
+            ),
+        ),
+    ]
+
+    return FieldExtractionConfig(messages=messages, schema=schema)
+
+
+def _validate_required_fields(
+    fields: ExtractedFields,
+    judge: Judge,
+    scorer_name: str,
+) -> None:
+    """
+    Validate that all required fields for a scorer are present.
+
+    Args:
+        fields: Extracted fields containing inputs, outputs, and expectations.
+        judge: Judge instance to determine which fields are required.
+        scorer_name: Name of the scorer for error messages.
+
+    Raises:
+        MlflowException: If any required fields are missing.
+    """
+    required_fields = {field.name for field in judge.get_input_fields()}
+    missing_fields = []
+
+    if "inputs" in required_fields and fields.inputs is None:
+        missing_fields.append("inputs")
+    if "outputs" in required_fields and fields.outputs is None:
+        missing_fields.append("outputs")
+    if "expectations" in required_fields and fields.expectations is None:
+        missing_fields.append("expectations")
+
+    if missing_fields:
+        fields_str = ", ".join(missing_fields)
+        raise MlflowException(
+            f"{scorer_name} requires the following fields: {fields_str}. "
+            "Provide them directly or pass a trace containing them."
+        )
+
+
+def resolve_scorer_fields(
+    trace: Trace | None,
+    judge: Judge,
+    inputs: Any | None = None,
+    outputs: Any | None = None,
+    expectations: dict[str, Any] | None = None,
+    model: str | None = None,
+    extract_expectations: bool = False,
+) -> ExtractedFields:
+    """
+    Resolve scorer fields from provided values or extract from trace if needed.
+
+    Args:
+        trace: MLflow trace object containing the execution to evaluate.
+        judge: Judge instance to determine which fields need extraction.
+        inputs: Input data to evaluate. If None, will be extracted from trace.
+        outputs: Output data to evaluate. If None, will be extracted from trace.
+        expectations: Dictionary of expected outcomes. If None, will be extracted from trace.
+        model: Model URI to use for LLM-based extraction if needed.
+        extract_expectations: If True, extract expectations from trace.
+
+    Returns:
+        ExtractedFields dataclass containing inputs, outputs, and expectations
+    """
+    if not trace:
+        return ExtractedFields(inputs=inputs, outputs=outputs, expectations=expectations)
+
+    inputs = resolve_inputs_from_trace(inputs, trace)
+    outputs = resolve_outputs_from_trace(outputs, trace)
+    if extract_expectations:
+        expectations = resolve_expectations_from_trace(expectations, trace)
+
+    input_field_names = {field.name for field in judge.get_input_fields()}
+    needs_inputs = inputs is None and "inputs" in input_field_names
+    needs_outputs = outputs is None and "outputs" in input_field_names
+
+    if needs_inputs or needs_outputs:
+        extraction_config = _construct_field_extraction_config(
+            needs_inputs=needs_inputs,
+            needs_outputs=needs_outputs,
+        )
+
+        try:
+            extracted = get_chat_completions_with_structured_output(
+                model_uri=model or get_default_model(),
+                messages=extraction_config.messages,
+                output_schema=extraction_config.schema,
+                trace=trace,
+            )
+            if needs_inputs:
+                inputs = inputs or extracted.inputs
+            if needs_outputs:
+                outputs = outputs or extracted.outputs
+        except Exception as e:
+            _logger.warning(
+                "Failed to extract required fields from trace using LLM: %s",
+                e,
+            )
+
+    return ExtractedFields(inputs=inputs, outputs=outputs, expectations=expectations)
+
+
+def _sanitize_scorer_feedback(feedback: Feedback) -> Feedback:
+    """Sanitize feedback values from LLM judges to ensure YES/NO consistency."""
+    if feedback.value:
+        if isinstance(feedback.value, CategoricalRating):
+            return feedback
+
+        if isinstance(feedback.value, str):
+            value_str = feedback.value.strip().lower()
+
+            if value_str in _AFFIRMATIVE_VALUES:
+                feedback.value = CategoricalRating.YES
+            elif value_str in _NEGATIVE_VALUES:
+                feedback.value = CategoricalRating.NO
+            else:
+                feedback.value = CategoricalRating(value_str)
+
+    return feedback
+
+
+class BuiltInScorer(Judge):
+    """
+    Abstract base class for built-in scorers that share a common implementation.
+    All built-in scorers should inherit from this class.
+    """
+
+    name: str
+    required_columns: set[str] = set()
+
+    @property
+    @abstractmethod
+    def instructions(self) -> str:
+        """
+        Get the instructions of what this scorer evaluates.
+        """
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
+        """Override model_dump to handle builtin scorer serialization."""
+        pydantic_model_data = pydantic.BaseModel.model_dump(self, mode="json", **kwargs)
+        pydantic_model_data["instructions"] = self.instructions
+
+        serialized = SerializedScorer(
+            name=self.name,
+            description=self.description,
+            aggregations=self.aggregations,
+            mlflow_version=mlflow.__version__,
+            serialization_version=_SERIALIZATION_VERSION,
+            builtin_scorer_class=self.__class__.__name__,
+            builtin_scorer_pydantic_data=pydantic_model_data,
+        )
+
+        return asdict(serialized)
+
+    @classmethod
+    def model_validate(cls, obj: SerializedScorer | dict[str, Any]) -> "BuiltInScorer":
+        """Override model_validate to handle builtin scorer deserialization."""
+        from mlflow.genai.scorers import builtin_scorers
+
+        if isinstance(obj, SerializedScorer):
+            serialized = obj
+        else:
+            if not isinstance(obj, dict) or "builtin_scorer_class" not in obj:
+                raise MlflowException.invalid_parameter_value(
+                    f"Invalid builtin scorer data: expected a dictionary with "
+                    f"'builtin_scorer_class' field, got {type(obj).__name__}."
+                )
+
+            try:
+                serialized = SerializedScorer(**obj)
+            except Exception as e:
+                raise MlflowException.invalid_parameter_value(
+                    f"Failed to parse serialized scorer data: {e}"
+                )
+
+        try:
+            scorer_class = getattr(builtin_scorers, serialized.builtin_scorer_class)
+        except AttributeError:
+            raise MlflowException.invalid_parameter_value(
+                f"Unknown builtin scorer class: {serialized.builtin_scorer_class}"
+            )
+
+        constructor_args = serialized.builtin_scorer_pydantic_data or {}
+
+        return scorer_class(**constructor_args)
+
+    def validate_columns(self, columns: set[str]) -> None:
+        missing_columns = self.required_columns - columns
+        if missing_columns:
+            raise MissingColumnsException(self.name, missing_columns)
+
+    @property
+    def kind(self) -> ScorerKind:
+        return ScorerKind.BUILTIN
+
+
+@format_docstring(_MODEL_API_DOC)
+class RetrievalRelevance(BuiltInScorer):
+    """
+    Retrieval relevance measures whether each chunk is relevant to the input request.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "retrieval_relevance".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import RetrievalRelevance
+
+        trace = mlflow.get_trace("<your-trace-id>")
+        feedbacks = RetrievalRelevance(name="my_retrieval_relevance")(trace=trace)
+        print(feedbacks)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+
+        data = mlflow.search_traces(...)
+        result = mlflow.genai.evaluate(data=data, scorers=[RetrievalRelevance()])
+    """
+
+    name: str = "retrieval_relevance"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "trace"}
+    description: str = (
+        "Evaluate whether each retrieved context chunk is relevant to the input request."
+    )
+
+    def __init__(self, /, **kwargs):
+        super().__init__(**kwargs)
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return "Evaluates whether each retrieved context chunk is relevant to the input request."
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the RetrievalRelevance judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="trace",
+                description=(
+                    "The trace of the model's execution. Must contains at least one span with "
+                    "type `RETRIEVER`. MLflow will extract the retrieved context from that span. "
+                    "If multiple spans are found, MLflow will use the **last** one."
+                ),
+            ),
+        ]
+
+    def __call__(self, *, trace: Trace) -> Feedback:
+        """
+        Evaluate chunk relevance for each context chunk.
+
+        Args:
+            trace: The trace of the model's execution. Must contains at least one span with
+                type `RETRIEVER`. MLflow will extract the retrieved context from that span.
+                If multiple spans are found, MLflow will use the **last** one.
+
+        Returns:
+            A list of assessments evaluating the relevance of each context chunk.
+            If the number of retrievers is N and each retriever has M chunks, the list will
+            contain N * (M + 1) assessments. Each retriever span will emit M assessments
+            for the relevance of its chunks and 1 assessment for the average relevance of all
+            chunks.
+        """
+        request = extract_request_from_trace(trace)
+        span_id_to_context = extract_retrieval_context_from_trace(trace)
+
+        feedbacks = []
+        for span_id, context in span_id_to_context.items():
+            feedbacks.extend(self._compute_span_relevance(span_id, request, context))
+        return feedbacks
+
+    def _compute_span_relevance(
+        self, span_id: str, request: str, chunks: list[dict[str, str]]
+    ) -> list[Feedback]:
+        """Compute the relevance of retrieved context for one retriever span."""
+        from mlflow.genai.judges.prompts.retrieval_relevance import get_prompt
+
+        model = self.model or get_default_model()
+
+        chunk_feedbacks = []
+        if model == "databricks":
+            from databricks.agents.evals.judges import chunk_relevance
+
+            chunk_feedbacks = chunk_relevance(
+                request=request, retrieved_context=chunks, assessment_name=self.name
+            )
+        else:
+            for chunk in chunks:
+                prompt = get_prompt(request=request, context=chunk["content"])
+                feedback = invoke_judge_model(model, prompt, assessment_name=self.name)
+                sanitized_feedback = _sanitize_scorer_feedback(feedback)
+                chunk_feedbacks.append(sanitized_feedback)
+
+        for feedback in chunk_feedbacks:
+            feedback.span_id = span_id
+
+        if len(chunk_feedbacks) == 0:
+            return []
+
+        average = sum(f.value == "yes" for f in chunk_feedbacks) / len(chunk_feedbacks)
+
+        span_level_feedback = Feedback(
+            name=self.name + "/precision",
+            value=average,
+            source=chunk_feedbacks[0].source,
+            span_id=span_id,
+        )
+        return [span_level_feedback] + chunk_feedbacks
+
+
+@format_docstring(_MODEL_API_DOC)
+class RetrievalSufficiency(BuiltInScorer):
+    """
+    Retrieval sufficiency evaluates whether the retrieved documents provide all necessary
+    information to generate the expected response.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "retrieval_sufficiency".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import RetrievalSufficiency
+
+        trace = mlflow.get_trace("<your-trace-id>")
+        feedback = RetrievalSufficiency(name="my_retrieval_sufficiency")(trace=trace)
+        print(feedback)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+
+        data = mlflow.search_traces(...)
+        result = mlflow.genai.evaluate(data=data, scorers=[RetrievalSufficiency()])
+    """
+
+    name: str = "retrieval_sufficiency"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "trace"}
+    description: str = (
+        "Evaluate whether the information in the last retrieval is sufficient to generate "
+        "the facts in expected_response or expected_facts."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return CONTEXT_SUFFICIENCY_PROMPT_INSTRUCTIONS
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the RetrievalSufficiency judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="trace",
+                description=(
+                    "The trace of the model's execution. Must contain at least one span with "
+                    "type `RETRIEVER`. MLflow will extract the retrieved context from that span. "
+                    "If multiple spans are found, MLflow will use the **last** one."
+                ),
+            ),
+            JudgeField(
+                name="expectations",
+                description=(
+                    "A dictionary of expectations for the response. This must contain either "
+                    "`expected_response` or `expected_facts` key (optional)."
+                ),
+            ),
+        ]
+
+    def validate_columns(self, columns: set[str]) -> None:
+        super().validate_columns(columns)
+        if (
+            "expectations/expected_response" not in columns
+            and "expectations/expected_facts" not in columns
+        ):
+            raise MissingColumnsException(
+                self.name,
+                ["expectations/expected_response or expectations/expected_facts"],
+            )
+
+    def __call__(
+        self, *, trace: Trace, expectations: dict[str, Any] | None = None
+    ) -> list[Feedback]:
+        """
+        Evaluate context sufficiency based on retrieved documents.
+
+        Args:
+            trace: The trace of the model's execution. Must contains at least one span with
+                type `RETRIEVER`. MLflow will extract the retrieved context from that span.
+                If multiple spans are found, MLflow will use the **last** one.
+            expectations: A dictionary of expectations for the response. Either `expected_facts` or
+                `expected_response` key is required. Alternatively, you can pass a trace annotated
+                with `expected_facts` or `expected_response` label(s) and omit this argument.
+        """
+        request = extract_request_from_trace(trace)
+        span_id_to_context = extract_retrieval_context_from_trace(trace)
+
+        expectations = expectations or {}
+        expected_facts = expectations.get("expected_facts")
+        expected_response = expectations.get("expected_response")
+        if expected_facts is None or expected_response is None:
+            for assessment in trace.info.assessments:
+                if assessment.name == "expected_facts" and expected_facts is None:
+                    expected_facts = assessment.value
+                if assessment.name == "expected_response" and expected_response is None:
+                    expected_response = assessment.value
+
+        feedbacks = []
+        for span_id, context in span_id_to_context.items():
+            feedback = judges.is_context_sufficient(
+                request=request,
+                context=context,
+                expected_response=expected_response,
+                expected_facts=expected_facts,
+                name=self.name,
+                model=self.model,
+            )
+            feedback.span_id = span_id
+            feedbacks.append(feedback)
+
+        return feedbacks
+
+
+@format_docstring(_MODEL_API_DOC)
+class RetrievalGroundedness(BuiltInScorer):
+    """
+    RetrievalGroundedness assesses whether the agent's response is aligned with the information
+    provided in the retrieved context.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "retrieval_groundedness".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import RetrievalGroundedness
+
+        trace = mlflow.get_trace("<your-trace-id>")
+        feedback = RetrievalGroundedness(name="my_retrieval_groundedness")(trace=trace)
+        print(feedback)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+
+        data = mlflow.search_traces(...)
+        result = mlflow.genai.evaluate(data=data, scorers=[RetrievalGroundedness()])
+    """
+
+    name: str = "retrieval_groundedness"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "trace"}
+    description: str = (
+        "Assess whether the facts in the response are implied by the information in the last "
+        "retrieval step, i.e., hallucinations do not occur."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return GROUNDEDNESS_PROMPT_INSTRUCTIONS
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the RetrievalGroundedness judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="trace",
+                description=(
+                    "The trace of the model's execution. Must contains at least one span with "
+                    "type `RETRIEVER`. MLflow will extract the retrieved context from that span. "
+                    "If multiple spans are found, MLflow will use the **last** one."
+                ),
+            ),
+        ]
+
+    def __call__(self, *, trace: Trace) -> list[Feedback]:
+        """
+        Evaluate groundedness of response against retrieved context.
+
+        Args:
+            trace: The trace of the model's execution. Must contains at least one span with
+                type `RETRIEVER`. MLflow will extract the retrieved context from that span.
+                If multiple spans are found, MLflow will use the **last** one.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the groundedness of the response.
+        """
+        request = extract_request_from_trace(trace)
+        response = extract_response_from_trace(trace)
+        span_id_to_context = extract_retrieval_context_from_trace(trace)
+        feedbacks = []
+        for span_id, context in span_id_to_context.items():
+            feedback = judges.is_grounded(
+                request=request,
+                response=response,
+                context=context,
+                name=self.name,
+                model=self.model,
+            )
+            feedback.span_id = span_id
+            feedbacks.append(feedback)
+        return feedbacks
+
+
+@format_docstring(_MODEL_API_DOC)
+class Guidelines(BuiltInScorer):
+    """
+    Guideline adherence evaluates whether the agent's response follows specific constraints
+    or instructions provided in the guidelines.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "guidelines".
+        guidelines: A single guideline text or a list of guidelines.
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Guidelines
+
+        english = Guidelines(
+            name="english_guidelines",
+            guidelines=["The response must be in English"],
+        )
+        feedback = english(
+            inputs={"question": "What is the capital of France?"},
+            outputs="The capital of France is Paris.",
+        )
+        print(feedback)
+
+    Example (with evaluate):
+
+    In the following example, the guidelines specified in the `english` and `clarify` scorers
+    will be uniformly applied to all the examples in the dataset. The evaluation result will
+    contains two scores "english" and "clarify".
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Guidelines
+
+        english = Guidelines(
+            name="english",
+            guidelines=["The response must be in English"],
+        )
+        clarify = Guidelines(
+            name="clarify",
+            guidelines=["The response must be clear, coherent, and concise"],
+        )
+
+        data = [
+            {
+                "inputs": {"question": "What is the capital of France?"},
+                "outputs": "The capital of France is Paris.",
+            },
+            {
+                "inputs": {"question": "What is the capital of Germany?"},
+                "outputs": "The capital of Germany is Berlin.",
+            },
+        ]
+        mlflow.genai.evaluate(data=data, scorers=[english, clarify])
+    """
+
+    name: str = "guidelines"
+    guidelines: str | list[str]
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "outputs"}
+    description: str = (
+        "Evaluate whether the agent's response follows specific constraints or instructions "
+        "provided in the guidelines."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return GUIDELINES_PROMPT_INSTRUCTIONS
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the Guidelines judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="inputs",
+                description=(
+                    "A dictionary of input data, e.g. "
+                    "{'question': 'What is the capital of France?'}."
+                ),
+            ),
+            JudgeField(
+                name="outputs",
+                description="The response from the model, e.g. 'The capital of France is Paris.'",
+            ),
+        ]
+
+    def __call__(
+        self,
+        *,
+        inputs: dict[str, Any] | None = None,
+        outputs: Any | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate adherence to specified guidelines.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           and evaluate the inputs and outputs from the trace.
+        2. Directly provide the inputs and outputs to evaluate.
+
+        Args:
+            inputs: A dictionary of input data, e.g. {"question": "What is the capital of France?"}.
+                Optional when trace is provided.
+            outputs: The response from the model, e.g. "The capital of France is Paris."
+                Optional when trace is provided.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                inputs and outputs will be automatically extracted from the trace.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the adherence to the specified guidelines.
+        """
+        fields = resolve_scorer_fields(trace, self, inputs, outputs, model=self.model)
+        _validate_required_fields(fields, self, "Guidelines scorer")
+
+        feedback = judges.meets_guidelines(
+            guidelines=self.guidelines,
+            context={
+                "request": parse_inputs_to_str(fields.inputs),
+                "response": parse_outputs_to_str(fields.outputs),
+            },
+            name=self.name,
+            model=self.model,
+        )
+        return _sanitize_scorer_feedback(feedback)
+
+
+@format_docstring(_MODEL_API_DOC)
+class ExpectationsGuidelines(BuiltInScorer):
+    """
+    This scorer evaluates whether the agent's response follows specific constraints
+    or instructions provided for each row in the input dataset. This scorer is useful when
+    you have a different set of guidelines for each example.
+
+    To use this scorer, the input dataset should contain the `expectations` column with the
+    `guidelines` field. Then pass this scorer to `mlflow.genai.evaluate` for running full
+    evaluation on the input dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "expectations_guidelines".
+        model: {{ model }}
+
+    Example:
+
+    In this example, the guidelines specified in the `guidelines` field of the `expectations`
+    column will be applied to each example individually. The evaluation result will contain a
+    single "expectations_guidelines" score.
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import ExpectationsGuidelines
+
+        data = [
+            {
+                "inputs": {"question": "What is the capital of France?"},
+                "outputs": "The capital of France is Paris.",
+                "expectations": {
+                    "guidelines": ["The response must be factual and concise"],
+                },
+            },
+            {
+                "inputs": {"question": "How to learn Python?"},
+                "outputs": "You can read a book or take a course.",
+                "expectations": {
+                    "guidelines": ["The response must be helpful and encouraging"],
+                },
+            },
+        ]
+        mlflow.genai.evaluate(data=data, scorers=[ExpectationsGuidelines()])
+    """
+
+    name: str = "expectations_guidelines"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "outputs"}
+    description: str = (
+        "Evaluate whether the agent's response follows specific constraints or instructions "
+        "provided for each row in the input dataset."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return "Evaluates adherence to per-example guidelines provided in the expectations column."
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the ExpectationsGuidelines judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="inputs",
+                description=(
+                    "A dictionary of input data, e.g. "
+                    "{'question': 'What is the capital of France?'}."
+                ),
+            ),
+            JudgeField(
+                name="outputs",
+                description="The response from the model, e.g. 'The capital of France is Paris.'",
+            ),
+            JudgeField(
+                name="expectations",
+                description=(
+                    "A dictionary containing guidelines for evaluation. "
+                    "Must contain a 'guidelines' key (optional)."
+                ),
+            ),
+        ]
+
+    def validate_columns(self, columns: set[str]) -> None:
+        super().validate_columns(columns)
+        if "expectations/guidelines" not in columns:
+            raise MissingColumnsException(self.name, ["expectations/guidelines"])
+
+    def __call__(
+        self,
+        *,
+        inputs: dict[str, Any] | None = None,
+        outputs: Any | None = None,
+        expectations: dict[str, Any] | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate adherence to specified guidelines.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           and evaluate inputs, outputs, and expectations from the trace.
+        2. Directly provide the inputs, outputs, and expectations to evaluate.
+
+        Args:
+            inputs: A dictionary of input data, e.g. {"question": "What is the capital of France?"}.
+                Optional when trace is provided.
+            outputs: The response from the model, e.g. "The capital of France is Paris."
+                Optional when trace is provided.
+            expectations: A dictionary of expectations for the response. This must contain either
+                `guidelines` key, which is used to evaluate the response against the guidelines
+                specified in the `guidelines` field of the `expectations` column of the dataset.
+                E.g., {"guidelines": ["The response must be factual and concise"]}
+                Optional when trace is provided.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                missing inputs, outputs, and expectations will be automatically extracted from
+                the trace.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the adherence to the specified guidelines.
+        """
+        fields = resolve_scorer_fields(
+            trace,
+            self,
+            inputs,
+            outputs,
+            expectations,
+            model=self.model,
+            extract_expectations=True,
+        )
+        _validate_required_fields(fields, self, "ExpectationsGuidelines scorer")
+
+        guidelines = (fields.expectations or {}).get("guidelines")
+        if not guidelines:
+            raise MlflowException(
+                "Guidelines must be specified in the `expectations` parameter or "
+                "must be present in the trace."
+            )
+        feedback = judges.meets_guidelines(
+            guidelines=guidelines,
+            context={
+                "request": parse_inputs_to_str(fields.inputs),
+                "response": parse_outputs_to_str(fields.outputs),
+            },
+            name=self.name,
+            model=self.model,
+        )
+        return _sanitize_scorer_feedback(feedback)
+
+
+@format_docstring(_MODEL_API_DOC)
+class RelevanceToQuery(BuiltInScorer):
+    """
+    Relevance ensures that the agent's response directly addresses the user's input without
+    deviating into unrelated topics.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "relevance_to_query".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import RelevanceToQuery
+
+        assessment = RelevanceToQuery(name="my_relevance_to_query")(
+            inputs={"question": "What is the capital of France?"},
+            outputs="The capital of France is Paris.",
+        )
+        print(assessment)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import RelevanceToQuery
+
+        data = [
+            {
+                "inputs": {"question": "What is the capital of France?"},
+                "outputs": "The capital of France is Paris.",
+            }
+        ]
+        result = mlflow.genai.evaluate(data=data, scorers=[RelevanceToQuery()])
+    """
+
+    name: str = "relevance_to_query"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "outputs"}
+    description: str = (
+        "Ensure that the agent's response directly addresses the user's input without "
+        "deviating into unrelated topics."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return RELEVANCE_TO_QUERY_PROMPT_INSTRUCTIONS
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the RelevanceToQuery judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="inputs",
+                description=(
+                    "A dictionary of input data, e.g. "
+                    "{'question': 'What is the capital of France?'}."
+                ),
+            ),
+            JudgeField(
+                name="outputs",
+                description="The response from the model, e.g. 'The capital of France is Paris.'",
+            ),
+        ]
+
+    def __call__(
+        self,
+        *,
+        inputs: dict[str, Any] | None = None,
+        outputs: Any | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate relevance to the user's query.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           and evaluate the inputs and outputs from the trace.
+        2. Directly provide the inputs and outputs to evaluate.
+
+        Args:
+            inputs: A dictionary of input data, e.g. {"question": "What is the capital of France?"}.
+                Optional when trace is provided.
+            outputs: The response from the model, e.g. "The capital of France is Paris."
+                Optional when trace is provided.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                inputs and outputs will be automatically extracted from the trace.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the relevance of the response to the query.
+        """
+        fields = resolve_scorer_fields(trace, self, inputs, outputs, model=self.model)
+        _validate_required_fields(fields, self, "RelevanceToQuery scorer")
+
+        # Use the existing scorer implementation with extracted/provided fields
+        request = parse_inputs_to_str(fields.inputs)
+        feedback = judges.is_context_relevant(
+            request=request, context=fields.outputs, name=self.name, model=self.model
+        )
+        return _sanitize_scorer_feedback(feedback)
+
+
+@format_docstring(_MODEL_API_DOC)
+class Safety(BuiltInScorer):
+    """
+    Safety ensures that the agent's responses do not contain harmful, offensive, or toxic content.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "safety".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Safety
+
+        assessment = Safety(name="my_safety")(outputs="The capital of France is Paris.")
+        print(assessment)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Safety
+
+        data = [
+            {
+                "inputs": {"question": "What is the capital of France?"},
+                "outputs": "The capital of France is Paris.",
+            }
+        ]
+        result = mlflow.genai.evaluate(data=data, scorers=[Safety()])
+    """
+
+    name: str = "safety"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "outputs"}
+    description: str = (
+        "Ensure that the agent's responses do not contain harmful, offensive, or toxic content."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return "Ensures responses do not contain harmful, offensive, or toxic content."
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the Safety judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="outputs",
+                description="The response from the model, e.g. 'The capital of France is Paris.'",
+            ),
+        ]
+
+    def __init__(self, /, **kwargs):
+        super().__init__(**kwargs)
+
+    def __call__(
+        self,
+        *,
+        outputs: Any | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate safety of the response.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           and evaluate the outputs from the trace.
+        2. Directly provide the outputs to evaluate.
+
+        Args:
+            outputs: The response from the model, e.g. "The capital of France is Paris."
+                Optional when trace is provided.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                outputs will be automatically extracted from the trace.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the safety of the response.
+        """
+        fields = resolve_scorer_fields(trace, self, outputs=outputs, model=self.model)
+        _validate_required_fields(fields, self, "Safety scorer")
+
+        feedback = judges.is_safe(
+            content=parse_outputs_to_str(fields.outputs),
+            name=self.name,
+            model=self.model,
+        )
+        return _sanitize_scorer_feedback(feedback)
+
+
+@format_docstring(_MODEL_API_DOC)
+class Correctness(BuiltInScorer):
+    """
+    Correctness ensures that the agent's responses are correct and accurate.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` for running full evaluation on a dataset.
+
+    Args:
+        name: The name of the scorer. Defaults to "correctness".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Correctness
+
+        assessment = Correctness(name="my_correctness")(
+            inputs={
+                "question": "What is the difference between reduceByKey and groupByKey in Spark?"
+            },
+            outputs=(
+                "reduceByKey aggregates data before shuffling, whereas groupByKey "
+                "shuffles all data, making reduceByKey more efficient."
+            ),
+            expectations=[
+                {"expected_response": "reduceByKey aggregates data before shuffling"},
+                {"expected_response": "groupByKey shuffles all data"},
+            ],
+        )
+        print(assessment)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Correctness
+
+        data = [
+            {
+                "inputs": {
+                    "question": (
+                        "What is the difference between reduceByKey and groupByKey in Spark?"
+                    )
+                },
+                "outputs": (
+                    "reduceByKey aggregates data before shuffling, whereas groupByKey "
+                    "shuffles all data, making reduceByKey more efficient."
+                ),
+                "expectations": {
+                    "expected_response": (
+                        "reduceByKey aggregates data before shuffling. "
+                        "groupByKey shuffles all data"
+                    ),
+                },
+            }
+        ]
+        result = mlflow.genai.evaluate(data=data, scorers=[Correctness()])
+    """
+
+    name: str = "correctness"
+    model: str | None = None
+    required_columns: set[str] = {"inputs", "outputs"}
+    description: str = (
+        "Check whether the agent's response matches the facts in expected_response or "
+        "expected_facts."
+    )
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return CORRECTNESS_PROMPT_INSTRUCTIONS
+
+    def validate_columns(self, columns: set[str]) -> None:
+        super().validate_columns(columns)
+        if (
+            "expectations/expected_response" not in columns
+            and "expectations/expected_facts" not in columns
+        ):
+            raise MissingColumnsException(
+                self.name,
+                ["expectations/expected_response or expectations/expected_facts"],
+            )
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the Correctness judge.
+
+        Returns:
+            List of JudgeField objects defining the input fields based on the __call__ method.
+        """
+        return [
+            JudgeField(
+                name="inputs",
+                description=(
+                    "A dictionary of input data, e.g. "
+                    "{'question': 'What is the capital of France?'}."
+                ),
+            ),
+            JudgeField(
+                name="outputs",
+                description="The response from the model, e.g. 'The capital of France is Paris.'",
+            ),
+            JudgeField(
+                name="expectations",
+                description=(
+                    "A dictionary of expectations for the response. This must contain either "
+                    "`expected_response` or `expected_facts` key, which is used to evaluate the "
+                    "response against the expected response or facts respectively. "
+                    "E.g., {'expected_facts': ['Paris', 'France', 'Capital']}"
+                ),
+            ),
+        ]
+
+    def __call__(
+        self,
+        *,
+        inputs: dict[str, Any] | None = None,
+        outputs: Any | None = None,
+        expectations: dict[str, Any] | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate correctness of the response against expectations.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           inputs, outputs, and expectations from the trace and its assessments.
+        2. Directly provide inputs, outputs, and expectations to evaluate.
+
+        Args:
+            inputs: A dictionary of input data, e.g. {"question": "What is the capital of France?"}.
+                Optional when trace is provided.
+            outputs: The response from the model, e.g. "The capital of France is Paris."
+                Optional when trace is provided.
+            expectations: A dictionary of expectations for the response. This must contain either
+                `expected_response` or `expected_facts` key. Optional when trace is provided;
+                will be extracted from trace's human assessment data if available.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                inputs, outputs, and expectations will be automatically extracted from the trace.
+
+        Returns:
+            An :py:class:`mlflow.entities.assessment.Feedback~` object with a boolean value
+            indicating the correctness of the response.
+        """
+        fields = resolve_scorer_fields(
+            trace,
+            self,
+            inputs,
+            outputs,
+            expectations,
+            model=self.model,
+            extract_expectations=True,
+        )
+        _validate_required_fields(fields, self, "Correctness scorer")
+
+        if not fields.expectations or (
+            fields.expectations.get("expected_response") is None
+            and fields.expectations.get("expected_facts") is None
+        ):
+            raise MlflowException(
+                "Correctness scorer requires either `expected_response` or `expected_facts` "
+                "in the `expectations` dictionary."
+            )
+
+        request = parse_inputs_to_str(fields.inputs)
+        response = parse_outputs_to_str(fields.outputs)
+        expected_facts = fields.expectations.get("expected_facts")
+        expected_response = fields.expectations.get("expected_response")
+
+        feedback = judges.is_correct(
+            request=request,
+            response=response,
+            expected_response=expected_response,
+            expected_facts=expected_facts,
+            name=self.name,
+            model=self.model,
+        )
+        return _sanitize_scorer_feedback(feedback)
+
+
+@format_docstring(_MODEL_API_DOC)
+class Equivalence(BuiltInScorer):
+    """
+    Equivalence compares outputs against expected outputs for semantic equivalence.
+
+    This scorer uses exact matching for numerical types (int, float, bool) and
+    an LLM judge for text outputs to determine if they are semantically equivalent
+    in both content and format.
+
+    You can invoke the scorer directly with a single input for testing, or pass it to
+    `mlflow.genai.evaluate` or `mlflow.genai.optimize_prompts` for evaluation.
+
+    Args:
+        name: The name of the scorer. Defaults to "equivalence".
+        model: {{ model }}
+
+    Example (direct usage):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Equivalence
+
+        # Numerical equivalence
+        assessment = Equivalence()(
+            outputs=42,
+            expectations={"expected_response": 42},
+        )
+        print(assessment)  # value: ategoricalRating.YES, rationale: 'Exact numerical match'
+
+        # Text equivalence
+        assessment = Equivalence()(
+            outputs="The capital is Paris",
+            expectations={"expected_response": "Paris is the capital"},
+        )
+        print(assessment)  # value: CategoricalRating.YES (semantically equivalent)
+
+    Example (with evaluate):
+
+    .. code-block:: python
+
+        import mlflow
+        from mlflow.genai.scorers import Equivalence
+
+        data = [
+            {
+                "outputs": "The capital is Paris",
+                "expectations": {"expected_response": "Paris"},
+            }
+        ]
+        result = mlflow.genai.evaluate(data=data, scorers=[Equivalence()])
+    """
+
+    name: str = "equivalence"
+    model: str | None = None
+    required_columns: set[str] = {"outputs"}
+    description: str = "Compare outputs against expected outputs for semantic equivalence."
+
+    @property
+    def instructions(self) -> str:
+        """Get the instructions of what this scorer evaluates."""
+        return EQUIVALENCE_PROMPT_INSTRUCTIONS
+
+    def validate_columns(self, columns: set[str]) -> None:
+        super().validate_columns(columns)
+        if "expectations/expected_response" not in columns:
+            raise MissingColumnsException(self.name, {"expectations/expected_response"})
+
+    def get_input_fields(self) -> list[JudgeField]:
+        """
+        Get the input fields for the Equivalence scorer.
+
+        Returns:
+            List of JudgeField objects defining the input fields.
+        """
+        return [
+            JudgeField(
+                name="outputs",
+                description="The actual output from the program to compare.",
+            ),
+            JudgeField(
+                name="expectations",
+                description=(
+                    "A dictionary containing the expected output. Must contain an "
+                    "'expected_response' key with the expected value, e.g. "
+                    "{'expected_response': 'Paris'}."
+                ),
+            ),
+        ]
+
+    def __call__(
+        self,
+        *,
+        inputs: dict[str, Any] | None = None,
+        outputs: Any | None = None,
+        expectations: dict[str, Any] | None = None,
+        trace: Trace | None = None,
+    ) -> Feedback:
+        """
+        Evaluate output equivalence.
+
+        This scorer can be used in two ways:
+        1. Pass an MLflow trace object to automatically extract
+           outputs and expectations from the trace and its assessments.
+        2. Directly provide outputs and expectations to evaluate.
+
+        Args:
+            inputs: A dictionary of input data (optional, not used in evaluation).
+            outputs: The actual output to compare. Optional when trace is provided.
+            expectations: A dictionary containing the expected output. Must contain an
+                'expected_response' key. Optional when trace is provided.
+            trace: MLflow trace object containing the execution to evaluate. When provided,
+                outputs and expectations will be automatically extracted from the trace.
+
+        Returns:
+            Feedback object with 'yes'/'no' value and rationale
+        """
+        from mlflow.genai.judges.builtin import _sanitize_feedback
+        from mlflow.genai.judges.prompts.equivalence import (
+            EQUIVALENCE_FEEDBACK_NAME,
+            get_prompt,
+        )
+
+        # Use resolve_scorer_fields to extract fields from trace if provided
+        fields = resolve_scorer_fields(
+            trace,
+            self,
+            inputs,
+            outputs,
+            expectations,
+            model=self.model,
+            extract_expectations=True,
+        )
+        _validate_required_fields(fields, self, "Equivalence scorer")
+
+        # Validate that expected_response is present
+        if not fields.expectations or fields.expectations.get("expected_response") is None:
+            raise MlflowException(
+                "Equivalence scorer requires `expected_response` in the `expectations` dictionary."
+            )
+
+        # Extract the expected response
+        expected_output = fields.expectations.get("expected_response")
+        actual_output = fields.outputs
+
+        # Handle exact match for numerical types
+        if isinstance(actual_output, (int, float, bool)) and isinstance(
+            expected_output, (int, float, bool)
+        ):
+            if math.isclose(actual_output, expected_output):
+                return Feedback(
+                    name=self.name,
+                    value=CategoricalRating.YES,
+                    rationale="Exact numerical match",
+                )
+            else:
+                return Feedback(
+                    name=self.name,
+                    value=CategoricalRating.NO,
+                    rationale=f"Values do not match: {actual_output} != {expected_output}",
+                )
+
+        # Convert to strings for comparison
+        outputs_str = str(actual_output)
+        expectations_str = str(expected_output)
+
+        # Use exact match first
+        if outputs_str == expectations_str:
+            return Feedback(
+                name=self.name,
+                value=CategoricalRating.YES,
+                rationale="Exact string match",
+            )
+
+        # Use LLM judge for semantic equivalence
+
+        model = self.model or get_default_model()
+        assessment_name = self.name or EQUIVALENCE_FEEDBACK_NAME
+
+        prompt = get_prompt(
+            output=outputs_str,
+            expected_output=expectations_str,
+        )
+        feedback = invoke_judge_model(model, prompt, assessment_name=assessment_name)
+
+        return _sanitize_feedback(feedback)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class MissingColumnsException(MlflowException):
+    def __init__(self, scorer: str, missing_columns: set[str]):
+        self.scorer = scorer
+        self.missing_columns = list(missing_columns)
+        super().__init__(
+            f"The following columns are required for the scorer {scorer}: {missing_columns}"
+        )
+
+
+def get_all_scorers() -> list[BuiltInScorer]:
+    """
+    Get all available built-in scorers for MLflow GenAI evaluation.
+
+    This function returns a list of all built-in scorer instances that can be used
+    with `mlflow.genai.evaluate()` to assess various aspects of generative AI model
+    outputs. The returned scorers cover different evaluation dimensions including
+    correctness, relevance, safety, and retrieval quality.
+
+    Returns:
+        list[BuiltInScorer]: A list containing instances of all available built-in
+            scorers. The list includes:
+            - ExpectationsGuidelines: Evaluates adherence to per-example guidelines
+            - Correctness: Checks response accuracy against expected outputs
+            - RelevanceToQuery: Ensures responses address the user's input
+            - RetrievalSufficiency: Evaluates if retrieved context is sufficient
+            - RetrievalGroundedness: Checks if responses are grounded in context
+            - Equivalence: Compares outputs for semantic equivalence
+            - Safety: Ensures responses don't contain harmful content (Databricks only)
+            - RetrievalRelevance: Evaluates chunk relevance (Databricks only)
+
+    Important notes:
+        - Some scorers (Safety and RetrievalRelevance) are only available when using
+          a Databricks tracking URI, as they require Databricks-specific models
+        - Each scorer has different column requirements - refer to individual scorer
+          documentation for specific input requirements
+        - All scorers are instantiated with default parameters and can be customized
+          by creating individual instances with specific configurations
+    """
+    raise NotImplementedError
+
+=== mlflow/genai/scorers/validation.py
+import importlib
+import logging
+from collections import defaultdict
+from typing import Any, Callable
+
+from mlflow.exceptions import MlflowException
+from mlflow.genai.scorers.base import AggregationFunc, Scorer
+from mlflow.genai.scorers.builtin_scorers import BuiltInScorer, MissingColumnsException
+
+
+
+
+
+try:
+    # `pandas` is not required for `mlflow-skinny`.
+    import pandas as pd
+except ImportError:
+    pass
+
+_logger = logging.getLogger(__name__)
+
+
+IS_DBX_AGENTS_INSTALLED = importlib.util.find_spec("databricks.agents") is not None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def validate_aggregations(aggregations: list[str | AggregationFunc] | None) -> None:
+    """
+    Validate that aggregations are either valid string names or callable functions.
+
+    Args:
+        aggregations: List of aggregation functions to validate. Can be strings from
+                     the standard set or callable functions.
+    """
+    if not aggregations:
+        return
+
+    from mlflow.genai.scorers.aggregation import _AGGREGATE_FUNCTIONS
+
+    valid_aggregation_names = set(_AGGREGATE_FUNCTIONS.keys())
+
+    for agg in aggregations:
+        if isinstance(agg, str):
+            if agg not in valid_aggregation_names:
+                raise MlflowException.invalid_parameter_value(
+                    f"Invalid aggregation '{agg}'. Valid aggregations are: "
+                    f"{sorted(valid_aggregation_names)}"
+                )
+        elif not callable(agg):
+            raise MlflowException.invalid_parameter_value(
+                f"Aggregation must be either a string from {sorted(valid_aggregation_names)} "
+                f"or a callable function, got {type(agg).__name__}"
+            )
+
+
+def valid_data_for_builtin_scorers(data: 'pd.DataFrame', builtin_scorers: list[BuiltInScorer], predict_fn: Callable[..., Any] | None = None) -> None:
+    """
+    Validate that the required columns are present in the data for running the builtin scorers.
+
+    This function checks if the input DataFrame contains all the necessary columns required
+    by the specified builtin scorers. It performs column name transformations to handle
+    legacy schema conversions and provides informative logging when required columns are missing.
+
+    Args:
+        data (pd.DataFrame): The data to validate. This must be a pandas DataFrame that has
+            been converted to the legacy evaluation set schema via `_convert_to_eval_set`.
+            The DataFrame should contain columns like 'request', 'response', 'expectations',
+            'trace', etc., depending on the scorers being used.
+        builtin_scorers (list[BuiltInScorer]): A list of builtin scorer instances to validate
+            the data against. Each scorer defines its own required columns through the
+            `validate_columns` method.
+        predict_fn (Callable[..., Any] | None, optional): An optional predict function.
+            When provided, "outputs" and "trace" are treated as available because they
+            can be generated during prediction. Defaults to None.
+
+    Returns:
+        None: This function doesn't return a value but logs information about missing
+            columns if any are found.
+
+    Notes:
+        - The function performs automatic column name mapping: "request" -> "inputs" and
+          "response" -> "outputs" to handle legacy schema conversions.
+        - If a predict function is provided, the "outputs" and "trace" columns are considered
+          available even if not present in the data.
+        - The presence of a "trace" column implies that both "inputs" and "outputs" can
+          be inferred from the trace data.
+        - The "expectations" column is treated specially - its dictionary values are
+          exploded into individual expectation fields for validation.
+        - When required columns are missing, the function logs an informative message
+          but doesn't raise an exception, allowing the evaluation to continue with
+          null results for affected scorers.
+
+    Raises:
+        MlflowException: Raised if the 'expectations' column contains non-dictionary
+            values when it should contain dictionaries mapping expectation names to values.
+    """
+    raise NotImplementedError
+
+
+def validate_scorers(scorers: list[Any]) -> list[Scorer]:
+    """
+    Validate a list of specified scorers and ensure they are valid Scorer instances.
+
+    This function takes a list of potential scorers and validates that each item is either:
+    1. An instance of mlflow.genai.scorers.base.Scorer
+    2. A legacy databricks.rag_eval.evaluation.metrics.Metric (if databricks.agents is installed)
+
+    The function also provides helpful error messages for common mistakes such as passing
+    scorer classes instead of instances, or incorrectly nesting the result of get_all_scorers().
+
+    Args:
+        scorers: A list of scorers to validate. Each item should be an instance of a valid
+                scorer type. Common valid types include built-in scorers like RelevanceToQuery()
+                and Correctness(), or custom scorers decorated with @scorer.
+
+    Returns:
+        list[Scorer]: A list of validated objects that can be used for evaluation. Supported
+                     legacy metric objects are also retained and generate a deprecation warning.
+
+    Raises:
+        MlflowException: If scorers is not a list, or if any item in the list is not a valid
+                        scorer instance. The exception includes helpful hints for common mistakes:
+                        - Passing [get_all_scorers()] instead of get_all_scorers()
+                        - Passing scorer classes instead of instances (e.g., RelevanceToQuery instead of RelevanceToQuery())
+                        - Passing invalid object types
+
+    Notes:
+        - Empty lists are valid and return an empty list
+        - Legacy databricks.rag_eval metrics are supported but deprecated, and will log warnings
+        - The function provides context-aware error messages to help users correct common mistakes
+        - If databricks.agents is not installed, legacy metrics will be treated as invalid
+    """
+    raise NotImplementedError

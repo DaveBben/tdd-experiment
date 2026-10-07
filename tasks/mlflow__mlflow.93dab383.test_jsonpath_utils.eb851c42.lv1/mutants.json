@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_jsonpath_utils.eb851c42.lv1",
+ "pool": 208,
+ "mutants": [
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 134,
+   "op": "statement",
+   "start": 4389,
+   "end": 4400,
+   "old": "result = {}",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 188,
+   "op": "statement",
+   "start": 6455,
+   "end": 6469,
+   "old": "current = data",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 196,
+   "op": "return",
+   "start": 6758,
+   "end": 6772,
+   "old": "return current",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 204,
+   "op": "statement",
+   "start": 6990,
+   "end": 7004,
+   "old": "current = data",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 312,
+   "op": "statement",
+   "start": 11281,
+   "end": 11291,
+   "old": "paths = []",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 331,
+   "op": "statement",
+   "start": 12115,
+   "end": 12142,
+   "old": "collect_paths(data, prefix)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1235,
+   "end": 1236,
+   "old": "0",
+   "new": "(1)",
+   "id": 6
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 40,
+   "op": "comparison",
+   "start": 1265,
+   "end": 1278,
+   "old": "i < len(path)",
+   "new": "(i <= len(path))",
+   "id": 7
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4919,
+   "end": 4964,
+   "old": "parts = split_path_respecting_backticks(path)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 150,
+   "op": "statement",
+   "start": 4973,
+   "end": 5040,
+   "old": "set_nested_value(result, parts, get_nested_value_safe(data, parts))",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 163,
+   "op": "statement",
+   "start": 5424,
+   "end": 5447,
+   "old": "part = current_parts[0]",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 164,
+   "op": "statement",
+   "start": 5456,
+   "end": 5485,
+   "old": "remaining = current_parts[1:]",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 201,
+   "op": "comparison",
+   "start": 6955,
+   "end": 6968,
+   "old": "value is None",
+   "new": "(value is not None)",
+   "id": 12
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7822,
+   "end": 7844,
+   "old": "final_part = parts[-1]",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 238,
+   "op": "constant",
+   "start": 8268,
+   "end": 8273,
+   "old": "False",
+   "new": "(True)",
+   "id": 14
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 260,
+   "op": "statement",
+   "start": 8982,
+   "end": 9045,
+   "old": "available_fields = get_available_field_suggestions(sample_data)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 267,
+   "op": "arithmetic",
+   "start": 9224,
+   "end": 9288,
+   "old": "error_msg += \"\\n\ud83d\udca1 Use dot notation to specify nested fields:\"",
+   "new": "error_msg -= '\\n\ud83d\udca1 Use dot notation to specify nested fields:'",
+   "id": 16
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 92,
+   "op": "boolean",
+   "start": 3035,
+   "end": 3054,
+   "old": "not parts_remaining",
+   "new": "(parts_remaining)",
+   "id": 17
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 139,
+   "op": "comparison",
+   "start": 4529,
+   "end": 4546,
+   "old": "\"*\" in field_path",
+   "new": "('*' not in field_path)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4629,
+   "end": 4683,
+   "old": "matching_paths = find_matching_paths(data, field_path)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4696,
+   "end": 4733,
+   "old": "expanded_paths.update(matching_paths)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 145,
+   "op": "statement",
+   "start": 4786,
+   "end": 4816,
+   "old": "expanded_paths.add(field_path)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 166,
+   "op": "comparison",
+   "start": 5498,
+   "end": 5509,
+   "old": "part == \"*\"",
+   "new": "(part != '*')",
+   "id": 22
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 176,
+   "op": "return",
+   "start": 6011,
+   "end": 6023,
+   "old": "return paths",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 190,
+   "op": "boolean",
+   "start": 6504,
+   "end": 6549,
+   "old": "isinstance(current, dict) and part in current",
+   "new": "(isinstance(current, dict) or part in current)",
+   "id": 24
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 206,
+   "op": "boolean",
+   "start": 7058,
+   "end": 7102,
+   "old": "part.isdigit() and isinstance(current, list)",
+   "new": "(part.isdigit() or isinstance(current, list))",
+   "id": 25
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 227,
+   "op": "boolean",
+   "start": 7856,
+   "end": 7906,
+   "old": "final_part.isdigit() and isinstance(current, list)",
+   "new": "(final_part.isdigit() or isinstance(current, list))",
+   "id": 26
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 251,
+   "op": "comparison",
+   "start": 8693,
+   "end": 8704,
+   "old": "\"*\" in path",
+   "new": "('*' not in path)",
+   "id": 27
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 256,
+   "op": "boolean",
+   "start": 8861,
+   "end": 8871,
+   "old": "not values",
+   "new": "(values)",
+   "id": 28
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 263,
+   "op": "constant",
+   "start": 9105,
+   "end": 9135,
+   "old": "\"\u274c Invalid field path(s):\\n\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 265,
+   "op": "statement",
+   "start": 9183,
+   "end": 9214,
+   "old": "error_msg += f\"   \u2022 {path}\\n\"",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 267,
+   "op": "constant",
+   "start": 9237,
+   "end": 9288,
+   "old": "\"\\n\ud83d\udca1 Use dot notation to specify nested fields:\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 271,
+   "op": "arithmetic",
+   "start": 9415,
+   "end": 9471,
+   "old": "error_msg += \"\\n\\n\ud83d\udccb Available fields in this data:\\n\"",
+   "new": "error_msg -= '\\n\\n\ud83d\udccb Available fields in this data:\\n'",
+   "id": 32
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 271,
+   "op": "statement",
+   "start": 9415,
+   "end": 9471,
+   "old": "error_msg += \"\\n\\n\ud83d\udccb Available fields in this data:\\n\"",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 41,
+   "op": "comparison",
+   "start": 1309,
+   "end": 1323,
+   "old": "path[i] == \"`\"",
+   "new": "(path[i] != '`')",
+   "id": 34
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 44,
+   "op": "boolean",
+   "start": 1459,
+   "end": 1491,
+   "old": "i < len(path) and path[i] != \"`\"",
+   "new": "(i < len(path) or path[i] != '`')",
+   "id": 35
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1544,
+   "end": 1550,
+   "old": "i += 1",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 48,
+   "op": "arithmetic",
+   "start": 1597,
+   "end": 1603,
+   "old": "i += 1",
+   "new": "i -= 1",
+   "id": 37
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 49,
+   "op": "comparison",
+   "start": 1642,
+   "end": 1656,
+   "old": "path[i] == \".\"",
+   "new": "(path[i] != '.')",
+   "id": 38
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1761,
+   "end": 1767,
+   "old": "i += 1",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 56,
+   "op": "arithmetic",
+   "start": 1825,
+   "end": 1831,
+   "old": "i += 1",
+   "new": "i -= 1",
+   "id": 40
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 95,
+   "op": "constant",
+   "start": 3117,
+   "end": 3118,
+   "old": "0",
+   "new": "(1)",
+   "id": 41
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 115,
+   "op": "return",
+   "start": 3806,
+   "end": 3842,
+   "old": "return traverse(current[part], rest)",
+   "new": "return None",
+   "id": 42
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 139,
+   "op": "constant",
+   "start": 4529,
+   "end": 4532,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 163,
+   "op": "constant",
+   "start": 5445,
+   "end": 5446,
+   "old": "0",
+   "new": "(1)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 180,
+   "op": "return",
+   "start": 6178,
+   "end": 6236,
+   "old": "return find_paths(current_data[part], remaining, new_path)",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 193,
+   "op": "statement",
+   "start": 6687,
+   "end": 6715,
+   "old": "current = current[int(part)]",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 216,
+   "op": "comparison",
+   "start": 7440,
+   "end": 7459,
+   "old": "part not in current",
+   "new": "(part in current)",
+   "id": 47
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 231,
+   "op": "statement",
+   "start": 8033,
+   "end": 8053,
+   "old": "current.append(None)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 275,
+   "op": "statement",
+   "start": 9596,
+   "end": 9664,
+   "old": "info_fields = [f for f in available_fields if f.startswith(\"info.\")]",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 276,
+   "op": "statement",
+   "start": 9681,
+   "end": 9749,
+   "old": "data_fields = [f for f in available_fields if f.startswith(\"data.\")]",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 305,
+   "op": "statement",
+   "start": 11011,
+   "end": 11084,
+   "old": "error_msg += \"\\n\ud83d\udca1 Tip: Use --verbose flag to see all available fields\"",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 317,
+   "op": "statement",
+   "start": 11431,
+   "end": 11486,
+   "old": "path = f\"{current_path}.{key}\" if current_path else key",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 318,
+   "op": "statement",
+   "start": 11503,
+   "end": 11521,
+   "old": "paths.append(path)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 322,
+   "op": "boolean",
+   "start": 11708,
+   "end": 11737,
+   "old": "isinstance(obj, list) and obj",
+   "new": "(isinstance(obj, list) or obj)",
+   "id": 54
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 44,
+   "op": "comparison",
+   "start": 1459,
+   "end": 1472,
+   "old": "i < len(path)",
+   "new": "(i <= len(path))",
+   "id": 55
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 44,
+   "op": "comparison",
+   "start": 1477,
+   "end": 1491,
+   "old": "path[i] != \"`\"",
+   "new": "(path[i] == '`')",
+   "id": 56
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 48,
+   "op": "constant",
+   "start": 1602,
+   "end": 1603,
+   "old": "1",
+   "new": "(2)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1653,
+   "end": 1656,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 56,
+   "op": "constant",
+   "start": 1830,
+   "end": 1831,
+   "old": "1",
+   "new": "(2)",
+   "id": 59
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 96,
+   "op": "constant",
+   "start": 3151,
+   "end": 3152,
+   "old": "1",
+   "new": "(2)",
+   "id": 60
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3506,
+   "end": 3518,
+   "old": "results = []",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 111,
+   "op": "return",
+   "start": 3678,
+   "end": 3687,
+   "old": "return []",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 164,
+   "op": "constant",
+   "start": 5482,
+   "end": 5483,
+   "old": "1",
+   "new": "(2)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 171,
+   "op": "statement",
+   "start": 5704,
+   "end": 5768,
+   "old": "paths.extend(find_paths(current_data[key], remaining, new_path))",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 219,
+   "op": "boolean",
+   "start": 7628,
+   "end": 7661,
+   "old": "next_part and next_part.isdigit()",
+   "new": "(next_part or next_part.isdigit())",
+   "id": 65
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 220,
+   "op": "statement",
+   "start": 7683,
+   "end": 7701,
+   "old": "current[part] = []",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 279,
+   "op": "arithmetic",
+   "start": 9803,
+   "end": 9835,
+   "old": "error_msg += \"   Info fields:\\n\"",
+   "new": "error_msg -= '   Info fields:\\n'",
+   "id": 67
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 284,
+   "op": "arithmetic",
+   "start": 10002,
+   "end": 10034,
+   "old": "error_msg += \"   Data fields:\\n\"",
+   "new": "error_msg -= '   Data fields:\\n'",
+   "id": 68
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 284,
+   "op": "statement",
+   "start": 10002,
+   "end": 10034,
+   "old": "error_msg += \"   Data fields:\\n\"",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 297,
+   "op": "arithmetic",
+   "start": 10707,
+   "end": 10724,
+   "old": "error_msg += \"\\n\"",
+   "new": "error_msg -= '\\n'",
+   "id": 70
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 297,
+   "op": "statement",
+   "start": 10707,
+   "end": 10724,
+   "old": "error_msg += \"\\n\"",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 300,
+   "op": "statement",
+   "start": 10778,
+   "end": 10833,
+   "old": "error_msg += f\"   data.*: {', '.join(data_fields[:5])}\"",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 303,
+   "op": "arithmetic",
+   "start": 10976,
+   "end": 10993,
+   "old": "error_msg += \"\\n\"",
+   "new": "error_msg -= '\\n'",
+   "id": 73
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 303,
+   "op": "statement",
+   "start": 10976,
+   "end": 10993,
+   "old": "error_msg += \"\\n\"",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 320,
+   "op": "comparison",
+   "start": 11619,
+   "end": 11646,
+   "old": "current_path.count(\".\") < 2",
+   "new": "(current_path.count('.') <= 2)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 325,
+   "op": "comparison",
+   "start": 11881,
+   "end": 11898,
+   "old": "path not in paths",
+   "new": "(path in paths)",
+   "id": 76
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 326,
+   "op": "statement",
+   "start": 11916,
+   "end": 11934,
+   "old": "paths.append(path)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 329,
+   "op": "statement",
+   "start": 12042,
+   "end": 12109,
+   "old": "collect_paths(obj[0], f\"{current_path}.*\" if current_path else \"*\")",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 108,
+   "op": "statement",
+   "start": 3576,
+   "end": 3612,
+   "old": "results.extend(traverse(item, rest))",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 174,
+   "op": "statement",
+   "start": 5894,
+   "end": 5926,
+   "old": "new_path = f\"{current_path}.{i}\"",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 218,
+   "op": "comparison",
+   "start": 7580,
+   "end": 7598,
+   "old": "i + 1 < len(parts)",
+   "new": "(i + 1 <= len(parts))",
+   "id": 81
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 279,
+   "op": "constant",
+   "start": 9816,
+   "end": 9835,
+   "old": "\"   Info fields:\\n\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 281,
+   "op": "arithmetic",
+   "start": 9914,
+   "end": 9948,
+   "old": "error_msg += f\"     \u2022 {field}\\n\"",
+   "new": "error_msg -= f'     \u2022 {field}\\n'",
+   "id": 83
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 286,
+   "op": "arithmetic",
+   "start": 10113,
+   "end": 10147,
+   "old": "error_msg += f\"     \u2022 {field}\\n\"",
+   "new": "error_msg -= f'     \u2022 {field}\\n'",
+   "id": 84
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 286,
+   "op": "statement",
+   "start": 10113,
+   "end": 10147,
+   "old": "error_msg += f\"     \u2022 {field}\\n\"",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 295,
+   "op": "comparison",
+   "start": 10588,
+   "end": 10608,
+   "old": "len(info_fields) > 8",
+   "new": "(len(info_fields) >= 8)",
+   "id": 86
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 297,
+   "op": "constant",
+   "start": 10720,
+   "end": 10724,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 301,
+   "op": "comparison",
+   "start": 10857,
+   "end": 10877,
+   "old": "len(data_fields) > 5",
+   "new": "(len(data_fields) >= 5)",
+   "id": 88
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 302,
+   "op": "arithmetic",
+   "start": 10903,
+   "end": 10955,
+   "old": "error_msg += f\", ... (+{len(data_fields) - 5} more)\"",
+   "new": "error_msg -= f', ... (+{len(data_fields) - 5} more)'",
+   "id": 89
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 303,
+   "op": "constant",
+   "start": 10989,
+   "end": 10993,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 324,
+   "op": "constant",
+   "start": 11862,
+   "end": 11865,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 295,
+   "op": "constant",
+   "start": 10607,
+   "end": 10608,
+   "old": "8",
+   "new": "(9)",
+   "id": 92
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 320,
+   "op": "constant",
+   "start": 11638,
+   "end": 11641,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 218,
+   "op": "constant",
+   "start": 7584,
+   "end": 7585,
+   "old": "1",
+   "new": "(2)",
+   "id": 94
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 218,
+   "op": "constant",
+   "start": 7574,
+   "end": 7575,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 290,
+   "op": "constant",
+   "start": 10361,
+   "end": 10368,
+   "old": "\"info.\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 291,
+   "op": "constant",
+   "start": 10446,
+   "end": 10453,
+   "old": "\"data.\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 329,
+   "op": "constant",
+   "start": 12060,
+   "end": 12061,
+   "old": "0",
+   "new": "(1)",
+   "id": 98
+  },
+  {
+   "path": "mlflow/utils/jsonpath_utils.py",
+   "line": 329,
+   "op": "constant",
+   "start": 12105,
+   "end": 12108,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

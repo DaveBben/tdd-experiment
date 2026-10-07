@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_span.69efd376.lv1",
+ "pool": 204,
+ "mutants": [
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2620,
+   "end": 2820,
+   "old": "raise MlflowException(\n        \"The `otel_span` argument must be an instance of one of valid \"\n        f\"OpenTelemetry span classes, but got {type(otel_span)}.\",\n        INVALID_PARAMETER_VALUE,\n    )",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 458,
+   "op": "return",
+   "start": 17499,
+   "end": 17563,
+   "old": "return span_id.to_bytes(length=8, byteorder=\"big\", signed=False)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 463,
+   "op": "return",
+   "start": 17853,
+   "end": 17919,
+   "old": "return trace_id.to_bytes(length=16, byteorder=\"big\", signed=False)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 473,
+   "op": "return",
+   "start": 18231,
+   "end": 18290,
+   "old": "return int.from_bytes(bytes, byteorder=\"big\", signed=False)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 79,
+   "op": "return",
+   "start": 2487,
+   "end": 2534,
+   "old": "return LiveSpan(otel_span, trace_id, span_type)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 188,
+   "op": "return",
+   "start": 6052,
+   "end": 6085,
+   "old": "return self._attributes.get_all()",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 228,
+   "op": "return",
+   "start": 7250,
+   "end": 8455,
+   "old": "return {\n            \"trace_id\": _encode_bytes_to_base64(\n                _encode_trace_id_to_byte(self._span.context.trace_id)\n            ),\n            \"span_id\": _encode_bytes_to_base64(_encode_span_id_to_byte(self._span.context.span_id)),\n            \"parent_span_id\": _encode_bytes_to_base64(\n                _encode_span_id_to_byte(self._span.parent.span_id)\n            )\n            if self._span.parent\n            else None,\n            \"name\": self.name,\n            \"start_time_unix_nano\": self.start_time_ns,\n            \"end_time_unix_nano\": self.end_time_ns,\n            \"events\": [\n                {\n                    \"name\": event.name,\n                    \"time_unix_nano\": event.timestamp,\n                    \"attributes\": event.attributes,\n                }\n                for event in self.events\n            ],\n            \"status\": {\n                \"code\": self.status.status_code.to_otel_proto_status_code_name(),\n                \"message\": self.status.description,\n            },\n            # save the dumped attributes so they can be loaded correctly when deserializing\n            \"attributes\": {k: self._span.attributes.get(k) for k in self.attributes.keys()},\n        }",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 339,
+   "op": "statement",
+   "start": 12335,
+   "end": 12382,
+   "old": "span_id = decode_id(data[\"context\"][\"span_id\"])",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 340,
+   "op": "statement",
+   "start": 12391,
+   "end": 12462,
+   "old": "parent_id = decode_id(data[\"parent_id\"]) if data[\"parent_id\"] else None",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 342,
+   "op": "statement",
+   "start": 12472,
+   "end": 13464,
+   "old": "otel_span = OTelReadableSpan(\n            name=data[\"name\"],\n            context=build_otel_context(trace_id, span_id),\n            parent=build_otel_context(trace_id, parent_id) if parent_id else None,\n            start_time=data[\"start_time\"],\n            end_time=data[\"end_time\"],\n            attributes=data[\"attributes\"],\n            status=SpanStatus(data[\"status_code\"], data[\"status_message\"]).to_otel_status(),\n            # Setting an empty resource explicitly. Otherwise OTel create a new Resource by\n            # Resource.create(), which introduces a significant overhead in some environments.\n            # https://github.com/mlflow/mlflow/issues/15625\n            resource=_OTelResource.get_empty(),\n            events=[\n                OTelEvent(\n                    name=event[\"name\"],\n                    timestamp=event[\"timestamp\"],\n                    attributes=event[\"attributes\"],\n                )\n                for event in data[\"events\"]\n            ],\n        )",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 363,
+   "op": "return",
+   "start": 13473,
+   "end": 13494,
+   "old": "return cls(otel_span)",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 372,
+   "op": "statement",
+   "start": 13841,
+   "end": 13899,
+   "old": "span_id = _otel_proto_bytes_to_id(otel_proto_span.span_id)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 373,
+   "op": "statement",
+   "start": 13908,
+   "end": 13924,
+   "old": "parent_id = None",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 385,
+   "op": "statement",
+   "start": 14432,
+   "end": 14634,
+   "old": "mlflow_trace_id = (\n            generate_trace_id_v4_from_otel_trace_id(trace_id, location_id)\n            if location_id\n            else generate_mlflow_trace_id_from_otel_trace_id(trace_id)\n        )",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 390,
+   "op": "statement",
+   "start": 14643,
+   "end": 16043,
+   "old": "otel_span = OTelReadableSpan(\n            name=otel_proto_span.name,\n            context=build_otel_context(trace_id, span_id),\n            parent=build_otel_context(trace_id, parent_id) if parent_id else None,\n            start_time=otel_proto_span.start_time_unix_nano,\n            end_time=otel_proto_span.end_time_unix_nano,\n            # we need to dump the attribute value to be consistent with span.set_attribute behavior\n            attributes={\n                # Include the MLflow trace request ID only if it's not already present in attributes\n                SpanAttributeKey.REQUEST_ID: dump_span_attribute_value(mlflow_trace_id),\n                **{\n                    attr.key: dump_span_attribute_value(_decode_otel_proto_anyvalue(attr.value))\n                    for attr in otel_proto_span.attributes\n                },\n            },\n            status=OTelStatus(status_code, otel_proto_span.status.message or None),\n            events=[\n                OTelEvent(\n                    name=event.name,\n                    timestamp=event.time_unix_nano,\n                    attributes={\n                        attr.key: _decode_otel_proto_anyvalue(attr.value)\n                        for attr in event.attributes\n                    },\n                )\n                for event in otel_proto_span.events\n            ],\n            resource=_OTelResource.get_empty(),\n        )",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 434,
+   "op": "statement",
+   "start": 16524,
+   "end": 16550,
+   "old": "otel_span.name = self.name",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 435,
+   "op": "statement",
+   "start": 16559,
+   "end": 16610,
+   "old": "otel_span.start_time_unix_nano = self.start_time_ns",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 453,
+   "op": "return",
+   "start": 17188,
+   "end": 17204,
+   "old": "return otel_span",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 479,
+   "op": "return",
+   "start": 18423,
+   "end": 18434,
+   "old": "return True",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 527,
+   "op": "statement",
+   "start": 20510,
+   "end": 20567,
+   "old": "self.set_attribute(SpanAttributeKey.SPAN_TYPE, span_type)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 675,
+   "op": "return",
+   "start": 26793,
+   "end": 26816,
+   "old": "return Span(self._span)",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 869,
+   "op": "return",
+   "start": 33162,
+   "end": 33229,
+   "old": "return {key: self.get(key) for key in self._span.attributes.keys()}",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 333,
+   "op": "comparison",
+   "start": 12099,
+   "end": 12116,
+   "old": "\"context\" in data",
+   "new": "('context' not in data)",
+   "id": 22
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 375,
+   "op": "statement",
+   "start": 13980,
+   "end": 14047,
+   "old": "parent_id = _otel_proto_bytes_to_id(otel_proto_span.parent_span_id)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 379,
+   "op": "statement",
+   "start": 14204,
+   "end": 14235,
+   "old": "status_code = OTelStatusCode.OK",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 437,
+   "op": "statement",
+   "start": 16652,
+   "end": 16699,
+   "old": "otel_span.end_time_unix_nano = self.end_time_ns",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 440,
+   "op": "statement",
+   "start": 16740,
+   "end": 16796,
+   "old": "otel_span.parent_span_id = bytes.fromhex(self.parent_id)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 446,
+   "op": "statement",
+   "start": 16978,
+   "end": 16992,
+   "old": "attr.key = key",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 447,
+   "op": "statement",
+   "start": 17005,
+   "end": 17048,
+   "old": "_set_otel_proto_anyvalue(attr.value, value)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 229,
+   "op": "constant",
+   "start": 7271,
+   "end": 7281,
+   "old": "\"trace_id\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 232,
+   "op": "constant",
+   "start": 7405,
+   "end": 7414,
+   "old": "\"span_id\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 238,
+   "op": "constant",
+   "start": 7698,
+   "end": 7704,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 239,
+   "op": "constant",
+   "start": 7729,
+   "end": 7751,
+   "old": "\"start_time_unix_nano\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 249,
+   "op": "constant",
+   "start": 8100,
+   "end": 8108,
+   "old": "\"status\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 380,
+   "op": "comparison",
+   "start": 14249,
+   "end": 14313,
+   "old": "otel_proto_span.status.code == OTelProtoStatus.STATUS_CODE_ERROR",
+   "new": "(otel_proto_span.status.code != OTelProtoStatus.STATUS_CODE_ERROR)",
+   "id": 34
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 381,
+   "op": "statement",
+   "start": 14327,
+   "end": 14361,
+   "old": "status_code = OTelStatusCode.ERROR",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 383,
+   "op": "statement",
+   "start": 14388,
+   "end": 14422,
+   "old": "status_code = OTelStatusCode.UNSET",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 463,
+   "op": "constant",
+   "start": 17899,
+   "end": 17904,
+   "old": "\"big\"",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 481,
+   "op": "constant",
+   "start": 18472,
+   "end": 18477,
+   "old": "False",
+   "new": "(True)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 907,
+   "op": "constant",
+   "start": 34749,
+   "end": 34808,
+   "old": "\"The attributes of the immutable span must not be updated.\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 250,
+   "op": "constant",
+   "start": 8128,
+   "end": 8134,
+   "old": "\"code\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 251,
+   "op": "constant",
+   "start": 8210,
+   "end": 8219,
+   "old": "\"message\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 338,
+   "op": "constant",
+   "start": 12314,
+   "end": 12324,
+   "old": "\"trace_id\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 339,
+   "op": "constant",
+   "start": 12371,
+   "end": 12380,
+   "old": "\"span_id\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 340,
+   "op": "constant",
+   "start": 12440,
+   "end": 12451,
+   "old": "\"parent_id\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 339,
+   "op": "constant",
+   "start": 12360,
+   "end": 12369,
+   "old": "\"context\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 340,
+   "op": "constant",
+   "start": 12418,
+   "end": 12429,
+   "old": "\"parent_id\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 348,
+   "op": "constant",
+   "start": 12785,
+   "end": 12797,
+   "old": "\"attributes\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 405,
+   "op": "boolean",
+   "start": 15540,
+   "end": 15578,
+   "old": "otel_proto_span.status.message or None",
+   "new": "(otel_proto_span.status.message and None)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 349,
+   "op": "constant",
+   "start": 12835,
+   "end": 12848,
+   "old": "\"status_code\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 349,
+   "op": "constant",
+   "start": 12856,
+   "end": 12872,
+   "old": "\"status_message\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 357,
+   "op": "constant",
+   "start": 13312,
+   "end": 13323,
+   "old": "\"timestamp\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 113,
+   "op": "return",
+   "start": 4049,
+   "end": 4103,
+   "old": "return cls(status_code, otel_status.description or \"\")",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 121,
+   "op": "statement",
+   "start": 4263,
+   "end": 4284,
+   "old": "status = OtelStatus()",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 132,
+   "op": "return",
+   "start": 4684,
+   "end": 4697,
+   "old": "return status",
+   "new": "return None",
+   "id": 54
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 149,
+   "op": "return",
+   "start": 5249,
+   "end": 5305,
+   "old": "return cls(status_code, otel_proto_status.message or \"\")",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 107,
+   "op": "statement",
+   "start": 3764,
+   "end": 3822,
+   "old": "status_code = SpanStatusCode(otel_status.status_code.name)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 109,
+   "op": "statement",
+   "start": 3862,
+   "end": 4040,
+   "old": "raise MlflowException(\n                f\"Got invalid status code from OpenTelemetry: {otel_status.status_code}\",\n                error_code=INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 125,
+   "op": "statement",
+   "start": 4465,
+   "end": 4518,
+   "old": "status.code = OtelStatus.StatusCode.STATUS_CODE_ERROR",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 127,
+   "op": "statement",
+   "start": 4545,
+   "end": 4598,
+   "old": "status.code = OtelStatus.StatusCode.STATUS_CODE_UNSET",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/entities/span_status.py",
+   "line": 149,
+   "op": "boolean",
+   "start": 5273,
+   "end": 5304,
+   "old": "otel_proto_status.message or \"\"",
+   "new": "(otel_proto_status.message and '')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/entities/trace_data.py",
+   "line": 84,
+   "op": "return",
+   "start": 3452,
+   "end": 3510,
+   "old": "return span._span.attributes.get(SpanAttributeKey.OUTPUTS)",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "mlflow/tracing/config.py",
+   "line": 53,
+   "op": "return",
+   "start": 1576,
+   "end": 1605,
+   "old": "return _MLFLOW_TRACING_CONFIG",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "mlflow/tracing/config.py",
+   "line": 125,
+   "op": "return",
+   "start": 4450,
+   "end": 4493,
+   "old": "return TracingConfigContext(config_updates)",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 32,
+   "op": "statement",
+   "start": 1223,
+   "end": 1274,
+   "old": "set_request_response_preview(self.info, trace_data)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/tracing/trace_manager.py",
+   "line": 214,
+   "op": "statement",
+   "start": 8118,
+   "end": 8138,
+   "old": "cls._instance = None",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/tracing/utils/otlp.py",
+   "line": 119,
+   "op": "return",
+   "start": 4206,
+   "end": 4268,
+   "old": "return int.from_bytes(id_bytes, byteorder=\"big\", signed=False)",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "mlflow/tracing/utils/otlp.py",
+   "line": 173,
+   "op": "constant",
+   "start": 6014,
+   "end": 6028,
+   "old": "\"kvlist_value\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "mlflow/tracing/utils/processor.py",
+   "line": 12,
+   "op": "statement",
+   "start": 259,
+   "end": 280,
+   "old": "config = get_config()",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "mlflow/tracing/utils/processor.py",
+   "line": 29,
+   "op": "statement",
+   "start": 816,
+   "end": 1011,
+   "old": "_logger.warning(\n            f\"Span processors {non_null_return_processors} returned a non-null value, \"\n            \"but it will be ignored. Span processors should not return a value.\"\n        )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "mlflow/tracing/utils/processor.py",
+   "line": 20,
+   "op": "comparison",
+   "start": 478,
+   "end": 496,
+   "old": "result is not None",
+   "new": "(result is None)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 34,
+   "op": "statement",
+   "start": 1249,
+   "end": 1279,
+   "old": "max_length = _get_max_length()",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 36,
+   "op": "statement",
+   "start": 1285,
+   "end": 1299,
+   "old": "content = None",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1304,
+   "end": 1314,
+   "old": "obj = None",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1817,
+   "end": 1857,
+   "old": "content = content or request_or_response",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 63,
+   "op": "return",
+   "start": 2059,
+   "end": 2229,
+   "old": "return (\n        TRACE_REQUEST_RESPONSE_PREVIEW_MAX_LENGTH_DBX\n        if is_databricks_uri(tracking_uri)\n        else TRACE_REQUEST_RESPONSE_PREVIEW_MAX_LENGTH_OSS\n    )",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 130,
+   "op": "return",
+   "start": 4500,
+   "end": 4509,
+   "old": "return \"\"",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 31,
+   "op": "comparison",
+   "start": 1197,
+   "end": 1224,
+   "old": "request_or_response is None",
+   "new": "(request_or_response is not None)",
+   "id": 77
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1369,
+   "end": 1394,
+   "old": "obj = request_or_response",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 52,
+   "op": "boolean",
+   "start": 1827,
+   "end": 1857,
+   "old": "content or request_or_response",
+   "new": "(content and request_or_response)",
+   "id": 79
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 55,
+   "op": "return",
+   "start": 1902,
+   "end": 1916,
+   "old": "return content",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "arithmetic",
+   "start": 1929,
+   "end": 1962,
+   "old": "content[: max_length - 3] + \"...\"",
+   "new": "(content[:max_length - 3] - '...')",
+   "id": 81
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 71,
+   "op": "boolean",
+   "start": 2318,
+   "end": 2343,
+   "old": "not isinstance(obj, dict)",
+   "new": "(isinstance(obj, dict))",
+   "id": 82
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 75,
+   "op": "boolean",
+   "start": 2451,
+   "end": 2515,
+   "old": "(messages := obj.get(\"messages\")) and isinstance(messages, list)",
+   "new": "((messages := obj.get('messages')) or isinstance(messages, list))",
+   "id": 83
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 76,
+   "op": "return",
+   "start": 2525,
+   "end": 2580,
+   "old": "return [item for item in messages if _is_message(item)]",
+   "new": "return None",
+   "id": 84
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 80,
+   "op": "boolean",
+   "start": 2695,
+   "end": 2910,
+   "old": "(choices := obj.get(\"choices\"))\n        and isinstance(choices, list)\n        and len(choices) > 0\n        and isinstance(choices[0], dict)\n        and (msg := choices[0].get(\"message\"))\n        and _is_message(msg)",
+   "new": "((choices := obj.get('choices')) or isinstance(choices, list) or len(choices) > 0 or isinstance(choices[0], dict) or (msg := choices[0].get('message')) or _is_message(msg))",
+   "id": 85
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 90,
+   "op": "boolean",
+   "start": 3031,
+   "end": 3086,
+   "old": "(input := obj.get(\"input\")) and isinstance(input, list)",
+   "new": "((input := obj.get('input')) or isinstance(input, list))",
+   "id": 86
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 91,
+   "op": "return",
+   "start": 3096,
+   "end": 3148,
+   "old": "return [item for item in input if _is_message(item)]",
+   "new": "return None",
+   "id": 87
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 94,
+   "op": "boolean",
+   "start": 3242,
+   "end": 3300,
+   "old": "(output := obj.get(\"output\")) and isinstance(output, list)",
+   "new": "((output := obj.get('output')) or isinstance(output, list))",
+   "id": 88
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 98,
+   "op": "comparison",
+   "start": 3464,
+   "end": 3480,
+   "old": "\"request\" in obj",
+   "new": "('request' not in obj)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 99,
+   "op": "return",
+   "start": 3490,
+   "end": 3534,
+   "old": "return _try_extract_messages(obj[\"request\"])",
+   "new": "return None",
+   "id": 90
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1709,
+   "end": 1753,
+   "old": "msg = _get_last_message(messages, role=role)",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1766,
+   "end": 1811,
+   "old": "content = _get_text_content_from_message(msg)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "constant",
+   "start": 1957,
+   "end": 1962,
+   "old": "\"...\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 82,
+   "op": "comparison",
+   "start": 2777,
+   "end": 2793,
+   "old": "len(choices) > 0",
+   "new": "(len(choices) >= 0)",
+   "id": 94
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3464,
+   "end": 3473,
+   "old": "\"request\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1529,
+   "end": 1566,
+   "old": "obj = json.loads(request_or_response)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 57,
+   "op": "arithmetic",
+   "start": 1939,
+   "end": 1953,
+   "old": "max_length - 3",
+   "new": "(max_length + 3)",
+   "id": 97
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 90,
+   "op": "constant",
+   "start": 3049,
+   "end": 3056,
+   "old": "\"input\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/tracing/utils/truncation.py",
+   "line": 84,
+   "op": "constant",
+   "start": 2863,
+   "end": 2864,
+   "old": "0",
+   "new": "(1)",
+   "id": 99
+  }
+ ]
+}

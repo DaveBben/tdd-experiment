@@ -1,0 +1,1006 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_types_self.3ae7e16d.lv1",
+ "pool": 400,
+ "mutants": [
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 985,
+   "op": "return",
+   "start": 44566,
+   "end": 44577,
+   "old": "return args",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1324,
+   "op": "statement",
+   "start": 59658,
+   "end": 59674,
+   "old": "nullable = False",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1583,
+   "op": "statement",
+   "start": 72200,
+   "end": 72259,
+   "old": "update_field_from_config(self._config_wrapper, name, field)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1605,
+   "op": "return",
+   "start": 73032,
+   "end": 73055,
+   "old": "return parameter_schema",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1712,
+   "op": "statement",
+   "start": 77827,
+   "end": 77873,
+   "old": "type_param = self._get_first_arg_or_any(type_)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1947,
+   "op": "statement",
+   "start": 89667,
+   "end": 89718,
+   "old": "return_schema: core_schema.CoreSchema | None = None",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1948,
+   "op": "statement",
+   "start": 89727,
+   "end": 89764,
+   "old": "config_wrapper = self._config_wrapper",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1959,
+   "op": "return",
+   "start": 90257,
+   "end": 90391,
+   "old": "return core_schema.call_schema(\n            arguments_schema,\n            function,\n            return_schema=return_schema,\n        )",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 989,
+   "op": "boolean",
+   "start": 44702,
+   "end": 44710,
+   "old": "not args",
+   "new": "(args)",
+   "id": 8
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1582,
+   "op": "comparison",
+   "start": 72099,
+   "end": 72127,
+   "old": "field.annotation is not None",
+   "new": "(field.annotation is None)",
+   "id": 9
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2754,
+   "op": "statement",
+   "start": 127139,
+   "end": 127188,
+   "old": "self._definitions[def_schema['ref']] = def_schema",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 991,
+   "op": "constant",
+   "start": 44755,
+   "end": 44756,
+   "old": "0",
+   "new": "(1)",
+   "id": 11
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1331,
+   "op": "constant",
+   "start": 59897,
+   "end": 59898,
+   "old": "1",
+   "new": "(2)",
+   "id": 12
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1527,
+   "op": "comparison",
+   "start": 69618,
+   "end": 69642,
+   "old": "maybe_schema is not None",
+   "new": "(maybe_schema is None)",
+   "id": 13
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1530,
+   "op": "comparison",
+   "start": 69764,
+   "end": 69782,
+   "old": "origin is not None",
+   "new": "(origin is None)",
+   "id": 14
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1953,
+   "op": "statement",
+   "start": 89955,
+   "end": 89996,
+   "old": "globalns, localns = self._types_namespace",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2755,
+   "op": "constant",
+   "start": 127230,
+   "end": 127238,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1326,
+   "op": "comparison",
+   "start": 59715,
+   "end": 59726,
+   "old": "arg is None",
+   "new": "(arg is not None)",
+   "id": 17
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1338,
+   "op": "statement",
+   "start": 60218,
+   "end": 60257,
+   "old": "choices_with_tags.append((choice, tag))",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1747,
+   "op": "return",
+   "start": 79805,
+   "end": 79854,
+   "old": "return core_schema.is_subclass_schema(type_param)",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 2754,
+   "op": "constant",
+   "start": 127168,
+   "end": 127173,
+   "old": "'ref'",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1557,
+   "op": "constant",
+   "start": 71055,
+   "end": 71059,
+   "old": "True",
+   "new": "(False)",
+   "id": 21
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1734,
+   "op": "statement",
+   "start": 78977,
+   "end": 79025,
+   "old": "type_param = self._resolve_self_type(type_param)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1741,
+   "op": "boolean",
+   "start": 79409,
+   "end": 79440,
+   "old": "not inspect.isclass(type_param)",
+   "new": "(inspect.isclass(type_param))",
+   "id": 23
+  },
+  {
+   "path": "pydantic/_internal/_generate_schema.py",
+   "line": 1744,
+   "op": "comparison",
+   "start": 79618,
+   "end": 79636,
+   "old": "type_param is None",
+   "new": "(type_param is not None)",
+   "id": 24
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 193,
+   "op": "statement",
+   "start": 6520,
+   "end": 6588,
+   "old": "schema_update, other_metadata = collect_known_metadata([annotation])",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 382,
+   "op": "return",
+   "start": 15976,
+   "end": 15997,
+   "old": "return res, remaining",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 101,
+   "op": "comparison",
+   "start": 3445,
+   "end": 3502,
+   "old": "type(v) not in (int, str, float, bytes, bool, type(None))",
+   "new": "(type(v) in (int, str, float, bytes, bool, type(None)))",
+   "id": 27
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 102,
+   "op": "return",
+   "start": 3512,
+   "end": 3540,
+   "old": "return to_jsonable_python(v)",
+   "new": "return None",
+   "id": 28
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 334,
+   "op": "statement",
+   "start": 13849,
+   "end": 13899,
+   "old": "chain_schema_steps = [schema] + chain_schema_steps",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 163,
+   "op": "constant",
+   "start": 5487,
+   "end": 5499,
+   "old": "'min_length'",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 194,
+   "op": "constant",
+   "start": 6614,
+   "end": 6620,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 197,
+   "op": "constant",
+   "start": 6674,
+   "end": 6683,
+   "old": "'pattern'",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 199,
+   "op": "constant",
+   "start": 6721,
+   "end": 6731,
+   "old": "'to_lower'",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 207,
+   "op": "statement",
+   "start": 6964,
+   "end": 7016,
+   "old": "raise ValueError(f'Unknown constraint {constraint}')",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 290,
+   "op": "comparison",
+   "start": 11654,
+   "end": 11748,
+   "old": "(annotation_type := type(annotation)) in (at_to_constraint_map := _get_at_to_constraint_map())",
+   "new": "((annotation_type := type(annotation)) not in (at_to_constraint_map := _get_at_to_constraint_map()))",
+   "id": 35
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 367,
+   "op": "statement",
+   "start": 14908,
+   "end": 14939,
+   "old": "res.update(annotation.__dict__)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 214,
+   "op": "comparison",
+   "start": 7548,
+   "end": 7570,
+   "old": "constraint == 'strict'",
+   "new": "(constraint != 'strict')",
+   "id": 37
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 270,
+   "op": "statement",
+   "start": 10598,
+   "end": 10635,
+   "old": "metadata = schema.get('metadata', {})",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 328,
+   "op": "statement",
+   "start": 13664,
+   "end": 13726,
+   "old": "schema = cs.no_info_after_validator_function(val_func, schema)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 370,
+   "op": "statement",
+   "start": 15161,
+   "end": 15211,
+   "old": "constraint = at_to_constraint_map[annotation_type]",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 215,
+   "op": "constant",
+   "start": 7591,
+   "end": 7599,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 220,
+   "op": "comparison",
+   "start": 7879,
+   "end": 7905,
+   "old": "constraint == 'union_mode'",
+   "new": "(constraint != 'union_mode')",
+   "id": 42
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 233,
+   "op": "statement",
+   "start": 8446,
+   "end": 8464,
+   "old": "x = handler(value)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 271,
+   "op": "comparison",
+   "start": 10651,
+   "end": 10732,
+   "old": "(existing_json_schema_updates := metadata.get('pydantic_js_updates')) is not None",
+   "new": "((existing_json_schema_updates := metadata.get('pydantic_js_updates')) is None)",
+   "id": 44
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 272,
+   "op": "statement",
+   "start": 10750,
+   "end": 10924,
+   "old": "metadata['pydantic_js_updates'] = {\n                    **existing_json_schema_updates,\n                    **{js_constraint_key: as_jsonable_value(value)},\n                }",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 279,
+   "op": "boolean",
+   "start": 11094,
+   "end": 11142,
+   "old": "constraint == 'allow_inf_nan' and value is False",
+   "new": "(constraint == 'allow_inf_nan' or value is False)",
+   "id": 46
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 372,
+   "op": "boolean",
+   "start": 15287,
+   "end": 15360,
+   "old": "isinstance(annotation, type) and issubclass(annotation, PydanticMetadata)",
+   "new": "(isinstance(annotation, type) or issubclass(annotation, PydanticMetadata))",
+   "id": 47
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 214,
+   "op": "constant",
+   "start": 7490,
+   "end": 7507,
+   "old": "'function-before'",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 261,
+   "op": "statement",
+   "start": 10157,
+   "end": 10233,
+   "old": "js_constraint_key = 'minItems' if constraint == 'min_length' else 'maxItems'",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 270,
+   "op": "constant",
+   "start": 10620,
+   "end": 10630,
+   "old": "'metadata'",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 320,
+   "op": "statement",
+   "start": 13279,
+   "end": 13319,
+   "old": "predicate_satisfied = annotation.func(v)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 326,
+   "op": "return",
+   "start": 13642,
+   "end": 13650,
+   "old": "return v",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 240,
+   "op": "comparison",
+   "start": 9040,
+   "end": 9072,
+   "old": "'type' in ve.errors()[0]['type']",
+   "new": "('type' not in ve.errors()[0]['type'])",
+   "id": 53
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 241,
+   "op": "statement",
+   "start": 9098,
+   "end": 9288,
+   "old": "raise TypeError(\n                            f\"Unable to apply constraint '{constraint}' to supplied value {value} for schema of type '{schema_type}'\"  # noqa: B023\n                        )",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 257,
+   "op": "constant",
+   "start": 9934,
+   "end": 9940,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 259,
+   "op": "boolean",
+   "start": 10014,
+   "end": 10101,
+   "old": "inner_schema_type == 'json-or-python' and inner_schema['json_schema']['type'] == 'list'",
+   "new": "(inner_schema_type == 'json-or-python' or inner_schema['json_schema']['type'] == 'list')",
+   "id": 56
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 272,
+   "op": "constant",
+   "start": 10759,
+   "end": 10780,
+   "old": "'pydantic_js_updates'",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 277,
+   "op": "constant",
+   "start": 10968,
+   "end": 10989,
+   "old": "'pydantic_js_updates'",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 300,
+   "op": "constant",
+   "start": 12319,
+   "end": 12333,
+   "old": "'__qualname__'",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 310,
+   "op": "boolean",
+   "start": 12897,
+   "end": 12920,
+   "old": "not predicate_satisfied",
+   "new": "(predicate_satisfied)",
+   "id": 60
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 322,
+   "op": "statement",
+   "start": 13402,
+   "end": 13621,
+   "old": "raise PydanticCustomError(\n                            'not_operation_failed',\n                            f'Not of {predicate_name}failed',  # pyright: ignore[reportArgumentType]  # noqa: B023\n                        )",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 255,
+   "op": "constant",
+   "start": 9792,
+   "end": 9808,
+   "old": "'function-after'",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 258,
+   "op": "constant",
+   "start": 9982,
+   "end": 9988,
+   "old": "'list'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 259,
+   "op": "constant",
+   "start": 10084,
+   "end": 10090,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "pydantic/_internal/_known_annotated_metadata.py",
+   "line": 375,
+   "op": "constant",
+   "start": 15617,
+   "end": 15620,
+   "old": "'_'",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "pydantic/_internal/_validate_call.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2838,
+   "end": 2889,
+   "old": "self.qualname = extract_function_qualname(function)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "pydantic/_internal/_validate_call.py",
+   "line": 107,
+   "op": "statement",
+   "start": 3895,
+   "end": 3999,
+   "old": "return_type = signature.return_annotation if signature.return_annotation is not signature.empty else Any",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pydantic/_internal/_validate_call.py",
+   "line": 110,
+   "op": "statement",
+   "start": 4177,
+   "end": 4460,
+   "old": "validator = create_schema_validator(\n                schema,\n                self.schema_type,\n                self.module,\n                self.qualname,\n                'validate_call',\n                core_config,\n                self.config_wrapper.plugin_settings,\n            )",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "pydantic/_internal/_validate_call.py",
+   "line": 89,
+   "op": "constant",
+   "start": 3231,
+   "end": 3236,
+   "old": "False",
+   "new": "(True)",
+   "id": 69
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 967,
+   "op": "return",
+   "start": 42358,
+   "end": 42376,
+   "old": "return json_schema",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2106,
+   "op": "return",
+   "start": 91176,
+   "end": 91198,
+   "old": "return ref_json_schema",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1293,
+   "op": "comparison",
+   "start": 56053,
+   "end": 56096,
+   "old": "self.union_format == 'primitive_type_array'",
+   "new": "(self.union_format != 'primitive_type_array')",
+   "id": 72
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 965,
+   "op": "constant",
+   "start": 42221,
+   "end": 42227,
+   "old": "'type'",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1293,
+   "op": "constant",
+   "start": 56074,
+   "end": 56096,
+   "old": "'primitive_type_array'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1296,
+   "op": "statement",
+   "start": 56183,
+   "end": 56240,
+   "old": "schema_types: list[str] | str | None = schema.get('type')",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1311,
+   "op": "statement",
+   "start": 57109,
+   "end": 57135,
+   "old": "types.extend(schema_types)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1314,
+   "op": "return",
+   "start": 57284,
+   "end": 57327,
+   "old": "return {'type': list(dict.fromkeys(types))}",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2402,
+   "op": "statement",
+   "start": 103634,
+   "end": 103665,
+   "old": "members.extend(schema['anyOf'])",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 964,
+   "op": "constant",
+   "start": 42120,
+   "end": 42134,
+   "old": "'items_schema'",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1250,
+   "op": "constant",
+   "start": 54474,
+   "end": 54482,
+   "old": "'schema'",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1297,
+   "op": "comparison",
+   "start": 56260,
+   "end": 56280,
+   "old": "schema_types is None",
+   "new": "(schema_types is not None)",
+   "id": 81
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1302,
+   "op": "boolean",
+   "start": 56507,
+   "end": 56571,
+   "old": "not all(t in _PRIMITIVE_JSON_SCHEMA_TYPES for t in schema_types)",
+   "new": "(all((t in _PRIMITIVE_JSON_SCHEMA_TYPES for t in schema_types)))",
+   "id": 82
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 1304,
+   "op": "comparison",
+   "start": 56618,
+   "end": 56634,
+   "old": "len(schema) != 1",
+   "new": "(len(schema) == 1)",
+   "id": 83
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2091,
+   "op": "statement",
+   "start": 90573,
+   "end": 90658,
+   "old": "self._core_defs_invalid_for_json_schema[self.get_defs_ref((core_ref, self.mode))] = e",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2092,
+   "op": "statement",
+   "start": 90675,
+   "end": 90683,
+   "old": "continue",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2104,
+   "op": "constant",
+   "start": 91083,
+   "end": 91095,
+   "old": "'schema_ref'",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2401,
+   "op": "comparison",
+   "start": 103599,
+   "end": 103616,
+   "old": "'anyOf' in schema",
+   "new": "('anyOf' not in schema)",
+   "id": 87
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2407,
+   "op": "constant",
+   "start": 103828,
+   "end": 103829,
+   "old": "0",
+   "new": "(1)",
+   "id": 88
+  },
+  {
+   "path": "pydantic/json_schema.py",
+   "line": 2401,
+   "op": "constant",
+   "start": 103593,
+   "end": 103594,
+   "old": "1",
+   "new": "(2)",
+   "id": 89
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 428,
+   "op": "constant",
+   "start": 20206,
+   "end": 20211,
+   "old": "False",
+   "new": "(True)",
+   "id": 90
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 430,
+   "op": "constant",
+   "start": 20287,
+   "end": 20292,
+   "old": "False",
+   "new": "(True)",
+   "id": 91
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 433,
+   "op": "constant",
+   "start": 20447,
+   "end": 20452,
+   "old": "False",
+   "new": "(True)",
+   "id": 92
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 712,
+   "op": "constant",
+   "start": 33905,
+   "end": 33967,
+   "old": "'At least one of `by_alias` or `by_name` must be set to True.'",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "pydantic/main.py",
+   "line": 713,
+   "op": "constant",
+   "start": 33990,
+   "end": 34024,
+   "old": "'validate-by-alias-and-name-false'",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "pydantic/type_adapter.py",
+   "line": 435,
+   "op": "comparison",
+   "start": 18837,
+   "end": 18856,
+   "old": "by_name is not True",
+   "new": "(by_name is True)",
+   "id": 95
+  },
+  {
+   "path": "pydantic/validate_call_decorator.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1639,
+   "end": 1751,
+   "old": "raise PydanticUserError(f'Input built-in function `{function}` is not supported', code=_INVALID_TYPE_ERROR_CODE)",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "pydantic/validate_call_decorator.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1867,
+   "end": 2048,
+   "old": "raise PydanticUserError(\n            f'The `@{name}` decorator should be applied after `@validate_call` (put `@{name}` on top)',\n            code=_INVALID_TYPE_ERROR_CODE,\n        )",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "pydantic/validate_call_decorator.py",
+   "line": 56,
+   "op": "statement",
+   "start": 2092,
+   "end": 2341,
+   "old": "raise PydanticUserError(\n            f'Unable to validate {function}: `validate_call` should be applied to functions, not classes (put `@validate_call` on top of `__init__` or `__new__` instead)',\n            code=_INVALID_TYPE_ERROR_CODE,\n        )",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "pydantic/validate_call_decorator.py",
+   "line": 36,
+   "op": "boolean",
+   "start": 1154,
+   "end": 1191,
+   "old": "not isinstance(partial.func, partial)",
+   "new": "(isinstance(partial.func, partial))",
+   "id": 99
+  }
+ ]
+}

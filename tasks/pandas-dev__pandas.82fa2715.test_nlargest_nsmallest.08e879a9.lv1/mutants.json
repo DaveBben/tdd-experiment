@@ -1,0 +1,396 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_nlargest_nsmallest.08e879a9.lv1",
+ "pool": 39,
+ "mutants": [
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 171,
+   "op": "statement",
+   "start": 5426,
+   "end": 5484,
+   "old": "validate_argsort_kind(args, kwargs, max_fname_arg_count=3)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 172,
+   "op": "statement",
+   "start": 5489,
+   "end": 5522,
+   "old": "ascending = cast(bool, ascending)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 173,
+   "op": "return",
+   "start": 5527,
+   "end": 5543,
+   "old": "return ascending",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 376,
+   "op": "return",
+   "start": 11719,
+   "end": 11755,
+   "old": "return validation_func(args, kwargs)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 167,
+   "op": "boolean",
+   "start": 5317,
+   "end": 5359,
+   "old": "is_integer(ascending) or ascending is None",
+   "new": "(is_integer(ascending) and ascending is None)",
+   "id": 4
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 168,
+   "op": "statement",
+   "start": 5369,
+   "end": 5395,
+   "old": "args = (ascending,) + args",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 169,
+   "op": "statement",
+   "start": 5404,
+   "end": 5420,
+   "old": "ascending = True",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 167,
+   "op": "comparison",
+   "start": 5342,
+   "end": 5359,
+   "old": "ascending is None",
+   "new": "(ascending is not None)",
+   "id": 7
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 168,
+   "op": "arithmetic",
+   "start": 5376,
+   "end": 5395,
+   "old": "(ascending,) + args",
+   "new": "((ascending,) - args)",
+   "id": 8
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 169,
+   "op": "constant",
+   "start": 5416,
+   "end": 5420,
+   "old": "True",
+   "new": "(False)",
+   "id": 9
+  },
+  {
+   "path": "pandas/compat/numpy/function.py",
+   "line": 171,
+   "op": "constant",
+   "start": 5482,
+   "end": 5483,
+   "old": "3",
+   "new": "(4)",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 882,
+   "op": "statement",
+   "start": 27506,
+   "end": 27575,
+   "old": "ascending = nv.validate_argsort_with_ascending(ascending, (), kwargs)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 884,
+   "op": "statement",
+   "start": 27585,
+   "end": 27620,
+   "old": "values = self._values_for_argsort()",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 885,
+   "op": "return",
+   "start": 27629,
+   "end": 27810,
+   "old": "return nargsort(\n            values,\n            kind=kind,\n            ascending=ascending,\n            na_position=na_position,\n            mask=np.asarray(self.isna()),\n        )",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2906,
+   "op": "return",
+   "start": 96873,
+   "end": 96944,
+   "old": "return cls._create_method(op, coerce_to_dtype=False, result_dtype=bool)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 840,
+   "op": "constant",
+   "start": 26042,
+   "end": 26046,
+   "old": "True",
+   "new": "(False)",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 841,
+   "op": "constant",
+   "start": 26073,
+   "end": 26084,
+   "old": "\"quicksort\"",
+   "new": "('XX')",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 842,
+   "op": "constant",
+   "start": 26113,
+   "end": 26119,
+   "old": "\"last\"",
+   "new": "('XX')",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 2906,
+   "op": "constant",
+   "start": 96919,
+   "end": 96924,
+   "old": "False",
+   "new": "(True)",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1372,
+   "op": "statement",
+   "start": 44614,
+   "end": 44658,
+   "old": "f = partial(Series.nlargest, n=n, keep=keep)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1373,
+   "op": "statement",
+   "start": 44667,
+   "end": 44699,
+   "old": "data = self._obj_with_exclusions",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1376,
+   "op": "statement",
+   "start": 44837,
+   "end": 44904,
+   "old": "result = self._python_apply_general(f, data, not_indexed_same=True)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1377,
+   "op": "return",
+   "start": 44913,
+   "end": 44926,
+   "old": "return result",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1383,
+   "op": "statement",
+   "start": 45081,
+   "end": 45126,
+   "old": "f = partial(Series.nsmallest, n=n, keep=keep)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1384,
+   "op": "statement",
+   "start": 45135,
+   "end": 45167,
+   "old": "data = self._obj_with_exclusions",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1387,
+   "op": "statement",
+   "start": 45305,
+   "end": 45372,
+   "old": "result = self._python_apply_general(f, data, not_indexed_same=True)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1388,
+   "op": "return",
+   "start": 45381,
+   "end": 45394,
+   "old": "return result",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1370,
+   "op": "constant",
+   "start": 44538,
+   "end": 44539,
+   "old": "5",
+   "new": "(6)",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1370,
+   "op": "constant",
+   "start": 44581,
+   "end": 44588,
+   "old": "\"first\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1381,
+   "op": "constant",
+   "start": 45005,
+   "end": 45006,
+   "old": "5",
+   "new": "(6)",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1381,
+   "op": "constant",
+   "start": 45048,
+   "end": 45055,
+   "old": "\"first\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 3407,
+   "op": "return",
+   "start": 112846,
+   "end": 112856,
+   "old": "return res",
+   "new": "return None",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1376,
+   "op": "constant",
+   "start": 44899,
+   "end": 44903,
+   "old": "True",
+   "new": "(False)",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 1387,
+   "op": "constant",
+   "start": 45367,
+   "end": 45371,
+   "old": "True",
+   "new": "(False)",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1173,
+   "op": "return",
+   "start": 38645,
+   "end": 38668,
+   "old": "return [self.binlabels]",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1258,
+   "op": "return",
+   "start": 41147,
+   "end": 41194,
+   "old": "return df.__finalize__(sdata, method=\"groupby\")",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/groupby/ops.py",
+   "line": 1258,
+   "op": "constant",
+   "start": 41184,
+   "end": 41193,
+   "old": "\"groupby\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 835,
+   "op": "boolean",
+   "start": 25062,
+   "end": 25081,
+   "old": "not level.is_unique",
+   "new": "(level.is_unique)",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 836,
+   "op": "statement",
+   "start": 25095,
+   "end": 25157,
+   "old": "raise ValueError(f\"Level values not unique: {level.tolist()}\")",
+   "new": "pass",
+   "id": 38
+  }
+ ]
+}

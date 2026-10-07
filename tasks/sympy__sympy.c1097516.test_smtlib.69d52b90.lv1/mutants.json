@@ -1,0 +1,1006 @@
+{
+ "task": "sympy__sympy.c1097516.test_smtlib.69d52b90.lv1",
+ "pool": 102,
+ "mutants": [
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1701,
+   "op": "statement",
+   "start": 58780,
+   "end": 58822,
+   "old": "errmsg = \"cannot convert to mpmath number\"",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1699,
+   "op": "constant",
+   "start": 58717,
+   "end": 58721,
+   "old": "True",
+   "new": "(False)",
+   "id": 1
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1701,
+   "op": "constant",
+   "start": 58789,
+   "end": 58822,
+   "old": "\"cannot convert to mpmath number\"",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1702,
+   "op": "boolean",
+   "start": 58834,
+   "end": 58864,
+   "old": "allow_ints and self.is_Integer",
+   "new": "(allow_ints or self.is_Integer)",
+   "id": 3
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1703,
+   "op": "return",
+   "start": 58878,
+   "end": 58891,
+   "old": "return self.p",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1705,
+   "op": "return",
+   "start": 58945,
+   "end": 58984,
+   "old": "return make_mpf(self._as_mpf_val(prec))",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1707,
+   "op": "statement",
+   "start": 59010,
+   "end": 59040,
+   "old": "result = evalf(self, prec, {})",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1708,
+   "op": "return",
+   "start": 59053,
+   "end": 59082,
+   "old": "return quad_to_mpmath(result)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1704,
+   "op": "constant",
+   "start": 58917,
+   "end": 58930,
+   "old": "'_as_mpf_val'",
+   "new": "('XX')",
+   "id": 8
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1710,
+   "op": "statement",
+   "start": 59131,
+   "end": 59157,
+   "old": "v = self._eval_evalf(prec)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1716,
+   "op": "statement",
+   "start": 59350,
+   "end": 59375,
+   "old": "re, im = v.as_real_imag()",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1729,
+   "op": "return",
+   "start": 59788,
+   "end": 59813,
+   "old": "return make_mpc((re, im))",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1711,
+   "op": "comparison",
+   "start": 59173,
+   "end": 59182,
+   "old": "v is None",
+   "new": "(v is not None)",
+   "id": 12
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1712,
+   "op": "statement",
+   "start": 59200,
+   "end": 59224,
+   "old": "raise ValueError(errmsg)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1714,
+   "op": "return",
+   "start": 59268,
+   "end": 59292,
+   "old": "return make_mpf(v._mpf_)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1717,
+   "op": "boolean",
+   "start": 59391,
+   "end": 59419,
+   "old": "allow_ints and re.is_Integer",
+   "new": "(allow_ints or re.is_Integer)",
+   "id": 15
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1718,
+   "op": "statement",
+   "start": 59437,
+   "end": 59456,
+   "old": "re = from_int(re.p)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1723,
+   "op": "boolean",
+   "start": 59591,
+   "end": 59619,
+   "old": "allow_ints and im.is_Integer",
+   "new": "(allow_ints or im.is_Integer)",
+   "id": 17
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1724,
+   "op": "statement",
+   "start": 59637,
+   "end": 59656,
+   "old": "im = from_int(im.p)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1720,
+   "op": "statement",
+   "start": 59503,
+   "end": 59516,
+   "old": "re = re._mpf_",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1722,
+   "op": "statement",
+   "start": 59551,
+   "end": 59575,
+   "old": "raise ValueError(errmsg)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1726,
+   "op": "statement",
+   "start": 59703,
+   "end": 59716,
+   "old": "im = im._mpf_",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sympy/core/evalf.py",
+   "line": 1728,
+   "op": "statement",
+   "start": 59751,
+   "end": 59775,
+   "old": "raise ValueError(errmsg)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4495,
+   "op": "statement",
+   "start": 137054,
+   "end": 137123,
+   "old": "_illegal = (S.NaN, S.Infinity, S.NegativeInfinity, S.ComplexInfinity)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 211,
+   "op": "statement",
+   "start": 6505,
+   "end": 6529,
+   "old": "s, d, e = dec.as_tuple()",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 212,
+   "op": "statement",
+   "start": 6534,
+   "end": 6547,
+   "old": "prec = len(d)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 219,
+   "op": "return",
+   "start": 6744,
+   "end": 6759,
+   "old": "return rv, prec",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4197,
+   "op": "return",
+   "start": 127856,
+   "end": 127868,
+   "old": "return False",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 209,
+   "op": "boolean",
+   "start": 6419,
+   "end": 6438,
+   "old": "not dec.is_finite()",
+   "new": "(dec.is_finite())",
+   "id": 28
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 210,
+   "op": "statement",
+   "start": 6448,
+   "end": 6500,
+   "old": "raise TypeError(\"dec must be finite, got %s.\" % dec)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 213,
+   "op": "comparison",
+   "start": 6555,
+   "end": 6561,
+   "old": "e >= 0",
+   "new": "(e > 0)",
+   "id": 30
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 214,
+   "op": "statement",
+   "start": 6590,
+   "end": 6612,
+   "old": "rv = Integer(int(dec))",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 216,
+   "op": "statement",
+   "start": 6631,
+   "end": 6642,
+   "old": "s = (-1)**s",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 217,
+   "op": "statement",
+   "start": 6651,
+   "end": 6704,
+   "old": "d = sum(di*10**i for i, di in enumerate(reversed(d)))",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 218,
+   "op": "statement",
+   "start": 6713,
+   "end": 6739,
+   "old": "rv = Rational(s*d, 10**-e)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4189,
+   "op": "return",
+   "start": 127634,
+   "end": 127645,
+   "old": "return True",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4190,
+   "op": "comparison",
+   "start": 127653,
+   "end": 127669,
+   "old": "type(x) is float",
+   "new": "(type(x) is not float)",
+   "id": 36
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4191,
+   "op": "return",
+   "start": 127679,
+   "end": 127700,
+   "old": "return x.is_integer()",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4193,
+   "op": "return",
+   "start": 127740,
+   "end": 127751,
+   "old": "return True",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4196,
+   "op": "return",
+   "start": 127829,
+   "end": 127851,
+   "old": "return x._mpf_[2] >= 0",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4197,
+   "op": "constant",
+   "start": 127863,
+   "end": 127868,
+   "old": "False",
+   "new": "(True)",
+   "id": 40
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 213,
+   "op": "constant",
+   "start": 6560,
+   "end": 6561,
+   "old": "0",
+   "new": "(1)",
+   "id": 41
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4189,
+   "op": "constant",
+   "start": 127641,
+   "end": 127645,
+   "old": "True",
+   "new": "(False)",
+   "id": 42
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4193,
+   "op": "constant",
+   "start": 127747,
+   "end": 127751,
+   "old": "True",
+   "new": "(False)",
+   "id": 43
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4196,
+   "op": "comparison",
+   "start": 127836,
+   "end": 127851,
+   "old": "x._mpf_[2] >= 0",
+   "new": "(x._mpf_[2] > 0)",
+   "id": 44
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 210,
+   "op": "arithmetic",
+   "start": 6464,
+   "end": 6499,
+   "old": "\"dec must be finite, got %s.\" % dec",
+   "new": "('dec must be finite, got %s.' * dec)",
+   "id": 45
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 218,
+   "op": "arithmetic",
+   "start": 6727,
+   "end": 6730,
+   "old": "s*d",
+   "new": "(s / d)",
+   "id": 46
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4196,
+   "op": "constant",
+   "start": 127850,
+   "end": 127851,
+   "old": "0",
+   "new": "(1)",
+   "id": 47
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 210,
+   "op": "constant",
+   "start": 6464,
+   "end": 6493,
+   "old": "\"dec must be finite, got %s.\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 216,
+   "op": "constant",
+   "start": 6637,
+   "end": 6638,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 217,
+   "op": "arithmetic",
+   "start": 6659,
+   "end": 6667,
+   "old": "di*10**i",
+   "new": "(di / 10 ** i)",
+   "id": 50
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 218,
+   "op": "constant",
+   "start": 6732,
+   "end": 6734,
+   "old": "10",
+   "new": "(11)",
+   "id": 51
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 4196,
+   "op": "constant",
+   "start": 127844,
+   "end": 127845,
+   "old": "2",
+   "new": "(3)",
+   "id": 52
+  },
+  {
+   "path": "sympy/core/numbers.py",
+   "line": 217,
+   "op": "constant",
+   "start": 6662,
+   "end": 6664,
+   "old": "10",
+   "new": "(11)",
+   "id": 53
+  },
+  {
+   "path": "sympy/core/relational.py",
+   "line": 1302,
+   "op": "return",
+   "start": 41448,
+   "end": 41494,
+   "old": "return fuzzy_not(is_le(lhs, rhs, assumptions))",
+   "new": "return None",
+   "id": 54
+  },
+  {
+   "path": "sympy/core/relational.py",
+   "line": 1441,
+   "op": "return",
+   "start": 45672,
+   "end": 45718,
+   "old": "return fuzzy_not(is_eq(lhs, rhs, assumptions))",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 432,
+   "op": "return",
+   "start": 15858,
+   "end": 15874,
+   "old": "return decorator",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 343,
+   "op": "statement",
+   "start": 12401,
+   "end": 12428,
+   "old": "order = order or self.order",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 286,
+   "op": "comparison",
+   "start": 9762,
+   "end": 9787,
+   "old": "'order' in self._settings",
+   "new": "('order' not in self._settings)",
+   "id": 58
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 287,
+   "op": "return",
+   "start": 9801,
+   "end": 9831,
+   "old": "return self._settings['order']",
+   "new": "return None",
+   "id": 59
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 289,
+   "op": "statement",
+   "start": 9858,
+   "end": 9899,
+   "old": "raise AttributeError(\"No order defined.\")",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 343,
+   "op": "boolean",
+   "start": 12409,
+   "end": 12428,
+   "old": "order or self.order",
+   "new": "(order and self.order)",
+   "id": 61
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 345,
+   "op": "comparison",
+   "start": 12441,
+   "end": 12455,
+   "old": "order == 'old'",
+   "new": "(order != 'old')",
+   "id": 62
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 346,
+   "op": "return",
+   "start": 12469,
+   "end": 12541,
+   "old": "return sorted(Add.make_args(expr), key=cmp_to_key(self._compare_pretty))",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 286,
+   "op": "constant",
+   "start": 9762,
+   "end": 9769,
+   "old": "'order'",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 345,
+   "op": "constant",
+   "start": 12450,
+   "end": 12455,
+   "old": "'old'",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 347,
+   "op": "comparison",
+   "start": 12555,
+   "end": 12570,
+   "old": "order == 'none'",
+   "new": "(order != 'none')",
+   "id": 66
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 348,
+   "op": "return",
+   "start": 12584,
+   "end": 12606,
+   "old": "return list(expr.args)",
+   "new": "return None",
+   "id": 67
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 350,
+   "op": "return",
+   "start": 12633,
+   "end": 12674,
+   "old": "return expr.as_ordered_terms(order=order)",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 289,
+   "op": "constant",
+   "start": 9879,
+   "end": 9898,
+   "old": "\"No order defined.\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "sympy/printing/printer.py",
+   "line": 347,
+   "op": "constant",
+   "start": 12564,
+   "end": 12570,
+   "old": "'none'",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 506,
+   "op": "statement",
+   "start": 19480,
+   "end": 19533,
+   "old": "_symbols = dict(symbol_table) if symbol_table else {}",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 515,
+   "op": "statement",
+   "start": 19826,
+   "end": 19908,
+   "old": "safe_update({\n        e\n        for e in exprs\n        if e.is_Symbol\n    }, bool)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 521,
+   "op": "statement",
+   "start": 19914,
+   "end": 20091,
+   "old": "safe_update({\n        symbol\n        for e in exprs\n        for boolfunc in e.atoms(BooleanFunction)\n        for symbol in boolfunc.args\n        if symbol.is_Symbol\n    }, bool)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 529,
+   "op": "statement",
+   "start": 20097,
+   "end": 20370,
+   "old": "safe_update({\n        symbol\n        for e in exprs\n        for boolfunc in e.atoms(Function)\n        if type(boolfunc) in _symbols\n        for symbol, param in zip(boolfunc.args, _symbols[type(boolfunc)].__args__)\n        if symbol.is_Symbol and param == bool\n    }, bool)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 538,
+   "op": "statement",
+   "start": 20376,
+   "end": 20643,
+   "old": "safe_update({\n        symbol\n        for e in exprs\n        for intfunc in e.atoms(Function)\n        if type(intfunc) in _symbols\n        for symbol, param in zip(intfunc.args, _symbols[type(intfunc)].__args__)\n        if symbol.is_Symbol and param == int\n    }, int)",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 547,
+   "op": "statement",
+   "start": 20649,
+   "end": 20779,
+   "old": "safe_update({\n        symbol\n        for e in exprs\n        for symbol in e.atoms(Symbol)\n        if symbol.is_integer\n    }, int)",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 554,
+   "op": "statement",
+   "start": 20785,
+   "end": 20940,
+   "old": "safe_update({\n        symbol\n        for e in exprs\n        for symbol in e.atoms(Symbol)\n        if symbol.is_real and not symbol.is_integer\n    }, float)",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 562,
+   "op": "statement",
+   "start": 20975,
+   "end": 21040,
+   "old": "rels_eq = [rel for expr in exprs for rel in expr.atoms(Equality)]",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 563,
+   "op": "statement",
+   "start": 21045,
+   "end": 21231,
+   "old": "rels = [\n               (rel.lhs, rel.rhs) for rel in rels_eq if rel.lhs.is_Symbol\n           ] + [\n               (rel.rhs, rel.lhs) for rel in rels_eq if rel.rhs.is_Symbol\n           ]",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 583,
+   "op": "return",
+   "start": 21736,
+   "end": 21751,
+   "old": "return _symbols",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 563,
+   "op": "arithmetic",
+   "start": 21052,
+   "end": 21231,
+   "old": "[\n               (rel.lhs, rel.rhs) for rel in rels_eq if rel.lhs.is_Symbol\n           ] + [\n               (rel.rhs, rel.lhs) for rel in rels_eq if rel.rhs.is_Symbol\n           ]",
+   "new": "([(rel.lhs, rel.rhs) for rel in rels_eq if rel.lhs.is_Symbol] - [(rel.rhs, rel.lhs) for rel in rels_eq if rel.rhs.is_Symbol])",
+   "id": 81
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 569,
+   "op": "statement",
+   "start": 21270,
+   "end": 21676,
+   "old": "inference = (\n            _symbols[infer] if infer in _symbols else\n            _symbols[reltd] if reltd in _symbols else\n\n            _symbols[type(reltd)].__args__[-1]\n            if reltd.is_Function and type(reltd) in _symbols else\n\n            bool if reltd.is_Boolean else\n            int if reltd.is_integer or reltd.is_Integer else\n            float if reltd.is_real else\n            None\n        )",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 581,
+   "op": "statement",
+   "start": 21699,
+   "end": 21730,
+   "old": "safe_update({infer}, inference)",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 511,
+   "op": "comparison",
+   "start": 19641,
+   "end": 19689,
+   "old": "(old_type := _symbols.setdefault(s, inf)) != inf",
+   "new": "((old_type := _symbols.setdefault(s, inf)) == inf)",
+   "id": 84
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 512,
+   "op": "statement",
+   "start": 19707,
+   "end": 19799,
+   "old": "raise TypeError(f\"Could not infer type of `{s}`. Apparently both `{old_type}` and `{inf}`?\")",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 570,
+   "op": "comparison",
+   "start": 21315,
+   "end": 21332,
+   "old": "infer in _symbols",
+   "new": "(infer not in _symbols)",
+   "id": 86
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 533,
+   "op": "comparison",
+   "start": 20202,
+   "end": 20228,
+   "old": "type(boolfunc) in _symbols",
+   "new": "(type(boolfunc) not in _symbols)",
+   "id": 87
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 535,
+   "op": "boolean",
+   "start": 20323,
+   "end": 20357,
+   "old": "symbol.is_Symbol and param == bool",
+   "new": "(symbol.is_Symbol or param == bool)",
+   "id": 88
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 542,
+   "op": "comparison",
+   "start": 20480,
+   "end": 20505,
+   "old": "type(intfunc) in _symbols",
+   "new": "(type(intfunc) not in _symbols)",
+   "id": 89
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 544,
+   "op": "boolean",
+   "start": 20598,
+   "end": 20631,
+   "old": "symbol.is_Symbol and param == int",
+   "new": "(symbol.is_Symbol or param == int)",
+   "id": 90
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 558,
+   "op": "boolean",
+   "start": 20886,
+   "end": 20926,
+   "old": "symbol.is_real and not symbol.is_integer",
+   "new": "(symbol.is_real or not symbol.is_integer)",
+   "id": 91
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 571,
+   "op": "comparison",
+   "start": 21369,
+   "end": 21386,
+   "old": "reltd in _symbols",
+   "new": "(reltd not in _symbols)",
+   "id": 92
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 535,
+   "op": "comparison",
+   "start": 20344,
+   "end": 20357,
+   "old": "param == bool",
+   "new": "(param != bool)",
+   "id": 93
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 544,
+   "op": "comparison",
+   "start": 20619,
+   "end": 20631,
+   "old": "param == int",
+   "new": "(param != int)",
+   "id": 94
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 558,
+   "op": "boolean",
+   "start": 20905,
+   "end": 20926,
+   "old": "not symbol.is_integer",
+   "new": "(symbol.is_integer)",
+   "id": 95
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 574,
+   "op": "boolean",
+   "start": 21455,
+   "end": 21500,
+   "old": "reltd.is_Function and type(reltd) in _symbols",
+   "new": "(reltd.is_Function or type(reltd) in _symbols)",
+   "id": 96
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 574,
+   "op": "comparison",
+   "start": 21477,
+   "end": 21500,
+   "old": "type(reltd) in _symbols",
+   "new": "(type(reltd) not in _symbols)",
+   "id": 97
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 573,
+   "op": "constant",
+   "start": 21437,
+   "end": 21438,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "sympy/printing/smtlib.py",
+   "line": 577,
+   "op": "boolean",
+   "start": 21568,
+   "end": 21604,
+   "old": "reltd.is_integer or reltd.is_Integer",
+   "new": "(reltd.is_integer and reltd.is_Integer)",
+   "id": 99
+  }
+ ]
+}

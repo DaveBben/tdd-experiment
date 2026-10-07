@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_scales.d9dcdef6.lv1",
+ "pool": 641,
+ "mutants": [
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 104,
+   "op": "statement",
+   "start": 3850,
+   "end": 3885,
+   "old": "missing = set(levels) - set(values)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 670,
+   "op": "statement",
+   "start": 24709,
+   "end": 24754,
+   "old": "levels = categorical_order(data, scale.order)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 763,
+   "op": "statement",
+   "start": 28395,
+   "end": 28434,
+   "old": "levels = categorical_order(data, order)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 582,
+   "op": "return",
+   "start": 21095,
+   "end": 21123,
+   "old": "return to_rgba_array(colors)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 584,
+   "op": "return",
+   "start": 21150,
+   "end": 21185,
+   "old": "return to_rgba_array(colors)[:, :3]",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 678,
+   "op": "return",
+   "start": 25050,
+   "end": 25060,
+   "old": "return out",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 690,
+   "op": "statement",
+   "start": 25349,
+   "end": 25397,
+   "old": "out = np.full((len(x), colors.shape[1]), np.nan)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 756,
+   "op": "statement",
+   "start": 28002,
+   "end": 28033,
+   "old": "warnings.warn(msg, UserWarning)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 770,
+   "op": "statement",
+   "start": 28582,
+   "end": 28625,
+   "old": "ixs = np.asarray(np.nan_to_num(x), np.intp)",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 574,
+   "op": "comparison",
+   "start": 20865,
+   "end": 20892,
+   "old": "to_rgba(x) != to_rgba(x, 1)",
+   "new": "(to_rgba(x) == to_rgba(x, 1))",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 684,
+   "op": "constant",
+   "start": 25212,
+   "end": 25217,
+   "old": "False",
+   "new": "(True)",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 691,
+   "op": "constant",
+   "start": 25432,
+   "end": 25433,
+   "old": "0",
+   "new": "(1)",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 692,
+   "op": "constant",
+   "start": 25470,
+   "end": 25471,
+   "old": "1",
+   "new": "(2)",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 114,
+   "op": "constant",
+   "start": 4301,
+   "end": 4304,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 690,
+   "op": "constant",
+   "start": 25385,
+   "end": 25386,
+   "old": "1",
+   "new": "(2)",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_core/properties.py",
+   "line": 757,
+   "op": "constant",
+   "start": 28091,
+   "end": 28096,
+   "old": "False",
+   "new": "(True)",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1090,
+   "op": "return",
+   "start": 35296,
+   "end": 35304,
+   "old": "return 1",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 431,
+   "op": "statement",
+   "start": 13542,
+   "end": 13602,
+   "old": "mpl_scale = new._get_scale(str(data.name), forward, inverse)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 438,
+   "op": "statement",
+   "start": 13775,
+   "end": 13808,
+   "old": "new._matplotlib_scale = mpl_scale",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 493,
+   "op": "statement",
+   "start": 15801,
+   "end": 15817,
+   "old": "arg = self.trans",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 906,
+   "op": "statement",
+   "start": 29749,
+   "end": 29779,
+   "old": "self.major = mpl.axis.Ticker()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 936,
+   "op": "return",
+   "start": 30915,
+   "end": 30923,
+   "old": "return 5",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 940,
+   "op": "statement",
+   "start": 31012,
+   "end": 31034,
+   "old": "locator.set_axis(self)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 944,
+   "op": "statement",
+   "start": 31131,
+   "end": 31155,
+   "old": "formatter.set_axis(self)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 989,
+   "op": "return",
+   "start": 32789,
+   "end": 32806,
+   "old": "return self.scale",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1026,
+   "op": "statement",
+   "start": 33614,
+   "end": 33633,
+   "old": "fs = np.log, np.exp",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1047,
+   "op": "constant",
+   "start": 34226,
+   "end": 34228,
+   "old": "10",
+   "new": "(11)",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1084,
+   "op": "return",
+   "start": 35171,
+   "end": 35219,
+   "old": "return np.sign(x) * np.power(np.abs(x), 1 / exp)",
+   "new": "return None",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 330,
+   "op": "statement",
+   "start": 10905,
+   "end": 10941,
+   "old": "nticks = len(axis.get_major_ticks())",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 331,
+   "op": "statement",
+   "start": 10954,
+   "end": 10979,
+   "old": "lo, hi = -.5, nticks - .5",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 424,
+   "op": "comparison",
+   "start": 13361,
+   "end": 13385,
+   "old": "new._tick_params is None",
+   "new": "(new._tick_params is not None)",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 425,
+   "op": "statement",
+   "start": 13399,
+   "end": 13415,
+   "old": "new = new.tick()",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 426,
+   "op": "comparison",
+   "start": 13427,
+   "end": 13452,
+   "old": "new._label_params is None",
+   "new": "(new._label_params is not None)",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 427,
+   "op": "statement",
+   "start": 13466,
+   "end": 13483,
+   "old": "new = new.label()",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 435,
+   "op": "statement",
+   "start": 13682,
+   "end": 13705,
+   "old": "axis.update_units(data)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 464,
+   "op": "statement",
+   "start": 14496,
+   "end": 14519,
+   "old": "x = x.dropna().unique()",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 660,
+   "op": "statement",
+   "start": 21858,
+   "end": 21893,
+   "old": "m = re.match(r\"symlog(\\d*)\", trans)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 804,
+   "op": "statement",
+   "start": 26649,
+   "end": 26781,
+   "old": "err = (\n                f\"Tick locator must be an instance of {Locator!r}, \"\n                f\"not {type(locator)!r}.\"\n            )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 845,
+   "op": "comparison",
+   "start": 27863,
+   "end": 27882,
+   "old": "locator is not None",
+   "new": "(locator is None)",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 866,
+   "op": "statement",
+   "start": 28528,
+   "end": 28566,
+   "old": "formatter = AutoDateFormatter(locator)",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1084,
+   "op": "arithmetic",
+   "start": 35178,
+   "end": 35219,
+   "old": "np.sign(x) * np.power(np.abs(x), 1 / exp)",
+   "new": "(np.sign(x) / np.power(np.abs(x), 1 / exp))",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 129,
+   "op": "statement",
+   "start": 3772,
+   "end": 3801,
+   "old": "trans_data = func(trans_data)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 451,
+   "op": "return",
+   "start": 14230,
+   "end": 14248,
+   "old": "return (x - a) / b",
+   "new": "return None",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 803,
+   "op": "comparison",
+   "start": 26579,
+   "end": 26598,
+   "old": "locator is not None",
+   "new": "(locator is None)",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 968,
+   "op": "statement",
+   "start": 31887,
+   "end": 31922,
+   "old": "self.set_major_locator(info.majloc)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1029,
+   "op": "comparison",
+   "start": 33706,
+   "end": 33716,
+   "old": "base == 10",
+   "new": "(base != 10)",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1062,
+   "op": "arithmetic",
+   "start": 34751,
+   "end": 34788,
+   "old": "np.sign(x) * c * (exp(np.abs(x)) - 1)",
+   "new": "(np.sign(x) * c / (exp(np.abs(x)) - 1))",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 132,
+   "op": "constant",
+   "start": 3857,
+   "end": 3858,
+   "old": "0",
+   "new": "(1)",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 181,
+   "op": "statement",
+   "start": 5245,
+   "end": 5271,
+   "old": "use = x.notna().to_numpy()",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 484,
+   "op": "constant",
+   "start": 15551,
+   "end": 15567,
+   "old": "\"set_scientific\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 657,
+   "op": "constant",
+   "start": 21750,
+   "end": 21762,
+   "old": "r\"^log(\\d*)\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 660,
+   "op": "constant",
+   "start": 21871,
+   "end": 21885,
+   "old": "r\"symlog(\\d*)\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1029,
+   "op": "constant",
+   "start": 33714,
+   "end": 33716,
+   "old": "10",
+   "new": "(11)",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 477,
+   "op": "comparison",
+   "start": 15056,
+   "end": 15068,
+   "old": "vmin <= locs",
+   "new": "(vmin < locs)",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1037,
+   "op": "constant",
+   "start": 33978,
+   "end": 33986,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1057,
+   "op": "constant",
+   "start": 34575,
+   "end": 34583,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1058,
+   "op": "arithmetic",
+   "start": 34622,
+   "end": 34649,
+   "old": "1 + np.abs(np.divide(x, c))",
+   "new": "(1 - np.abs(np.divide(x, c)))",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1084,
+   "op": "constant",
+   "start": 35211,
+   "end": 35212,
+   "old": "1",
+   "new": "(2)",
+   "id": 57
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 507,
+   "op": "comparison",
+   "start": 16222,
+   "end": 16236,
+   "old": "arg == \"logit\"",
+   "new": "(arg != 'logit')",
+   "id": 58
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 511,
+   "op": "statement",
+   "start": 16392,
+   "end": 16419,
+   "old": "base = get_param(\"log\", 10)",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 515,
+   "op": "return",
+   "start": 16572,
+   "end": 16605,
+   "old": "return _make_symlog_transforms(c)",
+   "new": "return None",
+   "id": 60
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 511,
+   "op": "constant",
+   "start": 16409,
+   "end": 16414,
+   "old": "\"log\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 519,
+   "op": "comparison",
+   "start": 16756,
+   "end": 16769,
+   "old": "arg == \"sqrt\"",
+   "new": "(arg != 'sqrt')",
+   "id": 62
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 32,
+   "op": "return",
+   "start": 437,
+   "end": 479,
+   "old": "return lch_to_rgb(*husl_to_lch([h, s, l]))",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 68,
+   "op": "return",
+   "start": 1096,
+   "end": 1148,
+   "old": "return luv_to_lch(xyz_to_luv(rgb_to_xyz([r, g, b])))",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 72,
+   "op": "statement",
+   "start": 1177,
+   "end": 1199,
+   "old": "hrad = math.radians(H)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 193,
+   "op": "statement",
+   "start": 4341,
+   "end": 4391,
+   "old": "xyz = map(lambda row: dot_product(row, triple), m)",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 223,
+   "op": "statement",
+   "start": 5022,
+   "end": 5038,
+   "old": "L, U, V = triple",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 229,
+   "op": "statement",
+   "start": 5128,
+   "end": 5156,
+   "old": "varU = U / (13.0 * L) + refU",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 255,
+   "op": "statement",
+   "start": 5705,
+   "end": 5729,
+   "old": "V = (math.sin(Hrad) * C)",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 313,
+   "op": "return",
+   "start": 6649,
+   "end": 6665,
+   "old": "return [H, S, L]",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 127,
+   "op": "comparison",
+   "start": 2918,
+   "end": 2927,
+   "old": "t > lab_e",
+   "new": "(t >= lab_e)",
+   "id": 71
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 134,
+   "op": "comparison",
+   "start": 3044,
+   "end": 3068,
+   "old": "math.pow(t, 3.0) > lab_e",
+   "new": "(math.pow(t, 3.0) >= lab_e)",
+   "id": 72
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 137,
+   "op": "return",
+   "start": 3122,
+   "end": 3155,
+   "old": "return (116.0 * t - 16.0) / lab_k",
+   "new": "return None",
+   "id": 73
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 209,
+   "op": "arithmetic",
+   "start": 4731,
+   "end": 4771,
+   "old": "(9.0 * Y) / (X + (15.0 * Y) + (3.0 * Z))",
+   "new": "(9.0 * Y * (X + 15.0 * Y + 3.0 * Z))",
+   "id": 74
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 210,
+   "op": "arithmetic",
+   "start": 4780,
+   "end": 4806,
+   "old": "116.0 * f(Y / refY) - 16.0",
+   "new": "(116.0 * f(Y / refY) + 16.0)",
+   "id": 75
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 214,
+   "op": "return",
+   "start": 4880,
+   "end": 4902,
+   "old": "return [0.0, 0.0, 0.0]",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 88,
+   "op": "statement",
+   "start": 1723,
+   "end": 1784,
+   "old": "C = (L * (top - 1.05122 * t) / (bottom + 0.17266 * sinH * t))",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 137,
+   "op": "arithmetic",
+   "start": 3129,
+   "end": 3155,
+   "old": "(116.0 * t - 16.0) / lab_k",
+   "new": "((116.0 * t - 16.0) * lab_k)",
+   "id": 78
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 142,
+   "op": "arithmetic",
+   "start": 3216,
+   "end": 3225,
+   "old": "12.92 * c",
+   "new": "(12.92 / c)",
+   "id": 79
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 208,
+   "op": "arithmetic",
+   "start": 4692,
+   "end": 4718,
+   "old": "X + (15.0 * Y) + (3.0 * Z)",
+   "new": "(X + 15.0 * Y - 3.0 * Z)",
+   "id": 80
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 217,
+   "op": "arithmetic",
+   "start": 4945,
+   "end": 4953,
+   "old": "13.0 * L",
+   "new": "(13.0 / L)",
+   "id": 81
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 283,
+   "op": "arithmetic",
+   "start": 6167,
+   "end": 6173,
+   "old": "C / mx",
+   "new": "(C * mx)",
+   "id": 82
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 83,
+   "op": "arithmetic",
+   "start": 1561,
+   "end": 1573,
+   "old": "0.17266 * m2",
+   "new": "(0.17266 / m2)",
+   "id": 83
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 128,
+   "op": "arithmetic",
+   "start": 2957,
+   "end": 2966,
+   "old": "1.0 / 3.0",
+   "new": "(1.0 * 3.0)",
+   "id": 84
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 130,
+   "op": "arithmetic",
+   "start": 3007,
+   "end": 3019,
+   "old": "16.0 / 116.0",
+   "new": "(16.0 // 116.0)",
+   "id": 85
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 208,
+   "op": "arithmetic",
+   "start": 4692,
+   "end": 4706,
+   "old": "X + (15.0 * Y)",
+   "new": "(X - 15.0 * Y)",
+   "id": 86
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 232,
+   "op": "arithmetic",
+   "start": 5244,
+   "end": 5277,
+   "old": "(varU - 4.0) * varV - varU * varV",
+   "new": "((varU - 4.0) * varV + varU * varV)",
+   "id": 87
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 82,
+   "op": "arithmetic",
+   "start": 1475,
+   "end": 1502,
+   "old": "0.99915 * m1 + 1.05122 * m2",
+   "new": "(0.99915 * m1 - 1.05122 * m2)",
+   "id": 88
+  },
+  {
+   "path": "seaborn/external/husl.py",
+   "line": 209,
+   "op": "arithmetic",
+   "start": 4749,
+   "end": 4757,
+   "old": "15.0 * Y",
+   "new": "(15.0 / Y)",
+   "id": 89
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 786,
+   "op": "statement",
+   "start": 26172,
+   "end": 26286,
+   "old": "kwarg_map = dict(\n        s=\"start\", r=\"rot\", g=\"gamma\",\n        h=\"hue\", l=\"light\", d=\"dark\",  # noqa: E741\n    )",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 422,
+   "op": "comparison",
+   "start": 14104,
+   "end": 14118,
+   "old": "input == \"hls\"",
+   "new": "(input != 'hls')",
+   "id": 91
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 738,
+   "op": "return",
+   "start": 24935,
+   "end": 24947,
+   "old": "return color",
+   "new": "return None",
+   "id": 92
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 768,
+   "op": "statement",
+   "start": 25741,
+   "end": 25760,
+   "old": "argstr = argstr[3:]",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 424,
+   "op": "constant",
+   "start": 14182,
+   "end": 14188,
+   "old": "\"husl\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 788,
+   "op": "constant",
+   "start": 26239,
+   "end": 26244,
+   "old": "\"hue\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 733,
+   "op": "constant",
+   "start": 24805,
+   "end": 24806,
+   "old": "2",
+   "new": "(3)",
+   "id": 96
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 737,
+   "op": "arithmetic",
+   "start": 24885,
+   "end": 24926,
+   "old": "a * (p0 * np.cos(phi) + p1 * np.sin(phi))",
+   "new": "(a / (p0 * np.cos(phi) + p1 * np.sin(phi)))",
+   "id": 97
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 784,
+   "op": "constant",
+   "start": 26141,
+   "end": 26144,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "seaborn/palettes.py",
+   "line": 735,
+   "op": "arithmetic",
+   "start": 24851,
+   "end": 24858,
+   "old": "rot * x",
+   "new": "(rot / x)",
+   "id": 99
+  }
+ ]
+}

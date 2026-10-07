@@ -1,0 +1,886 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_databricks_tracing_utils.8ef44eb4.lv1",
+ "pool": 88,
+ "mutants": [
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5583,
+   "end": 5643,
+   "old": "self._source_type = AssessmentSourceType._parse(source_type)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5712,
+   "end": 5745,
+   "old": "source_type = source_type.upper()",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 183,
+   "op": "return",
+   "start": 6454,
+   "end": 6472,
+   "old": "return source_type",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 186,
+   "op": "return",
+   "start": 6505,
+   "end": 6529,
+   "old": "return self._source_type",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 190,
+   "op": "return",
+   "start": 6604,
+   "end": 6649,
+   "old": "return str(AssessmentSourceType(source_type))",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 194,
+   "op": "return",
+   "start": 6727,
+   "end": 6790,
+   "old": "return ProtoAssessmentSource.SourceType.Name(proto_source_type)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 168,
+   "op": "comparison",
+   "start": 5841,
+   "end": 5885,
+   "old": "source_type == AssessmentSourceType.AI_JUDGE",
+   "new": "(source_type != AssessmentSourceType.AI_JUDGE)",
+   "id": 6
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 169,
+   "op": "statement",
+   "start": 5899,
+   "end": 6024,
+   "old": "warnings.warn(\n                \"AI_JUDGE is deprecated. Use LLM_JUDGE instead.\",\n                FutureWarning,\n            )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 173,
+   "op": "statement",
+   "start": 6037,
+   "end": 6081,
+   "old": "source_type = AssessmentSourceType.LLM_JUDGE",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 175,
+   "op": "comparison",
+   "start": 6094,
+   "end": 6147,
+   "old": "source_type not in AssessmentSourceType._SOURCE_TYPES",
+   "new": "(source_type in AssessmentSourceType._SOURCE_TYPES)",
+   "id": 9
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 176,
+   "op": "statement",
+   "start": 6161,
+   "end": 6445,
+   "old": "raise MlflowException(\n                message=(\n                    f\"Invalid assessment source type: {source_type}. \"\n                    f\"Valid source types: {AssessmentSourceType._SOURCE_TYPES}\"\n                ),\n                error_code=INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/entities/assessment_source.py",
+   "line": 170,
+   "op": "constant",
+   "start": 5930,
+   "end": 5978,
+   "old": "\"AI_JUDGE is deprecated. Use LLM_JUDGE instead.\"",
+   "new": "('XX')",
+   "id": 11
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 160,
+   "op": "return",
+   "start": 5196,
+   "end": 5246,
+   "old": "return self.get_attribute(SpanAttributeKey.INPUTS)",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 165,
+   "op": "return",
+   "start": 5345,
+   "end": 5396,
+   "old": "return self.get_attribute(SpanAttributeKey.OUTPUTS)",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 26,
+   "op": "return",
+   "start": 770,
+   "end": 1053,
+   "old": "return pb.UCSchemaLocation(\n        catalog_name=uc_schema_location.catalog_name,\n        schema_name=uc_schema_location.schema_name,\n        otel_spans_table_name=uc_schema_location._otel_spans_table_name,\n        otel_logs_table_name=uc_schema_location._otel_logs_table_name,\n    )",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 35,
+   "op": "statement",
+   "start": 1143,
+   "end": 1234,
+   "old": "location = UCSchemaLocation(catalog_name=proto.catalog_name, schema_name=proto.schema_name)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 41,
+   "op": "return",
+   "start": 1473,
+   "end": 1488,
+   "old": "return location",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 47,
+   "op": "return",
+   "start": 1620,
+   "end": 1710,
+   "old": "return pb.InferenceTableLocation(full_table_name=inference_table_location.full_table_name)",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 53,
+   "op": "return",
+   "start": 1850,
+   "end": 1940,
+   "old": "return pb.MlflowExperimentLocation(experiment_id=mlflow_experiment_location.experiment_id)",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 77,
+   "op": "return",
+   "start": 3023,
+   "end": 3095,
+   "old": "return TraceLocationType(pb.TraceLocation.TraceLocationType.Name(proto))",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 81,
+   "op": "statement",
+   "start": 3175,
+   "end": 3225,
+   "old": "type_ = trace_location_type_from_proto(proto.type)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 103,
+   "op": "statement",
+   "start": 4010,
+   "end": 4036,
+   "old": "request_time = Timestamp()",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 104,
+   "op": "statement",
+   "start": 4041,
+   "end": 4095,
+   "old": "request_time.FromMilliseconds(trace_info.request_time)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 105,
+   "op": "statement",
+   "start": 4100,
+   "end": 4125,
+   "old": "execution_duration = None",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 115,
+   "op": "return",
+   "start": 4451,
+   "end": 5083,
+   "old": "return pb.TraceInfo(\n        trace_id=trace_id,\n        client_request_id=trace_info.client_request_id,\n        trace_location=trace_location_to_proto(trace_info.trace_location),\n        request_preview=trace_info.request_preview,\n        response_preview=trace_info.response_preview,\n        request_time=request_time,\n        execution_duration=execution_duration,\n        state=pb.TraceInfo.State.Value(trace_info.state),\n        trace_metadata=_truncate_request_metadata(trace_info.trace_metadata),\n        tags=_truncate_tags(trace_info.tags),\n        assessments=[assessment_to_proto(a) for a in trace_info.assessments],\n    )",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 131,
+   "op": "return",
+   "start": 5136,
+   "end": 5267,
+   "old": "return pb.Trace(\n        trace_info=trace.info.to_proto(),\n        spans=[span.to_otel_proto() for span in trace.data.spans],\n    )",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 138,
+   "op": "return",
+   "start": 5340,
+   "end": 5509,
+   "old": "return Trace(\n        info=TraceInfo.from_proto(proto.trace_info),\n        data=TraceData(spans=[Span.from_otel_proto(span, location_id) for span in proto.spans]),\n    )",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 145,
+   "op": "statement",
+   "start": 5582,
+   "end": 5616,
+   "old": "assessment_proto = pb.Assessment()",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5621,
+   "end": 5671,
+   "old": "assessment_proto.assessment_name = assessment.name",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 147,
+   "op": "statement",
+   "start": 5676,
+   "end": 5735,
+   "old": "location, trace_id = parse_trace_id_v4(assessment.trace_id)",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 156,
+   "op": "statement",
+   "start": 6063,
+   "end": 6099,
+   "old": "assessment_proto.trace_id = trace_id",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 158,
+   "op": "statement",
+   "start": 6105,
+   "end": 6167,
+   "old": "assessment_proto.source.CopyFrom(assessment.source.to_proto())",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 161,
+   "op": "statement",
+   "start": 6230,
+   "end": 6302,
+   "old": "assessment_proto.create_time.FromMilliseconds(assessment.create_time_ms)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 162,
+   "op": "statement",
+   "start": 6307,
+   "end": 6389,
+   "old": "assessment_proto.last_update_time.FromMilliseconds(assessment.last_update_time_ms)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 184,
+   "op": "return",
+   "start": 7255,
+   "end": 7278,
+   "old": "return assessment_proto",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 38,
+   "op": "statement",
+   "start": 1292,
+   "end": 1353,
+   "old": "location._otel_spans_table_name = proto.otel_spans_table_name",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 40,
+   "op": "statement",
+   "start": 1409,
+   "end": 1468,
+   "old": "location._otel_logs_table_name = proto.otel_logs_table_name",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 57,
+   "op": "comparison",
+   "start": 2030,
+   "end": 2080,
+   "old": "trace_location.type == TraceLocationType.UC_SCHEMA",
+   "new": "(trace_location.type != TraceLocationType.UC_SCHEMA)",
+   "id": 37
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 58,
+   "op": "return",
+   "start": 2090,
+   "end": 2264,
+   "old": "return pb.TraceLocation(\n            type=pb.TraceLocation.TraceLocationType.UC_SCHEMA,\n            uc_schema=uc_schema_location_to_proto(trace_location.uc_schema),\n        )",
+   "new": "return None",
+   "id": 38
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 83,
+   "op": "comparison",
+   "start": 3234,
+   "end": 3279,
+   "old": "proto.WhichOneof(\"identifier\") == \"uc_schema\"",
+   "new": "(proto.WhichOneof('identifier') != 'uc_schema')",
+   "id": 39
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 84,
+   "op": "return",
+   "start": 3289,
+   "end": 3414,
+   "old": "return TraceLocation(\n            type=type_,\n            uc_schema=uc_schema_location_from_proto(proto.uc_schema),\n        )",
+   "new": "return None",
+   "id": 40
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 106,
+   "op": "comparison",
+   "start": 4133,
+   "end": 4174,
+   "old": "trace_info.execution_duration is not None",
+   "new": "(trace_info.execution_duration is None)",
+   "id": 41
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 107,
+   "op": "statement",
+   "start": 4184,
+   "end": 4215,
+   "old": "execution_duration = Duration()",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 108,
+   "op": "statement",
+   "start": 4224,
+   "end": 4290,
+   "old": "execution_duration.FromMilliseconds(trace_info.execution_duration)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 111,
+   "op": "statement",
+   "start": 4344,
+   "end": 4396,
+   "old": "_, trace_id = parse_trace_id_v4(trace_info.trace_id)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 113,
+   "op": "statement",
+   "start": 4415,
+   "end": 4445,
+   "old": "trace_id = trace_info.trace_id",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 149,
+   "op": "statement",
+   "start": 5761,
+   "end": 5798,
+   "old": "catalog, schema = location.split(\".\")",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 150,
+   "op": "statement",
+   "start": 5807,
+   "end": 6058,
+   "old": "assessment_proto.trace_location.CopyFrom(\n            pb.TraceLocation(\n                type=pb.TraceLocation.TraceLocationType.UC_SCHEMA,\n                uc_schema=pb.UCSchemaLocation(catalog_name=catalog, schema_name=schema),\n            )\n        )",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 164,
+   "op": "comparison",
+   "start": 6398,
+   "end": 6428,
+   "old": "assessment.span_id is not None",
+   "new": "(assessment.span_id is None)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 165,
+   "op": "statement",
+   "start": 6438,
+   "end": 6483,
+   "old": "assessment_proto.span_id = assessment.span_id",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 166,
+   "op": "comparison",
+   "start": 6491,
+   "end": 6523,
+   "old": "assessment.rationale is not None",
+   "new": "(assessment.rationale is None)",
+   "id": 50
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 167,
+   "op": "statement",
+   "start": 6533,
+   "end": 6582,
+   "old": "assessment_proto.rationale = assessment.rationale",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 168,
+   "op": "comparison",
+   "start": 6590,
+   "end": 6626,
+   "old": "assessment.assessment_id is not None",
+   "new": "(assessment.assessment_id is None)",
+   "id": 52
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 169,
+   "op": "statement",
+   "start": 6636,
+   "end": 6693,
+   "old": "assessment_proto.assessment_id = assessment.assessment_id",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 171,
+   "op": "comparison",
+   "start": 6702,
+   "end": 6736,
+   "old": "assessment.expectation is not None",
+   "new": "(assessment.expectation is None)",
+   "id": 54
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 172,
+   "op": "statement",
+   "start": 6746,
+   "end": 6818,
+   "old": "assessment_proto.expectation.CopyFrom(assessment.expectation.to_proto())",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 180,
+   "op": "statement",
+   "start": 7113,
+   "end": 7162,
+   "old": "assessment_proto.overrides = assessment.overrides",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 181,
+   "op": "comparison",
+   "start": 7170,
+   "end": 7198,
+   "old": "assessment.valid is not None",
+   "new": "(assessment.valid is None)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 182,
+   "op": "statement",
+   "start": 7208,
+   "end": 7249,
+   "old": "assessment_proto.valid = assessment.valid",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 188,
+   "op": "boolean",
+   "start": 7386,
+   "end": 7498,
+   "old": "\"trace_location\" in proto.DESCRIPTOR.fields_by_name and proto.trace_location.HasField(\n        \"uc_schema\"\n    )",
+   "new": "('trace_location' in proto.DESCRIPTOR.fields_by_name or proto.trace_location.HasField('uc_schema'))",
+   "id": 59
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 191,
+   "op": "statement",
+   "start": 7508,
+   "end": 7545,
+   "old": "trace_location = proto.trace_location",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 192,
+   "op": "return",
+   "start": 7554,
+   "end": 7716,
+   "old": "return construct_trace_id_v4(\n            f\"{trace_location.uc_schema.catalog_name}.{trace_location.uc_schema.schema_name}\",\n            proto.trace_id,\n        )",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 197,
+   "op": "return",
+   "start": 7735,
+   "end": 7756,
+   "old": "return proto.trace_id",
+   "new": "return None",
+   "id": 62
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1258,
+   "end": 1281,
+   "old": "\"otel_spans_table_name\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 39,
+   "op": "constant",
+   "start": 1376,
+   "end": 1398,
+   "old": "\"otel_logs_table_name\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 62,
+   "op": "comparison",
+   "start": 2274,
+   "end": 2332,
+   "old": "trace_location.type == TraceLocationType.MLFLOW_EXPERIMENT",
+   "new": "(trace_location.type != TraceLocationType.MLFLOW_EXPERIMENT)",
+   "id": 65
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 63,
+   "op": "return",
+   "start": 2342,
+   "end": 2548,
+   "old": "return pb.TraceLocation(\n            type=pb.TraceLocation.TraceLocationType.MLFLOW_EXPERIMENT,\n            mlflow_experiment=mlflow_experiment_location_to_proto(trace_location.mlflow_experiment),\n        )",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 83,
+   "op": "constant",
+   "start": 3268,
+   "end": 3279,
+   "old": "\"uc_schema\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 88,
+   "op": "comparison",
+   "start": 3424,
+   "end": 3477,
+   "old": "proto.WhichOneof(\"identifier\") == \"mlflow_experiment\"",
+   "new": "(proto.WhichOneof('identifier') != 'mlflow_experiment')",
+   "id": 68
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 89,
+   "op": "return",
+   "start": 3487,
+   "end": 3634,
+   "old": "return TraceLocation(\n            type=type_,\n            mlflow_experiment=MlflowExperimentLocation.from_proto(proto.mlflow_experiment),\n        )",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 173,
+   "op": "comparison",
+   "start": 6828,
+   "end": 6859,
+   "old": "assessment.feedback is not None",
+   "new": "(assessment.feedback is None)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 174,
+   "op": "statement",
+   "start": 6869,
+   "end": 6935,
+   "old": "assessment_proto.feedback.CopyFrom(assessment.feedback.to_proto())",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 178,
+   "op": "statement",
+   "start": 7032,
+   "end": 7075,
+   "old": "assessment_proto.metadata[key] = str(value)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 188,
+   "op": "comparison",
+   "start": 7386,
+   "end": 7437,
+   "old": "\"trace_location\" in proto.DESCRIPTOR.fields_by_name",
+   "new": "('trace_location' not in proto.DESCRIPTOR.fields_by_name)",
+   "id": 73
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 67,
+   "op": "comparison",
+   "start": 2558,
+   "end": 2614,
+   "old": "trace_location.type == TraceLocationType.INFERENCE_TABLE",
+   "new": "(trace_location.type != TraceLocationType.INFERENCE_TABLE)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 68,
+   "op": "return",
+   "start": 2624,
+   "end": 2822,
+   "old": "return pb.TraceLocation(\n            type=pb.TraceLocation.TraceLocationType.INFERENCE_TABLE,\n            inference_table=inference_table_location_to_proto(trace_location.inference_table),\n        )",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 73,
+   "op": "statement",
+   "start": 2841,
+   "end": 2916,
+   "old": "raise ValueError(f\"Unsupported trace location type: {trace_location.type}\")",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 83,
+   "op": "constant",
+   "start": 3251,
+   "end": 3263,
+   "old": "\"identifier\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 88,
+   "op": "constant",
+   "start": 3458,
+   "end": 3477,
+   "old": "\"mlflow_experiment\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 93,
+   "op": "comparison",
+   "start": 3644,
+   "end": 3695,
+   "old": "proto.WhichOneof(\"identifier\") == \"inference_table\"",
+   "new": "(proto.WhichOneof('identifier') != 'inference_table')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 94,
+   "op": "return",
+   "start": 3705,
+   "end": 3846,
+   "old": "return TraceLocation(\n            type=type_,\n            inference_table=InferenceTableLocation.from_proto(proto.inference_table),\n        )",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 99,
+   "op": "return",
+   "start": 3865,
+   "end": 3936,
+   "old": "return TraceLocation(TraceLocationType.TRACE_LOCATION_TYPE_UNSPECIFIED)",
+   "new": "return None",
+   "id": 81
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 149,
+   "op": "constant",
+   "start": 5794,
+   "end": 5797,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 188,
+   "op": "constant",
+   "start": 7386,
+   "end": 7402,
+   "old": "\"trace_location\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 189,
+   "op": "constant",
+   "start": 7481,
+   "end": 7492,
+   "old": "\"uc_schema\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 88,
+   "op": "constant",
+   "start": 3441,
+   "end": 3453,
+   "old": "\"identifier\"",
+   "new": "('XX')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3678,
+   "end": 3695,
+   "old": "\"inference_table\"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "mlflow/utils/databricks_tracing_utils.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3661,
+   "end": 3673,
+   "old": "\"identifier\"",
+   "new": "('XX')",
+   "id": 87
+  }
+ ]
+}

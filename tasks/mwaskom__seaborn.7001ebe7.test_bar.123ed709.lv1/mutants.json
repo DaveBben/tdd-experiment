@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_bar.123ed709.lv1",
+ "pool": 139,
+ "mutants": [
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1090,
+   "op": "return",
+   "start": 35296,
+   "end": 35304,
+   "old": "return 1",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1038,
+   "op": "return",
+   "start": 34001,
+   "end": 34016,
+   "old": "return fs[0](x)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1037,
+   "op": "constant",
+   "start": 33961,
+   "end": 33969,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1037,
+   "op": "constant",
+   "start": 33978,
+   "end": 33986,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_core/scales.py",
+   "line": 1038,
+   "op": "constant",
+   "start": 34011,
+   "end": 34012,
+   "old": "0",
+   "new": "(1)",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 32,
+   "op": "statement",
+   "start": 669,
+   "end": 698,
+   "old": "forward = transform.transform",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 35,
+   "op": "statement",
+   "start": 757,
+   "end": 793,
+   "old": "other = {\"x\": \"y\", \"y\": \"x\"}[orient]",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "statement",
+   "start": 803,
+   "end": 859,
+   "old": "pos = reverse(forward(data[orient]) - data[\"width\"] / 2)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 38,
+   "op": "statement",
+   "start": 868,
+   "end": 932,
+   "old": "width = reverse(forward(data[orient]) + data[\"width\"] / 2) - pos",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 40,
+   "op": "statement",
+   "start": 942,
+   "end": 991,
+   "old": "val = (data[other] - data[\"baseline\"]).to_numpy()",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1000,
+   "end": 1034,
+   "old": "base = data[\"baseline\"].to_numpy()",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1044,
+   "end": 1088,
+   "old": "kws = self._resolve_properties(data, scales)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1246,
+   "end": 1268,
+   "old": "kws.pop(\"width\", None)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 50,
+   "op": "statement",
+   "start": 1277,
+   "end": 1302,
+   "old": "kws.pop(\"baseline\", None)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 52,
+   "op": "statement",
+   "start": 1312,
+   "end": 1350,
+   "old": "val_dim = {\"x\": \"h\", \"y\": \"w\"}[orient]",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1359,
+   "end": 1378,
+   "old": "bars, vals = [], []",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 78,
+   "op": "return",
+   "start": 2201,
+   "end": 2218,
+   "old": "return bars, vals",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 82,
+   "op": "statement",
+   "start": 2278,
+   "end": 2327,
+   "old": "resolved = resolve_properties(self, data, scales)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2337,
+   "end": 2398,
+   "old": "resolved[\"facecolor\"] = resolve_color(self, data, \"\", scales)",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2482,
+   "end": 2508,
+   "old": "fc = resolved[\"facecolor\"]",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 102,
+   "op": "statement",
+   "start": 3053,
+   "end": 3250,
+   "old": "artist = mpl.patches.Patch(\n            facecolor=key[\"facecolor\"],\n            edgecolor=key[\"edgecolor\"],\n            linewidth=key[\"edgewidth\"],\n            linestyle=key[\"edgestyle\"],\n        )",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 108,
+   "op": "return",
+   "start": 3259,
+   "end": 3272,
+   "old": "return artist",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7231,
+   "end": 7265,
+   "old": "ori_idx = [\"x\", \"y\"].index(orient)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 208,
+   "op": "statement",
+   "start": 7274,
+   "end": 7308,
+   "old": "val_idx = [\"y\", \"x\"].index(orient)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 210,
+   "op": "statement",
+   "start": 7318,
+   "end": 7345,
+   "old": "patches = defaultdict(list)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 215,
+   "op": "statement",
+   "start": 7495,
+   "end": 7511,
+   "old": "collections = {}",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 38,
+   "op": "arithmetic",
+   "start": 876,
+   "end": 932,
+   "old": "reverse(forward(data[orient]) + data[\"width\"] / 2) - pos",
+   "new": "(reverse(forward(data[orient]) + data['width'] / 2) + pos)",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1127,
+   "end": 1168,
+   "old": "kws.update(x=pos, y=base, w=width, h=val)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1195,
+   "end": 1236,
+   "old": "kws.update(x=base, y=pos, w=val, h=width)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 57,
+   "op": "statement",
+   "start": 1428,
+   "end": 1467,
+   "old": "row = {k: v[i] for k, v in kws.items()}",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 65,
+   "op": "statement",
+   "start": 1765,
+   "end": 2124,
+   "old": "bar = mpl.patches.Rectangle(\n                xy=(row[\"x\"], row[\"y\"]),\n                width=row[\"w\"],\n                height=row[\"h\"],\n                facecolor=row[\"facecolor\"],\n                edgecolor=row[\"edgecolor\"],\n                linestyle=row[\"edgestyle\"],\n                linewidth=row[\"edgewidth\"],\n                **self.artist_kws,\n            )",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2137,
+   "end": 2153,
+   "old": "bars.append(bar)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 76,
+   "op": "statement",
+   "start": 2166,
+   "end": 2191,
+   "old": "vals.append(row[val_dim])",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "statement",
+   "start": 2555,
+   "end": 2624,
+   "old": "resolved[\"facecolor\"] = fc[0], fc[1], fc[2], fc[3] * resolved[\"fill\"]",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 91,
+   "op": "statement",
+   "start": 2651,
+   "end": 2689,
+   "old": "fc[:, 3] = fc[:, 3] * resolved[\"fill\"]",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 92,
+   "op": "statement",
+   "start": 2736,
+   "end": 2762,
+   "old": "resolved[\"facecolor\"] = fc",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 212,
+   "op": "statement",
+   "start": 7398,
+   "end": 7448,
+   "old": "bars, _ = self._make_patches(data, scales, orient)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 213,
+   "op": "statement",
+   "start": 7461,
+   "end": 7485,
+   "old": "patches[ax].extend(bars)",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 218,
+   "op": "statement",
+   "start": 7572,
+   "end": 7642,
+   "old": "col = mpl.collections.PatchCollection(ax_patches, match_original=True)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 221,
+   "op": "statement",
+   "start": 7760,
+   "end": 7781,
+   "old": "collections[ax] = col",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7987,
+   "end": 8047,
+   "old": "xys = np.vstack([path.vertices for path in col.get_paths()])",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 227,
+   "op": "statement",
+   "start": 8060,
+   "end": 8082,
+   "old": "ax.update_datalim(xys)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 250,
+   "op": "statement",
+   "start": 8980,
+   "end": 9044,
+   "old": "linewidth = min(.1 * min_width, mpl.rcParams[\"patch.linewidth\"])",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "arithmetic",
+   "start": 817,
+   "end": 858,
+   "old": "forward(data[orient]) - data[\"width\"] / 2",
+   "new": "(forward(data[orient]) + data['width'] / 2)",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 44,
+   "op": "constant",
+   "start": 1110,
+   "end": 1113,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1285,
+   "end": 1295,
+   "old": "\"baseline\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 63,
+   "op": "statement",
+   "start": 1743,
+   "end": 1751,
+   "old": "continue",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 84,
+   "op": "constant",
+   "start": 2346,
+   "end": 2357,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 85,
+   "op": "constant",
+   "start": 2416,
+   "end": 2427,
+   "old": "\"edgecolor\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 85,
+   "op": "constant",
+   "start": 2457,
+   "end": 2463,
+   "old": "\"edge\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 87,
+   "op": "constant",
+   "start": 2496,
+   "end": 2507,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 91,
+   "op": "arithmetic",
+   "start": 2662,
+   "end": 2689,
+   "old": "fc[:, 3] * resolved[\"fill\"]",
+   "new": "(fc[:, 3] / resolved['fill'])",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 229,
+   "op": "comparison",
+   "start": 8095,
+   "end": 8120,
+   "old": "\"edgewidth\" not in scales",
+   "new": "('edgewidth' in scales)",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 239,
+   "op": "return",
+   "start": 8534,
+   "end": 8574,
+   "old": "return np.array(edges), np.array(widths)",
+   "new": "return None",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 243,
+   "op": "statement",
+   "start": 8671,
+   "end": 8706,
+   "old": "edges, widths = get_dimensions(col)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 248,
+   "op": "statement",
+   "start": 8915,
+   "end": 8966,
+   "old": "min_width = min(min_width, min(points[:, ori_idx]))",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 252,
+   "op": "statement",
+   "start": 9108,
+   "end": 9136,
+   "old": "col.set_linewidth(linewidth)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 35,
+   "op": "constant",
+   "start": 766,
+   "end": 769,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 35,
+   "op": "constant",
+   "start": 776,
+   "end": 779,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 35,
+   "op": "constant",
+   "start": 771,
+   "end": 774,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 35,
+   "op": "constant",
+   "start": 781,
+   "end": 784,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "arithmetic",
+   "start": 841,
+   "end": 858,
+   "old": "data[\"width\"] / 2",
+   "new": "(data['width'] * 2)",
+   "id": 61
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "arithmetic",
+   "start": 841,
+   "end": 858,
+   "old": "data[\"width\"] / 2",
+   "new": "(data['width'] // 2)",
+   "id": 62
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 38,
+   "op": "arithmetic",
+   "start": 884,
+   "end": 925,
+   "old": "forward(data[orient]) + data[\"width\"] / 2",
+   "new": "(forward(data[orient]) - data['width'] / 2)",
+   "id": 63
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 40,
+   "op": "arithmetic",
+   "start": 949,
+   "end": 979,
+   "old": "data[other] - data[\"baseline\"]",
+   "new": "(data[other] + data['baseline'])",
+   "id": 64
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1323,
+   "end": 1326,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1328,
+   "end": 1331,
+   "old": "\"h\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2564,
+   "end": 2575,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "arithmetic",
+   "start": 2600,
+   "end": 2624,
+   "old": "fc[3] * resolved[\"fill\"]",
+   "new": "(fc[3] / resolved['fill'])",
+   "id": 68
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 92,
+   "op": "constant",
+   "start": 2745,
+   "end": 2756,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 219,
+   "op": "constant",
+   "start": 7687,
+   "end": 7688,
+   "old": "0",
+   "new": "(1)",
+   "id": 70
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 229,
+   "op": "constant",
+   "start": 8095,
+   "end": 8106,
+   "old": "\"edgewidth\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 238,
+   "op": "statement",
+   "start": 8477,
+   "end": 8517,
+   "old": "widths.append(np.ptp(verts[:, ori_idx]))",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 250,
+   "op": "arithmetic",
+   "start": 8996,
+   "end": 9010,
+   "old": ".1 * min_width",
+   "new": "(0.1 / min_width)",
+   "id": 73
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "constant",
+   "start": 857,
+   "end": 858,
+   "old": "2",
+   "new": "(3)",
+   "id": 74
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 41,
+   "op": "constant",
+   "start": 1012,
+   "end": 1022,
+   "old": "\"baseline\"",
+   "new": "('XX')",
+   "id": 75
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2582,
+   "end": 2583,
+   "old": "0",
+   "new": "(1)",
+   "id": 76
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2596,
+   "end": 2597,
+   "old": "2",
+   "new": "(3)",
+   "id": 77
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 91,
+   "op": "constant",
+   "start": 2657,
+   "end": 2658,
+   "old": "3",
+   "new": "(4)",
+   "id": 78
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 91,
+   "op": "constant",
+   "start": 2682,
+   "end": 2688,
+   "old": "\"fill\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3187,
+   "end": 3198,
+   "old": "\"edgewidth\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3227,
+   "end": 3238,
+   "old": "\"edgestyle\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 207,
+   "op": "constant",
+   "start": 7242,
+   "end": 7245,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 207,
+   "op": "constant",
+   "start": 7247,
+   "end": 7250,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 208,
+   "op": "constant",
+   "start": 7290,
+   "end": 7293,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 220,
+   "op": "constant",
+   "start": 7741,
+   "end": 7746,
+   "old": "False",
+   "new": "(True)",
+   "id": 85
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 244,
+   "op": "arithmetic",
+   "start": 8732,
+   "end": 8750,
+   "old": "72 / ax.figure.dpi",
+   "new": "(72 * ax.figure.dpi)",
+   "id": 86
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 250,
+   "op": "constant",
+   "start": 9025,
+   "end": 9042,
+   "old": "\"patch.linewidth\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 37,
+   "op": "constant",
+   "start": 846,
+   "end": 853,
+   "old": "\"width\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 38,
+   "op": "constant",
+   "start": 924,
+   "end": 925,
+   "old": "2",
+   "new": "(3)",
+   "id": 89
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 67,
+   "op": "constant",
+   "start": 1861,
+   "end": 1864,
+   "old": "\"w\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 68,
+   "op": "constant",
+   "start": 1894,
+   "end": 1897,
+   "old": "\"h\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 69,
+   "op": "constant",
+   "start": 1930,
+   "end": 1941,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 70,
+   "op": "constant",
+   "start": 1974,
+   "end": 1985,
+   "old": "\"edgecolor\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 71,
+   "op": "constant",
+   "start": 2018,
+   "end": 2029,
+   "old": "\"edgestyle\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2062,
+   "end": 2073,
+   "old": "\"edgewidth\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 89,
+   "op": "constant",
+   "start": 2617,
+   "end": 2623,
+   "old": "\"fill\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 245,
+   "op": "arithmetic",
+   "start": 8778,
+   "end": 8880,
+   "old": "ax.transData.transform([edges + widths] * 2)\n                    - ax.transData.transform([edges] * 2)",
+   "new": "(ax.transData.transform([edges + widths] * 2) + ax.transData.transform([edges] * 2))",
+   "id": 97
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 66,
+   "op": "constant",
+   "start": 1828,
+   "end": 1831,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "seaborn/_marks/bar.py",
+   "line": 246,
+   "op": "arithmetic",
+   "start": 8868,
+   "end": 8879,
+   "old": "[edges] * 2",
+   "new": "([edges] / 2)",
+   "id": 99
+  }
+ ]
+}

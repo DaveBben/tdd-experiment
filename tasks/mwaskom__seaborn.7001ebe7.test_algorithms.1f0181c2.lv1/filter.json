@@ -1,0 +1,31 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_algorithms.1f0181c2.lv1",
+ "image": "libercoders/featurebench-specs_seaborn-instance_52738fbb@sha256:fe27a1a5205fa0939453e79d0f40c74cb402bad8ea1d42fff7de5e2106e77ce1",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 13 passed in 4.60s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 382 passed, 5 xfailed in 10.71s ========================"
+ },
+ "mutant_pool": 71,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 382 passed, 5 xfailed in 10.75s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/seaborn/algorithms.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

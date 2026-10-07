@@ -1,0 +1,43 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_formats.05080a4e.lv1",
+ "image": "libercoders/featurebench-specs_pandas-instance_15f634a6@sha256:e484ae407255b4c2c481a842e476c3c3285d2032738adf0abd410fb5f776dab7",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 54 passed in 0.22s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 218 passed, 2 skipped in 0.86s ========================"
+ },
+ "mutant_pool": 1595,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 218 passed, 2 skipped in 0.85s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/opt/miniconda3/envs/testbed/lib/python3.11/site-packages/bottleneck-1.6.0.dist-info/METADATA": {
+   "lines": 1,
+   "tracked": false
+  },
+  "/testbed/doc/source/reference/aliases.rst": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/testbed/pandas/tests/io/formats/test_format.py": {
+   "lines": 1,
+   "tracked": true
+  },
+  "/usr/share/cmake-3.22/Help/command/file.rst": {
+   "lines": 1,
+   "tracked": false
+  }
+ },
+ "keep": false
+}

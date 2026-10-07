@@ -1,0 +1,616 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_presigned_url_artifact_repo.8d57288e.lv1",
+ "pool": 61,
+ "mutants": [
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 61,
+   "op": "statement",
+   "start": 2087,
+   "end": 2151,
+   "old": "first_creds = creds_func() if orig_creds is None else orig_creds",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 62,
+   "op": "return",
+   "start": 2160,
+   "end": 2188,
+   "old": "return try_func(first_creds)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2838,
+   "end": 2870,
+   "old": "self.artifact_uri = artifact_uri",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 85,
+   "op": "statement",
+   "start": 2879,
+   "end": 2911,
+   "old": "self.tracking_uri = tracking_uri",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 86,
+   "op": "statement",
+   "start": 2920,
+   "end": 2952,
+   "old": "self.registry_uri = registry_uri",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 90,
+   "op": "statement",
+   "start": 3181,
+   "end": 3226,
+   "old": "self.thread_pool = self._create_thread_pool()",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 103,
+   "op": "statement",
+   "start": 3763,
+   "end": 3839,
+   "old": "self._async_logging_queue = AsyncArtifactsLoggingQueue(log_artifact_handler)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 115,
+   "op": "return",
+   "start": 4156,
+   "end": 4288,
+   "old": "return ThreadPoolExecutor(\n            max_workers=self.max_workers, thread_name_prefix=f\"Mlflow{self.__class__.__name__}\"\n        )",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 361,
+   "op": "statement",
+   "start": 14767,
+   "end": 14813,
+   "old": "num_cpus = os.cpu_count() or _NUM_DEFAULT_CPUS",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 362,
+   "op": "return",
+   "start": 14822,
+   "end": 14887,
+   "old": "return min(num_cpus * _NUM_MAX_THREADS_PER_CPU, _NUM_MAX_THREADS)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 64,
+   "op": "statement",
+   "start": 2224,
+   "end": 2400,
+   "old": "_logger.info(\n            f\"Failed to complete request, possibly due to credential expiration (Error: {e}).\"\n            \" Refreshing credentials and trying again...\"\n        )",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2409,
+   "end": 2433,
+   "old": "new_creds = creds_func()",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 69,
+   "op": "return",
+   "start": 2442,
+   "end": 2468,
+   "old": "return try_func(new_creds)",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 361,
+   "op": "boolean",
+   "start": 14778,
+   "end": 14813,
+   "old": "os.cpu_count() or _NUM_DEFAULT_CPUS",
+   "new": "(os.cpu_count() and _NUM_DEFAULT_CPUS)",
+   "id": 13
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 61,
+   "op": "comparison",
+   "start": 2117,
+   "end": 2135,
+   "old": "orig_creds is None",
+   "new": "(orig_creds is not None)",
+   "id": 14
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3382,
+   "end": 3424,
+   "old": "tmp_path = os.path.join(tmp_dir, filename)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 101,
+   "op": "statement",
+   "start": 3711,
+   "end": 3753,
+   "old": "self.log_artifact(tmp_path, artifact_path)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 362,
+   "op": "arithmetic",
+   "start": 14833,
+   "end": 14868,
+   "old": "num_cpus * _NUM_MAX_THREADS_PER_CPU",
+   "new": "(num_cpus / _NUM_MAX_THREADS_PER_CPU)",
+   "id": 17
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 95,
+   "op": "comparison",
+   "start": 3444,
+   "end": 3464,
+   "old": "artifact is not None",
+   "new": "(artifact is None)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/store/artifact/artifact_repo.py",
+   "line": 100,
+   "op": "statement",
+   "start": 3671,
+   "end": 3694,
+   "old": "artifact.save(tmp_path)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1121,
+   "end": 1162,
+   "old": "self._queue: Queue[RunArtifact] = Queue()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 38,
+   "op": "statement",
+   "start": 1171,
+   "end": 1201,
+   "old": "self._lock = threading.RLock()",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 39,
+   "op": "statement",
+   "start": 1210,
+   "end": 1261,
+   "old": "self._artifact_logging_func = artifact_logging_func",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1271,
+   "end": 1327,
+   "old": "self._stop_data_logging_thread_event = threading.Event()",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1336,
+   "end": 1362,
+   "old": "self._is_activated = False",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1357,
+   "end": 1362,
+   "old": "False",
+   "new": "(True)",
+   "id": 25
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 258,
+   "op": "statement",
+   "start": 9958,
+   "end": 9983,
+   "old": "self._is_activated = True",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_artifacts_logging_queue.py",
+   "line": 258,
+   "op": "constant",
+   "start": 9979,
+   "end": 9983,
+   "old": "True",
+   "new": "(False)",
+   "id": 27
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1559,
+   "end": 1573,
+   "old": "json_dict = {}",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 79,
+   "op": "return",
+   "start": 2799,
+   "end": 2815,
+   "old": "return json_dict",
+   "new": "return None",
+   "id": 29
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 109,
+   "op": "return",
+   "start": 3961,
+   "end": 3975,
+   "old": "return to_dict",
+   "new": "return None",
+   "id": 30
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 117,
+   "op": "statement",
+   "start": 4244,
+   "end": 4356,
+   "old": "json_dict_with_int64_as_str = json.loads(\n        MessageToJson(message, preserving_proto_field_name=True)\n    )",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 122,
+   "op": "statement",
+   "start": 4516,
+   "end": 4578,
+   "old": "json_dict_with_int64_fields_only = _mark_int64_fields(message)",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 126,
+   "op": "statement",
+   "start": 4833,
+   "end": 4961,
+   "old": "json_dict_with_int64_as_numbers = _merge_json_dicts(\n        json_dict_with_int64_fields_only, json_dict_with_int64_as_str\n    )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 129,
+   "op": "return",
+   "start": 4966,
+   "end": 5026,
+   "old": "return json.dumps(json_dict_with_int64_as_numbers, indent=2)",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 744,
+   "op": "return",
+   "start": 29106,
+   "end": 29122,
+   "old": "return post_data",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2712,
+   "end": 2794,
+   "old": "json_dict[field.name] = [ftype(v) for v in value] if is_repeated else ftype(value)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 54,
+   "op": "boolean",
+   "start": 1797,
+   "end": 1944,
+   "old": "field.type == FieldDescriptor.TYPE_MESSAGE\n            and field.message_type.has_options\n            and field.message_type.GetOptions().map_entry",
+   "new": "(field.type == FieldDescriptor.TYPE_MESSAGE or field.message_type.has_options or field.message_type.GetOptions().map_entry)",
+   "id": 37
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 59,
+   "op": "statement",
+   "start": 2041,
+   "end": 2184,
+   "old": "json_dict[field.name] = _mark_int64_fields_for_proto_maps(\n                value, field.message_type.fields_by_name[\"value\"].type\n            )",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 62,
+   "op": "statement",
+   "start": 2197,
+   "end": 2205,
+   "old": "continue",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 64,
+   "op": "comparison",
+   "start": 2218,
+   "end": 2260,
+   "old": "field.type == FieldDescriptor.TYPE_MESSAGE",
+   "new": "(field.type != FieldDescriptor.TYPE_MESSAGE)",
+   "id": 40
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 65,
+   "op": "statement",
+   "start": 2274,
+   "end": 2309,
+   "old": "ftype = partial(_mark_int64_fields)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 74,
+   "op": "statement",
+   "start": 2568,
+   "end": 2599,
+   "old": "is_repeated = field.is_repeated",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 87,
+   "op": "boolean",
+   "start": 3040,
+   "end": 3084,
+   "old": "isinstance(key, int) and str(key) in to_dict",
+   "new": "(isinstance(key, int) or str(key) in to_dict)",
+   "id": 43
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 93,
+   "op": "statement",
+   "start": 3444,
+   "end": 3476,
+   "old": "to_dict[key] = to_dict[str(key)]",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 96,
+   "op": "comparison",
+   "start": 3523,
+   "end": 3541,
+   "old": "key not in to_dict",
+   "new": "(key in to_dict)",
+   "id": 45
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 97,
+   "op": "statement",
+   "start": 3555,
+   "end": 3563,
+   "old": "continue",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 100,
+   "op": "statement",
+   "start": 3613,
+   "end": 3660,
+   "old": "_merge_json_dicts(from_dict[key], to_dict[key])",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 54,
+   "op": "comparison",
+   "start": 1797,
+   "end": 1839,
+   "old": "field.type == FieldDescriptor.TYPE_MESSAGE",
+   "new": "(field.type != FieldDescriptor.TYPE_MESSAGE)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 66,
+   "op": "comparison",
+   "start": 2323,
+   "end": 2359,
+   "old": "field.type in _PROTOBUF_INT64_FIELDS",
+   "new": "(field.type not in _PROTOBUF_INT64_FIELDS)",
+   "id": 49
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2373,
+   "end": 2384,
+   "old": "ftype = int",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 70,
+   "op": "statement",
+   "start": 2452,
+   "end": 2460,
+   "old": "continue",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 76,
+   "op": "statement",
+   "start": 2643,
+   "end": 2702,
+   "old": "is_repeated = field.label == FieldDescriptor.LABEL_REPEATED",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 87,
+   "op": "comparison",
+   "start": 3065,
+   "end": 3084,
+   "old": "str(key) in to_dict",
+   "new": "(str(key) not in to_dict)",
+   "id": 53
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 108,
+   "op": "statement",
+   "start": 3927,
+   "end": 3956,
+   "old": "to_dict[key] = from_dict[key]",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 129,
+   "op": "constant",
+   "start": 5024,
+   "end": 5025,
+   "old": "2",
+   "new": "(3)",
+   "id": 55
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 76,
+   "op": "comparison",
+   "start": 2657,
+   "end": 2702,
+   "old": "field.label == FieldDescriptor.LABEL_REPEATED",
+   "new": "(field.label != FieldDescriptor.LABEL_REPEATED)",
+   "id": 56
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 118,
+   "op": "constant",
+   "start": 4345,
+   "end": 4349,
+   "old": "True",
+   "new": "(False)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 104,
+   "op": "statement",
+   "start": 3801,
+   "end": 3838,
+   "old": "_merge_json_dicts(v, to_dict[key][i])",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3881,
+   "end": 3900,
+   "old": "to_dict[key][i] = v",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/utils/proto_json_utils.py",
+   "line": 60,
+   "op": "constant",
+   "start": 2157,
+   "end": 2164,
+   "old": "\"value\"",
+   "new": "('XX')",
+   "id": 60
+  }
+ ]
+}

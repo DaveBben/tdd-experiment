@@ -1,0 +1,716 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_algorithms.1f0181c2.lv1",
+ "pool": 71,
+ "mutants": [
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 38,
+   "op": "statement",
+   "start": 1466,
+   "end": 1482,
+   "old": "n = len(args[0])",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 41,
+   "op": "statement",
+   "start": 1520,
+   "end": 1556,
+   "old": "n_boot = kwargs.get(\"n_boot\", 10000)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1561,
+   "end": 1594,
+   "old": "func = kwargs.get(\"func\", \"mean\")",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1599,
+   "end": 1630,
+   "old": "axis = kwargs.get(\"axis\", None)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1635,
+   "end": 1668,
+   "old": "units = kwargs.get(\"units\", None)",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1673,
+   "end": 1718,
+   "old": "random_seed = kwargs.get(\"random_seed\", None)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1859,
+   "end": 1897,
+   "old": "seed = kwargs.get(\"seed\", random_seed)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 62,
+   "op": "statement",
+   "start": 2175,
+   "end": 2209,
+   "old": "args = list(map(np.asarray, args))",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 96,
+   "op": "statement",
+   "start": 3143,
+   "end": 3157,
+   "old": "boot_dist = []",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 101,
+   "op": "return",
+   "start": 3385,
+   "end": 3411,
+   "old": "return np.array(boot_dist)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 106,
+   "op": "statement",
+   "start": 3543,
+   "end": 3574,
+   "old": "unique_units = np.unique(units)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 107,
+   "op": "statement",
+   "start": 3579,
+   "end": 3606,
+   "old": "n_units = len(unique_units)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 109,
+   "op": "statement",
+   "start": 3612,
+   "end": 3678,
+   "old": "args = [[a[units == unit] for unit in unique_units] for a in args]",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 111,
+   "op": "statement",
+   "start": 3684,
+   "end": 3698,
+   "old": "boot_dist = []",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 120,
+   "op": "return",
+   "start": 4161,
+   "end": 4187,
+   "old": "return np.array(boot_dist)",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 36,
+   "op": "comparison",
+   "start": 1349,
+   "end": 1389,
+   "old": "len(np.unique(list(map(len, args)))) > 1",
+   "new": "(len(np.unique(list(map(len, args)))) >= 1)",
+   "id": 15
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 37,
+   "op": "statement",
+   "start": 1399,
+   "end": 1461,
+   "old": "raise ValueError(\"All input arrays must have the same length\")",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 46,
+   "op": "comparison",
+   "start": 1726,
+   "end": 1749,
+   "old": "random_seed is not None",
+   "new": "(random_seed is None)",
+   "id": 17
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1759,
+   "end": 1827,
+   "old": "msg = \"`random_seed` has been renamed to `seed` and will be removed\"",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1836,
+   "end": 1854,
+   "old": "warnings.warn(msg)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 50,
+   "op": "comparison",
+   "start": 1905,
+   "end": 1917,
+   "old": "axis is None",
+   "new": "(axis is not None)",
+   "id": 20
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1927,
+   "end": 1947,
+   "old": "func_kwargs = dict()",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 53,
+   "op": "statement",
+   "start": 1966,
+   "end": 1995,
+   "old": "func_kwargs = dict(axis=axis)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 57,
+   "op": "statement",
+   "start": 2084,
+   "end": 2094,
+   "old": "rng = seed",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 59,
+   "op": "statement",
+   "start": 2113,
+   "end": 2146,
+   "old": "rng = np.random.default_rng(seed)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 63,
+   "op": "comparison",
+   "start": 2217,
+   "end": 2234,
+   "old": "units is not None",
+   "new": "(units is None)",
+   "id": 25
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 64,
+   "op": "statement",
+   "start": 2244,
+   "end": 2269,
+   "old": "units = np.asarray(units)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 69,
+   "op": "statement",
+   "start": 2348,
+   "end": 2369,
+   "old": "f = getattr(np, func)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 72,
+   "op": "statement",
+   "start": 2443,
+   "end": 2497,
+   "old": "missing_data = np.isnan(np.sum(np.column_stack(args)))",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 83,
+   "op": "statement",
+   "start": 2831,
+   "end": 2839,
+   "old": "f = func",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 87,
+   "op": "statement",
+   "start": 2885,
+   "end": 2908,
+   "old": "integers = rng.integers",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 92,
+   "op": "comparison",
+   "start": 2998,
+   "end": 3015,
+   "old": "units is not None",
+   "new": "(units is None)",
+   "id": 31
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 93,
+   "op": "return",
+   "start": 3025,
+   "end": 3137,
+   "old": "return _structured_bootstrap(args, n_boot, units, f,\n                                     func_kwargs, integers)",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 98,
+   "op": "statement",
+   "start": 3199,
+   "end": 3243,
+   "old": "resampler = integers(0, n, n, dtype=np.intp)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 99,
+   "op": "statement",
+   "start": 3278,
+   "end": 3328,
+   "old": "sample = [a.take(resampler, axis=0) for a in args]",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 100,
+   "op": "statement",
+   "start": 3337,
+   "end": 3380,
+   "old": "boot_dist.append(f(*sample, **func_kwargs))",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 113,
+   "op": "statement",
+   "start": 3740,
+   "end": 3796,
+   "old": "resampler = integers(0, n_units, n_units, dtype=np.intp)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 114,
+   "op": "statement",
+   "start": 3805,
+   "end": 3855,
+   "old": "sample = [[a[i] for i in resampler] for a in args]",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 115,
+   "op": "statement",
+   "start": 3864,
+   "end": 3893,
+   "old": "lengths = map(len, sample[0])",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 116,
+   "op": "statement",
+   "start": 3902,
+   "end": 3965,
+   "old": "resampler = [integers(0, n, n, dtype=np.intp) for n in lengths]",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 117,
+   "op": "statement",
+   "start": 3974,
+   "end": 4050,
+   "old": "sample = [[c.take(r, axis=0) for c, r in zip(a, resampler)] for a in sample]",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 118,
+   "op": "statement",
+   "start": 4059,
+   "end": 4101,
+   "old": "sample = list(map(np.concatenate, sample))",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 119,
+   "op": "statement",
+   "start": 4110,
+   "end": 4156,
+   "old": "boot_dist.append(func(*sample, **func_kwargs))",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 36,
+   "op": "constant",
+   "start": 1388,
+   "end": 1389,
+   "old": "1",
+   "new": "(2)",
+   "id": 43
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 41,
+   "op": "constant",
+   "start": 1540,
+   "end": 1548,
+   "old": "\"n_boot\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 41,
+   "op": "constant",
+   "start": 1550,
+   "end": 1555,
+   "old": "10000",
+   "new": "(10001)",
+   "id": 45
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1579,
+   "end": 1585,
+   "old": "\"func\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1587,
+   "end": 1593,
+   "old": "\"mean\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1617,
+   "end": 1623,
+   "old": "\"axis\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 44,
+   "op": "constant",
+   "start": 1654,
+   "end": 1661,
+   "old": "\"units\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 45,
+   "op": "constant",
+   "start": 1698,
+   "end": 1711,
+   "old": "\"random_seed\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 47,
+   "op": "constant",
+   "start": 1765,
+   "end": 1827,
+   "old": "\"`random_seed` has been renamed to `seed` and will be removed\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1877,
+   "end": 1883,
+   "old": "\"seed\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 74,
+   "op": "boolean",
+   "start": 2510,
+   "end": 2553,
+   "old": "missing_data and not func.startswith(\"nan\")",
+   "new": "(missing_data or not func.startswith('nan'))",
+   "id": 53
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2567,
+   "end": 2605,
+   "old": "nanf = getattr(np, f\"nan{func}\", None)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 89,
+   "op": "statement",
+   "start": 2944,
+   "end": 2966,
+   "old": "integers = rng.randint",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 37,
+   "op": "constant",
+   "start": 1416,
+   "end": 1460,
+   "old": "\"All input arrays must have the same length\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1479,
+   "end": 1480,
+   "old": "0",
+   "new": "(1)",
+   "id": 57
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 74,
+   "op": "boolean",
+   "start": 2527,
+   "end": 2553,
+   "old": "not func.startswith(\"nan\")",
+   "new": "(func.startswith('nan'))",
+   "id": 58
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 76,
+   "op": "comparison",
+   "start": 2621,
+   "end": 2633,
+   "old": "nanf is None",
+   "new": "(nanf is not None)",
+   "id": 59
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2651,
+   "end": 2720,
+   "old": "msg = f\"Data contain nans but no nan-aware version of `{func}` found\"",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2737,
+   "end": 2768,
+   "old": "warnings.warn(msg, UserWarning)",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2803,
+   "end": 2811,
+   "old": "f = nanf",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3220,
+   "end": 3221,
+   "old": "0",
+   "new": "(1)",
+   "id": 63
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 113,
+   "op": "constant",
+   "start": 3761,
+   "end": 3762,
+   "old": "0",
+   "new": "(1)",
+   "id": 64
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 109,
+   "op": "comparison",
+   "start": 3623,
+   "end": 3636,
+   "old": "units == unit",
+   "new": "(units != unit)",
+   "id": 65
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 115,
+   "op": "constant",
+   "start": 3890,
+   "end": 3891,
+   "old": "0",
+   "new": "(1)",
+   "id": 66
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 116,
+   "op": "constant",
+   "start": 3924,
+   "end": 3925,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 74,
+   "op": "constant",
+   "start": 2547,
+   "end": 2552,
+   "old": "\"nan\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 99,
+   "op": "constant",
+   "start": 3311,
+   "end": 3312,
+   "old": "0",
+   "new": "(1)",
+   "id": 69
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 117,
+   "op": "constant",
+   "start": 4000,
+   "end": 4001,
+   "old": "0",
+   "new": "(1)",
+   "id": 70
+  }
+ ]
+}

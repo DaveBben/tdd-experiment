@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_info.d8a64ebf.lv1",
+ "pool": 1624,
+ "mutants": [
+  {
+   "path": "pandas/core/_numba/executor.py",
+   "line": 217,
+   "op": "statement",
+   "start": 6768,
+   "end": 6883,
+   "old": "column_looper = make_looper(\n            func, result_dtype, is_grouped_kernel, nopython, nogil, parallel\n        )",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/_numba/executor.py",
+   "line": 226,
+   "op": "statement",
+   "start": 7139,
+   "end": 7256,
+   "old": "result, na_positions = column_looper(\n                values, start, end, min_periods, *kwargs.values()\n            )",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/_numba/executor.py",
+   "line": 241,
+   "op": "constant",
+   "start": 7837,
+   "end": 7838,
+   "old": "0",
+   "new": "(1)",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/arrays/datetimelike.py",
+   "line": 2494,
+   "op": "statement",
+   "start": 87934,
+   "end": 87946,
+   "old": "copy = False",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/arrays/datetimelike.py",
+   "line": 2508,
+   "op": "constant",
+   "start": 88473,
+   "end": 88478,
+   "old": "False",
+   "new": "(True)",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2443,
+   "op": "statement",
+   "start": 80866,
+   "end": 80907,
+   "old": "data_dtype = getattr(data, \"dtype\", None)",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2447,
+   "op": "statement",
+   "start": 80975,
+   "end": 81014,
+   "old": "out_dtype = np.dtype(f\"M8[{out_unit}]\")",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2453,
+   "op": "statement",
+   "start": 81244,
+   "end": 81256,
+   "old": "copy = False",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2449,
+   "op": "comparison",
+   "start": 81023,
+   "end": 81043,
+   "old": "data_dtype == object",
+   "new": "(data_dtype != object)",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2453,
+   "op": "constant",
+   "start": 81251,
+   "end": 81256,
+   "old": "False",
+   "new": "(True)",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2506,
+   "op": "statement",
+   "start": 83118,
+   "end": 83147,
+   "old": "data = cast(np.ndarray, data)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2475,
+   "op": "statement",
+   "start": 82075,
+   "end": 82087,
+   "old": "copy = False",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2825,
+   "op": "boolean",
+   "start": 93167,
+   "end": 93219,
+   "old": "tz is not None and not timezones.tz_compare(tz, dtz)",
+   "new": "(tz is not None or not timezones.tz_compare(tz, dtz))",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2831,
+   "op": "constant",
+   "start": 93499,
+   "end": 93502,
+   "old": "\"M\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2834,
+   "op": "comparison",
+   "start": 93645,
+   "end": 93659,
+   "old": "tz is not None",
+   "new": "(tz is None)",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/arrays/datetimes.py",
+   "line": 2768,
+   "op": "constant",
+   "start": 91135,
+   "end": 91138,
+   "old": "\"M\"",
+   "new": "('XX')",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/arrays/timedeltas.py",
+   "line": 1264,
+   "op": "return",
+   "start": 41024,
+   "end": 41036,
+   "old": "return dtype",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/arrays/timedeltas.py",
+   "line": 1128,
+   "op": "constant",
+   "start": 36783,
+   "end": 36788,
+   "old": "False",
+   "new": "(True)",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/arrays/timedeltas.py",
+   "line": 1118,
+   "op": "constant",
+   "start": 36417,
+   "end": 36433,
+   "old": "\"TimedeltaArray\"",
+   "new": "('XX')",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/arrays/timedeltas.py",
+   "line": 1139,
+   "op": "statement",
+   "start": 37183,
+   "end": 37200,
+   "old": "mask = data._mask",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1373,
+   "op": "statement",
+   "start": 42208,
+   "end": 42244,
+   "old": "arr = np.asarray(value, dtype=dtype)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1259,
+   "op": "statement",
+   "start": 39186,
+   "end": 39191,
+   "old": "break",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4522,
+   "end": 4563,
+   "old": "dtypes = {obj.dtype for obj in to_concat}",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4200,
+   "end": 4205,
+   "old": "\"iuf\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 164,
+   "op": "comparison",
+   "start": 5538,
+   "end": 5550,
+   "old": "\"b\" in kinds",
+   "new": "('b' not in kinds)",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/dtypes/concat.py",
+   "line": 157,
+   "op": "constant",
+   "start": 5335,
+   "end": 5338,
+   "old": "\"u\"",
+   "new": "('XX')",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 603,
+   "op": "constant",
+   "start": 17216,
+   "end": 17220,
+   "old": "True",
+   "new": "(False)",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 635,
+   "op": "constant",
+   "start": 17958,
+   "end": 17959,
+   "old": "0",
+   "new": "(1)",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/dtypes/missing.py",
+   "line": 639,
+   "op": "constant",
+   "start": 18074,
+   "end": 18078,
+   "old": "\"iu\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 1065,
+   "op": "statement",
+   "start": 31197,
+   "end": 31221,
+   "old": "self.as_index = as_index",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 847,
+   "op": "statement",
+   "start": 28689,
+   "end": 28719,
+   "old": "groupings: list[Grouping] = []",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 464,
+   "op": "statement",
+   "start": 14222,
+   "end": 14250,
+   "old": "self._orig_grouper = grouper",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 466,
+   "op": "statement",
+   "start": 14318,
+   "end": 14340,
+   "old": "self._orig_cats = None",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 811,
+   "op": "statement",
+   "start": 27575,
+   "end": 27585,
+   "old": "keys = key",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 845,
+   "op": "statement",
+   "start": 28655,
+   "end": 28683,
+   "old": "levels = [level] * len(keys)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 908,
+   "op": "statement",
+   "start": 30976,
+   "end": 31325,
+   "old": "ping = (\n            Grouping(\n                group_axis,\n                gpr,\n                obj=obj,\n                level=level,\n                sort=sort,\n                observed=observed,\n                in_axis=in_axis,\n                dropna=dropna,\n            )\n            if not isinstance(gpr, Grouping)\n            else gpr\n        )",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 805,
+   "op": "return",
+   "start": 27438,
+   "end": 27466,
+   "old": "return key, frozenset(), obj",
+   "new": "return None",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 869,
+   "op": "return",
+   "start": 29379,
+   "end": 29391,
+   "old": "return False",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 503,
+   "op": "statement",
+   "start": 15892,
+   "end": 15909,
+   "old": "self.obj = newobj",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 591,
+   "op": "comparison",
+   "start": 19360,
+   "end": 19384,
+   "old": "level not in index.names",
+   "new": "(level in index.names)",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 763,
+   "op": "boolean",
+   "start": 25825,
+   "end": 25864,
+   "old": "is_list_like(level) and len(level) == 1",
+   "new": "(is_list_like(level) or len(level) == 1)",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 768,
+   "op": "statement",
+   "start": 26020,
+   "end": 26060,
+   "old": "key = group_axis.get_level_values(level)",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 842,
+   "op": "arithmetic",
+   "start": 28594,
+   "end": 28613,
+   "old": "[None] * len(level)",
+   "new": "([None] / len(level))",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 763,
+   "op": "comparison",
+   "start": 25849,
+   "end": 25864,
+   "old": "len(level) == 1",
+   "new": "(len(level) != 1)",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/groupby/grouper.py",
+   "line": 524,
+   "op": "statement",
+   "start": 16925,
+   "end": 16981,
+   "old": "raise ValueError(f\"Grouper for '{t}' not 1-dimensional\")",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/indexers/utils.py",
+   "line": 228,
+   "op": "constant",
+   "start": 5727,
+   "end": 5728,
+   "old": "1",
+   "new": "(2)",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/indexes/api.py",
+   "line": 102,
+   "op": "comparison",
+   "start": 2529,
+   "end": 2547,
+   "old": "id(obj) not in ids",
+   "new": "(id(obj) in ids)",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 537,
+   "op": "return",
+   "start": 16452,
+   "end": 16465,
+   "old": "return values",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 1027,
+   "op": "return",
+   "start": 32441,
+   "end": 32454,
+   "old": "return arrays",
+   "new": "return None",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 197,
+   "op": "boolean",
+   "start": 5048,
+   "end": 5106,
+   "old": "not isinstance(values, (ABCSeries, Index, ExtensionArray))",
+   "new": "(isinstance(values, (ABCSeries, Index, ExtensionArray)))",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 359,
+   "op": "statement",
+   "start": 10851,
+   "end": 10931,
+   "old": "raise ValueError(f\"Shape of passed values is {passed}, indices imply {implied}\")",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 692,
+   "op": "statement",
+   "start": 21408,
+   "end": 21432,
+   "old": "index = default_index(N)",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 535,
+   "op": "comparison",
+   "start": 16359,
+   "end": 16375,
+   "old": "values.ndim != 2",
+   "new": "(values.ndim == 2)",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 886,
+   "op": "statement",
+   "start": 26958,
+   "end": 26988,
+   "old": "raise ValueError(err) from err",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 217,
+   "op": "constant",
+   "start": 5759,
+   "end": 5760,
+   "old": "1",
+   "new": "(2)",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 246,
+   "op": "boolean",
+   "start": 6813,
+   "end": 6880,
+   "old": "not copy and (dtype is None or astype_is_view(values.dtype, dtype))",
+   "new": "(not copy or (dtype is None or astype_is_view(values.dtype, dtype)))",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 269,
+   "op": "statement",
+   "start": 7632,
+   "end": 7677,
+   "old": "values = _prep_ndarraylike(values, copy=copy)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/internals/construction.py",
+   "line": 258,
+   "op": "boolean",
+   "start": 7168,
+   "end": 7231,
+   "old": "copy and (dtype is None or astype_is_view(values.dtype, dtype))",
+   "new": "(copy or (dtype is None or astype_is_view(values.dtype, dtype)))",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/internals/managers.py",
+   "line": 2412,
+   "op": "return",
+   "start": 82002,
+   "end": 82193,
+   "old": "return [\n        new_block_2d(\n            ensure_block_shape(arr, ndim=2), placement=BlockPlacement(i), refs=ref\n        )\n        for ((i, arr), ref) in zip(tuples, refs, strict=True)\n    ]",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 467,
+   "op": "statement",
+   "start": 13618,
+   "end": 13636,
+   "old": "current_column = 0",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 159,
+   "op": "constant",
+   "start": 3582,
+   "end": 3589,
+   "old": "\"outer\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 525,
+   "op": "statement",
+   "start": 15353,
+   "end": 15385,
+   "old": "sample = cast(\"Series\", objs[0])",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 760,
+   "op": "statement",
+   "start": 22782,
+   "end": 22827,
+   "old": "raise ValueError(\"No objects to concatenate\")",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 762,
+   "op": "comparison",
+   "start": 22836,
+   "end": 22852,
+   "old": "keys is not None",
+   "new": "(keys is None)",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 530,
+   "op": "statement",
+   "start": 15496,
+   "end": 15522,
+   "old": "cons = sample._constructor",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 666,
+   "op": "statement",
+   "start": 19497,
+   "end": 19530,
+   "old": "indexes = [x.index for x in objs]",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 763,
+   "op": "boolean",
+   "start": 22865,
+   "end": 22892,
+   "old": "not isinstance(keys, Index)",
+   "new": "(isinstance(keys, Index))",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 539,
+   "op": "statement",
+   "start": 15743,
+   "end": 16005,
+   "old": "new_index = _get_concat_axis_series(\n                    objs,\n                    ignore_index,\n                    bm_axis,\n                    keys,\n                    levels,\n                    verify_integrity,\n                    names,\n                )",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 581,
+   "op": "constant",
+   "start": 17133,
+   "end": 17144,
+   "old": "\"DataFrame\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 672,
+   "op": "statement",
+   "start": 19748,
+   "end": 19815,
+   "old": "concat_axis = _make_concat_multiindex(indexes, keys, levels, names)",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 694,
+   "op": "return",
+   "start": 20631,
+   "end": 20657,
+   "old": "return Index(result_names)",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 683,
+   "op": "statement",
+   "start": 20251,
+   "end": 20406,
+   "old": "raise TypeError(\n                    f\"Cannot concatenate type 'Series' with \"\n                    f\"object of type '{type(x).__name__}'\"\n                )",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/reshape/concat.py",
+   "line": 605,
+   "op": "constant",
+   "start": 17840,
+   "end": 17841,
+   "old": "1",
+   "new": "(2)",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 223,
+   "op": "statement",
+   "start": 6959,
+   "end": 7003,
+   "old": "comp_index = ensure_platform_int(comp_index)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 384,
+   "op": "statement",
+   "start": 13387,
+   "end": 13435,
+   "old": "propagator = np.repeat(np.arange(width), stride)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 404,
+   "op": "statement",
+   "start": 14140,
+   "end": 14182,
+   "old": "new_codes.append(np.tile(repeater, width))",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 603,
+   "op": "constant",
+   "start": 21501,
+   "end": 21505,
+   "old": "True",
+   "new": "(False)",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 188,
+   "op": "boolean",
+   "start": 5673,
+   "end": 5686,
+   "old": "not self.sort",
+   "new": "(self.sort)",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 298,
+   "op": "statement",
+   "start": 9996,
+   "end": 10156,
+   "old": "new_values = (\n                sorted_values.reshape(length, width, stride)\n                .swapaxes(1, 2)\n                .reshape(result_shape)\n            )",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 382,
+   "op": "arithmetic",
+   "start": 13305,
+   "end": 13343,
+   "old": "len(self.removed_level) + self.has_nan",
+   "new": "(len(self.removed_level) - self.has_nan)",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 144,
+   "op": "constant",
+   "start": 3872,
+   "end": 3873,
+   "old": "1",
+   "new": "(2)",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 280,
+   "op": "constant",
+   "start": 9351,
+   "end": 9352,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 427,
+   "op": "statement",
+   "start": 15278,
+   "end": 15314,
+   "old": "repeater[self.unique_nan_index] = -1",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 422,
+   "op": "boolean",
+   "start": 15030,
+   "end": 15043,
+   "old": "not self.sort",
+   "new": "(self.sort)",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 427,
+   "op": "constant",
+   "start": 15313,
+   "end": 15314,
+   "old": "1",
+   "new": "(2)",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 441,
+   "op": "constant",
+   "start": 15771,
+   "end": 15772,
+   "old": "1",
+   "new": "(2)",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/reshape/reshape.py",
+   "line": 193,
+   "op": "constant",
+   "start": 5976,
+   "end": 5977,
+   "old": "1",
+   "new": "(2)",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 660,
+   "op": "statement",
+   "start": 19898,
+   "end": 19922,
+   "old": "count = len(group_index)",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 727,
+   "op": "statement",
+   "start": 22258,
+   "end": 22275,
+   "old": "mask = labels < 0",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 693,
+   "op": "statement",
+   "start": 21248,
+   "end": 21291,
+   "old": "table = hashtable.Int64HashTable(size_hint)",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 186,
+   "op": "constant",
+   "start": 5469,
+   "end": 5470,
+   "old": "0",
+   "new": "(1)",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 167,
+   "op": "comparison",
+   "start": 4727,
+   "end": 4736,
+   "old": "lab == -1",
+   "new": "(lab != -1)",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 167,
+   "op": "constant",
+   "start": 4720,
+   "end": 4721,
+   "old": "1",
+   "new": "(2)",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 193,
+   "op": "constant",
+   "start": 5664,
+   "end": 5665,
+   "old": "0",
+   "new": "(1)",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 686,
+   "op": "constant",
+   "start": 21032,
+   "end": 21033,
+   "old": "1",
+   "new": "(2)",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/sorting.py",
+   "line": 686,
+   "op": "constant",
+   "start": 21026,
+   "end": 21027,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/util/numba_.py",
+   "line": 29,
+   "op": "statement",
+   "start": 670,
+   "end": 695,
+   "old": "GLOBAL_USE_NUMBA = enable",
+   "new": "pass",
+   "id": 96
+  },
+  {
+   "path": "pandas/io/formats/printing.py",
+   "line": 231,
+   "op": "comparison",
+   "start": 6878,
+   "end": 6929,
+   "old": "_nest_lvl < get_option(\"display.pprint_nest_depth\")",
+   "new": "(_nest_lvl <= get_option('display.pprint_nest_depth'))",
+   "id": 97
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 224,
+   "op": "statement",
+   "start": 7677,
+   "end": 7701,
+   "old": "kwargs.update(args_dict)",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "pandas/util/_validators.py",
+   "line": 42,
+   "op": "arithmetic",
+   "start": 1011,
+   "end": 1042,
+   "old": "len(args) + max_fname_arg_count",
+   "new": "(len(args) - max_fname_arg_count)",
+   "id": 99
+  }
+ ]
+}

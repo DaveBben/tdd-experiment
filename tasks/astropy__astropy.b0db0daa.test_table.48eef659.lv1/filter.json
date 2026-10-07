@@ -1,0 +1,26 @@
+{
+ "task": "astropy__astropy.b0db0daa.test_table.48eef659.lv1",
+ "image": "libercoders/featurebench-specs_astropy-instance_493bb78b@sha256:4b5e7489d8bee8e20b53f94c74833e6d9ee0163673ac4a36eecb0372ef01fda2",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 43 passed, 4 skipped in 0.35s ========================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 191 passed, 103 skipped in 1.67s ======================="
+ },
+ "mutant_pool": 445,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 191 passed, 103 skipped in 1.58s ======================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

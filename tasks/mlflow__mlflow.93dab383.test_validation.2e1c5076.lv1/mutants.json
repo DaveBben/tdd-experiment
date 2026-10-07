@@ -1,0 +1,836 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_validation.2e1c5076.lv1",
+ "pool": 83,
+ "mutants": [
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1001,
+   "op": "statement",
+   "start": 41178,
+   "end": 41247,
+   "old": "_original_func: Callable[..., Any] | None = PrivateAttr(default=None)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1004,
+   "op": "statement",
+   "start": 41297,
+   "end": 41321,
+   "old": "super().__init__(**data)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1009,
+   "op": "statement",
+   "start": 41630,
+   "end": 41678,
+   "old": "object.__setattr__(self, \"_original_func\", func)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1012,
+   "op": "return",
+   "start": 41737,
+   "end": 41765,
+   "old": "return func(*args, **kwargs)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1016,
+   "op": "return",
+   "start": 41835,
+   "end": 41862,
+   "old": "return ScorerKind.DECORATOR",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/genai/scorers/base.py",
+   "line": 1009,
+   "op": "constant",
+   "start": 41655,
+   "end": 41671,
+   "old": "\"_original_func\"",
+   "new": "('XX')",
+   "id": 5
+  },
+  {
+   "path": "mlflow/genai/scorers/builtin_scorers.py",
+   "line": 1587,
+   "op": "statement",
+   "start": 56872,
+   "end": 57062,
+   "old": "scorers = [\n        ExpectationsGuidelines(),\n        Correctness(),\n        RelevanceToQuery(),\n        RetrievalSufficiency(),\n        RetrievalGroundedness(),\n        Equivalence(),\n    ]",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/genai/scorers/builtin_scorers.py",
+   "line": 1597,
+   "op": "return",
+   "start": 57177,
+   "end": 57191,
+   "old": "return scorers",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "mlflow/genai/scorers/builtin_scorers.py",
+   "line": 1596,
+   "op": "statement",
+   "start": 57124,
+   "end": 57172,
+   "old": "scorers.extend([Safety(), RetrievalRelevance()])",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1200,
+   "end": 1218,
+   "old": "valid_scorers = []",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1223,
+   "end": 1242,
+   "old": "legacy_metrics = []",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 98,
+   "op": "return",
+   "start": 3527,
+   "end": 3547,
+   "old": "return valid_scorers",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 115,
+   "op": "statement",
+   "start": 4142,
+   "end": 4184,
+   "old": "input_columns = set(data.columns.tolist())",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 152,
+   "op": "statement",
+   "start": 5601,
+   "end": 5643,
+   "old": "missing_col_to_scorers = defaultdict(list)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 36,
+   "op": "boolean",
+   "start": 799,
+   "end": 828,
+   "old": "not isinstance(scorers, list)",
+   "new": "(isinstance(scorers, list))",
+   "id": 14
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 37,
+   "op": "statement",
+   "start": 838,
+   "end": 1149,
+   "old": "raise MlflowException.invalid_parameter_value(\n            \"The `scorers` argument must be a list of scorers. If you are unsure about which \"\n            \"scorer to use, you can specify `scorers=mlflow.genai.scorers.get_all_scorers()` \"\n            \"to jump start with all available built-in scorers.\"\n        )",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 43,
+   "op": "comparison",
+   "start": 1158,
+   "end": 1175,
+   "old": "len(scorers) == 0",
+   "new": "(len(scorers) != 0)",
+   "id": 16
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 44,
+   "op": "return",
+   "start": 1185,
+   "end": 1194,
+   "old": "return []",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 91,
+   "op": "statement",
+   "start": 3153,
+   "end": 3217,
+   "old": "legacy_metric_names = [metric.name for metric in legacy_metrics]",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 92,
+   "op": "statement",
+   "start": 3226,
+   "end": 3521,
+   "old": "_logger.warning(\n            f\"Scorers {legacy_metric_names} are legacy metrics and will soon be deprecated \"\n            \"in future releases. Please use the builtin scorers defined in `mlflow.genai.scorers` \"\n            \"or custom scorers defined with the @scorer decorator instead.\"\n        )",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 119,
+   "op": "comparison",
+   "start": 4305,
+   "end": 4331,
+   "old": "\"request\" in input_columns",
+   "new": "('request' not in input_columns)",
+   "id": 20
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 120,
+   "op": "statement",
+   "start": 4341,
+   "end": 4372,
+   "old": "input_columns.remove(\"request\")",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 121,
+   "op": "statement",
+   "start": 4381,
+   "end": 4408,
+   "old": "input_columns.add(\"inputs\")",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 122,
+   "op": "comparison",
+   "start": 4416,
+   "end": 4443,
+   "old": "\"response\" in input_columns",
+   "new": "('response' not in input_columns)",
+   "id": 23
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 123,
+   "op": "statement",
+   "start": 4453,
+   "end": 4485,
+   "old": "input_columns.remove(\"response\")",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 124,
+   "op": "statement",
+   "start": 4494,
+   "end": 4522,
+   "old": "input_columns.add(\"outputs\")",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 126,
+   "op": "comparison",
+   "start": 4531,
+   "end": 4553,
+   "old": "predict_fn is not None",
+   "new": "(predict_fn is None)",
+   "id": 26
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 129,
+   "op": "statement",
+   "start": 4675,
+   "end": 4703,
+   "old": "input_columns.add(\"outputs\")",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 131,
+   "op": "comparison",
+   "start": 4712,
+   "end": 4736,
+   "old": "\"trace\" in input_columns",
+   "new": "('trace' not in input_columns)",
+   "id": 28
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 133,
+   "op": "statement",
+   "start": 4804,
+   "end": 4842,
+   "old": "input_columns |= {\"inputs\", \"outputs\"}",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 135,
+   "op": "comparison",
+   "start": 4851,
+   "end": 4873,
+   "old": "predict_fn is not None",
+   "new": "(predict_fn is None)",
+   "id": 30
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4883,
+   "end": 4909,
+   "old": "input_columns |= {\"trace\"}",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 139,
+   "op": "comparison",
+   "start": 4989,
+   "end": 5020,
+   "old": "\"expectations\" in input_columns",
+   "new": "('expectations' not in input_columns)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5934,
+   "end": 6112,
+   "old": "msg = (\n            \"The input data is missing following columns that are required by the specified \"\n            \"scorers. The results will be null for those scorers.\"\n        )",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 174,
+   "op": "statement",
+   "start": 6560,
+   "end": 6577,
+   "old": "_logger.info(msg)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 43,
+   "op": "constant",
+   "start": 1174,
+   "end": 1175,
+   "old": "0",
+   "new": "(1)",
+   "id": 35
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1322,
+   "end": 1350,
+   "old": "valid_scorers.append(scorer)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2865,
+   "end": 3120,
+   "old": "raise MlflowException.invalid_parameter_value(\n                f\"The `scorers` argument must be a list of scorers. The specified \"\n                f\"list contains an invalid item with type: {type(scorer).__name__}.\"\n                f\"{hint}\"\n            )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 119,
+   "op": "constant",
+   "start": 4305,
+   "end": 4314,
+   "old": "\"request\"",
+   "new": "('XX')",
+   "id": 38
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 122,
+   "op": "constant",
+   "start": 4416,
+   "end": 4426,
+   "old": "\"response\"",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 131,
+   "op": "constant",
+   "start": 4712,
+   "end": 4719,
+   "old": "\"trace\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 139,
+   "op": "constant",
+   "start": 4989,
+   "end": 5003,
+   "old": "\"expectations\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 155,
+   "op": "statement",
+   "start": 5704,
+   "end": 5742,
+   "old": "scorer.validate_columns(input_columns)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 162,
+   "op": "constant",
+   "start": 5954,
+   "end": 6102,
+   "old": "\"The input data is missing following columns that are required by the specified \"\n            \"scorers. The results will be null for those scorers.\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 38,
+   "op": "constant",
+   "start": 897,
+   "end": 1139,
+   "old": "\"The `scorers` argument must be a list of scorers. If you are unsure about which \"\n            \"scorer to use, you can specify `scorers=mlflow.genai.scorers.get_all_scorers()` \"\n            \"to jump start with all available built-in scorers.\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 62,
+   "op": "boolean",
+   "start": 1732,
+   "end": 1790,
+   "old": "isinstance(scorer, list) and (scorer == get_all_scorers())",
+   "new": "(isinstance(scorer, list) or scorer == get_all_scorers())",
+   "id": 45
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 120,
+   "op": "constant",
+   "start": 4362,
+   "end": 4371,
+   "old": "\"request\"",
+   "new": "('XX')",
+   "id": 46
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 121,
+   "op": "constant",
+   "start": 4399,
+   "end": 4407,
+   "old": "\"inputs\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 123,
+   "op": "constant",
+   "start": 4474,
+   "end": 4484,
+   "old": "\"response\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 124,
+   "op": "constant",
+   "start": 4512,
+   "end": 4521,
+   "old": "\"outputs\"",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 129,
+   "op": "constant",
+   "start": 4693,
+   "end": 4702,
+   "old": "\"outputs\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 133,
+   "op": "constant",
+   "start": 4822,
+   "end": 4830,
+   "old": "\"inputs\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 133,
+   "op": "constant",
+   "start": 4832,
+   "end": 4841,
+   "old": "\"outputs\"",
+   "new": "('XX')",
+   "id": 52
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 136,
+   "op": "constant",
+   "start": 4901,
+   "end": 4908,
+   "old": "\"trace\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 142,
+   "op": "statement",
+   "start": 5119,
+   "end": 5127,
+   "old": "continue",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 143,
+   "op": "boolean",
+   "start": 5143,
+   "end": 5170,
+   "old": "not isinstance(value, dict)",
+   "new": "(isinstance(value, dict))",
+   "id": 55
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 144,
+   "op": "statement",
+   "start": 5188,
+   "end": 5447,
+   "old": "raise MlflowException.invalid_parameter_value(\n                    \"The 'expectations' column must be a dictionary of each expectation name \"\n                    \"to its value. For example, `{'expected_response': 'answer to the question'}`.\"\n                )",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 149,
+   "op": "statement",
+   "start": 5492,
+   "end": 5530,
+   "old": "input_columns.add(f\"expectations/{k}\")",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 167,
+   "op": "statement",
+   "start": 6237,
+   "end": 6275,
+   "old": "col = col.replace(\"expectations/\", \"\")",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 168,
+   "op": "arithmetic",
+   "start": 6292,
+   "end": 6448,
+   "old": "msg += (\n                    f\"\\n - `{col}` field in `expectations` column \"\n                    f\"is required by [{', '.join(scorers)}].\"\n                )",
+   "new": "msg -= f\"\\n - `{col}` field in `expectations` column is required by [{', '.join(scorers)}].\"",
+   "id": 59
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 168,
+   "op": "statement",
+   "start": 6292,
+   "end": 6448,
+   "old": "msg += (\n                    f\"\\n - `{col}` field in `expectations` column \"\n                    f\"is required by [{', '.join(scorers)}].\"\n                )",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 173,
+   "op": "arithmetic",
+   "start": 6483,
+   "end": 6551,
+   "old": "msg += f\"\\n - `{col}` column is required by [{', '.join(scorers)}].\"",
+   "new": "msg -= f\"\\n - `{col}` column is required by [{', '.join(scorers)}].\"",
+   "id": 61
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 173,
+   "op": "statement",
+   "start": 6483,
+   "end": 6551,
+   "old": "msg += f\"\\n - `{col}` column is required by [{', '.join(scorers)}].\"",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 57,
+   "op": "statement",
+   "start": 1547,
+   "end": 1576,
+   "old": "legacy_metrics.append(scorer)",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 58,
+   "op": "statement",
+   "start": 1597,
+   "end": 1625,
+   "old": "valid_scorers.append(scorer)",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 59,
+   "op": "statement",
+   "start": 1646,
+   "end": 1654,
+   "old": "continue",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 62,
+   "op": "comparison",
+   "start": 1762,
+   "end": 1789,
+   "old": "scorer == get_all_scorers()",
+   "new": "(scorer != get_all_scorers())",
+   "id": 66
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 64,
+   "op": "comparison",
+   "start": 1875,
+   "end": 1892,
+   "old": "len(scorers) == 1",
+   "new": "(len(scorers) != 1)",
+   "id": 67
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 65,
+   "op": "statement",
+   "start": 1914,
+   "end": 2074,
+   "old": "hint = (\n                        \"\\nHint: Use `scorers=get_all_scorers()` to pass all \"\n                        \"builtin scorers at once.\"\n                    )",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 76,
+   "op": "boolean",
+   "start": 2519,
+   "end": 2581,
+   "old": "isinstance(scorer, type) and issubclass(scorer, BuiltInScorer)",
+   "new": "(isinstance(scorer, type) or issubclass(scorer, BuiltInScorer))",
+   "id": 69
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2599,
+   "end": 2807,
+   "old": "hint = (\n                    \"\\nHint: It looks like you passed a scorer class instead of an instance. \"\n                    f\"Correct way to pass scorers is `scorers=[{scorer.__name__}()]`.\"\n                )",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 82,
+   "op": "statement",
+   "start": 2842,
+   "end": 2851,
+   "old": "hint = \"\"",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 140,
+   "op": "constant",
+   "start": 5048,
+   "end": 5062,
+   "old": "\"expectations\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 158,
+   "op": "statement",
+   "start": 5846,
+   "end": 5893,
+   "old": "missing_col_to_scorers[col].append(scorer.name)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 166,
+   "op": "constant",
+   "start": 6203,
+   "end": 6218,
+   "old": "\"expectations/\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 64,
+   "op": "constant",
+   "start": 1891,
+   "end": 1892,
+   "old": "1",
+   "new": "(2)",
+   "id": 75
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 66,
+   "op": "constant",
+   "start": 1947,
+   "end": 2052,
+   "old": "\"\\nHint: Use `scorers=get_all_scorers()` to pass all \"\n                        \"builtin scorers at once.\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 70,
+   "op": "comparison",
+   "start": 2178,
+   "end": 2193,
+   "old": "len(scorer) > 1",
+   "new": "(len(scorer) >= 1)",
+   "id": 77
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 71,
+   "op": "statement",
+   "start": 2215,
+   "end": 2427,
+   "old": "hint = (\n                        \"\\nHint: Use `scorers=[*get_all_scorers(), scorer1, scorer2]` to pass \"\n                        \"all builtin scorers at once along with your custom scorers.\"\n                    )",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 145,
+   "op": "constant",
+   "start": 5255,
+   "end": 5429,
+   "old": "\"The 'expectations' column must be a dictionary of each expectation name \"\n                    \"to its value. For example, `{'expected_response': 'answer to the question'}`.\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 167,
+   "op": "constant",
+   "start": 6255,
+   "end": 6270,
+   "old": "\"expectations/\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 70,
+   "op": "constant",
+   "start": 2192,
+   "end": 2193,
+   "old": "1",
+   "new": "(2)",
+   "id": 81
+  },
+  {
+   "path": "mlflow/genai/scorers/validation.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2248,
+   "end": 2405,
+   "old": "\"\\nHint: Use `scorers=[*get_all_scorers(), scorer1, scorer2]` to pass \"\n                        \"all builtin scorers at once along with your custom scorers.\"",
+   "new": "('XX')",
+   "id": 82
+  }
+ ]
+}

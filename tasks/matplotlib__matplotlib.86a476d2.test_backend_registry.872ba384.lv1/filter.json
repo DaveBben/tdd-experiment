@@ -1,0 +1,26 @@
+{
+ "task": "matplotlib__matplotlib.86a476d2.test_backend_registry.872ba384.lv1",
+ "image": "libercoders/featurebench-specs_matplotlib-instance_1a84341f@sha256:6356bd09b20e4291aadfaa649146b3e59c57446ea2fcb36e959147b756bd5dbc",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================== 29 passed, 2 skipped in 1.84s ========================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 29 passed in 0.96s =============================="
+ },
+ "mutant_pool": 101,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 29 passed in 0.96s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

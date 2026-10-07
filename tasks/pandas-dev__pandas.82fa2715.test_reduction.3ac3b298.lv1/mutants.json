@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_reduction.3ac3b298.lv1",
+ "pool": 691,
+ "mutants": [
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 153,
+   "op": "return",
+   "start": 3854,
+   "end": 3928,
+   "old": "return _minmax(np.max, values=values, mask=mask, skipna=skipna, axis=axis)",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 31,
+   "op": "constant",
+   "start": 565,
+   "end": 569,
+   "old": "True",
+   "new": "(False)",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 69,
+   "op": "return",
+   "start": 1853,
+   "end": 1906,
+   "old": "return func(values, where=~mask, axis=axis, **kwargs)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 128,
+   "op": "statement",
+   "start": 3289,
+   "end": 3311,
+   "old": "subset = values[~mask]",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 160,
+   "op": "constant",
+   "start": 4024,
+   "end": 4028,
+   "old": "True",
+   "new": "(False)",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 181,
+   "op": "return",
+   "start": 4540,
+   "end": 4651,
+   "old": "return _reductions(\n            np.var, values=values, mask=mask, skipna=skipna, axis=axis, ddof=ddof\n        )",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 199,
+   "op": "return",
+   "start": 4975,
+   "end": 5086,
+   "old": "return _reductions(\n            np.std, values=values, mask=mask, skipna=skipna, axis=axis, ddof=ddof\n        )",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 124,
+   "op": "return",
+   "start": 3193,
+   "end": 3213,
+   "old": "return libmissing.NA",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 198,
+   "op": "constant",
+   "start": 4941,
+   "end": 4949,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/array_algos/masked_reductions.py",
+   "line": 61,
+   "op": "constant",
+   "start": 1586,
+   "end": 1587,
+   "old": "1",
+   "new": "(2)",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/common.py",
+   "line": 580,
+   "op": "statement",
+   "start": 15254,
+   "end": 15284,
+   "old": "old_value = getattr(obj, attr)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/dtypes/base.py",
+   "line": 594,
+   "op": "statement",
+   "start": 17621,
+   "end": 17643,
+   "old": "_registry = Registry()",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1282,
+   "op": "statement",
+   "start": 39832,
+   "end": 39860,
+   "old": "common_dtype = np.dtype(\"O\")",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1278,
+   "op": "constant",
+   "start": 39620,
+   "end": 39626,
+   "old": "\"mMSU\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "pandas/core/dtypes/cast.py",
+   "line": 1285,
+   "op": "constant",
+   "start": 39916,
+   "end": 39919,
+   "old": "\"O\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "pandas/core/groupby/generic.py",
+   "line": 3028,
+   "op": "statement",
+   "start": 100696,
+   "end": 100761,
+   "old": "raise TypeError(f\"'skew' is not supported for dtype={obj.dtype}\")",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2670,
+   "op": "statement",
+   "start": 84852,
+   "end": 84993,
+   "old": "gb = df.groupby(\n            groupings,\n            sort=False,\n            observed=self.observed,\n            dropna=self.dropna,\n        )",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2677,
+   "op": "statement",
+   "start": 85050,
+   "end": 85075,
+   "old": "result_series.name = name",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2901,
+   "op": "statement",
+   "start": 91953,
+   "end": 91982,
+   "old": "result = self._grouper.size()",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2499,
+   "op": "constant",
+   "start": 79335,
+   "end": 79340,
+   "old": "False",
+   "new": "(True)",
+   "id": 19
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2611,
+   "op": "constant",
+   "start": 82741,
+   "end": 82746,
+   "old": "False",
+   "new": "(True)",
+   "id": 20
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2689,
+   "op": "statement",
+   "start": 85498,
+   "end": 85547,
+   "old": "index_level = range(len(self._grouper.groupings))",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2699,
+   "op": "statement",
+   "start": 85935,
+   "end": 86044,
+   "old": "levels = list(\n                range(len(self._grouper.groupings), result_series.index.nlevels)\n            )",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2702,
+   "op": "statement",
+   "start": 86057,
+   "end": 86345,
+   "old": "indexed_group_size = result_series.groupby(\n                result_series.index.droplevel(levels),\n                sort=self.sort,\n                dropna=self.dropna,\n                # GH#43999 - deprecation of observed=False\n                observed=False,\n            ).transform(\"sum\")",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2727,
+   "op": "statement",
+   "start": 87139,
+   "end": 87205,
+   "old": "cols = Index(columns, dtype=orig_dtype).insert(len(columns), name)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2728,
+   "op": "statement",
+   "start": 87218,
+   "end": 87245,
+   "old": "result_frame.columns = cols",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2918,
+   "op": "statement",
+   "start": 92799,
+   "end": 92860,
+   "old": "result = self._obj_1d_constructor(result, name=self.obj.name)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2920,
+   "op": "statement",
+   "start": 92887,
+   "end": 92928,
+   "old": "result = self._obj_1d_constructor(result)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2983,
+   "op": "constant",
+   "start": 94473,
+   "end": 94477,
+   "old": "True",
+   "new": "(False)",
+   "id": 28
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 3014,
+   "op": "constant",
+   "start": 95602,
+   "end": 95606,
+   "old": "True",
+   "new": "(False)",
+   "id": 29
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2373,
+   "op": "constant",
+   "start": 75330,
+   "end": 75339,
+   "old": "\"groupby\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2827,
+   "op": "boolean",
+   "start": 89990,
+   "end": 90026,
+   "old": "not is_numeric_dtype(self.obj.dtype)",
+   "new": "(is_numeric_dtype(self.obj.dtype))",
+   "id": 31
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2938,
+   "op": "constant",
+   "start": 93423,
+   "end": 93428,
+   "old": "\"sum\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 3100,
+   "op": "constant",
+   "start": 97821,
+   "end": 97825,
+   "old": "True",
+   "new": "(False)",
+   "id": 33
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 3211,
+   "op": "constant",
+   "start": 100629,
+   "end": 100630,
+   "old": "1",
+   "new": "(2)",
+   "id": 34
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2600,
+   "op": "constant",
+   "start": 82411,
+   "end": 82416,
+   "old": "\"var\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2827,
+   "op": "constant",
+   "start": 89984,
+   "end": 89985,
+   "old": "1",
+   "new": "(2)",
+   "id": 36
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 3102,
+   "op": "constant",
+   "start": 97863,
+   "end": 98651,
+   "old": "\"\"\"\\\n        For SeriesGroupBy:\n\n        >>> lst = ['a', 'a', 'b', 'b']\n        >>> ser = pd.Series([1, 2, 3, 4], index=lst)\n        >>> ser\n        a    1\n        a    2\n        b    3\n        b    4\n        dtype: int64\n        >>> ser.groupby(level=0).min()\n        a    1\n        b    3\n        dtype: int64\n\n        For DataFrameGroupBy:\n\n        >>> data = [[1, 8, 2], [1, 2, 5], [2, 5, 8], [2, 6, 9]]\n        >>> df = pd.DataFrame(data, columns=[\"a\", \"b\", \"c\"],\n        ...                   index=[\"tiger\", \"leopard\", \"cheetah\", \"lion\"])\n        >>> df\n                  a  b  c\n          tiger   1  8  2\n        leopard   1  2  5\n        cheetah   2  5  8\n           lion   2  6  9\n        >>> df.groupby(\"a\").min()\n            b  c\n        a\n        1   2  2\n        2   5  8\"\"\"",
+   "new": "('XX')",
+   "id": 37
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 3169,
+   "op": "constant",
+   "start": 99646,
+   "end": 99647,
+   "old": "1",
+   "new": "(2)",
+   "id": 38
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2594,
+   "op": "constant",
+   "start": 82261,
+   "end": 82262,
+   "old": "0",
+   "new": "(1)",
+   "id": 39
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2925,
+   "op": "constant",
+   "start": 93080,
+   "end": 93085,
+   "old": "False",
+   "new": "(True)",
+   "id": 40
+  },
+  {
+   "path": "pandas/core/groupby/groupby.py",
+   "line": 2909,
+   "op": "constant",
+   "start": 92402,
+   "end": 92418,
+   "old": "\"numpy_nullable\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 700,
+   "op": "statement",
+   "start": 20663,
+   "end": 20696,
+   "old": "dtype_sum = _get_dtype_max(dtype)",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 856,
+   "op": "statement",
+   "start": 25801,
+   "end": 25852,
+   "old": "ret = np.empty(shp[dims != axis], dtype=np.float64)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1279,
+   "op": "statement",
+   "start": 37993,
+   "end": 38038,
+   "old": "m2 = _zero_out_fperr(m2, constant_tolerance2)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1361,
+   "op": "statement",
+   "start": 40344,
+   "end": 40386,
+   "old": "m4 = adjusted4.sum(axis, dtype=np.float64)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 172,
+   "op": "return",
+   "start": 5097,
+   "end": 5148,
+   "old": "return name not in [\"nansum\", \"nanprod\", \"nanmean\"]",
+   "new": "return None",
+   "id": 46
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 532,
+   "op": "comparison",
+   "start": 16200,
+   "end": 16222,
+   "old": "values.dtype == object",
+   "new": "(values.dtype != object)",
+   "id": 47
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 533,
+   "op": "statement",
+   "start": 16232,
+   "end": 16260,
+   "old": "values = values.astype(bool)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 582,
+   "op": "statement",
+   "start": 17438,
+   "end": 17505,
+   "old": "raise TypeError(\"datetime64 type does not support operation 'all'\")",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 588,
+   "op": "comparison",
+   "start": 17679,
+   "end": 17701,
+   "old": "values.dtype == object",
+   "new": "(values.dtype != object)",
+   "id": 50
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 721,
+   "op": "statement",
+   "start": 21417,
+   "end": 21437,
+   "old": "ct_mask = count == 0",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 779,
+   "op": "return",
+   "start": 23169,
+   "end": 23179,
+   "old": "return res",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 794,
+   "op": "boolean",
+   "start": 23773,
+   "end": 23816,
+   "old": "not using_nan_sentinel and mask is not None",
+   "new": "(not using_nan_sentinel or mask is not None)",
+   "id": 53
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 797,
+   "op": "statement",
+   "start": 23900,
+   "end": 23921,
+   "old": "values[mask] = np.nan",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1251,
+   "op": "statement",
+   "start": 36977,
+   "end": 37022,
+   "old": "count = _get_counts(values.shape, mask, axis)",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1256,
+   "op": "statement",
+   "start": 37152,
+   "end": 37174,
+   "old": "values = values.copy()",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1262,
+   "op": "statement",
+   "start": 37356,
+   "end": 37405,
+   "old": "mean = values.sum(axis, dtype=np.float64) / count",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1267,
+   "op": "boolean",
+   "start": 37510,
+   "end": 37537,
+   "old": "skipna and mask is not None",
+   "new": "(skipna or mask is not None)",
+   "id": 58
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1268,
+   "op": "statement",
+   "start": 37547,
+   "end": 37576,
+   "old": "np.putmask(adjusted, mask, 0)",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1290,
+   "op": "statement",
+   "start": 38374,
+   "end": 38411,
+   "old": "result = np.where(m2 == 0, 0, result)",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1211,
+   "op": "constant",
+   "start": 35911,
+   "end": 35915,
+   "old": "\"M8\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1410,
+   "op": "statement",
+   "start": 42384,
+   "end": 42425,
+   "old": "result = result.astype(dtype, copy=False)",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1300,
+   "op": "constant",
+   "start": 38596,
+   "end": 38600,
+   "old": "\"m8\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1454,
+   "op": "statement",
+   "start": 43396,
+   "end": 43418,
+   "old": "values = values.copy()",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 158,
+   "op": "boolean",
+   "start": 4537,
+   "end": 4567,
+   "old": "not needs_i8_conversion(dtype)",
+   "new": "(needs_i8_conversion(dtype))",
+   "id": 65
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 518,
+   "op": "comparison",
+   "start": 15657,
+   "end": 15683,
+   "old": "values.dtype.kind in \"iub\"",
+   "new": "(values.dtype.kind not in 'iub')",
+   "id": 66
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 580,
+   "op": "constant",
+   "start": 17406,
+   "end": 17409,
+   "old": "\"M\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 774,
+   "op": "statement",
+   "start": 22926,
+   "end": 23034,
+   "old": "warnings.filterwarnings(\n                \"ignore\", \"All-NaN slice encountered\", RuntimeWarning\n            )",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 794,
+   "op": "boolean",
+   "start": 23773,
+   "end": 23795,
+   "old": "not using_nan_sentinel",
+   "new": "(using_nan_sentinel)",
+   "id": 69
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1262,
+   "op": "arithmetic",
+   "start": 37363,
+   "end": 37405,
+   "old": "values.sum(axis, dtype=np.float64) / count",
+   "new": "(values.sum(axis, dtype=np.float64) // count)",
+   "id": 70
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1347,
+   "op": "boolean",
+   "start": 39879,
+   "end": 39925,
+   "old": "not skipna and mask is not None and mask.any()",
+   "new": "(not skipna or mask is not None or mask.any())",
+   "id": 71
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1359,
+   "op": "constant",
+   "start": 40291,
+   "end": 40292,
+   "old": "2",
+   "new": "(3)",
+   "id": 72
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1393,
+   "op": "arithmetic",
+   "start": 41788,
+   "end": 41838,
+   "old": "3 * (count - 1) ** 2 / ((count - 2) * (count - 3))",
+   "new": "(3 * (count - 1) ** 2 * ((count - 2) * (count - 3)))",
+   "id": 73
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1402,
+   "op": "comparison",
+   "start": 42161,
+   "end": 42177,
+   "old": "denominator == 0",
+   "new": "(denominator != 0)",
+   "id": 74
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1406,
+   "op": "arithmetic",
+   "start": 42294,
+   "end": 42323,
+   "old": "numerator / denominator - adj",
+   "new": "(numerator / denominator + adj)",
+   "id": 75
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1455,
+   "op": "constant",
+   "start": 43442,
+   "end": 43443,
+   "old": "1",
+   "new": "(2)",
+   "id": 76
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1731,
+   "op": "boolean",
+   "start": 51310,
+   "end": 51361,
+   "old": "not (is_float(x) or is_integer(x) or is_complex(x))",
+   "new": "(is_float(x) or is_integer(x) or is_complex(x))",
+   "id": 77
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 709,
+   "op": "statement",
+   "start": 20976,
+   "end": 20993,
+   "old": "dtype_sum = dtype",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 710,
+   "op": "statement",
+   "start": 21002,
+   "end": 21021,
+   "old": "dtype_count = dtype",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 716,
+   "op": "constant",
+   "start": 21225,
+   "end": 21231,
+   "old": "\"ndim\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 808,
+   "op": "statement",
+   "start": 24190,
+   "end": 24241,
+   "old": "res = np.apply_along_axis(get_median, axis, values)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1283,
+   "op": "arithmetic",
+   "start": 38165,
+   "end": 38205,
+   "old": "count * (count - 1) ** 0.5 / (count - 2)",
+   "new": "(count * (count - 1) ** 0.5 // (count - 2))",
+   "id": 82
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1346,
+   "op": "constant",
+   "start": 39867,
+   "end": 39868,
+   "old": "0",
+   "new": "(1)",
+   "id": 83
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1347,
+   "op": "boolean",
+   "start": 39879,
+   "end": 39889,
+   "old": "not skipna",
+   "new": "(skipna)",
+   "id": 84
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1393,
+   "op": "arithmetic",
+   "start": 41812,
+   "end": 41837,
+   "old": "(count - 2) * (count - 3)",
+   "new": "((count - 2) / (count - 3))",
+   "id": 85
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1716,
+   "op": "statement",
+   "start": 50614,
+   "end": 50643,
+   "old": "inferred = lib.infer_dtype(x)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 775,
+   "op": "constant",
+   "start": 22967,
+   "end": 22975,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 777,
+   "op": "constant",
+   "start": 23081,
+   "end": 23102,
+   "old": "\"Mean of empty slice\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1290,
+   "op": "constant",
+   "start": 38398,
+   "end": 38399,
+   "old": "0",
+   "new": "(1)",
+   "id": 89
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1293,
+   "op": "constant",
+   "start": 38485,
+   "end": 38486,
+   "old": "0",
+   "new": "(1)",
+   "id": 90
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1394,
+   "op": "arithmetic",
+   "start": 41859,
+   "end": 41878,
+   "old": "count * (count + 1)",
+   "new": "(count / (count + 1))",
+   "id": 91
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1403,
+   "op": "constant",
+   "start": 42216,
+   "end": 42217,
+   "old": "0",
+   "new": "(1)",
+   "id": 92
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1405,
+   "op": "constant",
+   "start": 42266,
+   "end": 42274,
+   "old": "\"ignore\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1730,
+   "op": "statement",
+   "start": 51290,
+   "end": 51300,
+   "old": "x = x.real",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1393,
+   "op": "constant",
+   "start": 41801,
+   "end": 41802,
+   "old": "1",
+   "new": "(2)",
+   "id": 95
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1717,
+   "op": "constant",
+   "start": 50672,
+   "end": 50680,
+   "old": "\"string\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 1743,
+   "op": "statement",
+   "start": 51783,
+   "end": 51844,
+   "old": "raise TypeError(f\"Could not convert {x} to numeric\") from err",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 817,
+   "op": "constant",
+   "start": 24604,
+   "end": 24605,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "pandas/core/nanops.py",
+   "line": 818,
+   "op": "constant",
+   "start": 24669,
+   "end": 24670,
+   "old": "0",
+   "new": "(1)",
+   "id": 99
+  }
+ ]
+}

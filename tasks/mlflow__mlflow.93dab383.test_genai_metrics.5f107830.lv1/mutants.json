@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_genai_metrics.5f107830.lv1",
+ "pool": 329,
+ "mutants": [
+  {
+   "path": "mlflow/metrics/genai/base.py",
+   "line": 72,
+   "op": "return",
+   "start": 3239,
+   "end": 3266,
+   "old": "return self.grading_context",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "mlflow/metrics/genai/base.py",
+   "line": 77,
+   "op": "constant",
+   "start": 3359,
+   "end": 3389,
+   "old": "\"\"\"\nExample Input:\n{input}\n\"\"\"",
+   "new": "('XX')",
+   "id": 1
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1550,
+   "end": 1564,
+   "old": "args_dict = {}",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 137,
+   "op": "statement",
+   "start": 4638,
+   "end": 4677,
+   "old": "scores = [None] * len(grading_payloads)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 168,
+   "op": "return",
+   "start": 5564,
+   "end": 5593,
+   "old": "return scores, justifications",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 193,
+   "op": "statement",
+   "start": 6327,
+   "end": 6400,
+   "old": "scores_for_aggregation = [score for score in scores if score is not None]",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 292,
+   "op": "statement",
+   "start": 10913,
+   "end": 10958,
+   "old": "allowed_variables = prompt_template.variables",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 293,
+   "op": "statement",
+   "start": 10963,
+   "end": 11027,
+   "old": "additional_variables = list(allowed_variables - {\"predictions\"})",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 298,
+   "op": "statement",
+   "start": 11304,
+   "end": 11808,
+   "old": "genai_metric_args = {\n        \"name\": name,\n        \"judge_prompt\": judge_prompt,\n        \"model\": model,\n        \"parameters\": parameters,\n        \"aggregations\": aggregations,\n        \"greater_is_better\": greater_is_better,\n        \"max_workers\": max_workers,\n        \"metric_metadata\": metric_metadata,\n        # Record the mlflow version for serialization in case the function signature changes later\n        \"mlflow_version\": VERSION,\n        \"fn_name\": make_genai_metric_from_prompt.__name__,\n    }",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 312,
+   "op": "statement",
+   "start": 11814,
+   "end": 11872,
+   "old": "aggregations = aggregations or [\"mean\", \"variance\", \"p90\"]",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 351,
+   "op": "statement",
+   "start": 13427,
+   "end": 13491,
+   "old": "eval_fn.__signature__ = Signature(parameters=eval_fn_parameters)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 353,
+   "op": "return",
+   "start": 13497,
+   "end": 13697,
+   "old": "return make_metric(\n        eval_fn=eval_fn,\n        greater_is_better=greater_is_better,\n        name=name,\n        metric_metadata=metric_metadata,\n        genai_metric_args=genai_metric_args,\n    )",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 486,
+   "op": "statement",
+   "start": 20796,
+   "end": 21484,
+   "old": "genai_metric_args = {\n        \"name\": name,\n        \"definition\": definition,\n        \"grading_prompt\": grading_prompt,\n        \"examples\": examples,\n        \"version\": version,\n        \"model\": model,\n        \"grading_context_columns\": grading_context_columns,\n        \"include_input\": include_input,\n        \"parameters\": parameters,\n        \"aggregations\": aggregations,\n        \"greater_is_better\": greater_is_better,\n        \"max_workers\": max_workers,\n        \"metric_metadata\": metric_metadata,\n        # Record the mlflow version for serialization in case the function signature changes later\n        \"mlflow_version\": VERSION,\n        \"fn_name\": make_genai_metric.__name__,\n    }",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 542,
+   "op": "statement",
+   "start": 23090,
+   "end": 23160,
+   "old": "class_name = f\"mlflow.metrics.genai.prompts.{version}.EvaluationModel\"",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 654,
+   "op": "statement",
+   "start": 27390,
+   "end": 27695,
+   "old": "signature_parameters = [\n        Parameter(\"predictions\", Parameter.POSITIONAL_OR_KEYWORD, annotation=\"pd.Series\"),\n        Parameter(\"metrics\", Parameter.POSITIONAL_OR_KEYWORD, annotation=dict[str, MetricValue]),\n        Parameter(\"inputs\", Parameter.POSITIONAL_OR_KEYWORD, annotation=\"pd.Series\"),\n    ]",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 100,
+   "op": "return",
+   "start": 3414,
+   "end": 3441,
+   "old": "return score, justification",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 142,
+   "op": "statement",
+   "start": 4859,
+   "end": 5163,
+   "old": "futures = {\n            executor.submit(\n                _score_model_on_one_payload,\n                payload,\n                model,\n                parameters,\n                headers,\n                proxy_url,\n            ): indx\n            for indx, payload in enumerate(grading_payloads)\n        }",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 339,
+   "op": "statement",
+   "start": 12955,
+   "end": 13018,
+   "old": "aggregate_scores = _get_aggregate_results(scores, aggregations)",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 505,
+   "op": "boolean",
+   "start": 21505,
+   "end": 21548,
+   "old": "aggregations or [\"mean\", \"variance\", \"p90\"]",
+   "new": "(aggregations and ['mean', 'variance', 'p90'])",
+   "id": 18
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 508,
+   "op": "boolean",
+   "start": 21617,
+   "end": 21662,
+   "old": "not isinstance(grading_context_columns, list)",
+   "new": "(isinstance(grading_context_columns, list))",
+   "id": 19
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 509,
+   "op": "statement",
+   "start": 21672,
+   "end": 21723,
+   "old": "grading_context_columns = [grading_context_columns]",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 537,
+   "op": "return",
+   "start": 22970,
+   "end": 22984,
+   "old": "return example",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 539,
+   "op": "comparison",
+   "start": 22993,
+   "end": 23013,
+   "old": "examples is not None",
+   "new": "(examples is None)",
+   "id": 22
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 544,
+   "op": "statement",
+   "start": 23178,
+   "end": 23244,
+   "old": "evaluation_model_class_module = _get_class_from_string(class_name)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 576,
+   "op": "statement",
+   "start": 24225,
+   "end": 24279,
+   "old": "eval_values = dict(zip(grading_context_columns, args))",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 619,
+   "op": "statement",
+   "start": 26216,
+   "end": 26245,
+   "old": "scores = [None] * len(inputs)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 60,
+   "op": "statement",
+   "start": 1854,
+   "end": 1979,
+   "old": "raise MlflowException(\n                f\"{arg} does not exist in the eval function {list(eval_values.keys())}.\"\n            )",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 68,
+   "op": "arithmetic",
+   "start": 2084,
+   "end": 2261,
+   "old": "\"Additional information used by the model:\\n\"\n            + \"\\n\".join(\n                [f\"key: {arg}\\nvalue:\\n{arg_value}\" for arg, arg_value in args_dict.items()]\n            )",
+   "new": "('Additional information used by the model:\\n' - '\\n'.join([f'key: {arg}\\nvalue:\\n{arg_value}' for arg, arg_value in args_dict.items()]))",
+   "id": 27
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2628,
+   "end": 2658,
+   "old": "score = int(data.get(\"score\"))",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 97,
+   "op": "boolean",
+   "start": 3240,
+   "end": 3313,
+   "old": "not isinstance(score, (int, float)) or not isinstance(justification, str)",
+   "new": "(not isinstance(score, (int, float)) and (not isinstance(justification, str)))",
+   "id": 29
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 164,
+   "op": "statement",
+   "start": 5438,
+   "end": 5476,
+   "old": "score, justification = future.result()",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 165,
+   "op": "statement",
+   "start": 5489,
+   "end": 5509,
+   "old": "scores[indx] = score",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 166,
+   "op": "statement",
+   "start": 5522,
+   "end": 5558,
+   "old": "justifications[indx] = justification",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 197,
+   "op": "comparison",
+   "start": 6522,
+   "end": 6546,
+   "old": "aggregations is not None",
+   "new": "(aggregations is None)",
+   "id": 33
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 306,
+   "op": "constant",
+   "start": 11574,
+   "end": 11591,
+   "old": "\"metric_metadata\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 308,
+   "op": "constant",
+   "start": 11717,
+   "end": 11733,
+   "old": "\"mlflow_version\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 487,
+   "op": "constant",
+   "start": 20826,
+   "end": 20832,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 522,
+   "op": "comparison",
+   "start": 22310,
+   "end": 22369,
+   "old": "set(grading_context.keys()) != set(grading_context_columns)",
+   "new": "(set(grading_context.keys()) == set(grading_context_columns))",
+   "id": 37
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 529,
+   "op": "boolean",
+   "start": 22704,
+   "end": 22721,
+   "old": "not include_input",
+   "new": "(include_input)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 530,
+   "op": "return",
+   "start": 22735,
+   "end": 22960,
+   "old": "return EvaluationExample(\n                output=example.output,\n                score=example.score,\n                justification=example.justification,\n                grading_context=example.grading_context,\n            )",
+   "new": "return None",
+   "id": 39
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 619,
+   "op": "arithmetic",
+   "start": 26225,
+   "end": 26245,
+   "old": "[None] * len(inputs)",
+   "new": "([None] / len(inputs))",
+   "id": 40
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 620,
+   "op": "arithmetic",
+   "start": 26271,
+   "end": 26291,
+   "old": "[None] * len(inputs)",
+   "new": "([None] / len(inputs))",
+   "id": 41
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 79,
+   "op": "constant",
+   "start": 2415,
+   "end": 2422,
+   "old": "\"score\"",
+   "new": "('XX')",
+   "id": 42
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 178,
+   "op": "constant",
+   "start": 5868,
+   "end": 5873,
+   "old": "\"max\"",
+   "new": "('XX')",
+   "id": 43
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 181,
+   "op": "constant",
+   "start": 5957,
+   "end": 5967,
+   "old": "\"variance\"",
+   "new": "('XX')",
+   "id": 44
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 182,
+   "op": "constant",
+   "start": 5989,
+   "end": 5994,
+   "old": "\"p90\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 193,
+   "op": "comparison",
+   "start": 6382,
+   "end": 6399,
+   "old": "score is not None",
+   "new": "(score is None)",
+   "id": 46
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 327,
+   "op": "arithmetic",
+   "start": 12328,
+   "end": 12366,
+   "old": "allowed_variables - set(kwargs.keys())",
+   "new": "(allowed_variables + set(kwargs.keys()))",
+   "id": 47
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 505,
+   "op": "constant",
+   "start": 21530,
+   "end": 21540,
+   "old": "\"variance\"",
+   "new": "('XX')",
+   "id": 48
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 512,
+   "op": "comparison",
+   "start": 21806,
+   "end": 21839,
+   "old": "len(grading_context_columns) == 0",
+   "new": "(len(grading_context_columns) != 0)",
+   "id": 49
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 519,
+   "op": "statement",
+   "start": 22172,
+   "end": 22243,
+   "old": "grading_context = {grading_context_columns[0]: example.grading_context}",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 581,
+   "op": "constant",
+   "start": 24449,
+   "end": 24461,
+   "old": "\"parameters\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 597,
+   "op": "statement",
+   "start": 25104,
+   "end": 25180,
+   "old": "arg_string = _format_args_string(grading_context_columns, eval_values, indx)",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 641,
+   "op": "statement",
+   "start": 26924,
+   "end": 26967,
+   "old": "as_comp = tqdm(as_comp, total=len(futures))",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 649,
+   "op": "statement",
+   "start": 27204,
+   "end": 27240,
+   "old": "justifications[indx] = justification",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 66,
+   "op": "constant",
+   "start": 2055,
+   "end": 2056,
+   "old": "0",
+   "new": "(1)",
+   "id": 55
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3118,
+   "end": 3130,
+   "old": "score = None",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 95,
+   "op": "statement",
+   "start": 3147,
+   "end": 3227,
+   "old": "justification = f\"Failed to extract score and justification. Raw output: {text}\"",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 333,
+   "op": "constant",
+   "start": 12694,
+   "end": 12703,
+   "old": "\"records\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 599,
+   "op": "statement",
+   "start": 25232,
+   "end": 25926,
+   "old": "raise MlflowException(\n                    f\"Values for grading_context_columns are malformed and cannot be \"\n                    f\"formatted into a prompt for metric '{name}'.\\n\"\n                    f\"Required columns: {grading_context_columns}\\n\"\n                    f\"Values: {eval_values}\\n\"\n                    f\"Error: {e!r}\\n\"\n                    f\"Please check the following: \\n\"\n                    \"- predictions and targets (if required) are provided correctly\\n\"\n                    \"- grading_context_columns are mapped correctly using the evaluator_config \"\n                    \"parameter\\n\"\n                    \"- input and output data are formatted correctly.\"\n                )",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 84,
+   "op": "constant",
+   "start": 2649,
+   "end": 2656,
+   "old": "\"score\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 324,
+   "op": "constant",
+   "start": 12199,
+   "end": 12212,
+   "old": "\"predictions\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3081,
+   "end": 3082,
+   "old": "2",
+   "new": "(3)",
+   "id": 62
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 326,
+   "op": "arithmetic",
+   "start": 12282,
+   "end": 12287,
+   "old": "i - 1",
+   "new": "(i + 1)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/metrics/genai/genai_metric.py",
+   "line": 88,
+   "op": "constant",
+   "start": 2827,
+   "end": 2866,
+   "old": "r\"score: (\\d+),?\\s*justification: (.+)\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 42,
+   "op": "statement",
+   "start": 1250,
+   "end": 1314,
+   "old": "safe_kwargs = {k: v for k, v in kwargs.items() if v is not None}",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 45,
+   "op": "statement",
+   "start": 1403,
+   "end": 1532,
+   "old": "extracted_variables = [\n                fname for _, fname, _, _ in string.Formatter().parse(template_str) if fname\n            ]",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 60,
+   "op": "statement",
+   "start": 2097,
+   "end": 2218,
+   "old": "safe_available_kwargs = {\n                k: safe_kwargs.get(k, \"{\" + k + \"}\") for k in extracted_variables\n            }",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 63,
+   "op": "statement",
+   "start": 2231,
+   "end": 2303,
+   "old": "new_template_strs.append(template_str.format_map(safe_available_kwargs))",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 54,
+   "op": "comparison",
+   "start": 1849,
+   "end": 1862,
+   "old": "v is not None",
+   "new": "(v is None)",
+   "id": 69
+  },
+  {
+   "path": "mlflow/metrics/genai/prompt_template.py",
+   "line": 61,
+   "op": "arithmetic",
+   "start": 2161,
+   "end": 2168,
+   "old": "\"{\" + k",
+   "new": "('{' - k)",
+   "id": 70
+  },
+  {
+   "path": "mlflow/metrics/genai/prompts/v1.py",
+   "line": 112,
+   "op": "statement",
+   "start": 3714,
+   "end": 3876,
+   "old": "examples_str = (\n            \"\"\n            if self.examples is None or len(self.examples) == 0\n            else f\"Examples:\\n{self._format_examples()}\"\n        )",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/metrics/genai/prompts/v1.py",
+   "line": 120,
+   "op": "return",
+   "start": 3971,
+   "end": 4297,
+   "old": "return {\n            \"model\": self.model,\n            \"eval_prompt\": template.partial_fill(\n                name=self.name,\n                definition=self.definition,\n                grading_prompt=self.grading_prompt,\n                examples=examples_str,\n            ),\n            \"parameters\": self.parameters,\n        }",
+   "new": "return None",
+   "id": 72
+  },
+  {
+   "path": "mlflow/metrics/genai/prompts/v1.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4257,
+   "end": 4269,
+   "old": "\"parameters\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 528,
+   "op": "return",
+   "start": 22375,
+   "end": 22744,
+   "old": "return _generate_eval_metric_class(eval_fn, require_strict_signature=require_strict_signature)(\n        eval_fn=eval_fn,\n        name=name,\n        greater_is_better=greater_is_better,\n        long_name=long_name,\n        version=version,\n        metric_details=metric_details,\n        metric_metadata=metric_metadata,\n        genai_metric_args=genai_metric_args,\n    )",
+   "new": "return None",
+   "id": 74
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 229,
+   "op": "statement",
+   "start": 9406,
+   "end": 10340,
+   "old": "genai_call_method.__signature__ = Signature(\n            parameters=[\n                Parameter(\"self\", Parameter.POSITIONAL_OR_KEYWORD),\n                Parameter(\n                    \"predictions\",\n                    Parameter.KEYWORD_ONLY,\n                    annotation=pd.Series | str | list[str],\n                ),\n                Parameter(\n                    \"inputs\",\n                    Parameter.KEYWORD_ONLY,\n                    annotation=pd.Series | str | list[str],\n                ),\n                Parameter(\n                    \"metrics\",\n                    Parameter.KEYWORD_ONLY,\n                    annotation=dict[str, MetricValue] | None,\n                    default=None,\n                ),\n                *[\n                    Parameter(name, Parameter.KEYWORD_ONLY, annotation=pd.Series | str | list[str])\n                    for name in allowed_kwargs_names\n                ],\n            ]\n        )",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 254,
+   "op": "statement",
+   "start": 10349,
+   "end": 10947,
+   "old": "genai_call_method.__doc__ = f\"\"\"\n            Evaluate the metric on the given inputs and predictions.\n            Note: only keyword arguments are supported.\n\n            Args:\n                predictions: predictions made by the model.\n                inputs: inputs used to make the predictions.\n                metrics: metrics calculated by the default evaluator.\n                kwargs: additional arguments used to compute the metric.\n                    Required arguments: {allowed_kwargs_names}\n\n            Returns:\n                evaluation result as MetricValue object.\n            \"\"\"",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 278,
+   "op": "statement",
+   "start": 11143,
+   "end": 11204,
+   "old": "allowed_kwargs_params = inspect.signature(eval_fn).parameters",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 415,
+   "op": "constant",
+   "start": 16702,
+   "end": 16707,
+   "old": "False",
+   "new": "(True)",
+   "id": 78
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 508,
+   "op": "statement",
+   "start": 21374,
+   "end": 21673,
+   "old": "_logger.warning(\n            f\"The metric name '{name}' provided is not a valid Python identifier, which will \"\n            \"prevent its use as a base metric for derived metrics. Please use a valid identifier \"\n            \"to enable creation of derived metrics that use the given metric.\"\n        )",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 604,
+   "op": "statement",
+   "start": 24831,
+   "end": 24854,
+   "old": "self._metrics = metrics",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 152,
+   "op": "statement",
+   "start": 5968,
+   "end": 6007,
+   "old": "parts.append(f\"version={self.version}\")",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 216,
+   "op": "return",
+   "start": 8661,
+   "end": 9396,
+   "old": "return self.eval_fn(\n                _convert_val_to_pd_Series(predictions, \"predictions\"),\n                metrics or {},\n                _convert_val_to_pd_Series(inputs, \"inputs\"),\n                # Note: based on https://github.com/mlflow/mlflow/blob/4fef77afdbe4d76302cb0b1aad2bd72b5cde64e9/mlflow/metrics/genai/genai_metric.py#L49-L53\n                # the extra params passed https://github.com/mlflow/mlflow/blob/4fef77afdbe4d76302cb0b1aad2bd72b5cde64e9/mlflow/metrics/genai/genai_metric.py#L513\n                # should always be pandas Series\n                *[\n                    _convert_val_to_pd_Series(kwargs[arg_name], arg_name)\n                    for arg_name in allowed_kwargs_names\n                ],\n            )",
+   "new": "return None",
+   "id": 82
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 306,
+   "op": "constant",
+   "start": 12161,
+   "end": 12187,
+   "old": "\"CallableEvaluationMetric\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 313,
+   "op": "boolean",
+   "start": 12330,
+   "end": 12360,
+   "old": "not isinstance(val, pd.Series)",
+   "new": "(isinstance(val, pd.Series))",
+   "id": 84
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 315,
+   "op": "return",
+   "start": 12407,
+   "end": 12430,
+   "old": "return pd.Series([val])",
+   "new": "return None",
+   "id": 85
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 490,
+   "op": "statement",
+   "start": 20718,
+   "end": 20874,
+   "old": "raise MlflowException(\n                \"`name` must be specified if `eval_fn` is a lambda function.\",\n                INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 494,
+   "op": "boolean",
+   "start": 20886,
+   "end": 20918,
+   "old": "not hasattr(eval_fn, \"__name__\")",
+   "new": "(hasattr(eval_fn, '__name__'))",
+   "id": 87
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 501,
+   "op": "constant",
+   "start": 21145,
+   "end": 21148,
+   "old": "\"/\"",
+   "new": "('XX')",
+   "id": 88
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 158,
+   "op": "arithmetic",
+   "start": 6223,
+   "end": 6261,
+   "old": "\"EvaluationMetric(\" + \", \".join(parts)",
+   "new": "('EvaluationMetric(' - ', '.join(parts))",
+   "id": 89
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 521,
+   "op": "constant",
+   "start": 22019,
+   "end": 22032,
+   "old": "\"predictions\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 521,
+   "op": "constant",
+   "start": 22045,
+   "end": 22054,
+   "old": "\"metrics\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 158,
+   "op": "constant",
+   "start": 6223,
+   "end": 6242,
+   "old": "\"EvaluationMetric(\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 208,
+   "op": "arithmetic",
+   "start": 8231,
+   "end": 8277,
+   "old": "set(allowed_kwargs_names) - set(kwargs.keys())",
+   "new": "(set(allowed_kwargs_names) + set(kwargs.keys()))",
+   "id": 93
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 489,
+   "op": "constant",
+   "start": 20694,
+   "end": 20704,
+   "old": "\"<lambda>\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 496,
+   "op": "constant",
+   "start": 20971,
+   "end": 21048,
+   "old": "\"`name` must be specified if `eval_fn` does not have a `__name__` attribute.\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "mlflow/models/evaluation/base.py",
+   "line": 197,
+   "op": "constant",
+   "start": 7904,
+   "end": 7912,
+   "old": "\"inputs\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mlflow/utils/class_utils.py",
+   "line": 6,
+   "op": "return",
+   "start": 155,
+   "end": 214,
+   "old": "return getattr(importlib.import_module(module), class_name)",
+   "new": "return None",
+   "id": 97
+  },
+  {
+   "path": "mlflow/utils/class_utils.py",
+   "line": 5,
+   "op": "constant",
+   "start": 134,
+   "end": 137,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "mlflow/utils/class_utils.py",
+   "line": 5,
+   "op": "constant",
+   "start": 148,
+   "end": 149,
+   "old": "1",
+   "new": "(2)",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_plot.b645d353.lv1",
+ "pool": 173,
+ "mutants": [
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 190,
+   "op": "statement",
+   "start": 5713,
+   "end": 5732,
+   "old": "lines = [\"<table>\"]",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 199,
+   "op": "statement",
+   "start": 5979,
+   "end": 6189,
+   "old": "repr = [\n            \"<div style='height: 300px'>\",\n            \"<div style='border-style: inset; border-width: 2px'>\",\n            *self._html_table(self),\n            \"</div>\",\n            \"</div>\",\n        ]",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 464,
+   "op": "statement",
+   "start": 14843,
+   "end": 14864,
+   "old": "accepted_types: tuple",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 465,
+   "op": "statement",
+   "start": 14906,
+   "end": 15001,
+   "old": "accepted_types = (\n            mpl.axes.Axes, mpl.figure.SubFigure, mpl.figure.Figure\n        )",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 479,
+   "op": "statement",
+   "start": 15409,
+   "end": 15428,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 480,
+   "op": "statement",
+   "start": 15437,
+   "end": 15457,
+   "old": "new._target = target",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 562,
+   "op": "statement",
+   "start": 18931,
+   "end": 18950,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 610,
+   "op": "statement",
+   "start": 20625,
+   "end": 20690,
+   "old": "axes = {\"x\": [] if x is None else x, \"y\": [] if y is None else y}",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 616,
+   "op": "statement",
+   "start": 20899,
+   "end": 20926,
+   "old": "pair_spec[\"variables\"] = {}",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 617,
+   "op": "statement",
+   "start": 20935,
+   "end": 20962,
+   "old": "pair_spec[\"structure\"] = {}",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 634,
+   "op": "statement",
+   "start": 21472,
+   "end": 21496,
+   "old": "pair_spec[\"wrap\"] = wrap",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 637,
+   "op": "statement",
+   "start": 21534,
+   "end": 21566,
+   "old": "new._pair_spec.update(pair_spec)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 638,
+   "op": "return",
+   "start": 21575,
+   "end": 21585,
+   "old": "return new",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 666,
+   "op": "statement",
+   "start": 22523,
+   "end": 22562,
+   "old": "variables: dict[str, VariableSpec] = {}",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 672,
+   "op": "statement",
+   "start": 22698,
+   "end": 22712,
+   "old": "structure = {}",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 690,
+   "op": "statement",
+   "start": 23443,
+   "end": 23570,
+   "old": "spec: FacetSpec = {\n            \"variables\": variables,\n            \"structure\": structure,\n            \"wrap\": wrap,\n        }",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 697,
+   "op": "statement",
+   "start": 23608,
+   "end": 23636,
+   "old": "new._facet_spec.update(spec)",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 699,
+   "op": "return",
+   "start": 23646,
+   "end": 23656,
+   "old": "return new",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 726,
+   "op": "statement",
+   "start": 24758,
+   "end": 24777,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 728,
+   "op": "return",
+   "start": 24821,
+   "end": 24831,
+   "old": "return new",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 745,
+   "op": "statement",
+   "start": 25369,
+   "end": 25388,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 747,
+   "op": "return",
+   "start": 25432,
+   "end": 25442,
+   "old": "return new",
+   "new": "return None",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 767,
+   "op": "statement",
+   "start": 26061,
+   "end": 26087,
+   "old": "new._limits.update(limits)",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 768,
+   "op": "return",
+   "start": 26096,
+   "end": 26106,
+   "old": "return new",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 801,
+   "op": "statement",
+   "start": 27187,
+   "end": 27206,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 807,
+   "op": "return",
+   "start": 27398,
+   "end": 27408,
+   "old": "return new",
+   "new": "return None",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 849,
+   "op": "statement",
+   "start": 29117,
+   "end": 29136,
+   "old": "new = self._clone()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 193,
+   "op": "statement",
+   "start": 5863,
+   "end": 5880,
+   "old": "lines.append(row)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 472,
+   "op": "boolean",
+   "start": 15134,
+   "end": 15172,
+   "old": "not isinstance(target, accepted_types)",
+   "new": "(isinstance(target, accepted_types))",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 473,
+   "op": "statement",
+   "start": 15186,
+   "end": 15366,
+   "old": "err = (\n                f\"The `Plot.on` target must be an instance of {accepted_types_str}. \"\n                f\"You passed an instance of {target.__class__} instead.\"\n            )",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 489,
+   "op": "constant",
+   "start": 15618,
+   "end": 15622,
+   "old": "True",
+   "new": "(False)",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 530,
+   "op": "boolean",
+   "start": 17553,
+   "end": 17579,
+   "old": "not isinstance(mark, Mark)",
+   "new": "(isinstance(mark, Mark))",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 531,
+   "op": "statement",
+   "start": 17593,
+   "end": 17651,
+   "old": "msg = f\"mark must be a Mark instance, not {type(mark)!r}.\"",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 532,
+   "op": "statement",
+   "start": 17664,
+   "end": 17684,
+   "old": "raise TypeError(msg)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 542,
+   "op": "constant",
+   "start": 18160,
+   "end": 18165,
+   "old": "False",
+   "new": "(True)",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 543,
+   "op": "boolean",
+   "start": 18177,
+   "end": 18191,
+   "old": "not transforms",
+   "new": "(transforms)",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 582,
+   "op": "constant",
+   "start": 19523,
+   "end": 19527,
+   "old": "True",
+   "new": "(False)",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 620,
+   "op": "statement",
+   "start": 21002,
+   "end": 21011,
+   "old": "keys = []",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 629,
+   "op": "boolean",
+   "start": 21265,
+   "end": 21311,
+   "old": "not cross and len(axes[\"x\"]) != len(axes[\"y\"])",
+   "new": "(not cross or len(axes['x']) != len(axes['y']))",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 630,
+   "op": "statement",
+   "start": 21325,
+   "end": 21393,
+   "old": "err = \"Lengths of the `x` and `y` lists must match with cross=False\"",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 667,
+   "op": "comparison",
+   "start": 22574,
+   "end": 22589,
+   "old": "col is not None",
+   "new": "(col is None)",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 668,
+   "op": "statement",
+   "start": 22603,
+   "end": 22625,
+   "old": "variables[\"col\"] = col",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 669,
+   "op": "comparison",
+   "start": 22637,
+   "end": 22652,
+   "old": "row is not None",
+   "new": "(row is None)",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 670,
+   "op": "statement",
+   "start": 22666,
+   "end": 22688,
+   "old": "variables[\"row\"] = row",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 805,
+   "op": "statement",
+   "start": 27321,
+   "end": 27351,
+   "old": "new._labels[\"legend\"] = legend",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 852,
+   "op": "statement",
+   "start": 29182,
+   "end": 29216,
+   "old": "new._figure_spec[\"figsize\"] = size",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 853,
+   "op": "comparison",
+   "start": 29228,
+   "end": 29249,
+   "old": "engine is not default",
+   "new": "(engine is default)",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 854,
+   "op": "statement",
+   "start": 29263,
+   "end": 29298,
+   "old": "new._layout_spec[\"engine\"] = engine",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 855,
+   "op": "comparison",
+   "start": 29310,
+   "end": 29331,
+   "old": "extent is not default",
+   "new": "(extent is default)",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 856,
+   "op": "statement",
+   "start": 29345,
+   "end": 29380,
+   "old": "new._layout_spec[\"extent\"] = extent",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 194,
+   "op": "constant",
+   "start": 5902,
+   "end": 5912,
+   "old": "\"</table>\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 201,
+   "op": "constant",
+   "start": 6043,
+   "end": 6097,
+   "old": "\"<div style='border-style: inset; border-width: 2px'>\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 546,
+   "op": "statement",
+   "start": 18287,
+   "end": 18307,
+   "old": "stat = transforms[0]",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 547,
+   "op": "statement",
+   "start": 18320,
+   "end": 18377,
+   "old": "move = [m for m in transforms[1:] if isinstance(m, Move)]",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 552,
+   "op": "statement",
+   "start": 18547,
+   "end": 18583,
+   "old": "error = len(move) != len(transforms)",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 610,
+   "op": "constant",
+   "start": 20662,
+   "end": 20665,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 613,
+   "op": "statement",
+   "start": 20790,
+   "end": 20852,
+   "old": "err = f\"You must pass a sequence of variable keys to `{axis}`\"",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 617,
+   "op": "constant",
+   "start": 20945,
+   "end": 20956,
+   "old": "\"structure\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 622,
+   "op": "statement",
+   "start": 21077,
+   "end": 21095,
+   "old": "key = f\"{axis}{i}\"",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 624,
+   "op": "statement",
+   "start": 21145,
+   "end": 21178,
+   "old": "pair_spec[\"variables\"][key] = col",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 629,
+   "op": "comparison",
+   "start": 21279,
+   "end": 21311,
+   "old": "len(axes[\"x\"]) != len(axes[\"y\"])",
+   "new": "(len(axes['x']) == len(axes['y']))",
+   "id": 60
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 633,
+   "op": "constant",
+   "start": 21447,
+   "end": 21454,
+   "old": "\"cross\"",
+   "new": "('XX')",
+   "id": 61
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 634,
+   "op": "constant",
+   "start": 21482,
+   "end": 21488,
+   "old": "\"wrap\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 692,
+   "op": "constant",
+   "start": 23511,
+   "end": 23522,
+   "old": "\"structure\"",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 693,
+   "op": "constant",
+   "start": 23547,
+   "end": 23553,
+   "old": "\"wrap\"",
+   "new": "('XX')",
+   "id": 64
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 206,
+   "op": "constant",
+   "start": 6205,
+   "end": 6209,
+   "old": "\"\\n\"",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 548,
+   "op": "comparison",
+   "start": 18398,
+   "end": 18430,
+   "old": "len(move) != len(transforms) - 1",
+   "new": "(len(move) == len(transforms) - 1)",
+   "id": 66
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 564,
+   "op": "constant",
+   "start": 18992,
+   "end": 18998,
+   "old": "\"mark\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 565,
+   "op": "constant",
+   "start": 19018,
+   "end": 19024,
+   "old": "\"stat\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 566,
+   "op": "constant",
+   "start": 19044,
+   "end": 19050,
+   "old": "\"move\"",
+   "new": "('XX')",
+   "id": 69
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 568,
+   "op": "constant",
+   "start": 19151,
+   "end": 19157,
+   "old": "\"vars\"",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 569,
+   "op": "constant",
+   "start": 19182,
+   "end": 19190,
+   "old": "\"source\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 570,
+   "op": "constant",
+   "start": 19210,
+   "end": 19218,
+   "old": "\"legend\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 571,
+   "op": "constant",
+   "start": 19240,
+   "end": 19247,
+   "old": "\"label\"",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 572,
+   "op": "constant",
+   "start": 19268,
+   "end": 19276,
+   "old": "\"orient\"",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 610,
+   "op": "comparison",
+   "start": 20644,
+   "end": 20653,
+   "old": "x is None",
+   "new": "(x is not None)",
+   "id": 75
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 670,
+   "op": "constant",
+   "start": 22676,
+   "end": 22681,
+   "old": "\"row\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 674,
+   "op": "constant",
+   "start": 22773,
+   "end": 22778,
+   "old": "\"col\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 674,
+   "op": "constant",
+   "start": 22780,
+   "end": 22785,
+   "old": "\"row\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 676,
+   "op": "comparison",
+   "start": 22850,
+   "end": 22871,
+   "old": "dim_order is not None",
+   "new": "(dim_order is None)",
+   "id": 79
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 803,
+   "op": "constant",
+   "start": 27261,
+   "end": 27268,
+   "old": "\"title\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 854,
+   "op": "constant",
+   "start": 29280,
+   "end": 29288,
+   "old": "\"engine\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 856,
+   "op": "constant",
+   "start": 29362,
+   "end": 29370,
+   "old": "\"extent\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 545,
+   "op": "constant",
+   "start": 18264,
+   "end": 18265,
+   "old": "0",
+   "new": "(1)",
+   "id": 83
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 546,
+   "op": "constant",
+   "start": 18305,
+   "end": 18306,
+   "old": "0",
+   "new": "(1)",
+   "id": 84
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 548,
+   "op": "arithmetic",
+   "start": 18411,
+   "end": 18430,
+   "old": "len(transforms) - 1",
+   "new": "(len(transforms) + 1)",
+   "id": 85
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 555,
+   "op": "constant",
+   "start": 18621,
+   "end": 18624,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 86
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 679,
+   "op": "comparison",
+   "start": 22973,
+   "end": 22988,
+   "old": "col is not None",
+   "new": "(col is None)",
+   "id": 87
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 548,
+   "op": "constant",
+   "start": 18429,
+   "end": 18430,
+   "old": "1",
+   "new": "(2)",
+   "id": 88
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 558,
+   "op": "constant",
+   "start": 18870,
+   "end": 18873,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 624,
+   "op": "constant",
+   "start": 21155,
+   "end": 21166,
+   "old": "\"variables\"",
+   "new": "('XX')",
+   "id": 90
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 627,
+   "op": "constant",
+   "start": 21227,
+   "end": 21238,
+   "old": "\"structure\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 629,
+   "op": "constant",
+   "start": 21288,
+   "end": 21291,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 687,
+   "op": "comparison",
+   "start": 23370,
+   "end": 23385,
+   "old": "row is not None",
+   "new": "(row is None)",
+   "id": 93
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 572,
+   "op": "constant",
+   "start": 19294,
+   "end": 19297,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 680,
+   "op": "constant",
+   "start": 23032,
+   "end": 23035,
+   "old": "\" \"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 681,
+   "op": "constant",
+   "start": 23063,
+   "end": 23212,
+   "old": "\"When faceting on both col= and row=, passing `order` as a list\"\n                    \"is ambiguous. Use a dict with 'col' and/or 'row' keys instead.\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "seaborn/_core/plot.py",
+   "line": 558,
+   "op": "constant",
+   "start": 18815,
+   "end": 18819,
+   "old": "\", \"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 145,
+   "op": "return",
+   "start": 3752,
+   "end": 3773,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 98
+  },
+  {
+   "path": "seaborn/external/version.py",
+   "line": 147,
+   "op": "comparison",
+   "start": 3790,
+   "end": 3812,
+   "old": "self._key < other._key",
+   "new": "(self._key <= other._key)",
+   "id": 99
+  }
+ ]
+}

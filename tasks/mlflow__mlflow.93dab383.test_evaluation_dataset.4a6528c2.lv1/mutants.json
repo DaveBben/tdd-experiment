@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_evaluation_dataset.4a6528c2.lv1",
+ "pool": 413,
+ "mutants": [
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 22,
+   "op": "statement",
+   "start": 773,
+   "end": 794,
+   "old": "self._source = source",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 75,
+   "op": "comparison",
+   "start": 2565,
+   "end": 2587,
+   "old": "self._name is not None",
+   "new": "(self._name is None)",
+   "id": 1
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 78,
+   "op": "return",
+   "start": 2645,
+   "end": 2661,
+   "old": "return \"dataset\"",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 48,
+   "op": "constant",
+   "start": 1743,
+   "end": 1749,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "mlflow/data/dataset_source.py",
+   "line": 84,
+   "op": "return",
+   "start": 2775,
+   "end": 2808,
+   "old": "return json.dumps(self.to_dict())",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "mlflow/data/dataset_source.py",
+   "line": 110,
+   "op": "return",
+   "start": 3504,
+   "end": 3549,
+   "old": "return cls.from_dict(json.loads(source_json))",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "mlflow/entities/lifecycle_stage.py",
+   "line": 16,
+   "op": "statement",
+   "start": 472,
+   "end": 498,
+   "old": "stages.append(cls.DELETED)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/entities/lifecycle_stage.py",
+   "line": 35,
+   "op": "statement",
+   "start": 1144,
+   "end": 1201,
+   "old": "raise MlflowException(f\"Invalid view type '{view_type}'\")",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/entities/span.py",
+   "line": 160,
+   "op": "return",
+   "start": 5196,
+   "end": 5246,
+   "old": "return self.get_attribute(SpanAttributeKey.INPUTS)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 81,
+   "op": "return",
+   "start": 1948,
+   "end": 2892,
+   "old": "return {\n        t\n        for t in sqlalchemy.inspect(engine).get_table_names()\n        # Filter out alembic tables\n        if not t.startswith(\"alembic_\")\n    } == {\n        SqlExperiment.__tablename__,\n        SqlRun.__tablename__,\n        SqlMetric.__tablename__,\n        SqlParam.__tablename__,\n        SqlTag.__tablename__,\n        SqlExperimentTag.__tablename__,\n        SqlLatestMetric.__tablename__,\n        SqlRegisteredModel.__tablename__,\n        SqlModelVersion.__tablename__,\n        SqlRegisteredModelTag.__tablename__,\n        SqlModelVersionTag.__tablename__,\n        SqlRegisteredModelAlias.__tablename__,\n        SqlDataset.__tablename__,\n        SqlInput.__tablename__,\n        SqlInputTag.__tablename__,\n        SqlTraceInfo.__tablename__,\n        SqlTraceTag.__tablename__,\n        SqlTraceMetadata.__tablename__,\n        SqlScorer.__tablename__,\n        SqlScorerVersion.__tablename__,\n        SqlJob.__tablename__,\n    }",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4176,
+   "end": 4221,
+   "old": "head_revision = _get_latest_schema_revision()",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 150,
+   "op": "statement",
+   "start": 4226,
+   "end": 4267,
+   "old": "current_rev = _get_schema_version(engine)",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 199,
+   "op": "return",
+   "start": 6587,
+   "end": 6614,
+   "old": "return make_managed_session",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 228,
+   "op": "statement",
+   "start": 7853,
+   "end": 7901,
+   "old": "config.set_main_option(\"sqlalchemy.url\", db_url)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 247,
+   "op": "statement",
+   "start": 8570,
+   "end": 8610,
+   "old": "_logger.info(\"Updating database tables\")",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 248,
+   "op": "statement",
+   "start": 8615,
+   "end": 8651,
+   "old": "config = _get_alembic_config(db_url)",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 289,
+   "op": "statement",
+   "start": 10177,
+   "end": 10238,
+   "old": "pool_max_overflow = MLFLOW_SQLALCHEMYSTORE_MAX_OVERFLOW.get()",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 293,
+   "op": "statement",
+   "start": 10404,
+   "end": 10415,
+   "old": "kwargs = {}",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 358,
+   "op": "return",
+   "start": 12882,
+   "end": 12895,
+   "old": "return engine",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 266,
+   "op": "constant",
+   "start": 9413,
+   "end": 9414,
+   "old": "0",
+   "new": "(1)",
+   "id": 19
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 269,
+   "op": "statement",
+   "start": 9461,
+   "end": 9502,
+   "old": "engine = create_sqlalchemy_engine(db_uri)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 297,
+   "op": "statement",
+   "start": 10557,
+   "end": 10588,
+   "old": "kwargs[\"pool_size\"] = pool_size",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 225,
+   "op": "constant",
+   "start": 7710,
+   "end": 7714,
+   "old": "\"%%\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 228,
+   "op": "constant",
+   "start": 7876,
+   "end": 7892,
+   "old": "\"sqlalchemy.url\"",
+   "new": "('XX')",
+   "id": 23
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 268,
+   "op": "constant",
+   "start": 9451,
+   "end": 9452,
+   "old": "1",
+   "new": "(2)",
+   "id": 24
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 320,
+   "op": "statement",
+   "start": 11492,
+   "end": 11516,
+   "old": "_logger.warning(err_str)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 327,
+   "op": "constant",
+   "start": 11783,
+   "end": 11790,
+   "old": "\"mysql\"",
+   "new": "('XX')",
+   "id": 26
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 343,
+   "op": "constant",
+   "start": 12328,
+   "end": 12336,
+   "old": "\"sqlite\"",
+   "new": "('XX')",
+   "id": 27
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 255,
+   "op": "constant",
+   "start": 9110,
+   "end": 9122,
+   "old": "\"connection\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 297,
+   "op": "constant",
+   "start": 10564,
+   "end": 10575,
+   "old": "\"pool_size\"",
+   "new": "('XX')",
+   "id": 29
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 299,
+   "op": "constant",
+   "start": 10630,
+   "end": 10644,
+   "old": "\"max_overflow\"",
+   "new": "('XX')",
+   "id": 30
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 308,
+   "op": "constant",
+   "start": 10937,
+   "end": 10968,
+   "old": "\"FallbackAsyncAdaptedQueuePool\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 310,
+   "op": "constant",
+   "start": 11047,
+   "end": 11058,
+   "old": "\"QueuePool\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 85,
+   "op": "boolean",
+   "start": 2076,
+   "end": 2104,
+   "old": "not t.startswith(\"alembic_\")",
+   "new": "(t.startswith('alembic_'))",
+   "id": 33
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 179,
+   "op": "statement",
+   "start": 5689,
+   "end": 5752,
+   "old": "session.execute(sql.text(\"PRAGMA case_sensitive_like = true;\"))",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 187,
+   "op": "statement",
+   "start": 6017,
+   "end": 6165,
+   "old": "_logger.exception(\n                    \"SQLAlchemy database error. The following exception is caught.\\n%s\",\n                    e,\n                )",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 191,
+   "op": "statement",
+   "start": 6182,
+   "end": 6257,
+   "old": "raise MlflowException(message=e, error_code=TEMPORARILY_UNAVAILABLE) from e",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 194,
+   "op": "statement",
+   "start": 6365,
+   "end": 6428,
+   "old": "raise MlflowException(message=e, error_code=BAD_REQUEST) from e",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 275,
+   "op": "arithmetic",
+   "start": 9688,
+   "end": 9713,
+   "old": "0.1 * ((2**attempts) - 1)",
+   "new": "(0.1 / (2 ** attempts - 1))",
+   "id": 38
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 354,
+   "op": "constant",
+   "start": 12810,
+   "end": 12815,
+   "old": "False",
+   "new": "(True)",
+   "id": 39
+  },
+  {
+   "path": "mlflow/store/db/utils.py",
+   "line": 331,
+   "op": "constant",
+   "start": 11877,
+   "end": 11885,
+   "old": "\"ssl_ca\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 304,
+   "op": "statement",
+   "start": 11719,
+   "end": 11754,
+   "old": "table = SqlExperiment.__tablename__",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 445,
+   "op": "statement",
+   "start": 17628,
+   "end": 17698,
+   "old": "experiment_id = experiment_id or SqlAlchemyStore.DEFAULT_EXPERIMENT_ID",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 464,
+   "op": "return",
+   "start": 18325,
+   "end": 18342,
+   "old": "return experiment",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 237,
+   "op": "comparison",
+   "start": 8075,
+   "end": 8135,
+   "old": "db_uri not in SqlAlchemyStore._db_uri_sql_alchemy_engine_map",
+   "new": "(db_uri in SqlAlchemyStore._db_uri_sql_alchemy_engine_map)",
+   "id": 44
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 261,
+   "op": "statement",
+   "start": 9667,
+   "end": 9719,
+   "old": "mkdir(local_file_uri_to_path(default_artifact_root))",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 290,
+   "op": "comparison",
+   "start": 11010,
+   "end": 11031,
+   "old": "self.db_type == MYSQL",
+   "new": "(self.db_type != MYSQL)",
+   "id": 46
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 293,
+   "op": "statement",
+   "start": 11147,
+   "end": 11212,
+   "old": "session.execute(sql.text(\"SET IDENTITY_INSERT experiments OFF;\"))",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 438,
+   "op": "constant",
+   "start": 17301,
+   "end": 17306,
+   "old": "False",
+   "new": "(True)",
+   "id": 48
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4123,
+   "op": "return",
+   "start": 171809,
+   "end": 171840,
+   "old": "return records, next_page_token",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4108,
+   "op": "comparison",
+   "start": 171092,
+   "end": 171125,
+   "old": "effective_max_results is not None",
+   "new": "(effective_max_results is None)",
+   "id": 50
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4109,
+   "op": "statement",
+   "start": 171143,
+   "end": 171201,
+   "old": "sql_records = query.limit(effective_max_results + 1).all()",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4119,
+   "op": "statement",
+   "start": 171655,
+   "end": 171680,
+   "old": "sql_records = query.all()",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 245,
+   "op": "statement",
+   "start": 8744,
+   "end": 8914,
+   "old": "SqlAlchemyStore._db_uri_sql_alchemy_engine_map[db_uri] = (\n                        mlflow.store.db.utils.create_sqlalchemy_engine_with_retry(db_uri)\n                    )",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4114,
+   "op": "statement",
+   "start": 171404,
+   "end": 171474,
+   "old": "cursor = f\"{last_record.created_time}:{last_record.dataset_record_id}\"",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4094,
+   "op": "constant",
+   "start": 170468,
+   "end": 170471,
+   "old": "\":\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4094,
+   "op": "constant",
+   "start": 170473,
+   "end": 170474,
+   "old": "1",
+   "new": "(2)",
+   "id": 56
+  },
+  {
+   "path": "mlflow/store/tracking/sqlalchemy_store.py",
+   "line": 4100,
+   "op": "comparison",
+   "start": 170725,
+   "end": 170785,
+   "old": "SqlEvaluationDatasetRecord.created_time == last_created_time",
+   "new": "(SqlEvaluationDatasetRecord.created_time != last_created_time)",
+   "id": 57
+  },
+  {
+   "path": "mlflow/tracking/_tracking_service/utils.py",
+   "line": 287,
+   "op": "return",
+   "start": 9768,
+   "end": 9778,
+   "old": "return uri",
+   "new": "return None",
+   "id": 58
+  },
+  {
+   "path": "mlflow/tracking/registry.py",
+   "line": 77,
+   "op": "constant",
+   "start": 3179,
+   "end": 3183,
+   "old": "\"uc\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_logging_queue.py",
+   "line": 64,
+   "op": "statement",
+   "start": 1943,
+   "end": 1973,
+   "old": "self._lock = threading.RLock()",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "mlflow/utils/async_logging/async_logging_queue.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2090,
+   "end": 2121,
+   "old": "self._status = QueueStatus.IDLE",
+   "new": "pass",
+   "id": 61
+  },
+  {
+   "path": "mlflow/utils/file_utils.py",
+   "line": 502,
+   "op": "statement",
+   "start": 15074,
+   "end": 15084,
+   "old": "path = uri",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "mlflow/utils/file_utils.py",
+   "line": 509,
+   "op": "return",
+   "start": 15384,
+   "end": 15424,
+   "old": "return urllib.request.url2pathname(path)",
+   "new": "return None",
+   "id": 63
+  },
+  {
+   "path": "mlflow/utils/file_utils.py",
+   "line": 1016,
+   "op": "statement",
+   "start": 32699,
+   "end": 32714,
+   "old": "self.fd.close()",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/utils/file_utils.py",
+   "line": 507,
+   "op": "boolean",
+   "start": 15262,
+   "end": 15297,
+   "old": "is_windows() and parsed_path.netloc",
+   "new": "(is_windows() or parsed_path.netloc)",
+   "id": 65
+  },
+  {
+   "path": "mlflow/utils/time.py",
+   "line": 9,
+   "op": "constant",
+   "start": 181,
+   "end": 185,
+   "old": "1000",
+   "new": "(1001)",
+   "id": 66
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 69,
+   "op": "return",
+   "start": 2171,
+   "end": 2183,
+   "old": "return False",
+   "new": "return None",
+   "id": 67
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 272,
+   "op": "statement",
+   "start": 9378,
+   "end": 9411,
+   "old": "_validate_db_type_string(db_type)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 280,
+   "op": "statement",
+   "start": 9530,
+   "end": 9580,
+   "old": "scheme = urllib.parse.urlparse(uri_or_path).scheme",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 315,
+   "op": "statement",
+   "start": 10855,
+   "end": 10894,
+   "old": "parsed_uri = urllib.parse.urlparse(uri)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 326,
+   "op": "statement",
+   "start": 11362,
+   "end": 11373,
+   "old": "prefix = \"\"",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 335,
+   "op": "statement",
+   "start": 11826,
+   "end": 11909,
+   "old": "new_uri_path = _join_posixpaths_and_append_absolute_suffixes(parsed_uri.path, path)",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 337,
+   "op": "return",
+   "start": 11974,
+   "end": 12029,
+   "old": "return prefix + urllib.parse.urlunparse(new_parsed_uri)",
+   "new": "return None",
+   "id": 73
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 535,
+   "op": "statement",
+   "start": 19274,
+   "end": 19296,
+   "old": "query = _decode(query)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 38,
+   "op": "return",
+   "start": 1184,
+   "end": 1196,
+   "old": "return False",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 42,
+   "op": "return",
+   "start": 1330,
+   "end": 1342,
+   "old": "return False",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 61,
+   "op": "return",
+   "start": 1985,
+   "end": 1996,
+   "old": "return True",
+   "new": "return None",
+   "id": 77
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 69,
+   "op": "constant",
+   "start": 2178,
+   "end": 2183,
+   "old": "False",
+   "new": "(True)",
+   "id": 78
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 321,
+   "op": "comparison",
+   "start": 11116,
+   "end": 11143,
+   "old": "len(parsed_uri.scheme) == 0",
+   "new": "(len(parsed_uri.scheme) != 0)",
+   "id": 79
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 324,
+   "op": "return",
+   "start": 11293,
+   "end": 11356,
+   "old": "return _join_posixpaths_and_append_absolute_suffixes(uri, path)",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 445,
+   "op": "boolean",
+   "start": 16332,
+   "end": 16381,
+   "old": "local_uri is not None and is_local_uri(local_uri)",
+   "new": "(local_uri is not None or is_local_uri(local_uri))",
+   "id": 81
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 446,
+   "op": "statement",
+   "start": 16391,
+   "end": 16425,
+   "old": "scheme = get_uri_scheme(local_uri)",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 448,
+   "op": "statement",
+   "start": 16467,
+   "end": 16513,
+   "old": "local_path = local_file_uri_to_path(local_uri)",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 538,
+   "op": "comparison",
+   "start": 19446,
+   "end": 19459,
+   "old": "\"..\" in query",
+   "new": "('..' not in query)",
+   "id": 84
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 575,
+   "op": "comparison",
+   "start": 20516,
+   "end": 20541,
+   "old": "parsed.scheme == \"models\"",
+   "new": "(parsed.scheme != 'models')",
+   "id": 85
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 38,
+   "op": "constant",
+   "start": 1191,
+   "end": 1196,
+   "old": "False",
+   "new": "(True)",
+   "id": 86
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 49,
+   "op": "boolean",
+   "start": 1510,
+   "end": 1666,
+   "old": "not (\n        parsed_uri.hostname == \".\"\n        or parsed_uri.hostname.startswith(\"localhost\")\n        or parsed_uri.hostname.startswith(\"127.0.0.1\")\n    )",
+   "new": "(parsed_uri.hostname == '.' or parsed_uri.hostname.startswith('localhost') or parsed_uri.hostname.startswith('127.0.0.1'))",
+   "id": 87
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 56,
+   "op": "statement",
+   "start": 1735,
+   "end": 1976,
+   "old": "raise MlflowException(\n                f\"{uri} is not a valid remote uri. For remote access \"\n                \"on windows, please consider using a different scheme \"\n                \"such as SMB (e.g. smb://<hostname>/<path>).\"\n            )",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 61,
+   "op": "constant",
+   "start": 1992,
+   "end": 1996,
+   "old": "True",
+   "new": "(False)",
+   "id": 89
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 66,
+   "op": "comparison",
+   "start": 2092,
+   "end": 2144,
+   "old": "scheme.lower() == pathlib.Path(uri).drive.lower()[0]",
+   "new": "(scheme.lower() != pathlib.Path(uri).drive.lower()[0])",
+   "id": 90
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 266,
+   "op": "comparison",
+   "start": 9155,
+   "end": 9177,
+   "old": "scheme_plus_count == 1",
+   "new": "(scheme_plus_count != 1)",
+   "id": 91
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 267,
+   "op": "statement",
+   "start": 9187,
+   "end": 9217,
+   "old": "db_type, _ = scheme.split(\"+\")",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 372,
+   "op": "constant",
+   "start": 13610,
+   "end": 13611,
+   "old": "0",
+   "new": "(1)",
+   "id": 93
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 445,
+   "op": "comparison",
+   "start": 16332,
+   "end": 16353,
+   "old": "local_uri is not None",
+   "new": "(local_uri is None)",
+   "id": 94
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 463,
+   "op": "return",
+   "start": 17094,
+   "end": 17391,
+   "old": "return urllib.parse.urlunsplit(\n                (\n                    local_uri_split.scheme,\n                    None,\n                    cwd.joinpath(local_path).as_posix(),\n                    local_uri_split.query,\n                    local_uri_split.fragment,\n                )\n            )",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 539,
+   "op": "constant",
+   "start": 19491,
+   "end": 19513,
+   "old": "\"Invalid query string\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "mlflow/utils/uri.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1547,
+   "end": 1550,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/utils/validation.py",
+   "line": 564,
+   "op": "comparison",
+   "start": 20072,
+   "end": 20103,
+   "old": "db_type not in DATABASE_ENGINES",
+   "new": "(db_type in DATABASE_ENGINES)",
+   "id": 98
+  },
+  {
+   "path": "mlflow/utils/validation.py",
+   "line": 565,
+   "op": "statement",
+   "start": 20113,
+   "end": 20266,
+   "old": "error_msg = (\n            f\"Invalid database engine: '{db_type}'. \"\n            f\"Supported database engines are {', '.join(DATABASE_ENGINES)}\"\n        )",
+   "new": "pass",
+   "id": 99
+  }
+ ]
+}

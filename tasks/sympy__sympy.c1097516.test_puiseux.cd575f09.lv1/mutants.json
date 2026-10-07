@@ -1,0 +1,1006 @@
+{
+ "task": "sympy__sympy.c1097516.test_puiseux.cd575f09.lv1",
+ "pool": 403,
+ "mutants": [
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 341,
+   "op": "statement",
+   "start": 11193,
+   "end": 11258,
+   "old": "PythonMPQ._compatible_types = (PythonMPQ, int, Decimal, Fraction)",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 166,
+   "op": "statement",
+   "start": 5879,
+   "end": 5919,
+   "old": "lhs = self.numerator * other.denominator",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 172,
+   "op": "return",
+   "start": 6062,
+   "end": 6098,
+   "old": "return self._cmp(other, operator.lt)",
+   "new": "return None",
+   "id": 2
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 229,
+   "op": "return",
+   "start": 7774,
+   "end": 7796,
+   "old": "return self._new(p, q)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 260,
+   "op": "return",
+   "start": 8737,
+   "end": 8759,
+   "old": "return self._new(p, q)",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 286,
+   "op": "return",
+   "start": 9560,
+   "end": 9582,
+   "old": "return self._new(p, q)",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 305,
+   "op": "return",
+   "start": 10041,
+   "end": 10079,
+   "old": "return self._new_check(p**exp, q**exp)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4979,
+   "end": 5028,
+   "old": "dinv = pow(self.denominator, -1, _PyHASH_MODULUS)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 166,
+   "op": "arithmetic",
+   "start": 5885,
+   "end": 5919,
+   "old": "self.numerator * other.denominator",
+   "new": "(self.numerator / other.denominator)",
+   "id": 8
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 327,
+   "op": "statement",
+   "start": 10751,
+   "end": 10781,
+   "old": "x = gcd(self.numerator, other)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 332,
+   "op": "return",
+   "start": 10927,
+   "end": 10948,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 153,
+   "op": "constant",
+   "start": 5480,
+   "end": 5481,
+   "old": "1",
+   "new": "(2)",
+   "id": 11
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 221,
+   "op": "statement",
+   "start": 7556,
+   "end": 7587,
+   "old": "p, q = (p // g2), q * (g // g2)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 248,
+   "op": "statement",
+   "start": 8365,
+   "end": 8374,
+   "old": "q = bq*aq",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 253,
+   "op": "statement",
+   "start": 8522,
+   "end": 8553,
+   "old": "p, q = (p // g2), q * (g // g2)",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 292,
+   "op": "arithmetic",
+   "start": 9733,
+   "end": 9758,
+   "old": "self.numerator*(other//x)",
+   "new": "(self.numerator / (other // x))",
+   "id": 15
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 329,
+   "op": "arithmetic",
+   "start": 10842,
+   "end": 10859,
+   "old": "self.numerator//x",
+   "new": "(self.numerator / x)",
+   "id": 16
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 144,
+   "op": "constant",
+   "start": 5205,
+   "end": 5206,
+   "old": "0",
+   "new": "(1)",
+   "id": 17
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 216,
+   "op": "arithmetic",
+   "start": 7403,
+   "end": 7408,
+   "old": "bq*aq",
+   "new": "(bq / aq)",
+   "id": 18
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 246,
+   "op": "constant",
+   "start": 8312,
+   "end": 8313,
+   "old": "1",
+   "new": "(2)",
+   "id": 19
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 247,
+   "op": "arithmetic",
+   "start": 8335,
+   "end": 8348,
+   "old": "ap*bq - aq*bp",
+   "new": "(ap * bq + aq * bp)",
+   "id": 20
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 278,
+   "op": "arithmetic",
+   "start": 9305,
+   "end": 9322,
+   "old": "(ap//x1)*(bp//x2)",
+   "new": "(ap // x1 / (bp // x2))",
+   "id": 21
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 139,
+   "op": "constant",
+   "start": 5009,
+   "end": 5010,
+   "old": "1",
+   "new": "(2)",
+   "id": 22
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 218,
+   "op": "arithmetic",
+   "start": 7452,
+   "end": 7457,
+   "old": "aq//g",
+   "new": "(aq / g)",
+   "id": 23
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 218,
+   "op": "arithmetic",
+   "start": 7459,
+   "end": 7464,
+   "old": "bq//g",
+   "new": "(bq / g)",
+   "id": 24
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 219,
+   "op": "arithmetic",
+   "start": 7488,
+   "end": 7501,
+   "old": "ap*q2 + bp*q1",
+   "new": "(ap * q2 - bp * q1)",
+   "id": 25
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 221,
+   "op": "arithmetic",
+   "start": 7564,
+   "end": 7571,
+   "old": "p // g2",
+   "new": "(p / g2)",
+   "id": 26
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 247,
+   "op": "arithmetic",
+   "start": 8335,
+   "end": 8340,
+   "old": "ap*bq",
+   "new": "(ap / bq)",
+   "id": 27
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 253,
+   "op": "arithmetic",
+   "start": 8540,
+   "end": 8553,
+   "old": "q * (g // g2)",
+   "new": "(q / (g // g2))",
+   "id": 28
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 219,
+   "op": "arithmetic",
+   "start": 7496,
+   "end": 7501,
+   "old": "bp*q1",
+   "new": "(bp / q1)",
+   "id": 29
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 251,
+   "op": "arithmetic",
+   "start": 8454,
+   "end": 8459,
+   "old": "ap*q2",
+   "new": "(ap / q2)",
+   "id": 30
+  },
+  {
+   "path": "sympy/external/pythonmpq.py",
+   "line": 251,
+   "op": "arithmetic",
+   "start": 8462,
+   "end": 8467,
+   "old": "bp*q1",
+   "new": "(bp / q1)",
+   "id": 31
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 75,
+   "op": "return",
+   "start": 2306,
+   "end": 2332,
+   "old": "return (ring,) + ring.gens",
+   "new": "return None",
+   "id": 32
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 123,
+   "op": "statement",
+   "start": 3587,
+   "end": 3607,
+   "old": "self.domain = domain",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 127,
+   "op": "statement",
+   "start": 3729,
+   "end": 3747,
+   "old": "self.ngens = ngens",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 179,
+   "op": "return",
+   "start": 5528,
+   "end": 5568,
+   "old": "return self.from_poly(self.poly_ring(n))",
+   "new": "return None",
+   "id": 35
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 449,
+   "op": "statement",
+   "start": 13607,
+   "end": 13638,
+   "old": "monom, ns = self.monom, self.ns",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 489,
+   "op": "return",
+   "start": 14962,
+   "end": 14986,
+   "old": "return self.poly.is_term",
+   "new": "return None",
+   "id": 37
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 549,
+   "op": "statement",
+   "start": 16809,
+   "end": 16826,
+   "old": "dom = ring.domain",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 550,
+   "op": "statement",
+   "start": 16835,
+   "end": 16857,
+   "old": "symbols = ring.symbols",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 572,
+   "op": "statement",
+   "start": 17521,
+   "end": 17558,
+   "old": "syms = [str(s) for s in ring.symbols]",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 573,
+   "op": "statement",
+   "start": 17567,
+   "end": 17581,
+   "old": "terms_str = []",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 651,
+   "op": "statement",
+   "start": 20558,
+   "end": 20583,
+   "old": "domain = self.ring.domain",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 660,
+   "op": "statement",
+   "start": 20887,
+   "end": 20912,
+   "old": "domain = self.ring.domain",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 752,
+   "op": "return",
+   "start": 24422,
+   "end": 24475,
+   "old": "return self._new(self.ring, poly1 + poly2, monom, ns)",
+   "new": "return None",
+   "id": 44
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 797,
+   "op": "return",
+   "start": 26285,
+   "end": 26332,
+   "old": "return self.ring.from_dict({monom: domain.one})",
+   "new": "return None",
+   "id": 45
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 802,
+   "op": "statement",
+   "start": 26469,
+   "end": 26500,
+   "old": "[(monom, coeff)] = self.terms()",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 831,
+   "op": "return",
+   "start": 27475,
+   "end": 27499,
+   "old": "return ring.from_dict(g)",
+   "new": "return None",
+   "id": 47
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 410,
+   "op": "boolean",
+   "start": 12217,
+   "end": 12254,
+   "old": "dmonom is not None and ns is not None",
+   "new": "(dmonom is not None or ns is not None)",
+   "id": 48
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 411,
+   "op": "return",
+   "start": 12268,
+   "end": 12338,
+   "old": "return tuple(QQ(mi - di, ni) for mi, di, ni in zip(monom, dmonom, ns))",
+   "new": "return None",
+   "id": 49
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 480,
+   "op": "statement",
+   "start": 14671,
+   "end": 14686,
+   "old": "yield mq, coeff",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 557,
+   "op": "statement",
+   "start": 17103,
+   "end": 17146,
+   "old": "terms.append(Mul(coeff_expr, *monoms_expr))",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 623,
+   "op": "comparison",
+   "start": 19471,
+   "end": 19487,
+   "old": "monom1 == monom2",
+   "new": "(monom1 != monom2)",
+   "id": 52
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 650,
+   "op": "return",
+   "start": 20526,
+   "end": 20549,
+   "old": "return self._add(other)",
+   "new": "return None",
+   "id": 53
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 677,
+   "op": "return",
+   "start": 21556,
+   "end": 21615,
+   "old": "return self._sub_ground(domain.convert_from(QQ(other), QQ))",
+   "new": "return None",
+   "id": 54
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 698,
+   "op": "return",
+   "start": 22378,
+   "end": 22401,
+   "old": "return self._mul(other)",
+   "new": "return None",
+   "id": 55
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 770,
+   "op": "statement",
+   "start": 25157,
+   "end": 25192,
+   "old": "monom = tuple(2 * e for e in monom)",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 790,
+   "op": "boolean",
+   "start": 25942,
+   "end": 25958,
+   "old": "not self.is_term",
+   "new": "(self.is_term)",
+   "id": 57
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 794,
+   "op": "boolean",
+   "start": 26126,
+   "end": 26150,
+   "old": "not domain.is_one(coeff)",
+   "new": "(domain.is_one(coeff))",
+   "id": 58
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 795,
+   "op": "statement",
+   "start": 26164,
+   "end": 26232,
+   "old": "raise ValueError(\"Only monomials can be raised to a rational power\")",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 804,
+   "op": "boolean",
+   "start": 26546,
+   "end": 26594,
+   "old": "not domain.is_Field and not domain.is_one(coeff)",
+   "new": "(not domain.is_Field or not domain.is_one(coeff))",
+   "id": 60
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 807,
+   "op": "arithmetic",
+   "start": 26720,
+   "end": 26729,
+   "old": "1 / coeff",
+   "new": "(1 * coeff)",
+   "id": 61
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 807,
+   "op": "arithmetic",
+   "start": 26720,
+   "end": 26729,
+   "old": "1 / coeff",
+   "new": "(1 // coeff)",
+   "id": 62
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 826,
+   "op": "statement",
+   "start": 27325,
+   "end": 27336,
+   "old": "n = expv[i]",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 413,
+   "op": "return",
+   "start": 12384,
+   "end": 12442,
+   "old": "return tuple(QQ(mi - di) for mi, di in zip(monom, dmonom))",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 426,
+   "op": "comparison",
+   "start": 12755,
+   "end": 12773,
+   "old": "dmonom is not None",
+   "new": "(dmonom is None)",
+   "id": 65
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 431,
+   "op": "return",
+   "start": 12966,
+   "end": 13035,
+   "old": "return tuple(int(mi.numerator + di) for mi, di in zip(monom, dmonom))",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 562,
+   "op": "comparison",
+   "start": 17275,
+   "end": 17283,
+   "old": "exp == 1",
+   "new": "(exp != 1)",
+   "id": 67
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 603,
+   "op": "statement",
+   "start": 18721,
+   "end": 18761,
+   "old": "f2 = [n // n2 for n, n2 in zip(ns, ns2)]",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 625,
+   "op": "boolean",
+   "start": 19529,
+   "end": 19570,
+   "old": "monom1 is not None and monom2 is not None",
+   "new": "(monom1 is not None or monom2 is not None)",
+   "id": 69
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 626,
+   "op": "statement",
+   "start": 19584,
+   "end": 19644,
+   "old": "monom = tuple(max(m1, m2) for m1, m2 in zip(monom1, monom2))",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 681,
+   "op": "return",
+   "start": 21721,
+   "end": 21742,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 695,
+   "op": "statement",
+   "start": 22251,
+   "end": 22365,
+   "old": "raise ValueError(\n                    \"Cannot multiply Puiseux polynomials from different rings\"\n                )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 723,
+   "op": "return",
+   "start": 23275,
+   "end": 23307,
+   "old": "return self._pow_rational(other)",
+   "new": "return None",
+   "id": 73
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 725,
+   "op": "return",
+   "start": 23334,
+   "end": 23355,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 74
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 730,
+   "op": "statement",
+   "start": 23537,
+   "end": 23649,
+   "old": "raise ValueError(\n                    \"Cannot divide Puiseux polynomials from different rings\"\n                )",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 748,
+   "op": "return",
+   "start": 24275,
+   "end": 24296,
+   "old": "return NotImplemented",
+   "new": "return None",
+   "id": 76
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 804,
+   "op": "boolean",
+   "start": 26570,
+   "end": 26594,
+   "old": "not domain.is_one(coeff)",
+   "new": "(domain.is_one(coeff))",
+   "id": 77
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 829,
+   "op": "statement",
+   "start": 27402,
+   "end": 27411,
+   "old": "e[i] -= 1",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 348,
+   "op": "comparison",
+   "start": 10317,
+   "end": 10335,
+   "old": "self.monom is None",
+   "new": "(self.monom is not None)",
+   "id": 79
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 433,
+   "op": "return",
+   "start": 13077,
+   "end": 13144,
+   "old": "return tuple(int((mi * ni).numerator) for mi, ni in zip(monom, ns))",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 564,
+   "op": "boolean",
+   "start": 17330,
+   "end": 17358,
+   "old": "exp >= 0 and int(exp) == exp",
+   "new": "(exp >= 0 or int(exp) == exp)",
+   "id": 81
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 567,
+   "op": "return",
+   "start": 17434,
+   "end": 17459,
+   "old": "return f\"{base}**({exp})\"",
+   "new": "return None",
+   "id": 82
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 580,
+   "op": "statement",
+   "start": 17872,
+   "end": 17893,
+   "old": "terms_str.append(\"1\")",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 581,
+   "op": "boolean",
+   "start": 17911,
+   "end": 17924,
+   "old": "not monom_str",
+   "new": "(monom_str)",
+   "id": 84
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 609,
+   "op": "statement",
+   "start": 18990,
+   "end": 19039,
+   "old": "monom2 = tuple(m * f for m, f in zip(monom2, f2))",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 610,
+   "op": "comparison",
+   "start": 19053,
+   "end": 19068,
+   "old": "ns2 is not None",
+   "new": "(ns2 is None)",
+   "id": 86
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 611,
+   "op": "statement",
+   "start": 19082,
+   "end": 19090,
+   "old": "ns = ns2",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 625,
+   "op": "comparison",
+   "start": 19552,
+   "end": 19570,
+   "old": "monom2 is not None",
+   "new": "(monom2 is None)",
+   "id": 88
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 629,
+   "op": "comparison",
+   "start": 19798,
+   "end": 19816,
+   "old": "monom2 is not None",
+   "new": "(monom2 is None)",
+   "id": 89
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 829,
+   "op": "constant",
+   "start": 27410,
+   "end": 27411,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 603,
+   "op": "arithmetic",
+   "start": 18727,
+   "end": 18734,
+   "old": "n // n2",
+   "new": "(n / n2)",
+   "id": 91
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 615,
+   "op": "comparison",
+   "start": 19243,
+   "end": 19258,
+   "old": "ns1 is not None",
+   "new": "(ns1 is None)",
+   "id": 92
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 616,
+   "op": "statement",
+   "start": 19272,
+   "end": 19280,
+   "old": "ns = ns1",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 617,
+   "op": "statement",
+   "start": 19293,
+   "end": 19318,
+   "old": "poly2 = poly2.inflate(ns)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 411,
+   "op": "arithmetic",
+   "start": 12284,
+   "end": 12291,
+   "old": "mi - di",
+   "new": "(mi + di)",
+   "id": 95
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 618,
+   "op": "comparison",
+   "start": 19334,
+   "end": 19352,
+   "old": "monom2 is not None",
+   "new": "(monom2 is None)",
+   "id": 96
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 607,
+   "op": "arithmetic",
+   "start": 18904,
+   "end": 18909,
+   "old": "m * f",
+   "new": "(m / f)",
+   "id": 97
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 428,
+   "op": "arithmetic",
+   "start": 12841,
+   "end": 12848,
+   "old": "mi * ni",
+   "new": "(mi / ni)",
+   "id": 98
+  },
+  {
+   "path": "sympy/polys/puiseux.py",
+   "line": 614,
+   "op": "arithmetic",
+   "start": 19195,
+   "end": 19200,
+   "old": "m * n",
+   "new": "(m / n)",
+   "id": 99
+  }
+ ]
+}

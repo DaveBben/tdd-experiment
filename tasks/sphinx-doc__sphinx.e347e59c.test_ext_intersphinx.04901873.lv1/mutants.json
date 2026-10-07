@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_ext_intersphinx.04901873.lv1",
+ "pool": 484,
+ "mutants": [
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 567,
+   "op": "statement",
+   "start": 19791,
+   "end": 19822,
+   "old": "modname = node.get('js:module')",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 567,
+   "op": "constant",
+   "start": 19810,
+   "end": 19821,
+   "old": "'js:module'",
+   "new": "('XX')",
+   "id": 1
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 568,
+   "op": "constant",
+   "start": 19849,
+   "end": 19860,
+   "old": "'js:object'",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "sphinx/domains/javascript.py",
+   "line": 569,
+   "op": "constant",
+   "start": 19888,
+   "end": 19899,
+   "old": "'reftarget'",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 25,
+   "op": "statement",
+   "start": 589,
+   "end": 607,
+   "old": "filename = argv[0]",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 23,
+   "op": "constant",
+   "start": 582,
+   "end": 583,
+   "old": "1",
+   "new": "(2)",
+   "id": 5
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1097,
+   "end": 1107,
+   "old": "print(key)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1448,
+   "end": 1498,
+   "old": "print(exc.args[0] % exc.args[1:], file=sys.stderr)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 48,
+   "op": "statement",
+   "start": 1281,
+   "end": 1332,
+   "old": "display_name = display_name * (display_name != '-')",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 49,
+   "op": "statement",
+   "start": 1349,
+   "end": 1409,
+   "old": "print(f'    {entry:<40} {display_name:<40}: {inv_item.uri}')",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 52,
+   "op": "constant",
+   "start": 1514,
+   "end": 1515,
+   "old": "1",
+   "new": "(2)",
+   "id": 10
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_cli.py",
+   "line": 48,
+   "op": "arithmetic",
+   "start": 1296,
+   "end": 1332,
+   "old": "display_name * (display_name != '-')",
+   "new": "(display_name / (display_name != '-'))",
+   "id": 11
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 143,
+   "op": "statement",
+   "start": 5062,
+   "end": 5075,
+   "old": "env = app.env",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5147,
+   "end": 5225,
+   "old": "intersphinx_cache: dict[InventoryURI, InventoryCacheEntry] = inventories.cache",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 163,
+   "op": "statement",
+   "start": 5775,
+   "end": 5835,
+   "old": "expected_uris = {project.target_uri for project in projects}",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 247,
+   "op": "statement",
+   "start": 9035,
+   "end": 9050,
+   "old": "updated = False",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 238,
+   "op": "comparison",
+   "start": 8693,
+   "end": 8728,
+   "old": "config.intersphinx_cache_limit >= 0",
+   "new": "(config.intersphinx_cache_limit > 0)",
+   "id": 16
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 241,
+   "op": "statement",
+   "start": 8833,
+   "end": 8890,
+   "old": "cache_time = now - config.intersphinx_cache_limit * 86400",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 355,
+   "op": "statement",
+   "start": 12770,
+   "end": 12900,
+   "old": "raw_data, target_uri = _fetch_inventory_url(\n            target_uri=target_uri, inv_location=inv_location, config=config\n        )",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 399,
+   "op": "comparison",
+   "start": 14302,
+   "end": 14334,
+   "old": "inv_location != new_inv_location",
+   "new": "(inv_location == new_inv_location)",
+   "id": 19
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 442,
+   "op": "return",
+   "start": 15540,
+   "end": 15550,
+   "old": "return url",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 238,
+   "op": "constant",
+   "start": 8727,
+   "end": 8728,
+   "old": "0",
+   "new": "(1)",
+   "id": 21
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 257,
+   "op": "comparison",
+   "start": 9338,
+   "end": 9359,
+   "old": "cache_dir is not None",
+   "new": "(cache_dir is None)",
+   "id": 22
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 263,
+   "op": "boolean",
+   "start": 9507,
+   "end": 9787,
+   "old": "cache_path is not None\n            and '://' in inv_location\n            and project.target_uri not in cache\n            and cache_path.is_file()\n            # the saved 'objects.inv' is not older than the cache expiry time\n            and cache_path.stat().st_mtime >= cache_time",
+   "new": "(cache_path is not None or '://' in inv_location or project.target_uri not in cache or cache_path.is_file() or (cache_path.stat().st_mtime >= cache_time))",
+   "id": 23
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 351,
+   "op": "constant",
+   "start": 12591,
+   "end": 12596,
+   "old": "'://'",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 358,
+   "op": "comparison",
+   "start": 12912,
+   "end": 12934,
+   "old": "cache_path is not None",
+   "new": "(cache_path is None)",
+   "id": 25
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 387,
+   "op": "statement",
+   "start": 13986,
+   "end": 14006,
+   "old": "r.raise_for_status()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 424,
+   "op": "statement",
+   "start": 15091,
+   "end": 15096,
+   "old": "raise",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 156,
+   "op": "statement",
+   "start": 5565,
+   "end": 5674,
+   "old": "msg = __(\n                'An invalid intersphinx_mapping entry was added after normalisation.'\n            )",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 168,
+   "op": "comparison",
+   "start": 6083,
+   "end": 6107,
+   "old": "uri not in expected_uris",
+   "new": "(uri in expected_uris)",
+   "id": 29
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7796,
+   "end": 7862,
+   "old": "inventories.main_inventory.setdefault(objtype, {}).update(objects)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 290,
+   "op": "statement",
+   "start": 10602,
+   "end": 10876,
+   "old": "raw_data, target_uri = _fetch_inventory_data(\n                    target_uri=project.target_uri,\n                    inv_location=inv_location,\n                    config=config,\n                    srcdir=srcdir,\n                    cache_path=cache_path,\n                )",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 304,
+   "op": "statement",
+   "start": 11189,
+   "end": 11194,
+   "old": "break",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16418,
+   "end": 16419,
+   "old": "1",
+   "new": "(2)",
+   "id": 33
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 299,
+   "op": "statement",
+   "start": 11001,
+   "end": 11026,
+   "old": "failures.append(err.args)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 300,
+   "op": "statement",
+   "start": 11043,
+   "end": 11051,
+   "old": "continue",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 303,
+   "op": "constant",
+   "start": 11168,
+   "end": 11172,
+   "old": "True",
+   "new": "(False)",
+   "id": 36
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 415,
+   "op": "arithmetic",
+   "start": 14805,
+   "end": 14826,
+   "old": "srcdir / inv_location",
+   "new": "(srcdir // inv_location)",
+   "id": 37
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 446,
+   "op": "constant",
+   "start": 15630,
+   "end": 15631,
+   "old": "1",
+   "new": "(2)",
+   "id": 38
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16413,
+   "end": 16416,
+   "old": "'@'",
+   "new": "('XX')",
+   "id": 39
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 186,
+   "op": "arithmetic",
+   "start": 6883,
+   "end": 6923,
+   "old": "app.doctreedir / '__intersphinx_cache__'",
+   "new": "(app.doctreedir // '__intersphinx_cache__')",
+   "id": 40
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 284,
+   "op": "constant",
+   "start": 10428,
+   "end": 10476,
+   "old": "\"loading intersphinx inventory '%s' from %s ...\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_load.py",
+   "line": 318,
+   "op": "constant",
+   "start": 11573,
+   "end": 11574,
+   "old": "1",
+   "new": "(2)",
+   "id": 42
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 78,
+   "op": "return",
+   "start": 2895,
+   "end": 2909,
+   "old": "return newnode",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 167,
+   "op": "statement",
+   "start": 6352,
+   "end": 6425,
+   "old": "obj_types = {f'{domain_name}:{obj_type}': None for obj_type in obj_types}",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 210,
+   "op": "statement",
+   "start": 7726,
+   "end": 7747,
+   "old": "typ = node['reftype']",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 642,
+   "op": "statement",
+   "start": 23106,
+   "end": 23125,
+   "old": "dispatcher.enable()",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 47,
+   "op": "statement",
+   "start": 1576,
+   "end": 1652,
+   "old": "uri = (_relative_path(Path(), Path(node['refdoc']).parent) / uri).as_posix()",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 54,
+   "op": "statement",
+   "start": 1917,
+   "end": 1978,
+   "old": "reftitle = _('(in %s %s)') % (inv_item.project_name, version)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 61,
+   "op": "statement",
+   "start": 2213,
+   "end": 2237,
+   "old": "newnode.append(contnode)",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 207,
+   "op": "boolean",
+   "start": 7651,
+   "end": 7699,
+   "old": "honor_disabled_refs and '*' in disabled_reftypes",
+   "new": "(honor_disabled_refs or '*' in disabled_reftypes)",
+   "id": 50
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 332,
+   "op": "statement",
+   "start": 11585,
+   "end": 11615,
+   "old": "node['reftarget'] = new_target",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 51,
+   "op": "statement",
+   "start": 1807,
+   "end": 1841,
+   "old": "version = inv_item.project_version",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 54,
+   "op": "arithmetic",
+   "start": 1928,
+   "end": 1978,
+   "old": "_('(in %s %s)') % (inv_item.project_name, version)",
+   "new": "(_('(in %s %s)') * (inv_item.project_name, version))",
+   "id": 53
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 56,
+   "op": "arithmetic",
+   "start": 2008,
+   "end": 2047,
+   "old": "_('(in %s)') % (inv_item.project_name,)",
+   "new": "(_('(in %s)') * (inv_item.project_name,))",
+   "id": 54
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2810,
+   "end": 2890,
+   "old": "newnode.append(contnode.__class__(inv_item.display_name, inv_item.display_name))",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 93,
+   "op": "statement",
+   "start": 3316,
+   "end": 3324,
+   "old": "continue",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 162,
+   "op": "comparison",
+   "start": 6148,
+   "end": 6167,
+   "old": "domain_name == 'py'",
+   "new": "(domain_name != 'py')",
+   "id": 57
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 210,
+   "op": "constant",
+   "start": 7737,
+   "end": 7746,
+   "old": "'reftype'",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 216,
+   "op": "statement",
+   "start": 7991,
+   "end": 8263,
+   "old": "res = _resolve_reference_in_domain(\n                inv_name,\n                inventory,\n                honor_disabled_refs,\n                disabled_reftypes,\n                domain,\n                objtypes,\n                node,\n                contnode,\n            )",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 231,
+   "op": "boolean",
+   "start": 8408,
+   "end": 8423,
+   "old": "not domain_name",
+   "new": "(domain_name)",
+   "id": 60
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 278,
+   "op": "constant",
+   "start": 9856,
+   "end": 9861,
+   "old": "False",
+   "new": "(True)",
+   "id": 61
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 325,
+   "op": "constant",
+   "start": 11343,
+   "end": 11346,
+   "old": "':'",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 45,
+   "op": "constant",
+   "start": 1474,
+   "end": 1479,
+   "old": "'://'",
+   "new": "('XX')",
+   "id": 63
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 68,
+   "op": "statement",
+   "start": 2523,
+   "end": 2681,
+   "old": "newnode.append(\n                contnode.__class__(\n                    title[len(inv_name) + 1 :], title[len(inv_name) + 1 :]\n                )\n            )",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 227,
+   "op": "return",
+   "start": 8312,
+   "end": 8322,
+   "old": "return res",
+   "new": "return None",
+   "id": 65
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 230,
+   "op": "constant",
+   "start": 8384,
+   "end": 8395,
+   "old": "'refdomain'",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 239,
+   "op": "statement",
+   "start": 8707,
+   "end": 8760,
+   "old": "msg = __('Domain %r is not registered') % domain_name",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 240,
+   "op": "statement",
+   "start": 8773,
+   "end": 8807,
+   "old": "raise ExtensionError(msg) from exc",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 47,
+   "op": "arithmetic",
+   "start": 1583,
+   "end": 1640,
+   "old": "_relative_path(Path(), Path(node['refdoc']).parent) / uri",
+   "new": "(_relative_path(Path(), Path(node['refdoc']).parent) // uri)",
+   "id": 69
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 63,
+   "op": "comparison",
+   "start": 2289,
+   "end": 2309,
+   "old": "domain_name == 'std'",
+   "new": "(domain_name != 'std')",
+   "id": 70
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 98,
+   "op": "constant",
+   "start": 3494,
+   "end": 3504,
+   "old": "'std:term'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 106,
+   "op": "constant",
+   "start": 3939,
+   "end": 3940,
+   "old": "1",
+   "new": "(2)",
+   "id": 72
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 122,
+   "op": "statement",
+   "start": 4630,
+   "end": 4979,
+   "old": "LOGGER.warning(\n                        __(\"inventory '%s': multiple matches found for %s:%s\"),\n                        inv_descriptor,\n                        objtype,\n                        target,\n                        type='intersphinx',\n                        subtype='external',\n                        location=node,\n                    )",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 63,
+   "op": "constant",
+   "start": 2319,
+   "end": 2328,
+   "old": "'reftype'",
+   "new": "('XX')",
+   "id": 74
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 104,
+   "op": "comparison",
+   "start": 3829,
+   "end": 3854,
+   "old": "k.lower() == target_lower",
+   "new": "(k.lower() != target_lower)",
+   "id": 75
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 132,
+   "op": "constant",
+   "start": 5078,
+   "end": 5079,
+   "old": "0",
+   "new": "(1)",
+   "id": 76
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 127,
+   "op": "constant",
+   "start": 4860,
+   "end": 4873,
+   "old": "'intersphinx'",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_resolve.py",
+   "line": 128,
+   "op": "constant",
+   "start": 4907,
+   "end": 4917,
+   "old": "'external'",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "sphinx/ext/intersphinx/_shared.py",
+   "line": 140,
+   "op": "return",
+   "start": 5070,
+   "end": 5107,
+   "old": "return self.env.intersphinx_inventory",
+   "new": "return None",
+   "id": 79
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 103,
+   "op": "statement",
+   "start": 3542,
+   "end": 3582,
+   "old": "projname = line_1.rstrip()[11:].decode()",
+   "new": "pass",
+   "id": 80
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 172,
+   "op": "return",
+   "start": 6776,
+   "end": 6786,
+   "old": "return inv",
+   "new": "return None",
+   "id": 81
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 242,
+   "op": "return",
+   "start": 9320,
+   "end": 9380,
+   "old": "return obj_type in self.data and name in self.data[obj_type]",
+   "new": "return None",
+   "id": 82
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 53,
+   "op": "comparison",
+   "start": 1368,
+   "end": 1414,
+   "old": "format_line == b'# Sphinx inventory version 2'",
+   "new": "(format_line != b'# Sphinx inventory version 2')",
+   "id": 83
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 59,
+   "op": "statement",
+   "start": 1704,
+   "end": 1747,
+   "old": "unknown_version = format_line[27:].decode()",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 115,
+   "op": "statement",
+   "start": 4225,
+   "end": 4377,
+   "old": "m = re.match(\n                r'(.+?)\\s+(\\S+)\\s+(-?\\d+)\\s+?(\\S*)\\s+(.*)',\n                line.rstrip(),\n                flags=re.VERBOSE,\n            )",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 280,
+   "op": "boolean",
+   "start": 10420,
+   "end": 10615,
+   "old": "self.project_name == other.project_name\n            and self.project_version == other.project_version\n            and self.uri == other.uri\n            and self.display_name == other.display_name",
+   "new": "(self.project_name == other.project_name or self.project_version == other.project_version or self.uri == other.uri or (self.display_name == other.display_name))",
+   "id": 86
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 134,
+   "op": "statement",
+   "start": 5061,
+   "end": 5069,
+   "old": "continue",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 282,
+   "op": "comparison",
+   "start": 10538,
+   "end": 10559,
+   "old": "self.uri == other.uri",
+   "new": "(self.uri != other.uri)",
+   "id": 88
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 283,
+   "op": "comparison",
+   "start": 10576,
+   "end": 10615,
+   "old": "self.display_name == other.display_name",
+   "new": "(self.display_name != other.display_name)",
+   "id": 89
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 129,
+   "op": "comparison",
+   "start": 4814,
+   "end": 4833,
+   "old": "type == 'py:module'",
+   "new": "(type != 'py:module')",
+   "id": 90
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 144,
+   "op": "statement",
+   "start": 5663,
+   "end": 5697,
+   "old": "actual_ambiguities.add(definition)",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 146,
+   "op": "statement",
+   "start": 5748,
+   "end": 6043,
+   "old": "logger.debug(\n                            __('inventory <%s> contains duplicate definitions of %s'),\n                            uri,\n                            definition,\n                            type='intersphinx',\n                            subtype='external',\n                        )",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "sphinx/util/inventory.py",
+   "line": 170,
+   "op": "constant",
+   "start": 6742,
+   "end": 6752,
+   "old": "'external'",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 97,
+   "op": "statement",
+   "start": 3000,
+   "end": 3060,
+   "old": "headers.setdefault('User-Agent', _user_agent or _USER_AGENT)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 111,
+   "op": "return",
+   "start": 3609,
+   "end": 3654,
+   "old": "return super().request(method, url, **kwargs)",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 96,
+   "op": "constant",
+   "start": 2977,
+   "end": 2986,
+   "old": "'headers'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 97,
+   "op": "boolean",
+   "start": 3033,
+   "end": 3059,
+   "old": "_user_agent or _USER_AGENT",
+   "new": "(_user_agent and _USER_AGENT)",
+   "id": 97
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 110,
+   "op": "constant",
+   "start": 3554,
+   "end": 3562,
+   "old": "'ignore'",
+   "new": "('XX')",
+   "id": 98
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 77,
+   "op": "constant",
+   "start": 2250,
+   "end": 2260,
+   "old": "'location'",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

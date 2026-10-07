@@ -1,0 +1,1006 @@
+{
+ "task": "pydata__xarray.97f3a746.test_treenode.aa8ba777.lv1",
+ "pool": 158,
+ "mutants": [
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 107,
+   "op": "statement",
+   "start": 3948,
+   "end": 3973,
+   "old": "old_parent = self._parent",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 127,
+   "op": "return",
+   "start": 4769,
+   "end": 4812,
+   "old": "return any(n is self for n in node.parents)",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 161,
+   "op": "statement",
+   "start": 5993,
+   "end": 6026,
+   "old": "self._set_parent(new_parent=None)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 204,
+   "op": "statement",
+   "start": 7568,
+   "end": 7580,
+   "old": "seen = set()",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 301,
+   "op": "statement",
+   "start": 11203,
+   "end": 11234,
+   "old": "node: Self | None = self.parent",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 310,
+   "op": "statement",
+   "start": 11480,
+   "end": 11691,
+   "old": "warn(\n            \"`iter_lineage` has been deprecated, and in the future will raise an error.\"\n            \"Please use `parents` from now on.\",\n            DeprecationWarning,\n            stacklevel=2,\n        )",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 316,
+   "op": "return",
+   "start": 11700,
+   "end": 11728,
+   "old": "return (self, *self.parents)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 323,
+   "op": "statement",
+   "start": 11912,
+   "end": 12118,
+   "old": "warn(\n            \"`lineage` has been deprecated, and in the future will raise an error.\"\n            \"Please use `parents` from now on.\",\n            DeprecationWarning,\n            stacklevel=2,\n        )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 334,
+   "op": "return",
+   "start": 12302,
+   "end": 12336,
+   "old": "return tuple(self._iter_parents())",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 348,
+   "op": "return",
+   "start": 12774,
+   "end": 12812,
+   "old": "return (*reversed(self.parents), self)",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 356,
+   "op": "return",
+   "start": 12990,
+   "end": 13001,
+   "old": "return node",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 379,
+   "op": "return",
+   "start": 13523,
+   "end": 13582,
+   "old": "return tuple(node for node in self.subtree if node.is_leaf)",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 409,
+   "op": "statement",
+   "start": 14339,
+   "end": 14372,
+   "old": "queue = collections.deque([self])",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 428,
+   "op": "statement",
+   "start": 14835,
+   "end": 14882,
+   "old": "queue = collections.deque([(NodePath(), self)])",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 446,
+   "op": "statement",
+   "start": 15348,
+   "end": 15384,
+   "old": "_this_node, *descendants = all_nodes",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 447,
+   "op": "return",
+   "start": 15393,
+   "end": 15418,
+   "old": "return tuple(descendants)",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 484,
+   "op": "return",
+   "start": 16070,
+   "end": 16122,
+   "old": "return max(node.level for node in self.root.subtree)",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 571,
+   "op": "statement",
+   "start": 18768,
+   "end": 18810,
+   "old": "new_children = {**self.children, key: val}",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 572,
+   "op": "statement",
+   "start": 18819,
+   "end": 18847,
+   "old": "self.children = new_children",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 721,
+   "op": "statement",
+   "start": 23958,
+   "end": 23975,
+   "old": "self._name = name",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 845,
+   "op": "statement",
+   "start": 28322,
+   "end": 28358,
+   "old": "path, active_nodes = queue.popleft()",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 849,
+   "op": "statement",
+   "start": 28470,
+   "end": 28499,
+   "old": "yield str(path), active_nodes",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 851,
+   "op": "statement",
+   "start": 28509,
+   "end": 28537,
+   "old": "first_node = active_nodes[0]",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 874,
+   "op": "statement",
+   "start": 29372,
+   "end": 29383,
+   "old": "yield nodes",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 102,
+   "op": "statement",
+   "start": 3795,
+   "end": 3938,
+   "old": "raise TypeError(\n                \"Parent nodes must be of type DataTree or None, \"\n                f\"not type {type(new_parent)}\"\n            )",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 108,
+   "op": "comparison",
+   "start": 3985,
+   "end": 4013,
+   "old": "new_parent is not old_parent",
+   "new": "(new_parent is old_parent)",
+   "id": 25
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 109,
+   "op": "statement",
+   "start": 4027,
+   "end": 4055,
+   "old": "self._check_loop(new_parent)",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 110,
+   "op": "statement",
+   "start": 4068,
+   "end": 4092,
+   "old": "self._detach(old_parent)",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 111,
+   "op": "statement",
+   "start": 4105,
+   "end": 4141,
+   "old": "self._attach(new_parent, child_name)",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 115,
+   "op": "comparison",
+   "start": 4295,
+   "end": 4317,
+   "old": "new_parent is not None",
+   "new": "(new_parent is None)",
+   "id": 29
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 130,
+   "op": "comparison",
+   "start": 4877,
+   "end": 4895,
+   "old": "parent is not None",
+   "new": "(parent is None)",
+   "id": 30
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 131,
+   "op": "statement",
+   "start": 4909,
+   "end": 4933,
+   "old": "self._pre_detach(parent)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 138,
+   "op": "statement",
+   "start": 5165,
+   "end": 5184,
+   "old": "self._parent = None",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 139,
+   "op": "statement",
+   "start": 5197,
+   "end": 5222,
+   "old": "self._post_detach(parent)",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 148,
+   "op": "statement",
+   "start": 5525,
+   "end": 5561,
+   "old": "self._pre_attach(parent, child_name)",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 154,
+   "op": "statement",
+   "start": 5788,
+   "end": 5809,
+   "old": "self._parent = parent",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 157,
+   "op": "statement",
+   "start": 5886,
+   "end": 5905,
+   "old": "self._parent = None",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 200,
+   "op": "statement",
+   "start": 7446,
+   "end": 7558,
+   "old": "raise TypeError(\n                \"children must be a dict-like mapping from names to node objects\"\n            )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 212,
+   "op": "statement",
+   "start": 7882,
+   "end": 7901,
+   "old": "childid = id(child)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 302,
+   "op": "comparison",
+   "start": 11249,
+   "end": 11265,
+   "old": "node is not None",
+   "new": "(node is None)",
+   "id": 39
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 303,
+   "op": "statement",
+   "start": 11279,
+   "end": 11289,
+   "old": "yield node",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 304,
+   "op": "statement",
+   "start": 11302,
+   "end": 11320,
+   "old": "node = node.parent",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 413,
+   "op": "statement",
+   "start": 14464,
+   "end": 14500,
+   "old": "queue.extend(node.children.values())",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 541,
+   "op": "statement",
+   "start": 17756,
+   "end": 17777,
+   "old": "path = NodePath(path)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 544,
+   "op": "statement",
+   "start": 17813,
+   "end": 17837,
+   "old": "current_node = self.root",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 545,
+   "op": "statement",
+   "start": 17850,
+   "end": 17882,
+   "old": "_root, *parts = list(path.parts)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 547,
+   "op": "statement",
+   "start": 17909,
+   "end": 17928,
+   "old": "current_node = self",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 579,
+   "op": "constant",
+   "start": 19007,
+   "end": 19011,
+   "old": "True",
+   "new": "(False)",
+   "id": 47
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 605,
+   "op": "statement",
+   "start": 19893,
+   "end": 19914,
+   "old": "path = NodePath(path)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 612,
+   "op": "statement",
+   "start": 20086,
+   "end": 20110,
+   "old": "current_node = self.root",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 616,
+   "op": "statement",
+   "start": 20210,
+   "end": 20229,
+   "old": "current_node = self",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 617,
+   "op": "statement",
+   "start": 20242,
+   "end": 20267,
+   "old": "*parts, name = path.parts",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 640,
+   "op": "comparison",
+   "start": 21374,
+   "end": 21403,
+   "old": "name in current_node.children",
+   "new": "(name not in current_node.children)",
+   "id": 52
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 647,
+   "op": "statement",
+   "start": 21666,
+   "end": 21695,
+   "old": "current_node._set(name, item)",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 856,
+   "op": "statement",
+   "start": 28687,
+   "end": 28754,
+   "old": "path_str = \"root node\" if not path.parts else f\"node {str(path)!r}\"",
+   "new": "pass",
+   "id": 54
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 860,
+   "op": "statement",
+   "start": 28888,
+   "end": 29001,
+   "old": "raise TreeIsomorphismError(\n                f\"children at {path_str} do not match: {child_summary}\"\n            )",
+   "new": "pass",
+   "id": 55
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 101,
+   "op": "comparison",
+   "start": 3718,
+   "end": 3740,
+   "old": "new_parent is not None",
+   "new": "(new_parent is None)",
+   "id": 56
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 116,
+   "op": "comparison",
+   "start": 4334,
+   "end": 4352,
+   "old": "new_parent is self",
+   "new": "(new_parent is not self)",
+   "id": 57
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 122,
+   "op": "statement",
+   "start": 4567,
+   "end": 4706,
+   "old": "raise InvalidTreeError(\n                    \"Cannot set parent, as intended parent is already a descendant of this node.\"\n                )",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 143,
+   "op": "comparison",
+   "start": 5353,
+   "end": 5371,
+   "old": "child_name is None",
+   "new": "(child_name is not None)",
+   "id": 59
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 144,
+   "op": "statement",
+   "start": 5389,
+   "end": 5511,
+   "old": "raise ValueError(\n                    \"To directly set parent, child needs a name, but child is unnamed\"\n                )",
+   "new": "pass",
+   "id": 60
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 150,
+   "op": "boolean",
+   "start": 5627,
+   "end": 5677,
+   "old": "not any(child is self for child in parentchildren)",
+   "new": "(any((child is self for child in parentchildren)))",
+   "id": 61
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 151,
+   "op": "constant",
+   "start": 5697,
+   "end": 5715,
+   "old": "\"Tree is corrupt.\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 206,
+   "op": "boolean",
+   "start": 7641,
+   "end": 7672,
+   "old": "not isinstance(child, TreeNode)",
+   "new": "(isinstance(child, TreeNode))",
+   "id": 63
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 207,
+   "op": "statement",
+   "start": 7690,
+   "end": 7868,
+   "old": "raise TypeError(\n                    f\"Cannot add object {name}. It is of type {type(child)}, \"\n                    \"but can only add children of type DataTree\"\n                )",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 214,
+   "op": "statement",
+   "start": 7954,
+   "end": 7971,
+   "old": "seen.add(childid)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 216,
+   "op": "statement",
+   "start": 8006,
+   "end": 8136,
+   "old": "raise InvalidTreeError(\n                    f\"Cannot add same node {name} multiple times as different children.\"\n                )",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 311,
+   "op": "constant",
+   "start": 11498,
+   "end": 11622,
+   "old": "\"`iter_lineage` has been deprecated, and in the future will raise an error.\"\n            \"Please use `parents` from now on.\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 343,
+   "op": "constant",
+   "start": 12546,
+   "end": 12696,
+   "old": "\"`ancestors` has been deprecated, and in the future will raise an error.\"\n            \"Please use `parents`. Example: `tuple(reversed(node.parents))`\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 643,
+   "op": "statement",
+   "start": 21520,
+   "end": 21549,
+   "old": "current_node._set(name, item)",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 645,
+   "op": "statement",
+   "start": 21584,
+   "end": 21639,
+   "old": "raise KeyError(f\"Already a node object at path {path}\")",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 839,
+   "op": "constant",
+   "start": 28136,
+   "end": 28172,
+   "old": "\"must pass at least one tree object\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 851,
+   "op": "constant",
+   "start": 28535,
+   "end": 28536,
+   "old": "0",
+   "new": "(1)",
+   "id": 72
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 127,
+   "op": "comparison",
+   "start": 4780,
+   "end": 4789,
+   "old": "n is self",
+   "new": "(n is not self)",
+   "id": 73
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 327,
+   "op": "constant",
+   "start": 12106,
+   "end": 12107,
+   "old": "2",
+   "new": "(3)",
+   "id": 74
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 552,
+   "op": "comparison",
+   "start": 18042,
+   "end": 18069,
+   "old": "current_node.parent is None",
+   "new": "(current_node.parent is not None)",
+   "id": 75
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 553,
+   "op": "statement",
+   "start": 18091,
+   "end": 18139,
+   "old": "raise KeyError(f\"Could not find node at {path}\")",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 555,
+   "op": "statement",
+   "start": 18182,
+   "end": 18216,
+   "old": "current_node = current_node.parent",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 559,
+   "op": "statement",
+   "start": 18308,
+   "end": 18338,
+   "old": "child = current_node.get(part)",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 562,
+   "op": "statement",
+   "start": 18458,
+   "end": 18478,
+   "old": "current_node = child",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 622,
+   "op": "comparison",
+   "start": 20438,
+   "end": 20450,
+   "old": "part == \"..\"",
+   "new": "(part != '..')",
+   "id": 80
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 853,
+   "op": "comparison",
+   "start": 28566,
+   "end": 28619,
+   "old": "sibling.children.keys() != first_node.children.keys()",
+   "new": "(sibling.children.keys() == first_node.children.keys())",
+   "id": 81
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 856,
+   "op": "boolean",
+   "start": 28713,
+   "end": 28727,
+   "old": "not path.parts",
+   "new": "(path.parts)",
+   "id": 82
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 856,
+   "op": "constant",
+   "start": 28698,
+   "end": 28709,
+   "old": "\"root node\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 136,
+   "op": "comparison",
+   "start": 5121,
+   "end": 5138,
+   "old": "child is not self",
+   "new": "(child is self)",
+   "id": 84
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 390,
+   "op": "comparison",
+   "start": 13870,
+   "end": 13887,
+   "old": "child is not self",
+   "new": "(child is self)",
+   "id": 85
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 560,
+   "op": "comparison",
+   "start": 18358,
+   "end": 18371,
+   "old": "child is None",
+   "new": "(child is not None)",
+   "id": 86
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 622,
+   "op": "constant",
+   "start": 20446,
+   "end": 20450,
+   "old": "\"..\"",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 623,
+   "op": "comparison",
+   "start": 20475,
+   "end": 20502,
+   "old": "current_node.parent is None",
+   "new": "(current_node.parent is not None)",
+   "id": 88
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 625,
+   "op": "statement",
+   "start": 20646,
+   "end": 20700,
+   "old": "raise KeyError(f\"Could not reach node at path {path}\")",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 627,
+   "op": "statement",
+   "start": 20751,
+   "end": 20785,
+   "old": "current_node = current_node.parent",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 628,
+   "op": "comparison",
+   "start": 20807,
+   "end": 20824,
+   "old": "part in (\"\", \".\")",
+   "new": "(part not in ('', '.'))",
+   "id": 91
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 857,
+   "op": "constant",
+   "start": 28783,
+   "end": 28789,
+   "old": "\" vs \"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 866,
+   "op": "arithmetic",
+   "start": 29148,
+   "end": 29159,
+   "old": "path / name",
+   "new": "(path * name)",
+   "id": 93
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 150,
+   "op": "comparison",
+   "start": 5635,
+   "end": 5648,
+   "old": "child is self",
+   "new": "(child is not self)",
+   "id": 94
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 432,
+   "op": "arithmetic",
+   "start": 15005,
+   "end": 15016,
+   "old": "path / name",
+   "new": "(path * name)",
+   "id": 95
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 432,
+   "op": "arithmetic",
+   "start": 15005,
+   "end": 15016,
+   "old": "path / name",
+   "new": "(path // name)",
+   "id": 96
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 631,
+   "op": "statement",
+   "start": 20923,
+   "end": 20965,
+   "old": "current_node = current_node.children[part]",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 638,
+   "op": "statement",
+   "start": 21307,
+   "end": 21361,
+   "old": "raise KeyError(f\"Could not reach node at path {path}\")",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "xarray/core/treenode.py",
+   "line": 854,
+   "op": "constant",
+   "start": 28660,
+   "end": 28661,
+   "old": "1",
+   "new": "(2)",
+   "id": 99
+  }
+ ]
+}

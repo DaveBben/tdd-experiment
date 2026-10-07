@@ -1,0 +1,1940 @@
+=== sphinx/ext/intersphinx/_cli.py
+"""This module provides contains the code for intersphinx command-line utilities."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+from sphinx.ext.intersphinx._load import _InvConfig
+
+
+def inspect_main(argv: list[str], /) -> int:
+    """
+    Debug functionality to print out an inventory file.
+
+    This function serves as a command-line utility to inspect and display the contents
+    of a Sphinx intersphinx inventory file. It fetches the inventory data from either
+    a local file path or a URL, loads it, and prints out all the entries in a
+    formatted manner.
+
+    Parameters:
+        argv (list[str]): Command-line arguments where the first element should be
+                         the path or URL to the inventory file to inspect.
+
+    Returns:
+        int: Exit code indicating success or failure:
+             - 0: Success, inventory was loaded and displayed successfully
+             - 1: Error occurred (missing filename, invalid inventory, or other exception)
+
+    Important notes:
+        - The function requires at least one argument (the inventory file path/URL)
+        - If no arguments are provided, an error message is printed to stderr
+        - The inventory entries are displayed sorted by key, with each entry showing:
+          * Entry name (left-aligned, 40 characters)
+          * Display name (left-aligned, 40 characters, omitted if '-')
+          * URI location
+        - Catches ValueError exceptions for inventory-specific errors and generic
+          Exception for unexpected errors, printing appropriate error messages to stderr
+    """
+    raise NotImplementedError
+
+=== sphinx/ext/intersphinx/_load.py
+"""This module contains the code for loading intersphinx inventories."""
+
+from __future__ import annotations
+
+import concurrent.futures
+import dataclasses
+import os.path
+import posixpath
+import time
+from operator import itemgetter
+from typing import TYPE_CHECKING
+from urllib.parse import urlsplit, urlunsplit
+
+from sphinx.builders.html import INVENTORY_FILENAME
+from sphinx.errors import ConfigError
+from sphinx.ext.intersphinx._shared import LOGGER, InventoryAdapter, _IntersphinxProject
+from sphinx.locale import __
+from sphinx.util import requests
+from sphinx.util.inventory import InventoryFile
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from sphinx.application import Sphinx
+    from sphinx.config import Config
+    from sphinx.ext.intersphinx._shared import (
+        IntersphinxMapping,
+        InventoryCacheEntry,
+        InventoryLocation,
+        InventoryName,
+        InventoryURI,
+    )
+    from sphinx.util.inventory import _Inventory
+    from sphinx.util.typing import Inventory
+
+
+def validate_intersphinx_mapping(app: Sphinx, config: Config) -> None:
+    """Validate and normalise :confval:`intersphinx_mapping`.
+
+    Ensure that:
+
+    * Keys are non-empty strings.
+    * Values are two-element tuples or lists.
+    * The first element of each value pair (the target URI)
+      is a non-empty string.
+    * The second element of each value pair (inventory locations)
+      is a tuple of non-empty strings or None.
+    """
+    # URIs should NOT be duplicated, otherwise different builds may use
+    # different project names (and thus, the build are no more reproducible)
+    # depending on which one is inserted last in the cache.
+    seen: dict[InventoryURI, InventoryName] = {}
+
+    errors = 0
+    for name, value in config.intersphinx_mapping.copy().items():
+        # ensure that intersphinx projects are always named
+        if not isinstance(name, str) or not name:
+            errors += 1
+            msg = __(
+                'Invalid intersphinx project identifier `%r` in intersphinx_mapping. '
+                'Project identifiers must be non-empty strings.'
+            )
+            LOGGER.error(msg, name)
+            del config.intersphinx_mapping[name]
+            continue
+
+        # ensure values are properly formatted
+        if not isinstance(value, (tuple, list)):
+            errors += 1
+            msg = __(
+                'Invalid value `%r` in intersphinx_mapping[%r]. '
+                'Expected a two-element tuple or list.'
+            )
+            LOGGER.error(msg, value, name)
+            del config.intersphinx_mapping[name]
+            continue
+        try:
+            uri, inv = value
+        except (TypeError, ValueError, Exception):
+            errors += 1
+            msg = __(
+                'Invalid value `%r` in intersphinx_mapping[%r]. '
+                'Values must be a (target URI, inventory locations) pair.'
+            )
+            LOGGER.error(msg, value, name)  # NoQA: TRY400
+            del config.intersphinx_mapping[name]
+            continue
+
+        # ensure target URIs are non-empty and unique
+        if not uri or not isinstance(uri, str):
+            errors += 1
+            msg = __(
+                'Invalid target URI value `%r` in intersphinx_mapping[%r][0]. '
+                'Target URIs must be unique non-empty strings.'
+            )
+            LOGGER.error(msg, uri, name)
+            del config.intersphinx_mapping[name]
+            continue
+        if uri in seen:
+            errors += 1
+            msg = __(
+                'Invalid target URI value `%r` in intersphinx_mapping[%r][0]. '
+                'Target URIs must be unique (other instance in intersphinx_mapping[%r]).'
+            )
+            LOGGER.error(msg, uri, name, seen[uri])
+            del config.intersphinx_mapping[name]
+            continue
+        seen[uri] = name
+
+        if not isinstance(inv, (tuple, list)):
+            inv = (inv,)
+
+        # ensure inventory locations are None or non-empty
+        targets: list[InventoryLocation] = []
+        for target in inv:
+            if target is None or target and isinstance(target, str):
+                targets.append(target)
+            else:
+                errors += 1
+                msg = __(
+                    'Invalid inventory location value `%r` in intersphinx_mapping[%r][1]. '
+                    'Inventory locations must be non-empty strings or None.'
+                )
+                LOGGER.error(msg, target, name)
+                del config.intersphinx_mapping[name]
+                continue
+
+        config.intersphinx_mapping[name] = (name, (uri, tuple(targets)))
+
+    if errors == 1:
+        msg = __('Invalid `intersphinx_mapping` configuration (1 error).')
+        raise ConfigError(msg)
+    if errors > 1:
+        msg = __('Invalid `intersphinx_mapping` configuration (%s errors).')
+        raise ConfigError(msg % errors)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@dataclasses.dataclass(frozen=True, kw_only=True, slots=True)
+class _InvConfig:
+    intersphinx_cache_limit: int
+    intersphinx_timeout: int | float | None
+    tls_verify: bool
+    tls_cacerts: str | dict[str, str] | None
+    user_agent: str
+
+    @classmethod
+    def from_config(cls, config: Config) -> _InvConfig:
+        """
+        Create an _InvConfig instance from a Sphinx configuration object.
+
+        This class method extracts intersphinx-related configuration values from a Sphinx
+        Config object and creates a new _InvConfig instance with those values. It serves
+        as a factory method to convert Sphinx configuration into a structured configuration
+        object specifically for inventory operations.
+
+        Parameters
+        ----------
+        config : sphinx.config.Config
+            The Sphinx configuration object containing intersphinx settings and other
+            configuration values needed for inventory operations.
+
+        Returns
+        -------
+        _InvConfig
+            A new _InvConfig instance populated with the following configuration values
+            extracted from the input config:
+            - intersphinx_cache_limit: Cache expiration time in days
+            - intersphinx_timeout: Timeout for HTTP requests when fetching inventories
+            - tls_verify: Whether to verify TLS certificates
+            - tls_cacerts: Custom CA certificates for TLS verification
+            - user_agent: User agent string for HTTP requests
+
+        The config object must provide all listed settings.
+        """
+        raise NotImplementedError
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def fetch_inventory(app: Sphinx, uri: InventoryURI, inv: str) -> Inventory:
+    """Fetch, parse and return an intersphinx inventory file."""
+    raw_data, uri = _fetch_inventory_data(
+        target_uri=uri,
+        inv_location=inv,
+        config=_InvConfig.from_config(app.config),
+        srcdir=app.srcdir,
+        cache_path=None,
+    )
+    return _load_inventory(raw_data, target_uri=uri).data
+
+
+def _fetch_inventory_data(
+    *,
+    target_uri: InventoryURI,
+    inv_location: str,
+    config: _InvConfig,
+    srcdir: Path,
+    cache_path: Path | None,
+) -> tuple[bytes, str]:
+    """
+    Fetch inventory data from a local or remote source.
+
+    This function retrieves intersphinx inventory data from either a local file path
+    or a remote URL. It strips authentication information from a remote ``target_uri``
+    (not from ``inv_location``) and optionally caches remotely fetched inventory data.
+
+    Parameters
+    ----------
+    target_uri : InventoryURI
+        The base URI where the documentation is hosted. This is used to generate
+        links and can be either a local or remote URI. For remote URIs, any
+        basic authentication information will be stripped.
+    inv_location : str
+        The location of the inventory file, either a local path or remote URL.
+    config : _InvConfig
+        Configuration object containing intersphinx settings including timeout,
+        TLS verification settings, and user agent information.
+    srcdir : Path
+        The source directory path used as the base for resolving local file paths.
+    cache_path : Path | None
+        Optional path where remote inventory data should be cached locally.
+        If None, no caching is performed. Only used for remote inventories.
+
+    Returns
+    -------
+    tuple[bytes, str]
+        A tuple containing:
+        - bytes: The raw inventory data
+        - str: The final target URI (may be updated if remote inventory was redirected)
+
+    Raises
+    ------
+    Exception
+        Various exceptions may be raised depending on the source:
+        - Network-related exceptions for remote URLs (timeout, connection errors, etc.)
+        - File I/O exceptions for local files (file not found, permission errors, etc.)
+        Fetching helpers rewrite network and local-file exception arguments with contextual
+        messages; cache-directory or cache-write errors may propagate directly.
+
+    Notes
+    -----
+    - For remote inventories, the function automatically handles HTTP redirects and
+      updates the target_uri accordingly if the inventory location has moved
+    - Remote inventory data is optionally cached to disk if cache_path is provided
+    - Basic authentication credentials are stripped from remote target URIs for security
+    - The function creates parent directories for the cache path if they don't exist
+    """
+    raise NotImplementedError
+
+
+def _fetch_inventory_group(
+    *,
+    project: _IntersphinxProject,
+    cache: dict[InventoryURI, InventoryCacheEntry],
+    now: int,
+    config: _InvConfig,
+    srcdir: Path,
+    cache_dir: Path | None,
+) -> bool:
+    """
+    Fetch and update inventory data for a single intersphinx project.
+
+    This function attempts to load inventory data for a given intersphinx project from
+    various locations (local files or remote URLs). It handles caching logic, including
+    cache expiration and file-based caching for remote inventories. The function tries
+    each location in the project until one succeeds or all fail.
+
+    Parameters:
+        project (_IntersphinxProject): The intersphinx project containing name, target URI,
+            and inventory locations to fetch from.
+        cache (dict[InventoryURI, InventoryCacheEntry]): The global inventory cache
+            dictionary mapping URIs to cached inventory data tuples.
+        now (int): Current timestamp in seconds since epoch, used for cache expiration
+            and updating cache entries.
+        config (_InvConfig): Configuration object containing intersphinx settings like
+            cache limits, timeouts, and TLS verification options.
+        srcdir (Path): Source directory path for resolving relative inventory file paths.
+        cache_dir (Path | None): Directory path for storing cached inventory files from
+            remote sources. If None, file-based caching is disabled.
+
+    Returns:
+        bool: True if the inventory cache was updated with new data, False if existing
+            cached data was used or no update occurred.
+
+    Important notes:
+        - The function tries inventory locations in order until one succeeds
+        - Local files are always read; remote files are only fetched if cache is expired
+        - Cache expiration is determined by config.intersphinx_cache_limit setting
+        - File-based caching is only used for remote inventories when cache_dir is provided
+        - Logs warnings if all inventory locations fail, or info messages for partial failures
+        - Updates the provided cache dictionary in-place when new data is fetched
+        - Handles both absolute and relative inventory location paths
+    """
+    raise NotImplementedError
+
+
+def _get_safe_url(url: str) -> str:
+    """
+    Get a safe version of a URL with basic authentication passwords obscured.
+
+    This function takes a URL that may contain basic authentication credentials
+    and returns a version suitable for printing and logging by removing the
+    password component while preserving the username and other URL parts.
+
+    Args:
+        url (str): A URL string that may contain basic authentication credentials
+            in the format 'https://username:password@hostname/path'
+
+    Returns:
+        str: The input URL with the password component removed. If basic auth
+            credentials are present, only the username portion is retained.
+            If no basic auth is present, the original URL is returned unchanged.
+
+    Examples:
+        - 'https://user:12345@example.com' becomes 'https://user@example.com'
+        - 'https://user:secret@example.com:8080/path' becomes 'https://user@example.com:8080/path'
+        - 'https://example.com/path' remains 'https://example.com/path'
+
+    Note:
+        This function is designed for security purposes to prevent sensitive
+        password information from appearing in logs or printed output while
+        maintaining enough information for debugging purposes.
+    """
+    raise NotImplementedError
+
+
+def _load_inventory(raw_data: bytes, /, *, target_uri: InventoryURI) -> _Inventory:
+    """
+    Parse and return an intersphinx inventory file from raw bytes data.
+
+    This function parses raw inventory bytes into the structured inventory used
+    for intersphinx cross-referencing.
+
+    Parameters
+    ----------
+    raw_data : bytes
+        The raw bytes content of the inventory file to be parsed.
+    target_uri : InventoryURI
+        The base URI used for generating links in the inventory. This can be
+        either a local or remote URI and serves as the base path for all
+        cross-reference links generated from this inventory.
+
+    Returns
+    -------
+    _Inventory
+        A parsed inventory object containing the structured inventory data
+        that can be used for cross-referencing. The returned object has a
+        'data' attribute containing the actual inventory mappings.
+
+    Raises
+    ------
+    ValueError
+        If the inventory file format is unknown, unsupported, or cannot be
+        parsed. The original exception is chained and a more descriptive
+        error message is provided indicating the inventory version issue.
+
+    Notes
+    -----
+    This is an internal function used by the intersphinx extension to process
+    inventory files after they have been fetched from local or remote sources.
+    The target_uri parameter is crucial for generating correct cross-reference
+    links and should match the base documentation URL where the inventory
+    originates from.
+    """
+    raise NotImplementedError
+
+
+def _strip_basic_auth(url: str) -> str:
+    """
+    Remove basic authentication credentials from a URL.
+
+    This function takes a URL that may contain basic authentication credentials
+    in the format 'https://user:pass@example.com' and returns the same URL with
+    the authentication portion removed, resulting in 'https://example.com'.
+
+    Args:
+        url (str): A URL string which may or may not contain basic authentication
+            credentials in the format 'scheme://[user[:password]@]host[:port]/path'.
+
+    Returns:
+        str: The input URL with any basic authentication credentials removed.
+            If no authentication credentials were present, the original URL is
+            returned unchanged.
+
+    Examples:
+        - 'https://user:pass@example.com/path' -> 'https://example.com/path'
+        - 'https://user@example.com' -> 'https://example.com'
+        - 'https://example.com' -> 'https://example.com' (unchanged)
+        - 'http://user:pass@host:8080/api' -> 'http://host:8080/api'
+
+    URL scheme, host, port, path, query, and fragment components are otherwise preserved.
+    """
+    raise NotImplementedError
+
+
+def load_mappings(app: Sphinx) -> None:
+    """
+    Load all intersphinx mappings into the environment.
+
+    This function synchronizes normalized intersphinx mappings with remote or local
+    inventory data and the environment cache. Stale entries are removed; if at least
+    one project reports an update, the main and named inventories are rebuilt in a
+    deterministic order.
+
+    Parameters
+    ----------
+    app : Sphinx
+        The Sphinx application instance containing the configuration and environment.
+        The app must have a valid `config.intersphinx_mapping` attribute with
+        normalized intersphinx mapping data, and an `env` attribute for accessing
+        the build environment.
+
+    Raises
+    ------
+    ConfigError
+        If an invalid intersphinx_mapping entry is encountered after normalization,
+        indicating a programming error in the validation process.
+
+    Notes
+    -----
+    - The intersphinx mappings are expected to be already normalized by the
+      `validate_intersphinx_mapping` function before calling this function.
+    - Cache entries are sorted by name and expiry time to ensure consistent
+      behavior when duplicate values exist across different inventories.
+    - The function automatically handles cache cleanup, removing entries that
+      are no longer referenced in the current configuration.
+    - Local inventory files are always re-read, while remote inventories respect
+      the cache expiration settings.
+    - If no fetch group reports an update, the existing main and named inventories are
+      left unchanged.
+    """
+    raise NotImplementedError
+
+=== sphinx/ext/intersphinx/_resolve.py
+"""This module provides logic for resolving references to intersphinx targets."""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+from typing import TYPE_CHECKING, cast
+
+from docutils import nodes
+
+from sphinx.addnodes import pending_xref
+from sphinx.deprecation import _deprecation_warning
+from sphinx.errors import ExtensionError
+from sphinx.ext.intersphinx._shared import LOGGER, InventoryAdapter
+from sphinx.locale import _, __
+from sphinx.transforms.post_transforms import ReferencesResolver
+from sphinx.util.docutils import CustomReSTDispatcher, SphinxRole
+from sphinx.util.osutil import _relative_path
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence, Set
+    from types import ModuleType
+    from typing import Any
+
+    from docutils.nodes import Node, TextElement, system_message
+    from docutils.utils import Reporter
+
+    from sphinx.application import Sphinx
+    from sphinx.domains import Domain
+    from sphinx.domains._domains_container import _DomainsContainer
+    from sphinx.environment import BuildEnvironment
+    from sphinx.ext.intersphinx._shared import InventoryName
+    from sphinx.util.inventory import _InventoryItem
+    from sphinx.util.typing import Inventory, RoleFunction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class IntersphinxDispatcher(CustomReSTDispatcher):
+    """Custom dispatcher for external role.
+
+    This enables :external:***:/:external+***: roles on parsing reST document.
+    """
+
+    def role(
+        self,
+        role_name: str,
+        language_module: ModuleType,
+        lineno: int,
+        reporter: Reporter,
+    ) -> tuple[RoleFunction, list[system_message]]:
+        if len(role_name) > 9 and role_name.startswith(('external:', 'external+')):
+            return IntersphinxRole(role_name), []
+        else:
+            return super().role(role_name, language_module, lineno, reporter)
+
+
+class IntersphinxRole(SphinxRole):
+    # group 1: just for the optionality of the inventory name
+    # group 2: the inventory name (optional)
+    # group 3: the domain:role or role part
+    _re_inv_ref = re.compile(r'(\+([^:]+))?:(.*)')
+
+    def __init__(self, orig_name: str) -> None:
+        self.orig_name = orig_name
+
+    def run(self) -> tuple[list[Node], list[system_message]]:
+        assert self.name == self.orig_name.lower()
+        inventory, name_suffix = self.get_inventory_and_name_suffix(self.orig_name)
+        resolve_self = self.env.config.intersphinx_resolve_self
+        self_referential = bool(resolve_self) and resolve_self == inventory
+
+        if not self_referential:
+            if inventory and not inventory_exists(self.env, inventory):
+                self._emit_warning(
+                    __('inventory for external cross-reference not found: %r'),
+                    inventory,
+                )
+                return [], []
+
+        domain_name, role_name = self._get_domain_role(name_suffix)
+
+        if role_name is None:
+            self._emit_warning(
+                __('invalid external cross-reference suffix: %r'), name_suffix
+            )
+            return [], []
+
+        # attempt to find a matching role function
+        role_func: RoleFunction | None
+
+        if domain_name is not None:
+            # the user specified a domain, so we only check that
+            if domain_name not in self.env.domains:
+                self._emit_warning(
+                    __('domain for external cross-reference not found: %r'), domain_name
+                )
+                return [], []
+            domain = self.env.domains[domain_name]
+            role_func = domain.roles.get(role_name)
+            if role_func is None:
+                msg = 'role for external cross-reference not found in domain %r: %r'
+                object_types = domain.object_types.get(role_name)
+                if object_types is not None and object_types.roles:
+                    self._emit_warning(
+                        __(f'{msg} (perhaps you meant one of: %s)'),
+                        domain_name,
+                        role_name,
+                        self._concat_strings(object_types.roles),
+                    )
+                else:
+                    self._emit_warning(__(msg), domain_name, role_name)
+                return [], []
+
+        else:
+            # the user did not specify a domain,
+            # so we check first the default (if available) then standard domains
+            default_domain = self.env.current_document.default_domain
+            std_domain = self.env.domains.standard_domain
+            domains: Sequence[Domain]
+            if default_domain is None or std_domain == default_domain:
+                domains = (std_domain,)
+            else:
+                domains = (default_domain, std_domain)
+
+            role_func = None
+            for domain in domains:
+                role_func = domain.roles.get(role_name)
+                if role_func is not None:
+                    domain_name = domain.name
+                    break
+
+            if role_func is None or domain_name is None:
+                domains_str = self._concat_strings(domain.name for domain in domains)
+                msg = 'role for external cross-reference not found in domains %s: %r'
+                possible_roles: set[str] = {
+                    f'{domain.name}:{r}'
+                    for domain in domains
+                    if (object_types := domain.object_types.get(role_name))
+                    for r in object_types.roles
+                }
+                if possible_roles:
+                    msg = f'{msg} (perhaps you meant one of: %s)'
+                    self._emit_warning(
+                        __(msg),
+                        domains_str,
+                        role_name,
+                        self._concat_strings(possible_roles),
+                    )
+                else:
+                    self._emit_warning(__(msg), domains_str, role_name)
+                return [], []
+
+        result, messages = role_func(
+            f'{domain_name}:{role_name}',
+            self.rawtext,
+            self.text,
+            self.lineno,
+            self.inliner,
+            self.options,
+            self.content,
+        )
+
+        if not self_referential:
+            # We do the intersphinx resolution by inserting our
+            # 'intersphinx' and 'inventory' attributes into the nodes.
+            # Only do this when it is an external reference.
+            for node in result:
+                if isinstance(node, pending_xref):
+                    node['intersphinx'] = True
+                    node['inventory'] = inventory
+
+        return result, messages
+
+    def get_inventory_and_name_suffix(self, name: str) -> tuple[str | None, str]:
+        """Extract an inventory name (if any) and ``domain+name`` suffix from a role *name*.
+        and the domain+name suffix.
+
+        The role name is expected to be of one of the following forms:
+
+        - ``external+inv:name`` -- explicit inventory and name, any domain.
+        - ``external+inv:domain:name`` -- explicit inventory, domain and name.
+        - ``external:name`` -- any inventory and domain, explicit name.
+        - ``external:domain:name`` -- any inventory, explicit domain and name.
+        """
+        assert name.startswith('external'), name
+        suffix = name[9:]
+        if name[8] == '+':
+            inv_name, _, suffix = suffix.partition(':')
+            return inv_name, suffix
+        elif name[8] == ':':
+            return None, suffix
+        else:
+            msg = f'Malformed :external: role name: {name}'
+            raise ValueError(msg)
+
+    def _get_domain_role(self, name: str) -> tuple[str | None, str | None]:
+        """Convert the *name* string into a domain and a role name.
+
+        - If *name* contains no ``:``, return ``(None, name)``.
+        - If *name* contains a single ``:``, the domain/role is split on this.
+        - If *name* contains multiple ``:``, return ``(None, None)``.
+        """
+        names = name.split(':')
+        if len(names) == 1:
+            return None, names[0]
+        elif len(names) == 2:
+            return names[0], names[1]
+        else:
+            return None, None
+
+    def _emit_warning(self, msg: str, /, *args: Any) -> None:
+        LOGGER.warning(
+            msg,
+            *args,
+            type='intersphinx',
+            subtype='external',
+            location=(self.env.current_document.docname, self.lineno),
+        )
+
+    def _concat_strings(self, strings: Iterable[str]) -> str:
+        return ', '.join(f'{s!r}' for s in sorted(strings))
+
+    # deprecated methods
+
+    def get_role_name(self, name: str) -> tuple[str, str] | None:
+        _deprecation_warning(
+            __name__, f'{self.__class__.__name__}.get_role_name', '', remove=(9, 0)
+        )
+        names = name.split(':')
+        if len(names) == 1:
+            # role
+            if (domain := self.env.current_document.default_domain) is not None:
+                domain_name = domain.name
+            else:
+                domain_name = None
+            role = names[0]
+        elif len(names) == 2:
+            # domain:role:
+            domain_name, role = names
+        else:
+            return None
+
+        if domain_name and self.is_existent_role(domain_name, role):
+            return domain_name, role
+        elif self.is_existent_role('std', role):
+            return 'std', role
+        else:
+            return None
+
+    def is_existent_role(self, domain_name: str, role_name: str) -> bool:
+        _deprecation_warning(
+            __name__, f'{self.__class__.__name__}.is_existent_role', '', remove=(9, 0)
+        )
+        try:
+            domain = self.env.domains[domain_name]
+        except KeyError:
+            return False
+        else:
+            return role_name in domain.roles
+
+    def invoke_role(
+        self, role: tuple[str, str]
+    ) -> tuple[list[Node], list[system_message]]:
+        """Invoke the role described by a ``(domain, role name)`` pair."""
+        _deprecation_warning(
+            __name__, f'{self.__class__.__name__}.invoke_role', '', remove=(9, 0)
+        )
+        domain = self.env.get_domain(role[0])
+        if domain:
+            role_func = domain.role(role[1])
+            assert role_func is not None
+
+            return role_func(
+                ':'.join(role),
+                self.rawtext,
+                self.text,
+                self.lineno,
+                self.inliner,
+                self.options,
+                self.content,
+            )
+        else:
+            return [], []
+
+
+class IntersphinxRoleResolver(ReferencesResolver):
+    """pending_xref node resolver for intersphinx role.
+
+    This resolves pending_xref nodes generated by :intersphinx:***: role.
+    """
+
+    default_priority = ReferencesResolver.default_priority - 1
+
+    def run(self, **kwargs: Any) -> None:
+        for node in self.document.findall(pending_xref):
+            if 'intersphinx' not in node:
+                continue
+            contnode = cast('nodes.TextElement', node[0].deepcopy())
+            inv_name = node['inventory']
+            if inv_name is not None:
+                assert inventory_exists(self.env, inv_name)
+                newnode = resolve_reference_in_inventory(
+                    self.env, inv_name, node, contnode
+                )
+            else:
+                newnode = resolve_reference_any_inventory(
+                    self.env, False, node, contnode
+                )
+            if newnode is None:
+                typ = node['reftype']
+                msg = __('external %s:%s reference target not found: %s') % (
+                    node['refdomain'],
+                    typ,
+                    node['reftarget'],
+                )
+                LOGGER.warning(msg, location=node, type='ref', subtype=typ)
+                node.replace_self(contnode)
+            else:
+                node.replace_self(newnode)
+
+
+def install_dispatcher(app: Sphinx, docname: str, source: list[str]) -> None:
+    """
+    Enable IntersphinxDispatcher for processing external cross-references.
+
+    This function installs a custom reStructuredText dispatcher that enables the processing
+    of :external: and :external+inventory: roles during document parsing. The dispatcher
+    allows users to create cross-references to external documentation via intersphinx.
+
+    Parameters
+    ----------
+    app : Sphinx
+        The Sphinx application instance used for building documentation.
+    docname : str
+        The name of the document being processed. This parameter is accepted for
+        compatibility with Sphinx's event system but is not used in the function.
+    source : list[str]
+        The source content of the document as a list of strings. This parameter is
+        accepted for compatibility with Sphinx's event system but is not used in the function.
+
+    Returns
+    -------
+    None
+        This function does not return any value.
+
+    Notes
+    -----
+    - The IntersphinxDispatcher is enabled for the active parsing context
+    - This function is typically called as part of Sphinx's document processing pipeline
+    - The dispatcher enables roles like :external:domain:role and :external+inventory:domain:role
+    - The unused parameters (docname and source) are required for compatibility with Sphinx's
+      event handler signature
+    """
+    raise NotImplementedError
+
+
+def missing_reference(app: Sphinx, env: BuildEnvironment, node: pending_xref, contnode: TextElement) -> nodes.reference | None:
+    """
+    Attempt to resolve a missing reference via intersphinx references.
+
+    This function serves as the main entry point for resolving cross-references that cannot
+    be found in the current documentation project. It attempts to resolve these references
+    by looking them up in external documentation inventories configured through the
+    intersphinx extension.
+
+    Resolution supports both lookup across available inventories and an explicitly
+    named inventory target.
+
+    Parameters
+    ----------
+    app : Sphinx
+        The Sphinx application instance containing the configuration and state.
+    env : BuildEnvironment
+        The build environment containing domains, inventories, and other build-time data.
+    node : pending_xref
+        The pending cross-reference node that needs to be resolved. Contains metadata
+        such as the reference target, domain, and type.
+    contnode : TextElement
+        The content node that will be used as the text content of the resolved reference
+        if resolution is successful.
+
+    Returns
+    -------
+    nodes.reference or None
+        Returns a resolved reference node with the appropriate URI and title if the
+        reference can be resolved via intersphinx inventories. Returns None if the
+        reference cannot be resolved, allowing other resolvers to attempt resolution
+        or for the reference to be marked as broken.
+
+    Notes
+    -----
+    The function respects named-inventory targets, self-reference configuration,
+    and disabled reference types.
+    """
+    raise NotImplementedError
+
+=== sphinx/ext/intersphinx/_shared.py
+"""This module contains code shared between intersphinx modules."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from sphinx.util import logging
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from typing import Any, Final, NoReturn, TypeAlias
+
+    from sphinx.environment import BuildEnvironment
+    from sphinx.util.typing import Inventory
+
+    #: The inventory project URL to which links are resolved.
+    #:
+    #: This value is unique in :confval:`intersphinx_mapping`.
+    InventoryURI = str
+
+    #: The inventory (non-empty) name.
+    #:
+    #: It is unique and in bijection with an inventory remote URL.
+    InventoryName = str
+
+    #: A target (local or remote) containing the inventory data to fetch.
+    #:
+    #: Empty strings are not expected and ``None`` indicates the default
+    #: inventory file name :data:`~sphinx.builder.html.INVENTORY_FILENAME`.
+    InventoryLocation = str | None
+
+    #: Inventory cache entry. The integer field is the cache expiration time.
+    InventoryCacheEntry: TypeAlias = tuple[InventoryName, int, Inventory]
+
+    #: The type of :confval:`intersphinx_mapping` *after* normalisation.
+    IntersphinxMapping = dict[
+        InventoryName,
+        tuple[InventoryName, tuple[InventoryURI, tuple[InventoryLocation, ...]]],
+    ]
+
+LOGGER: Final[logging.SphinxLoggerAdapter] = logging.getLogger('sphinx.ext.intersphinx')
+
+
+class _IntersphinxProject:
+    name: InventoryName
+    target_uri: InventoryURI
+    locations: tuple[InventoryLocation, ...]
+
+    __slots__ = {
+        'name':       'The inventory name. '
+                      'It is unique and in bijection with an remote inventory URL.',
+        'target_uri': 'The inventory project URL to which links are resolved. '
+                      'It is unique and in bijection with an inventory name.',
+        'locations':  'A tuple of local or remote targets containing '
+                      'the inventory data to fetch. '
+                      'None indicates the default inventory file name.',
+    }  # fmt: skip
+
+    def __init__(
+        self,
+        *,
+        name: InventoryName,
+        target_uri: InventoryURI,
+        locations: Sequence[InventoryLocation],
+    ) -> None:
+        if not name or not isinstance(name, str):
+            msg = 'name must be a non-empty string'
+            raise ValueError(msg)
+        if not target_uri or not isinstance(target_uri, str):
+            msg = 'target_uri must be a non-empty string'
+            raise ValueError(msg)
+        if not locations or not isinstance(locations, tuple):
+            msg = 'locations must be a non-empty tuple'
+            raise ValueError(msg)
+        if any(
+            location is not None and (not location or not isinstance(location, str))
+            for location in locations
+        ):
+            msg = 'locations must be a tuple of strings or None'
+            raise ValueError(msg)
+        object.__setattr__(self, 'name', name)
+        object.__setattr__(self, 'target_uri', target_uri)
+        object.__setattr__(self, 'locations', tuple(locations))
+
+    def __repr__(self) -> str:
+        return (
+            f'{self.__class__.__name__}('
+            f'name={self.name!r}, '
+            f'target_uri={self.target_uri!r}, '
+            f'locations={self.locations!r})'
+        )
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, _IntersphinxProject):
+            return NotImplemented
+        return (
+            self.name == other.name
+            and self.target_uri == other.target_uri
+            and self.locations == other.locations
+        )
+
+    def __hash__(self) -> int:
+        return hash((self.name, self.target_uri, self.locations))
+
+    def __setattr__(self, key: str, value: Any) -> NoReturn:
+        msg = f'{self.__class__.__name__} is immutable'
+        raise AttributeError(msg)
+
+    def __delattr__(self, key: str) -> NoReturn:
+        msg = f'{self.__class__.__name__} is immutable'
+        raise AttributeError(msg)
+
+
+class InventoryAdapter:
+    """Inventory adapter for environment"""
+
+    def __init__(self, env: BuildEnvironment) -> None:
+        """
+        Initialize an InventoryAdapter instance for managing intersphinx inventories.
+
+        This constructor sets up the adapter with a reference to the Sphinx build environment
+        and initializes the necessary intersphinx-related attributes on the environment if
+        they don't already exist.
+
+        Parameters
+        ----------
+        env : BuildEnvironment
+            The Sphinx build environment instance that will store the intersphinx
+            inventory data and cache.
+
+        Notes
+        -----
+        When ``env`` has no ``intersphinx_cache`` attribute, the constructor initializes
+        the following three environment attributes together:
+        - intersphinx_cache: Dictionary mapping inventory URIs to cache entries
+        - intersphinx_inventory: Main inventory storage for cross-reference resolution
+        - intersphinx_named_inventory: Named inventory storage for project-specific lookups
+
+        If ``intersphinx_cache`` already exists, the constructor leaves all three attributes
+        unchanged.
+        """
+        raise NotImplementedError
+
+=== sphinx/util/inventory.py
+"""Inventory utility functions for Sphinx."""
+
+from __future__ import annotations
+
+import posixpath
+import re
+import warnings
+import zlib
+from typing import TYPE_CHECKING
+
+from sphinx.deprecation import RemovedInSphinx10Warning
+from sphinx.locale import __
+from sphinx.util import logging
+
+BUFSIZE = 16 * 1024
+logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    import os
+    from collections.abc import Callable, Iterator, Sequence
+    from typing import NoReturn, Protocol
+
+    from sphinx.builders import Builder
+    from sphinx.environment import BuildEnvironment
+    from sphinx.util.typing import Inventory
+
+    # Readable file stream for inventory loading
+    class _SupportsRead(Protocol):
+        def read(self, size: int = ...) -> bytes: ...
+
+    _JoinFunc = Callable[[str, str], str]
+
+
+def __getattr__(name: str) -> object:
+    if name == 'InventoryFileReader':
+        from sphinx.util._inventory_file_reader import InventoryFileReader
+
+        return InventoryFileReader
+    msg = f'module {__name__!r} has no attribute {name!r}'
+    raise AttributeError(msg)
+
+
+class InventoryFile:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @classmethod
+    def load(cls, stream: _SupportsRead, uri: str, joinfunc: _JoinFunc) -> Inventory:
+        return cls.loads(stream.read(), uri=uri).data
+
+    @classmethod
+    def _loads_v1(cls, lines: Sequence[str], *, uri: str) -> _Inventory:
+        if len(lines) < 2:
+            msg = 'invalid inventory header: missing project name or version'
+            raise ValueError(msg)
+        inv = _Inventory({})
+        projname = lines[0].rstrip()[11:]  # Project name
+        version = lines[1].rstrip()[11:]  # Project version
+        for line in lines[2:]:
+            name, item_type, location = line.rstrip().split(None, maxsplit=2)
+            location = posixpath.join(uri, location)
+            # version 1 did not add anchors to the location
+            if item_type == 'mod':
+                item_type = 'py:module'
+                location += f'#module-{name}'
+            else:
+                item_type = f'py:{item_type}'
+                location += f'#{name}'
+            inv[item_type, name] = _InventoryItem(
+                project_name=projname,
+                project_version=version,
+                uri=location,
+                display_name='-',
+            )
+        return inv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @classmethod
+    def dump(
+        cls, filename: str | os.PathLike[str], env: BuildEnvironment, builder: Builder
+    ) -> None:
+        def escape(string: str) -> str:
+            return re.sub('\\s+', ' ', string)
+
+        with open(filename, 'wb') as f:
+            # header
+            f.write(
+                (
+                    '# Sphinx inventory version 2\n'
+                    f'# Project: {escape(env.config.project)}\n'
+                    f'# Version: {escape(env.config.version)}\n'
+                    '# The remainder of this file is compressed using zlib.\n'
+                ).encode()
+            )
+
+            # body
+            compressor = zlib.compressobj(9)
+            for domain in env.domains.sorted():
+                sorted_objects = sorted(domain.get_objects())
+                for fullname, dispname, type, docname, anchor, prio in sorted_objects:
+                    if anchor.endswith(fullname):
+                        # this can shorten the inventory by as much as 25%
+                        anchor = anchor.removesuffix(fullname) + '$'
+                    uri = builder.get_target_uri(docname)
+                    if anchor:
+                        uri += '#' + anchor
+                    if dispname == fullname:
+                        dispname = '-'
+                    entry = f'{fullname} {domain.name}:{type} {prio} {uri} {dispname}\n'
+                    f.write(compressor.compress(entry.encode()))
+            f.write(compressor.flush())
+
+
+class _Inventory:
+    """Inventory data in memory."""
+
+    __slots__ = ('data',)
+
+    data: dict[str, dict[str, _InventoryItem]]
+
+    def __init__(self, data: dict[str, dict[str, _InventoryItem]], /) -> None:
+        # type -> name -> _InventoryItem
+        self.data: dict[str, dict[str, _InventoryItem]] = data
+
+    def __repr__(self) -> str:
+        return f'_Inventory({self.data!r})'
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, _Inventory):
+            return NotImplemented
+        return self.data == other.data
+
+    def __hash__(self) -> int:
+        return hash(self.data)
+
+    def __getitem__(self, item: tuple[str, str]) -> _InventoryItem:
+        obj_type, name = item
+        return self.data.setdefault(obj_type, {})[name]
+
+    def __setitem__(self, item: tuple[str, str], value: _InventoryItem) -> None:
+        obj_type, name = item
+        self.data.setdefault(obj_type, {})[name] = value
+
+
+
+
+
+
+class _InventoryItem:
+    __slots__ = 'project_name', 'project_version', 'uri', 'display_name'
+
+    project_name: str
+    project_version: str
+    uri: str
+    display_name: str
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def __repr__(self) -> str:
+        return (
+            '_InventoryItem('
+            f'project_name={self.project_name!r}, '
+            f'project_version={self.project_version!r}, '
+            f'uri={self.uri!r}, '
+            f'display_name={self.display_name!r}'
+            ')'
+        )
+
+
+
+
+
+
+
+
+
+
+
+    def __hash__(self) -> int:
+        return hash((
+            self.project_name,
+            self.project_version,
+            self.uri,
+            self.display_name,
+        ))
+
+    def __setattr__(self, key: str, value: object) -> NoReturn:
+        msg = '_InventoryItem is immutable'
+        raise AttributeError(msg)
+
+    def __delattr__(self, key: str) -> NoReturn:
+        msg = '_InventoryItem is immutable'
+        raise AttributeError(msg)
+
+
+
+
+    def __setstate__(self, state: tuple[str, str, str, str]) -> None:
+        project_name, project_version, uri, display_name = state
+        object.__setattr__(self, 'project_name', project_name)
+        object.__setattr__(self, 'project_version', project_version)
+        object.__setattr__(self, 'uri', uri)
+        object.__setattr__(self, 'display_name', display_name)
+
+    def __getitem__(self, key: int | slice) -> str | tuple[str, ...]:
+        warnings.warn(
+            'The tuple interface for _InventoryItem objects is deprecated.',
+            RemovedInSphinx10Warning,
+            stacklevel=2,
+        )
+        tpl = self.project_name, self.project_version, self.uri, self.display_name
+        return tpl[key]
+
+    def __iter__(self) -> Iterator[str]:
+        warnings.warn(
+            'The iter() interface for _InventoryItem objects is deprecated.',
+            RemovedInSphinx10Warning,
+            stacklevel=2,
+        )
+        tpl = self.project_name, self.project_version, self.uri, self.display_name
+        return iter(tpl)
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Check equality between two _InventoryItem instances.
+
+        This method implements the equality comparison operator for _InventoryItem objects.
+        Two _InventoryItem instances are considered equal if and only if all their
+        corresponding attributes are equal: project_name, project_version, uri, and
+        display_name.
+
+        Parameters
+        ----------
+        other : object
+            The object to compare with this _InventoryItem instance. Can be any object,
+            but equality will only return True if it's another _InventoryItem with
+            matching attributes.
+
+        Returns
+        -------
+        bool or NotImplemented
+            True if both objects are _InventoryItem instances with identical attribute
+            values, False if they are _InventoryItem instances with different attribute
+            values, or NotImplemented if the other object is not an _InventoryItem
+            instance (allowing Python to try the reverse comparison).
+
+        Notes
+        -----
+        This method follows Python's equality protocol by returning NotImplemented
+        when comparing with objects of different types, rather than False. This allows
+        Python's comparison machinery to attempt the reverse comparison (other.__eq__(self))
+        if available.
+
+        All four stored attributes must be equal for the objects to compare equal.
+        """
+        raise NotImplementedError
+
+    def __getstate__(self) -> tuple[str, str, str, str]:
+        """
+        Get the state of the inventory item for pickling.
+
+        This method is part of Python's pickle protocol and returns a tuple containing
+        all the essential data needed to reconstruct the _InventoryItem object during
+        unpickling. Since _InventoryItem is an immutable object with __slots__, this
+        method provides the necessary state information for serialization.
+
+        Returns:
+            tuple[str, str, str, str]: A tuple containing the four core attributes of
+                the inventory item in the following order:
+                - project_name: The name of the project this item belongs to
+                - project_version: The version of the project
+                - uri: The URI/URL where this item can be found
+                - display_name: The display name for this item
+
+        Notes:
+            This method is automatically called by Python's pickle module when
+            serializing _InventoryItem objects. The returned tuple is used by
+            __setstate__ to reconstruct the object during deserialization.
+
+            The order of elements in the returned tuple must match the expected
+            order in __setstate__ for proper reconstruction.
+        """
+        raise NotImplementedError
+
+    def __init__(
+        self,
+        *,
+        project_name: str,
+        project_version: str,
+        uri: str,
+        display_name: str,
+    ) -> None:
+        """
+        Initialize an immutable inventory item with project and reference information.
+
+        This constructor creates a new _InventoryItem instance that represents a single
+        documentation object reference in a Sphinx inventory. The item stores metadata
+        about the object including its source project, version, URI location, and
+        display name.
+
+        Parameters
+        ----------
+        project_name : str
+            The name of the project that contains this inventory item. This is
+            typically the project name from the Sphinx configuration.
+        project_version : str
+            The version string of the project that contains this inventory item.
+            This corresponds to the project version from the Sphinx configuration.
+        uri : str
+            The URI stored for this item. It may be absolute or relative and may
+            include an anchor fragment.
+        display_name : str
+            The display name for this inventory item. Use '-' if the display name
+            is the same as the object name. This is used for presentation purposes
+            when referencing the object.
+
+        Notes
+        -----
+        All parameters must be provided as keyword arguments only. The created
+        _InventoryItem instance is immutable - attempting to modify any attributes
+        after creation will raise an AttributeError.
+
+        The object uses slots and is immutable after construction.
+        """
+        raise NotImplementedError

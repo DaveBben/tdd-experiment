@@ -1,0 +1,31 @@
+{
+ "task": "pydantic__pydantic.e1dcaf9e.test_experimental_arguments_schema.00dc2dd4.lv1",
+ "image": "libercoders/featurebench-specs_pydantic-instance_78693714@sha256:755c424c73170faf66d88006022ed2733f8e269446f330f301d762b0d0ab7d6b",
+ "test_cmd": "pytest -rA -v --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "        10 passed"
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "         3 xfailed"
+ },
+ "mutant_pool": 171,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "         3 xfailed"
+ },
+ "leak_lines": 20,
+ "leak_hits": {
+  "/testbed/pydantic/fields.py": {
+   "lines": 1,
+   "tracked": true
+  }
+ },
+ "keep": false
+}

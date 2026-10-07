@@ -1,0 +1,26 @@
+{
+ "task": "scikit-learn__scikit-learn.5741bac9.test_public_functions.28421aef.lv1",
+ "image": "libercoders/featurebench-specs_scikit_learn-instance_d734ea34@sha256:a9bd4207ee63bfdc8e96f99b0867c6248c3bf2700fdc4deb2442d316ce6a3ade",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================= 218 passed in 0.68s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 788 passed, 35 skipped in 5.52s ========================"
+ },
+ "mutant_pool": 303,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "======================= 788 passed, 35 skipped in 5.82s ========================"
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

@@ -1,0 +1,1006 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_formats.05080a4e.lv1",
+ "pool": 1595,
+ "mutants": [
+  {
+   "path": "pandas/core/arrays/base.py",
+   "line": 1959,
+   "op": "constant",
+   "start": 65045,
+   "end": 65050,
+   "old": "False",
+   "new": "(True)",
+   "id": 0
+  },
+  {
+   "path": "pandas/core/dtypes/astype.py",
+   "line": 126,
+   "op": "statement",
+   "start": 3635,
+   "end": 3656,
+   "old": "raise ValueError(msg)",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/core/dtypes/astype.py",
+   "line": 147,
+   "op": "boolean",
+   "start": 4288,
+   "end": 4311,
+   "old": "not (values >= 0).all()",
+   "new": "((values >= 0).all())",
+   "id": 2
+  },
+  {
+   "path": "pandas/core/dtypes/astype.py",
+   "line": 119,
+   "op": "return",
+   "start": 3390,
+   "end": 3435,
+   "old": "return tda.astype(dtype, copy=False)._ndarray",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7918,
+   "op": "return",
+   "start": 267866,
+   "end": 267876,
+   "old": "return res",
+   "new": "return None",
+   "id": 4
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7902,
+   "op": "constant",
+   "start": 267202,
+   "end": 267207,
+   "old": "False",
+   "new": "(True)",
+   "id": 5
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7936,
+   "op": "boolean",
+   "start": 268544,
+   "end": 268583,
+   "old": "float_format is None and decimal == \".\"",
+   "new": "(float_format is None or decimal == '.')",
+   "id": 6
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7936,
+   "op": "comparison",
+   "start": 268569,
+   "end": 268583,
+   "old": "decimal == \".\"",
+   "new": "(decimal != '.')",
+   "id": 7
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7973,
+   "op": "boolean",
+   "start": 269601,
+   "end": 269612,
+   "old": "not quoting",
+   "new": "(quoting)",
+   "id": 8
+  },
+  {
+   "path": "pandas/core/indexes/base.py",
+   "line": 7942,
+   "op": "constant",
+   "start": 268756,
+   "end": 268764,
+   "old": "\"object\"",
+   "new": "('XX')",
+   "id": 9
+  },
+  {
+   "path": "pandas/core/indexes/multi.py",
+   "line": 4357,
+   "op": "return",
+   "start": 153420,
+   "end": 153446,
+   "old": "return f\"{dtype.na_value}\"",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "pandas/core/indexes/multi.py",
+   "line": 4331,
+   "op": "arithmetic",
+   "start": 152725,
+   "end": 152734,
+   "old": "start + 1",
+   "new": "(start - 1)",
+   "id": 11
+  },
+  {
+   "path": "pandas/io/formats/console.py",
+   "line": 91,
+   "op": "return",
+   "start": 2666,
+   "end": 2703,
+   "old": "return \"zmq\" in str(type(ip)).lower()",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 378,
+   "op": "return",
+   "start": 11157,
+   "end": 11490,
+   "old": "return {\n        \"max_rows\": get_option(\"display.max_rows\"),\n        \"min_rows\": get_option(\"display.min_rows\"),\n        \"max_cols\": get_option(\"display.max_columns\"),\n        \"max_colwidth\": get_option(\"display.max_colwidth\"),\n        \"show_dimensions\": get_option(\"display.show_dimensions\"),\n        \"line_width\": line_width,\n    }",
+   "new": "return None",
+   "id": 13
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 524,
+   "op": "return",
+   "start": 15950,
+   "end": 16021,
+   "old": "return all((self.has_column_names, self.show_index_names, self.header))",
+   "new": "return None",
+   "id": 14
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 614,
+   "op": "return",
+   "start": 19195,
+   "end": 19233,
+   "old": "return self._adjust_max_rows(max_rows)",
+   "new": "return None",
+   "id": 15
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 808,
+   "op": "statement",
+   "start": 26267,
+   "end": 26331,
+   "old": "col_space = {k: cast(int, v) for k, v in self.col_space.items()}",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1261,
+   "op": "statement",
+   "start": 41303,
+   "end": 41337,
+   "old": "leading_space = self.leading_space",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1280,
+   "op": "return",
+   "start": 42046,
+   "end": 42063,
+   "old": "return fmt_values",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1481,
+   "op": "return",
+   "start": 49837,
+   "end": 49860,
+   "old": "return formatted_values",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1821,
+   "op": "constant",
+   "start": 60003,
+   "end": 60006,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 20
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1842,
+   "op": "statement",
+   "start": 60687,
+   "end": 60745,
+   "old": "numbers = [x for x in values if is_number_with_decimal(x)]",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1843,
+   "op": "return",
+   "start": 60754,
+   "end": 60819,
+   "old": "return len(numbers) > 0 and all(x.endswith(\"0\") for x in numbers)",
+   "new": "return None",
+   "id": 22
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 411,
+   "op": "constant",
+   "start": 12301,
+   "end": 12305,
+   "old": "True",
+   "new": "(False)",
+   "id": 23
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 550,
+   "op": "return",
+   "start": 16907,
+   "end": 16953,
+   "old": "return get_option(\"display.colheader_justify\")",
+   "new": "return None",
+   "id": 24
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 556,
+   "op": "statement",
+   "start": 17106,
+   "end": 17134,
+   "old": "cols = ensure_index(columns)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 659,
+   "op": "statement",
+   "start": 20734,
+   "end": 20763,
+   "old": "self._truncate_horizontally()",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1289,
+   "op": "boolean",
+   "start": 42324,
+   "end": 42380,
+   "old": "self.float_format is not None and self.formatter is None",
+   "new": "(self.float_format is not None or self.formatter is None)",
+   "id": 27
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 408,
+   "op": "constant",
+   "start": 12251,
+   "end": 12269,
+   "old": "\"display.min_rows\"",
+   "new": "('XX')",
+   "id": 28
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 490,
+   "op": "comparison",
+   "start": 14865,
+   "end": 14893,
+   "old": "self.show_dimensions is True",
+   "new": "(self.show_dimensions is not True)",
+   "id": 29
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 720,
+   "op": "statement",
+   "start": 22958,
+   "end": 22984,
+   "old": "strcols.append(fmt_values)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 811,
+   "op": "constant",
+   "start": 26426,
+   "end": 26437,
+   "old": "\"__index__\"",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1226,
+   "op": "statement",
+   "start": 40019,
+   "end": 40054,
+   "old": "formatter = self.fallback_formatter",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1464,
+   "op": "constant",
+   "start": 49132,
+   "end": 49137,
+   "old": "False",
+   "new": "(True)",
+   "id": 33
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1267,
+   "op": "boolean",
+   "start": 41498,
+   "end": 41548,
+   "old": "not is_float_type[i] or self.formatter is not None",
+   "new": "(not is_float_type[i] and self.formatter is not None)",
+   "id": 34
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1449,
+   "op": "arithmetic",
+   "start": 48614,
+   "end": 48639,
+   "old": "self.float_format % value",
+   "new": "(self.float_format * value)",
+   "id": 35
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 632,
+   "op": "constant",
+   "start": 19893,
+   "end": 19894,
+   "old": "0",
+   "new": "(1)",
+   "id": 36
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 786,
+   "op": "constant",
+   "start": 25417,
+   "end": 25422,
+   "old": "False",
+   "new": "(True)",
+   "id": 37
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1385,
+   "op": "boolean",
+   "start": 45707,
+   "end": 45718,
+   "old": "not re_isna",
+   "new": "(re_isna)",
+   "id": 38
+  },
+  {
+   "path": "pandas/io/formats/format.py",
+   "line": 1387,
+   "op": "boolean",
+   "start": 45814,
+   "end": 45825,
+   "old": "not re_isna",
+   "new": "(re_isna)",
+   "id": 39
+  },
+  {
+   "path": "pandas/io/formats/printing.py",
+   "line": 122,
+   "op": "boolean",
+   "start": 3403,
+   "end": 3459,
+   "old": "max_seq_items or get_option(\"max_seq_items\") or len(seq)",
+   "new": "(max_seq_items and get_option('max_seq_items') and len(seq))",
+   "id": 40
+  },
+  {
+   "path": "pandas/io/formats/printing.py",
+   "line": 129,
+   "op": "comparison",
+   "start": 3623,
+   "end": 3637,
+   "old": "i >= max_items",
+   "new": "(i > max_items)",
+   "id": 41
+  },
+  {
+   "path": "pandas/io/formats/string.py",
+   "line": 24,
+   "op": "statement",
+   "start": 551,
+   "end": 565,
+   "old": "self.fmt = fmt",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "pandas/io/formats/string.py",
+   "line": 54,
+   "op": "return",
+   "start": 1476,
+   "end": 1527,
+   "old": "return self._fit_strcols_to_terminal_width(strcols)",
+   "new": "return None",
+   "id": 43
+  },
+  {
+   "path": "pandas/io/formats/string.py",
+   "line": 163,
+   "op": "constant",
+   "start": 5256,
+   "end": 5257,
+   "old": "1",
+   "new": "(2)",
+   "id": 44
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1219,
+   "op": "statement",
+   "start": 50105,
+   "end": 50181,
+   "old": "multicol_align = multicol_align or get_option(\"styler.latex.multicol_align\")",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1834,
+   "op": "statement",
+   "start": 71790,
+   "end": 71815,
+   "old": "val = getattr(self, attr)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1158,
+   "op": "statement",
+   "start": 47711,
+   "end": 47748,
+   "old": "self.data.columns = _original_columns",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1180,
+   "op": "statement",
+   "start": 48574,
+   "end": 48692,
+   "old": "raise ValueError(\n                    \"`position_float` cannot be used in 'longtable' `environment`\"\n                )",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1183,
+   "op": "comparison",
+   "start": 48708,
+   "end": 48772,
+   "old": "position_float not in [\"raggedright\", \"raggedleft\", \"centering\"]",
+   "new": "(position_float in ['raggedright', 'raggedleft', 'centering'])",
+   "id": 49
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1825,
+   "op": "constant",
+   "start": 71595,
+   "end": 71602,
+   "old": "\"_todo\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1826,
+   "op": "constant",
+   "start": 71616,
+   "end": 71630,
+   "old": "\"table_styles\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 2780,
+   "op": "boolean",
+   "start": 107322,
+   "end": 107335,
+   "old": "not overwrite",
+   "new": "(overwrite)",
+   "id": 52
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 287,
+   "op": "constant",
+   "start": 9498,
+   "end": 9523,
+   "old": "\"styler.format.thousands\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1220,
+   "op": "constant",
+   "start": 50236,
+   "end": 50265,
+   "old": "\"styler.latex.multirow_align\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1181,
+   "op": "constant",
+   "start": 48612,
+   "end": 48674,
+   "old": "\"`position_float` cannot be used in 'longtable' `environment`\"",
+   "new": "('XX')",
+   "id": 55
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1174,
+   "op": "constant",
+   "start": 48401,
+   "end": 48411,
+   "old": "\"position\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1190,
+   "op": "constant",
+   "start": 49049,
+   "end": 49059,
+   "old": "\"selector\"",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1190,
+   "op": "constant",
+   "start": 49079,
+   "end": 49086,
+   "old": "\"props\"",
+   "new": "('XX')",
+   "id": 58
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1198,
+   "op": "constant",
+   "start": 49333,
+   "end": 49343,
+   "old": "\"selector\"",
+   "new": "('XX')",
+   "id": 59
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 1207,
+   "op": "constant",
+   "start": 49665,
+   "end": 49672,
+   "old": "\"label\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "pandas/io/formats/style.py",
+   "line": 2764,
+   "op": "arithmetic",
+   "start": 106760,
+   "end": 106795,
+   "old": "str(s[\"selector\"]) + idf + str(idx)",
+   "new": "(str(s['selector']) + idf - str(idx))",
+   "id": 61
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 278,
+   "op": "statement",
+   "start": 9618,
+   "end": 9640,
+   "old": "self.ctx_index.clear()",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 494,
+   "op": "statement",
+   "start": 17493,
+   "end": 17599,
+   "old": "display_value = (\n            self._display_funcs_column_names[r](value) if is_display else None\n        )",
+   "new": "pass",
+   "id": 63
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 623,
+   "op": "return",
+   "start": 22025,
+   "end": 22059,
+   "old": "return index_names + column_blanks",
+   "new": "return None",
+   "id": 64
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 831,
+   "op": "statement",
+   "start": 28760,
+   "end": 28775,
+   "old": "data: list = []",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1247,
+   "op": "return",
+   "start": 46114,
+   "end": 46125,
+   "old": "return self",
+   "new": "return None",
+   "id": 66
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 512,
+   "op": "constant",
+   "start": 18086,
+   "end": 18087,
+   "old": "0",
+   "new": "(1)",
+   "id": 67
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 703,
+   "op": "comparison",
+   "start": 24615,
+   "end": 24626,
+   "old": "count > max",
+   "new": "(count >= max)",
+   "id": 68
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 795,
+   "op": "statement",
+   "start": 27395,
+   "end": 27510,
+   "old": "header_element_visible = (\n                _is_visible(r, c, idx_lengths) and not self.hide_index_[c]\n            )",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 832,
+   "op": "constant",
+   "start": 28809,
+   "end": 28810,
+   "old": "0",
+   "new": "(1)",
+   "id": 70
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 965,
+   "op": "statement",
+   "start": 34196,
+   "end": 34319,
+   "old": "visible_index_levels: list[int] = [\n                i for i in range(index_levels) if not self.hide_index_[i]\n            ]",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1575,
+   "op": "statement",
+   "start": 59149,
+   "end": 59317,
+   "old": "raise ValueError(\n                \"``labels`` must be of length equal to the number of \"\n                f\"visible labels along ``axis`` ({visible_len}).\"\n            )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1691,
+   "op": "comparison",
+   "start": 63566,
+   "end": 63575,
+   "old": "axis == 0",
+   "new": "(axis != 0)",
+   "id": 73
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1709,
+   "op": "statement",
+   "start": 64132,
+   "end": 64154,
+   "old": "display_funcs_.clear()",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 525,
+   "op": "statement",
+   "start": 18597,
+   "end": 18602,
+   "old": "break",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 544,
+   "op": "statement",
+   "start": 19209,
+   "end": 19278,
+   "old": "header_element[\"id\"] = f\"{self.css['level']}{r}_{self.css['col']}{c}\"",
+   "new": "pass",
+   "id": 76
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 743,
+   "op": "statement",
+   "start": 25813,
+   "end": 25835,
+   "old": "visible_col_count += 1",
+   "new": "pass",
+   "id": 77
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 867,
+   "op": "statement",
+   "start": 30163,
+   "end": 30295,
+   "old": "self.cellstyle_map[tuple(self.ctx[r, c])].append(\n                    f\"{self.css['row']}{r}_{self.css['col']}{c}\"\n                )",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 943,
+   "op": "constant",
+   "start": 33317,
+   "end": 33323,
+   "old": "\"body\"",
+   "new": "('XX')",
+   "id": 79
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1691,
+   "op": "constant",
+   "start": 63574,
+   "end": 63575,
+   "old": "0",
+   "new": "(1)",
+   "id": 80
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 2006,
+   "op": "statement",
+   "start": 73676,
+   "end": 73785,
+   "old": "precision = (\n            get_option(\"styler.format.precision\") if precision is None else precision\n        )",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 851,
+   "op": "arithmetic",
+   "start": 29458,
+   "end": 29487,
+   "old": "\" \" + self.cell_context[r, c]",
+   "new": "(' ' - self.cell_context[r, c])",
+   "id": 82
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 950,
+   "op": "constant",
+   "start": 33578,
+   "end": 33589,
+   "old": "\"all;index\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 952,
+   "op": "constant",
+   "start": 33633,
+   "end": 33650,
+   "old": "\"skip-last;index\"",
+   "new": "('XX')",
+   "id": 84
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 972,
+   "op": "statement",
+   "start": 34570,
+   "end": 34618,
+   "old": "idx_len = d[\"index_lengths\"].get((lvl, r), None)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1219,
+   "op": "comparison",
+   "start": 45145,
+   "end": 45163,
+   "old": "hyperlinks is None",
+   "new": "(hyperlinks is not None)",
+   "id": 86
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1403,
+   "op": "comparison",
+   "start": 52799,
+   "end": 52812,
+   "old": "level is None",
+   "new": "(level is not None)",
+   "id": 87
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1408,
+   "op": "comparison",
+   "start": 52964,
+   "end": 52978,
+   "old": "escape is None",
+   "new": "(escape is not None)",
+   "id": 88
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1405,
+   "op": "constant",
+   "start": 52876,
+   "end": 52879,
+   "old": "\".\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1851,
+   "op": "constant",
+   "start": 68184,
+   "end": 68185,
+   "old": "1",
+   "new": "(2)",
+   "id": 90
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1861,
+   "op": "statement",
+   "start": 68688,
+   "end": 68716,
+   "old": "lengths[(i, last_label)] = 0",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 959,
+   "op": "constant",
+   "start": 33979,
+   "end": 33985,
+   "old": "\"body\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1861,
+   "op": "constant",
+   "start": 68715,
+   "end": 68716,
+   "old": "0",
+   "new": "(1)",
+   "id": 93
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1862,
+   "op": "comparison",
+   "start": 68734,
+   "end": 68758,
+   "old": "j not in hidden_elements",
+   "new": "(j in hidden_elements)",
+   "id": 94
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 2007,
+   "op": "constant",
+   "start": 73713,
+   "end": 73738,
+   "old": "\"styler.format.precision\"",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 970,
+   "op": "constant",
+   "start": 34494,
+   "end": 34505,
+   "old": "\"skip-last\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1870,
+   "op": "statement",
+   "start": 69208,
+   "end": 69236,
+   "old": "lengths[(i, last_label)] = 1",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 1867,
+   "op": "constant",
+   "start": 69062,
+   "end": 69063,
+   "old": "0",
+   "new": "(1)",
+   "id": 98
+  },
+  {
+   "path": "pandas/io/formats/style_render.py",
+   "line": 974,
+   "op": "constant",
+   "start": 34720,
+   "end": 34728,
+   "old": "\"clines\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

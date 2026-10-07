@@ -1,0 +1,26 @@
+{
+ "task": "Netflix__metaflow.b390a8d4.test_stub_generator.7bf08c98.lv1",
+ "image": "libercoders/featurebench-specs_metaflow-instance_87a4ffa7@sha256:b319caebd869643983a3302839c3604cd885b4b2fe6dafb79686564bfcd52654",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=10",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 31 passed in 0.46s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 14 passed in 0.29s =============================="
+ },
+ "mutant_pool": 453,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 14 passed in 0.28s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}

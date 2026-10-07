@@ -1,0 +1,1006 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_numpy_dataset.1beaad57.lv1",
+ "pool": 321,
+ "mutants": [
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 22,
+   "op": "statement",
+   "start": 773,
+   "end": 794,
+   "old": "self._source = source",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 47,
+   "op": "return",
+   "start": 1722,
+   "end": 1910,
+   "old": "return {\n            \"name\": self.name,\n            \"digest\": self.digest,\n            \"source\": self.source.to_json(),\n            \"source_type\": self.source._get_source_type(),\n        }",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 75,
+   "op": "comparison",
+   "start": 2565,
+   "end": 2587,
+   "old": "self._name is not None",
+   "new": "(self._name is None)",
+   "id": 2
+  },
+  {
+   "path": "mlflow/data/dataset.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1809,
+   "end": 1817,
+   "old": "\"source\"",
+   "new": "('XX')",
+   "id": 3
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3685,
+   "end": 3879,
+   "old": "raise MlflowException(\n            f\"Could not find a source information resolver for the specified\"\n            f\" dataset source: {raw_source}.\",\n            RESOURCE_DOES_NOT_EXIST,\n        )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 74,
+   "op": "comparison",
+   "start": 2791,
+   "end": 2816,
+   "old": "len(matching_sources) > 1",
+   "new": "(len(matching_sources) >= 1)",
+   "id": 5
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 75,
+   "op": "statement",
+   "start": 2830,
+   "end": 2914,
+   "old": "source_class_names_str = \", \".join([source.__name__ for source in matching_sources])",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 76,
+   "op": "statement",
+   "start": 2927,
+   "end": 3211,
+   "old": "warnings.warn(\n                f\"The specified dataset source can be interpreted in multiple ways:\"\n                f\" {source_class_names_str}. MLflow will assume that this is a\"\n                f\" {matching_sources[-1].__name__} source.\",\n                stacklevel=2,\n            )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 85,
+   "op": "return",
+   "start": 3305,
+   "end": 3348,
+   "old": "return matching_source._resolve(raw_source)",
+   "new": "return None",
+   "id": 8
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 59,
+   "op": "boolean",
+   "start": 2217,
+   "end": 2328,
+   "old": "not any(\n                issubclass(source, candidate_src) for candidate_src in candidate_sources\n            )",
+   "new": "(any((issubclass(source, candidate_src) for candidate_src in candidate_sources)))",
+   "id": 9
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 65,
+   "op": "statement",
+   "start": 2444,
+   "end": 2475,
+   "old": "matching_sources.append(source)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 67,
+   "op": "statement",
+   "start": 2527,
+   "end": 2753,
+   "old": "warnings.warn(\n                    f\"Failed to determine whether {source.__name__} can resolve source\"\n                    f\" information for '{raw_source}'. Exception: {e}\",\n                    stacklevel=2,\n                )",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 72,
+   "op": "statement",
+   "start": 2770,
+   "end": 2778,
+   "old": "continue",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 92,
+   "op": "statement",
+   "start": 3667,
+   "end": 3675,
+   "old": "continue",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 80,
+   "op": "constant",
+   "start": 3195,
+   "end": 3196,
+   "old": "2",
+   "new": "(3)",
+   "id": 14
+  },
+  {
+   "path": "mlflow/data/dataset_source_registry.py",
+   "line": 90,
+   "op": "constant",
+   "start": 3630,
+   "end": 3631,
+   "old": "2",
+   "new": "(3)",
+   "id": 15
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 85,
+   "op": "return",
+   "start": 2288,
+   "end": 2339,
+   "old": "return get_normalized_md5_digest(hashable_elements)",
+   "new": "return None",
+   "id": 16
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 108,
+   "op": "return",
+   "start": 2910,
+   "end": 2936,
+   "old": "return md5.hexdigest()[:8]",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 98,
+   "op": "boolean",
+   "start": 2636,
+   "end": 2648,
+   "old": "not elements",
+   "new": "(elements)",
+   "id": 18
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 99,
+   "op": "statement",
+   "start": 2658,
+   "end": 2801,
+   "old": "raise MlflowException(\n            \"No hashable elements were provided for md5 digest creation\",\n            INVALID_PARAMETER_VALUE,\n        )",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 78,
+   "op": "comparison",
+   "start": 2132,
+   "end": 2144,
+   "old": "item is None",
+   "new": "(item is not None)",
+   "id": 20
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 81,
+   "op": "statement",
+   "start": 2214,
+   "end": 2239,
+   "old": "hash_dict_of_arrays(item)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "mlflow/data/digest_utils.py",
+   "line": 100,
+   "op": "constant",
+   "start": 2693,
+   "end": 2753,
+   "old": "\"No hashable elements were provided for md5 digest creation\"",
+   "new": "('XX')",
+   "id": 22
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 29,
+   "op": "return",
+   "start": 717,
+   "end": 762,
+   "old": "return struct.pack(f\">{array.size}Q\", *array)",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 46,
+   "op": "statement",
+   "start": 1198,
+   "end": 1220,
+   "old": "elm = nd_array.item(0)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 27,
+   "op": "comparison",
+   "start": 594,
+   "end": 615,
+   "old": "len(array.shape) == 1",
+   "new": "(len(array.shape) != 1)",
+   "id": 25
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 34,
+   "op": "return",
+   "start": 839,
+   "end": 860,
+   "old": "return len(data) == 0",
+   "new": "return None",
+   "id": 26
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 167,
+   "op": "comparison",
+   "start": 5953,
+   "end": 6011,
+   "old": "len(data) < EvaluationDataset.NUM_SAMPLE_ROWS_FOR_HASH * 2",
+   "new": "(len(data) <= EvaluationDataset.NUM_SAMPLE_ROWS_FOR_HASH * 2)",
+   "id": 27
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 272,
+   "op": "statement",
+   "start": 10111,
+   "end": 10137,
+   "old": "self._spark_df_type = None",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 46,
+   "op": "constant",
+   "start": 1218,
+   "end": 1219,
+   "old": "0",
+   "new": "(1)",
+   "id": 29
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 116,
+   "op": "comparison",
+   "start": 3647,
+   "end": 3671,
+   "old": "\"pyspark\" in sys.modules",
+   "new": "('pyspark' not in sys.modules)",
+   "id": 30
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 143,
+   "op": "statement",
+   "start": 4919,
+   "end": 4964,
+   "old": "hashable = np.array(str(val) for val in data)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 167,
+   "op": "arithmetic",
+   "start": 5965,
+   "end": 6011,
+   "old": "EvaluationDataset.NUM_SAMPLE_ROWS_FOR_HASH * 2",
+   "new": "(EvaluationDataset.NUM_SAMPLE_ROWS_FOR_HASH / 2)",
+   "id": 32
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 257,
+   "op": "boolean",
+   "start": 9490,
+   "end": 9522,
+   "old": "name is not None and '\"' in name",
+   "new": "(name is not None or '\"' in name)",
+   "id": 33
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 258,
+   "op": "statement",
+   "start": 9536,
+   "end": 9714,
+   "old": "raise MlflowException(\n                message=f'Dataset name cannot include a double quote (\") but got {name}',\n                error_code=INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 275,
+   "op": "constant",
+   "start": 10233,
+   "end": 10238,
+   "old": "False",
+   "new": "(True)",
+   "id": 35
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 293,
+   "op": "boolean",
+   "start": 10921,
+   "end": 11001,
+   "old": "feature_names is not None and len(set(feature_names)) < len(list(feature_names))",
+   "new": "(feature_names is not None or len(set(feature_names)) < len(list(feature_names)))",
+   "id": 36
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 307,
+   "op": "statement",
+   "start": 11501,
+   "end": 11525,
+   "old": "self._has_targets = True",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 34,
+   "op": "constant",
+   "start": 859,
+   "end": 860,
+   "old": "0",
+   "new": "(1)",
+   "id": 38
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 50,
+   "op": "constant",
+   "start": 1351,
+   "end": 1355,
+   "old": "True",
+   "new": "(False)",
+   "id": 39
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 130,
+   "op": "statement",
+   "start": 4229,
+   "end": 4262,
+   "old": "pd.util.hash_array(np.array([v]))",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 148,
+   "op": "statement",
+   "start": 5244,
+   "end": 5278,
+   "old": "hashable = np.array(data.tolist())",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 167,
+   "op": "constant",
+   "start": 6010,
+   "end": 6011,
+   "old": "2",
+   "new": "(3)",
+   "id": 42
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 287,
+   "op": "statement",
+   "start": 10689,
+   "end": 10731,
+   "old": "spark_df_type = get_spark_dataframe_type()",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 288,
+   "op": "statement",
+   "start": 10748,
+   "end": 10811,
+   "old": "self._supported_dataframe_types = (pd.DataFrame, spark_df_type)",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 289,
+   "op": "statement",
+   "start": 10828,
+   "end": 10863,
+   "old": "self._spark_df_type = spark_df_type",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 293,
+   "op": "comparison",
+   "start": 10951,
+   "end": 11001,
+   "old": "len(set(feature_names)) < len(list(feature_names))",
+   "new": "(len(set(feature_names)) <= len(list(feature_names)))",
+   "id": 46
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 307,
+   "op": "constant",
+   "start": 11521,
+   "end": 11525,
+   "old": "True",
+   "new": "(False)",
+   "id": 47
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 353,
+   "op": "statement",
+   "start": 13491,
+   "end": 13526,
+   "old": "feature_names = list(feature_names)",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 36,
+   "op": "constant",
+   "start": 928,
+   "end": 929,
+   "old": "0",
+   "new": "(1)",
+   "id": 49
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 135,
+   "op": "constant",
+   "start": 4451,
+   "end": 4458,
+   "old": "\"2.1.0\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 140,
+   "op": "constant",
+   "start": 4739,
+   "end": 4740,
+   "old": "0",
+   "new": "(1)",
+   "id": 51
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 151,
+   "op": "return",
+   "start": 5374,
+   "end": 5409,
+   "old": "return _hash_ndarray_as_bytes(data)",
+   "new": "return None",
+   "id": 52
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 257,
+   "op": "constant",
+   "start": 9511,
+   "end": 9514,
+   "old": "'\"'",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 284,
+   "op": "constant",
+   "start": 10568,
+   "end": 10577,
+   "old": "\"pyspark\"",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 343,
+   "op": "comparison",
+   "start": 13076,
+   "end": 13126,
+   "old": "len(self._features_data) != len(self._labels_data)",
+   "new": "(len(self._features_data) == len(self._labels_data))",
+   "id": 55
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 381,
+   "op": "statement",
+   "start": 15119,
+   "end": 15188,
+   "old": "data = data.limit(EvaluationDataset.SPARK_DATAFRAME_LIMIT).toPandas()",
+   "new": "pass",
+   "id": 56
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 389,
+   "op": "statement",
+   "start": 15449,
+   "end": 15485,
+   "old": "self._predictions_name = predictions",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 391,
+   "op": "comparison",
+   "start": 15502,
+   "end": 15527,
+   "old": "feature_names is not None",
+   "new": "(feature_names is None)",
+   "id": 58
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 393,
+   "op": "statement",
+   "start": 15609,
+   "end": 15644,
+   "old": "self._feature_names = feature_names",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 421,
+   "op": "constant",
+   "start": 16897,
+   "end": 16904,
+   "old": "\"UTF-8\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 140,
+   "op": "constant",
+   "start": 4761,
+   "end": 4762,
+   "old": "0",
+   "new": "(1)",
+   "id": 61
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 295,
+   "op": "constant",
+   "start": 11062,
+   "end": 11136,
+   "old": "\"`feature_names` argument must be a list containing unique feature names.\"",
+   "new": "('XX')",
+   "id": 62
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 374,
+   "op": "comparison",
+   "start": 14641,
+   "end": 14695,
+   "old": "data.count() > EvaluationDataset.SPARK_DATAFRAME_LIMIT",
+   "new": "(data.count() >= EvaluationDataset.SPARK_DATAFRAME_LIMIT)",
+   "id": 63
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 375,
+   "op": "statement",
+   "start": 14717,
+   "end": 15102,
+   "old": "_logger.warning(\n                        \"Specified Spark DataFrame is too large for model evaluation. Only \"\n                        f\"the first {EvaluationDataset.SPARK_DATAFRAME_LIMIT} rows will be used. \"\n                        \"If you want evaluate on the whole spark dataframe, please manually call \"\n                        \"`spark_dataframe.toPandas()`.\"\n                    )",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 401,
+   "op": "statement",
+   "start": 15883,
+   "end": 15953,
+   "old": "features_data = features_data.drop(predictions, axis=1, inplace=False)",
+   "new": "pass",
+   "id": 65
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 409,
+   "op": "constant",
+   "start": 16234,
+   "end": 16374,
+   "old": "\"The data argument must be a numpy array, a list or a Pandas DataFrame, or \"\n                \"spark DataFrame if pyspark package installed.\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 368,
+   "op": "constant",
+   "start": 14263,
+   "end": 14468,
+   "old": "\"If data is a Pandas DataFrame or Spark DataFrame, `targets` argument \"\n                    \"must be the name of the column which contains evaluation labels in the `data` \"\n                    \"dataframe.\"",
+   "new": "('XX')",
+   "id": 67
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 421,
+   "op": "constant",
+   "start": 16844,
+   "end": 16847,
+   "old": "\",\"",
+   "new": "('XX')",
+   "id": 68
+  },
+  {
+   "path": "mlflow/data/evaluation_dataset.py",
+   "line": 398,
+   "op": "constant",
+   "start": 15813,
+   "end": 15818,
+   "old": "False",
+   "new": "(True)",
+   "id": 69
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 76,
+   "op": "return",
+   "start": 2577,
+   "end": 2649,
+   "old": "return f\"features:\\n  {self.features!r}\\ntargets:\\n  {self.targets!r}\\n\"",
+   "new": "return None",
+   "id": 70
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 20,
+   "op": "statement",
+   "start": 655,
+   "end": 827,
+   "old": "raise MlflowException(\n                f\"targets must be either None or mlflow.types.Schema, got '{type(features)}'\",\n                INVALID_PARAMETER_VALUE,\n            )",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 63,
+   "op": "statement",
+   "start": 2187,
+   "end": 2237,
+   "old": "targets = Schema.from_json(schema_dict[\"targets\"])",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 64,
+   "op": "return",
+   "start": 2250,
+   "end": 2279,
+   "old": "return cls(features, targets)",
+   "new": "return None",
+   "id": 73
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 19,
+   "op": "comparison",
+   "start": 586,
+   "end": 605,
+   "old": "targets is not None",
+   "new": "(targets is None)",
+   "id": 74
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 19,
+   "op": "boolean",
+   "start": 610,
+   "end": 641,
+   "old": "not isinstance(targets, Schema)",
+   "new": "(isinstance(targets, Schema))",
+   "id": 75
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 36,
+   "op": "constant",
+   "start": 1135,
+   "end": 1154,
+   "old": "\"mlflow_tensorspec\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 62,
+   "op": "constant",
+   "start": 2110,
+   "end": 2119,
+   "old": "\"targets\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "mlflow/data/schema.py",
+   "line": 62,
+   "op": "constant",
+   "start": 2151,
+   "end": 2160,
+   "old": "\"targets\"",
+   "new": "('XX')",
+   "id": 78
+  },
+  {
+   "path": "mlflow/tracking/context/git_context.py",
+   "line": 13,
+   "op": "comparison",
+   "start": 368,
+   "end": 389,
+   "old": "main_file is not None",
+   "new": "(main_file is None)",
+   "id": 79
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 62,
+   "op": "comparison",
+   "start": 1967,
+   "end": 1997,
+   "old": "variable_dimension is not None",
+   "new": "(variable_dimension is None)",
+   "id": 80
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 85,
+   "op": "boolean",
+   "start": 2771,
+   "end": 2802,
+   "old": "not isinstance(dtype, np.dtype)",
+   "new": "(isinstance(dtype, np.dtype))",
+   "id": 81
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 86,
+   "op": "statement",
+   "start": 2812,
+   "end": 2930,
+   "old": "raise TypeError(\n            f\"Expected `type` to be instance of `{np.dtype}`, received `{dtype.__class__}`\"\n        )",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 324,
+   "op": "boolean",
+   "start": 11189,
+   "end": 11226,
+   "old": "isinstance(data, list) and data == []",
+   "new": "(isinstance(data, list) or data == [])",
+   "id": 83
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 325,
+   "op": "return",
+   "start": 11236,
+   "end": 11277,
+   "old": "return Schema([ColSpec(DataType.string)])",
+   "new": "return None",
+   "id": 84
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 328,
+   "op": "statement",
+   "start": 11369,
+   "end": 11405,
+   "old": "col_data_mapping = defaultdict(list)",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 337,
+   "op": "statement",
+   "start": 11751,
+   "end": 11965,
+   "old": "schema = Schema(\n            [\n                ColSpec(_infer_colspec_type(values).dtype, name=name, required=requiredness[name])\n                for name, values in col_data_mapping.items()\n            ]\n        )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 449,
+   "op": "boolean",
+   "start": 16109,
+   "end": 16228,
+   "old": "not schema.is_tensor_spec() and any(\n        t in (DataType.integer, DataType.long) for t in schema.input_types()\n    )",
+   "new": "(not schema.is_tensor_spec() or any((t in (DataType.integer, DataType.long) for t in schema.input_types())))",
+   "id": 87
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 64,
+   "op": "statement",
+   "start": 2024,
+   "end": 2083,
+   "old": "variable_input_data_shape = list(variable_input_data_shape)",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 92,
+   "op": "constant",
+   "start": 3029,
+   "end": 3034,
+   "old": "\"str\"",
+   "new": "('XX')",
+   "id": 89
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 331,
+   "op": "statement",
+   "start": 11486,
+   "end": 11515,
+   "old": "col_data_mapping[k].append(v)",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 361,
+   "op": "statement",
+   "start": 12686,
+   "end": 12999,
+   "old": "schema = Schema(\n                [\n                    ColSpec(\n                        _infer_colspec_type(value),\n                        name=name,\n                        required=_infer_required(value),\n                    )\n                    for name, value in data.items()\n                ]\n            )",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 453,
+   "op": "constant",
+   "start": 16265,
+   "end": 17056,
+   "old": "\"Hint: Inferred schema contains integer column(s). Integer columns in \"\n            \"Python cannot represent missing values. If your input data contains \"\n            \"missing values at inference time, it will be encoded as floats and will \"\n            \"cause a schema enforcement error. The best way to avoid this problem is \"\n            \"to infer the model schema based on a realistic data sample (training \"\n            \"dataset) that includes missing values. Alternatively, you can declare \"\n            \"integer columns as doubles (float64) whenever these columns may have \"\n            \"missing values. See `Handling Integers With Missing Values \"\n            \"<https://www.mlflow.org/docs/latest/models.html#\"\n            \"handling-integers-with-missing-values>`_ for more details.\"",
+   "new": "('XX')",
+   "id": 92
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 65,
+   "op": "constant",
+   "start": 2145,
+   "end": 2146,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 385,
+   "op": "statement",
+   "start": 13415,
+   "end": 13697,
+   "old": "schema = Schema(\n            [\n                ColSpec(\n                    type=_infer_pandas_column(data[col]),\n                    name=col,\n                    required=_infer_required(data[col]),\n                )\n                for col in data.columns\n            ]\n        )",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 450,
+   "op": "comparison",
+   "start": 16154,
+   "end": 16192,
+   "old": "t in (DataType.integer, DataType.long)",
+   "new": "(t not in (DataType.integer, DataType.long))",
+   "id": 95
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 335,
+   "op": "comparison",
+   "start": 11698,
+   "end": 11723,
+   "old": "item.get(col) is not None",
+   "new": "(item.get(col) is None)",
+   "id": 96
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 373,
+   "op": "constant",
+   "start": 13087,
+   "end": 13093,
+   "old": "\"name\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 397,
+   "op": "statement",
+   "start": 13765,
+   "end": 13883,
+   "old": "schema = Schema(\n            [TensorSpec(type=clean_tensor_type(data.dtype), shape=_get_tensor_shape(data))]\n        )",
+   "new": "pass",
+   "id": 98
+  },
+  {
+   "path": "mlflow/types/utils.py",
+   "line": 360,
+   "op": "constant",
+   "start": 12630,
+   "end": 12672,
+   "old": "\"The dictionary keys are not all strings.\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

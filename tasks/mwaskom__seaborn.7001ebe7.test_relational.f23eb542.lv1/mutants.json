@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_relational.f23eb542.lv1",
+ "pool": 465,
+ "mutants": [
+  {
+   "path": "seaborn/_base.py",
+   "line": 1741,
+   "op": "return",
+   "start": 65556,
+   "end": 65574,
+   "old": "return markers[:n]",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 74,
+   "op": "return",
+   "start": 2360,
+   "end": 2373,
+   "old": "return values",
+   "new": "return None",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 842,
+   "op": "statement",
+   "start": 30913,
+   "end": 30960,
+   "old": "mapping = SizeMapping(self, sizes, order, norm)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 847,
+   "op": "statement",
+   "start": 31128,
+   "end": 31153,
+   "old": "self._style_map = mapping",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1215,
+   "op": "statement",
+   "start": 46762,
+   "end": 46822,
+   "old": "common_kws = {} if common_kws is None else common_kws.copy()",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1216,
+   "op": "statement",
+   "start": 46831,
+   "end": 46897,
+   "old": "semantic_kws = {} if semantic_kws is None else semantic_kws.copy()",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1280,
+   "op": "statement",
+   "start": 49226,
+   "end": 49251,
+   "old": "self.legend_title = title",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1300,
+   "op": "statement",
+   "start": 49701,
+   "end": 49860,
+   "old": "brief = mapper.map_type == \"numeric\" and (\n            verbosity == \"brief\"\n            or (verbosity == \"auto\" and len(mapper.levels) > brief_ticks)\n        )",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 594,
+   "op": "statement",
+   "start": 20922,
+   "end": 20964,
+   "old": "lookup_table = dict(zip(levels, defaults))",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1207,
+   "op": "boolean",
+   "start": 46463,
+   "end": 46536,
+   "old": "isinstance(verbosity, str) and verbosity not in [\"auto\", \"brief\", \"full\"]",
+   "new": "(isinstance(verbosity, str) or verbosity not in ['auto', 'brief', 'full'])",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1251,
+   "op": "comparison",
+   "start": 48137,
+   "end": 48175,
+   "old": "common_kws.get(\"color\", False) is None",
+   "new": "(common_kws.get('color', False) is not None)",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1295,
+   "op": "constant",
+   "start": 49592,
+   "end": 49593,
+   "old": "6",
+   "new": "(7)",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1690,
+   "op": "statement",
+   "start": 64389,
+   "end": 64453,
+   "old": "spec = tuple(itertools.chain(*((seg, gap) for seg in segments)))",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1718,
+   "op": "constant",
+   "start": 65034,
+   "end": 65037,
+   "old": "\"P\"",
+   "new": "('XX')",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1723,
+   "op": "constant",
+   "start": 65118,
+   "end": 65121,
+   "old": "\"v\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1729,
+   "op": "arithmetic",
+   "start": 65246,
+   "end": 65263,
+   "old": "360 / (s + 1) / 2",
+   "new": "(360 / (s + 1) * 2)",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 64,
+   "op": "comparison",
+   "start": 2003,
+   "end": 2028,
+   "old": "len(values) > len(levels)",
+   "new": "(len(values) >= len(levels))",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1300,
+   "op": "comparison",
+   "start": 49709,
+   "end": 49737,
+   "old": "mapper.map_type == \"numeric\"",
+   "new": "(mapper.map_type != 'numeric')",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1301,
+   "op": "boolean",
+   "start": 49756,
+   "end": 49850,
+   "old": "verbosity == \"brief\"\n            or (verbosity == \"auto\" and len(mapper.levels) > brief_ticks)",
+   "new": "(verbosity == 'brief' and (verbosity == 'auto' and len(mapper.levels) > brief_ticks))",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1306,
+   "op": "statement",
+   "start": 49955,
+   "end": 50008,
+   "old": "locator = mpl.ticker.LogLocator(numticks=brief_ticks)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1308,
+   "op": "statement",
+   "start": 50043,
+   "end": 50094,
+   "old": "locator = mpl.ticker.MaxNLocator(nbins=brief_ticks)",
+   "new": "pass",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1314,
+   "op": "statement",
+   "start": 50358,
+   "end": 50388,
+   "old": "levels = formatted_levels = []",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1318,
+   "op": "boolean",
+   "start": 50469,
+   "end": 50478,
+   "old": "not title",
+   "new": "(title)",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1321,
+   "op": "comparison",
+   "start": 50640,
+   "end": 50659,
+   "old": "other_props is None",
+   "new": "(other_props is not None)",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1330,
+   "op": "statement",
+   "start": 51037,
+   "end": 51109,
+   "old": "attr.update({k: v[level] for k, v in other_props.items() if level in v})",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1331,
+   "op": "statement",
+   "start": 51126,
+   "end": 51178,
+   "old": "update(self.variables[var], formatted_level, **attr)",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1668,
+   "op": "constant",
+   "start": 63757,
+   "end": 63758,
+   "old": "1",
+   "new": "(2)",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1717,
+   "op": "constant",
+   "start": 65021,
+   "end": 65023,
+   "old": "45",
+   "new": "(46)",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1722,
+   "op": "constant",
+   "start": 65105,
+   "end": 65107,
+   "old": "45",
+   "new": "(46)",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1729,
+   "op": "arithmetic",
+   "start": 65246,
+   "end": 65259,
+   "old": "360 / (s + 1)",
+   "new": "(360 * (s + 1))",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1729,
+   "op": "constant",
+   "start": 65262,
+   "end": 65263,
+   "old": "2",
+   "new": "(3)",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 596,
+   "op": "arithmetic",
+   "start": 21023,
+   "end": 21045,
+   "old": "set(levels) - set(arg)",
+   "new": "(set(levels) + set(arg))",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1226,
+   "op": "constant",
+   "start": 47303,
+   "end": 47304,
+   "old": "1",
+   "new": "(2)",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1228,
+   "op": "constant",
+   "start": 47389,
+   "end": 47390,
+   "old": "0",
+   "new": "(1)",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1241,
+   "op": "constant",
+   "start": 47754,
+   "end": 47761,
+   "old": "\"color\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1265,
+   "op": "comparison",
+   "start": 48579,
+   "end": 48590,
+   "old": "attr in kws",
+   "new": "(attr not in kws)",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1300,
+   "op": "constant",
+   "start": 49728,
+   "end": 49737,
+   "old": "\"numeric\"",
+   "new": "('XX')",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1301,
+   "op": "comparison",
+   "start": 49756,
+   "end": 49776,
+   "old": "verbosity == \"brief\"",
+   "new": "(verbosity != 'brief')",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1327,
+   "op": "statement",
+   "start": 50887,
+   "end": 50929,
+   "old": "attr = {name: attr for name in attr_names}",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 72,
+   "op": "constant",
+   "start": 2348,
+   "end": 2349,
+   "old": "6",
+   "new": "(7)",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 646,
+   "op": "constant",
+   "start": 22958,
+   "end": 22961,
+   "old": "\"x\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1301,
+   "op": "constant",
+   "start": 49769,
+   "end": 49776,
+   "old": "\"brief\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1302,
+   "op": "comparison",
+   "start": 49793,
+   "end": 49812,
+   "old": "verbosity == \"auto\"",
+   "new": "(verbosity != 'auto')",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1302,
+   "op": "comparison",
+   "start": 49817,
+   "end": 49849,
+   "old": "len(mapper.levels) > brief_ticks",
+   "new": "(len(mapper.levels) >= brief_ticks)",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1329,
+   "op": "statement",
+   "start": 50995,
+   "end": 51020,
+   "old": "attr = {attr_names: attr}",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1734,
+   "op": "constant",
+   "start": 65382,
+   "end": 65383,
+   "old": "0",
+   "new": "(1)",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1274,
+   "op": "statement",
+   "start": 49060,
+   "end": 49085,
+   "old": "ax.add_collection(artist)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1223,
+   "op": "constant",
+   "start": 47205,
+   "end": 47211,
+   "old": "\"size\"",
+   "new": "('XX')",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1684,
+   "op": "constant",
+   "start": 64259,
+   "end": 64260,
+   "old": "1",
+   "new": "(2)",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_base.py",
+   "line": 1683,
+   "op": "constant",
+   "start": 64229,
+   "end": 64230,
+   "old": "1",
+   "new": "(2)",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 679,
+   "op": "constant",
+   "start": 24352,
+   "end": 24418,
+   "old": "\"`errorbar` must be a callable, string, or (string, number) tuple\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 681,
+   "op": "comparison",
+   "start": 24427,
+   "end": 24438,
+   "old": "arg is None",
+   "new": "(arg is not None)",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 665,
+   "op": "constant",
+   "start": 24043,
+   "end": 24044,
+   "old": "2",
+   "new": "(3)",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 673,
+   "op": "constant",
+   "start": 24271,
+   "end": 24275,
+   "old": "\"ci\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 673,
+   "op": "constant",
+   "start": 24277,
+   "end": 24279,
+   "old": "95",
+   "new": "(96)",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 695,
+   "op": "comparison",
+   "start": 24836,
+   "end": 24853,
+   "old": "level is not None",
+   "new": "(level is None)",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 568,
+   "op": "return",
+   "start": 20485,
+   "end": 20516,
+   "old": "return np.average(x, weights=w)",
+   "new": "return None",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 692,
+   "op": "statement",
+   "start": 24730,
+   "end": 24765,
+   "old": "raise err.__class__(usage) from err",
+   "new": "pass",
+   "id": 57
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 44,
+   "op": "statement",
+   "start": 1635,
+   "end": 1668,
+   "old": "units = kwargs.get(\"units\", None)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 62,
+   "op": "statement",
+   "start": 2175,
+   "end": 2209,
+   "old": "args = list(map(np.asarray, args))",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 45,
+   "op": "constant",
+   "start": 1698,
+   "end": 1711,
+   "old": "\"random_seed\"",
+   "new": "('XX')",
+   "id": 60
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 76,
+   "op": "comparison",
+   "start": 2621,
+   "end": 2633,
+   "old": "nanf is None",
+   "new": "(nanf is not None)",
+   "id": 61
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2803,
+   "end": 2811,
+   "old": "f = nanf",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "seaborn/algorithms.py",
+   "line": 99,
+   "op": "constant",
+   "start": 3311,
+   "end": 3312,
+   "old": "0",
+   "new": "(1)",
+   "id": 63
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 247,
+   "op": "statement",
+   "start": 8740,
+   "end": 8757,
+   "old": "ax.legend_ = None",
+   "new": "pass",
+   "id": 64
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 834,
+   "op": "return",
+   "start": 30816,
+   "end": 30827,
+   "old": "return self",
+   "new": "return None",
+   "id": 65
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 862,
+   "op": "statement",
+   "start": 31703,
+   "end": 31722,
+   "old": "self.tight_layout()",
+   "new": "pass",
+   "id": 66
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 674,
+   "op": "statement",
+   "start": 24402,
+   "end": 24447,
+   "old": "hue_masks = [np.repeat(True, len(self.data))]",
+   "new": "pass",
+   "id": 67
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 809,
+   "op": "statement",
+   "start": 29841,
+   "end": 29893,
+   "old": "kwargs[\"color\"] = self._facet_color(hue_k, kw_color)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 822,
+   "op": "statement",
+   "start": 30366,
+   "end": 30391,
+   "old": "kwargs[\"data\"] = data_ijk",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 825,
+   "op": "statement",
+   "start": 30433,
+   "end": 30473,
+   "old": "self._facet_plot(func, ax, args, kwargs)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 831,
+   "op": "statement",
+   "start": 30745,
+   "end": 30765,
+   "old": "axis_labels[i] = val",
+   "new": "pass",
+   "id": 71
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 848,
+   "op": "statement",
+   "start": 31191,
+   "end": 31223,
+   "old": "plot_kwargs = plot_kwargs.copy()",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 852,
+   "op": "statement",
+   "start": 31389,
+   "end": 31403,
+   "old": "plot_args = []",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 871,
+   "op": "statement",
+   "start": 32028,
+   "end": 32056,
+   "old": "ax = self.axes[row_i, col_j]",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 236,
+   "op": "comparison",
+   "start": 8268,
+   "end": 8290,
+   "old": "ax.legend_ is not None",
+   "new": "(ax.legend_ is None)",
+   "id": 75
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 795,
+   "op": "constant",
+   "start": 29377,
+   "end": 29384,
+   "old": "\"color\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 805,
+   "op": "boolean",
+   "start": 29675,
+   "end": 29721,
+   "old": "not str(func.__module__).startswith(\"seaborn\")",
+   "new": "(str(func.__module__).startswith('seaborn'))",
+   "id": 77
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 817,
+   "op": "statement",
+   "start": 30183,
+   "end": 30222,
+   "old": "kwargs[\"label\"] = self.hue_names[hue_k]",
+   "new": "pass",
+   "id": 78
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 842,
+   "op": "return",
+   "start": 31024,
+   "end": 31036,
+   "old": "return color",
+   "new": "return None",
+   "id": 79
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 829,
+   "op": "constant",
+   "start": 30678,
+   "end": 30681,
+   "old": "\"y\"",
+   "new": "('XX')",
+   "id": 80
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 849,
+   "op": "constant",
+   "start": 31266,
+   "end": 31272,
+   "old": "\"size\"",
+   "new": "('XX')",
+   "id": 81
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 853,
+   "op": "constant",
+   "start": 31428,
+   "end": 31432,
+   "old": "\"ax\"",
+   "new": "('XX')",
+   "id": 82
+  },
+  {
+   "path": "seaborn/axisgrid.py",
+   "line": 817,
+   "op": "constant",
+   "start": 30190,
+   "end": 30197,
+   "old": "\"label\"",
+   "new": "('XX')",
+   "id": 83
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 792,
+   "op": "statement",
+   "start": 25558,
+   "end": 25624,
+   "old": "hpackers = legend.findobj(mpl.offsetbox.VPacker)[0].get_children()",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 865,
+   "op": "statement",
+   "start": 28202,
+   "end": 28495,
+   "old": "line_kws = {\n        \"linestyle\": \"\",\n        \"marker\": kws.pop(\"marker\", \"o\"),\n        \"markersize\": np.sqrt(kws.pop(\"s\", rc[\"lines.markersize\"] ** 2)),\n        \"markerfacecolor\": kws.pop(\"facecolor\", kws.get(\"color\")),\n        \"markeredgewidth\": kws.pop(\"linewidth\", 0),\n        **kws,\n    }",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 685,
+   "op": "statement",
+   "start": 22223,
+   "end": 22260,
+   "old": "formatter = mpl.ticker.LogFormatter()",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 819,
+   "op": "statement",
+   "start": 26522,
+   "end": 26662,
+   "old": "msg = (\n            \"\\n\\nThe `ci` parameter is deprecated. \"\n            f\"Use `errorbar={repr(errorbar)}` for the same effect.\\n\"\n        )",
+   "new": "pass",
+   "id": 87
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 682,
+   "op": "return",
+   "start": 22149,
+   "end": 22162,
+   "old": "return limits",
+   "new": "return None",
+   "id": 88
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 796,
+   "op": "boolean",
+   "start": 25758,
+   "end": 25809,
+   "old": "not all(artist.get_visible() for artist in handles)",
+   "new": "(all((artist.get_visible() for artist in handles)))",
+   "id": 89
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 814,
+   "op": "statement",
+   "start": 26397,
+   "end": 26412,
+   "old": "errorbar = None",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 868,
+   "op": "constant",
+   "start": 28290,
+   "end": 28302,
+   "old": "\"markersize\"",
+   "new": "('XX')",
+   "id": 91
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 690,
+   "op": "constant",
+   "start": 22483,
+   "end": 22488,
+   "old": "False",
+   "new": "(True)",
+   "id": 92
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 816,
+   "op": "statement",
+   "start": 26450,
+   "end": 26465,
+   "old": "errorbar = \"sd\"",
+   "new": "pass",
+   "id": 93
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 869,
+   "op": "constant",
+   "start": 28391,
+   "end": 28402,
+   "old": "\"facecolor\"",
+   "new": "('XX')",
+   "id": 94
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 799,
+   "op": "comparison",
+   "start": 25915,
+   "end": 25936,
+   "old": "font_size is not None",
+   "new": "(font_size is None)",
+   "id": 95
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 815,
+   "op": "constant",
+   "start": 26432,
+   "end": 26436,
+   "old": "\"sd\"",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 876,
+   "op": "constant",
+   "start": 28580,
+   "end": 28597,
+   "old": "\"markeredgecolor\"",
+   "new": "('XX')",
+   "id": 97
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 678,
+   "op": "constant",
+   "start": 22073,
+   "end": 22074,
+   "old": "1",
+   "new": "(2)",
+   "id": 98
+  },
+  {
+   "path": "seaborn/utils.py",
+   "line": 868,
+   "op": "constant",
+   "start": 28328,
+   "end": 28346,
+   "old": "\"lines.markersize\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

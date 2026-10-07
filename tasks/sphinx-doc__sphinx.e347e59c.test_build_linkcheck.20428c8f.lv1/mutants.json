@@ -1,0 +1,1006 @@
+{
+ "task": "sphinx-doc__sphinx.e347e59c.test_build_linkcheck.20428c8f.lv1",
+ "pool": 458,
+ "mutants": [
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 711,
+   "op": "statement",
+   "start": 25608,
+   "end": 25622,
+   "old": "parser.close()",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 100,
+   "op": "statement",
+   "start": 2702,
+   "end": 2742,
+   "old": "output_text = self.outdir / 'output.txt'",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 101,
+   "op": "statement",
+   "start": 2751,
+   "end": 2792,
+   "old": "output_json = self.outdir / 'output.json'",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 113,
+   "op": "statement",
+   "start": 3240,
+   "end": 3291,
+   "old": "filename = self.env.doc2path(result.docname, False)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 216,
+   "op": "statement",
+   "start": 7482,
+   "end": 7544,
+   "old": "self.txt_outfile.write(f'{filename}:{line}: [{what}] {uri}\\n')",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 272,
+   "op": "statement",
+   "start": 9416,
+   "end": 9447,
+   "old": "hyperlinks = builder.hyperlinks",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 327,
+   "op": "statement",
+   "start": 11139,
+   "end": 11147,
+   "old": "done = 0",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 523,
+   "op": "statement",
+   "start": 18225,
+   "end": 18282,
+   "old": "headers = _get_request_headers(uri, self.request_headers)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 530,
+   "op": "statement",
+   "start": 18524,
+   "end": 18542,
+   "old": "error_message = ''",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 630,
+   "op": "statement",
+   "start": 22689,
+   "end": 22723,
+   "old": "self.rate_limits.pop(netloc, None)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 676,
+   "op": "statement",
+   "start": 24514,
+   "end": 24569,
+   "old": "self.rate_limits[netloc] = RateLimit(delay, next_check)",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 722,
+   "op": "statement",
+   "start": 25886,
+   "end": 25904,
+   "old": "self.found = False",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 101,
+   "op": "arithmetic",
+   "start": 2765,
+   "end": 2792,
+   "old": "self.outdir / 'output.json'",
+   "new": "(self.outdir * 'output.json')",
+   "id": 12
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 254,
+   "op": "statement",
+   "start": 8713,
+   "end": 8737,
+   "old": "uri = node.get('source')",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 283,
+   "op": "comparison",
+   "start": 9729,
+   "end": 9750,
+   "old": "uri not in hyperlinks",
+   "new": "(uri in hyperlinks)",
+   "id": 14
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 328,
+   "op": "comparison",
+   "start": 11162,
+   "end": 11180,
+   "old": "done < total_links",
+   "new": "(done <= total_links)",
+   "id": 15
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 330,
+   "op": "arithmetic",
+   "start": 11230,
+   "end": 11239,
+   "old": "done += 1",
+   "new": "done -= 1",
+   "id": 16
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 336,
+   "op": "statement",
+   "start": 11367,
+   "end": 11495,
+   "old": "thread = HyperlinkAvailabilityCheckWorker(\n                self.config, self.rqueue, self.wqueue, self.rate_limits\n            )",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 431,
+   "op": "statement",
+   "start": 14561,
+   "end": 14590,
+   "old": "netloc = urlsplit(uri).netloc",
+   "new": "pass",
+   "id": 18
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 445,
+   "op": "statement",
+   "start": 15343,
+   "end": 15400,
+   "old": "status, info, code = self._check(docname, uri, hyperlink)",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 467,
+   "op": "boolean",
+   "start": 16322,
+   "end": 16361,
+   "old": "not uri.startswith(('http:', 'https:'))",
+   "new": "(uri.startswith(('http:', 'https:')))",
+   "id": 20
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 507,
+   "op": "statement",
+   "start": 17784,
+   "end": 17808,
+   "old": "anchor = unquote(anchor)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 520,
+   "op": "statement",
+   "start": 18154,
+   "end": 18170,
+   "old": "auth_info = None",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 633,
+   "op": "boolean",
+   "start": 22750,
+   "end": 22879,
+   "old": "(response_url.rstrip('/') == req_url.rstrip('/'))\n            or _allowed_redirect(req_url, response_url, self.allowed_redirects)",
+   "new": "(response_url.rstrip('/') == req_url.rstrip('/') and _allowed_redirect(req_url, response_url, self.allowed_redirects))",
+   "id": 23
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 675,
+   "op": "statement",
+   "start": 24473,
+   "end": 24505,
+   "old": "next_check = time.time() + delay",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 706,
+   "op": "statement",
+   "start": 25510,
+   "end": 25532,
+   "old": "chunk = chunk.decode()",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 100,
+   "op": "constant",
+   "start": 2730,
+   "end": 2742,
+   "old": "'output.txt'",
+   "new": "('XX')",
+   "id": 26
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 113,
+   "op": "constant",
+   "start": 3285,
+   "end": 3290,
+   "old": "False",
+   "new": "(True)",
+   "id": 27
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 174,
+   "op": "statement",
+   "start": 5719,
+   "end": 5746,
+   "old": "self.broken_hyperlinks += 1",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 189,
+   "op": "statement",
+   "start": 6291,
+   "end": 6314,
+   "old": "linkstat['text'] = text",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 206,
+   "op": "statement",
+   "start": 7121,
+   "end": 7144,
+   "old": "msg = 'Unknown status.'",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 211,
+   "op": "constant",
+   "start": 7342,
+   "end": 7346,
+   "old": "'\\n'",
+   "new": "('XX')",
+   "id": 31
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 243,
+   "op": "comparison",
+   "start": 8409,
+   "end": 8425,
+   "old": "'refuri' in node",
+   "new": "('refuri' not in node)",
+   "id": 32
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 249,
+   "op": "boolean",
+   "start": 8591,
+   "end": 8611,
+   "old": "uri and '://' in uri",
+   "new": "(uri or '://' in uri)",
+   "id": 33
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 250,
+   "op": "return",
+   "start": 8629,
+   "end": 8639,
+   "old": "return uri",
+   "new": "return None",
+   "id": 34
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 451,
+   "op": "statement",
+   "start": 15628,
+   "end": 15698,
+   "old": "self.rqueue.put(CheckResult(uri, docname, lineno, status, info, code))",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 563,
+   "op": "statement",
+   "start": 19889,
+   "end": 19923,
+   "old": "status_code = response.status_code",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 564,
+   "op": "statement",
+   "start": 19940,
+   "end": 20065,
+   "old": "redirect_status_code = (\n                    response.history[-1].status_code if response.history else None\n                )",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 568,
+   "op": "statement",
+   "start": 20152,
+   "end": 20184,
+   "old": "response_url = f'{response.url}'",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 569,
+   "op": "statement",
+   "start": 20201,
+   "end": 20228,
+   "old": "response.raise_for_status()",
+   "new": "pass",
+   "id": 39
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 665,
+   "op": "statement",
+   "start": 24088,
+   "end": 24125,
+   "old": "rate_limit = self.rate_limits[netloc]",
+   "new": "pass",
+   "id": 40
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 669,
+   "op": "statement",
+   "start": 24227,
+   "end": 24260,
+   "old": "last_wait_time = rate_limit.delay",
+   "new": "pass",
+   "id": 41
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 728,
+   "op": "statement",
+   "start": 26120,
+   "end": 26125,
+   "old": "break",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 147,
+   "op": "statement",
+   "start": 4685,
+   "end": 4701,
+   "old": "logger.info(msg)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 157,
+   "op": "comparison",
+   "start": 5043,
+   "end": 5068,
+   "old": "self.config.verbosity < 0",
+   "new": "(self.config.verbosity <= 0)",
+   "id": 44
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 197,
+   "op": "statement",
+   "start": 6805,
+   "end": 6821,
+   "old": "logger.info(msg)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 255,
+   "op": "comparison",
+   "start": 8761,
+   "end": 8773,
+   "old": "'://' in uri",
+   "new": "('://' not in uri)",
+   "id": 46
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 465,
+   "op": "constant",
+   "start": 16220,
+   "end": 16221,
+   "old": "0",
+   "new": "(1)",
+   "id": 47
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 474,
+   "op": "constant",
+   "start": 16643,
+   "end": 16644,
+   "old": "0",
+   "new": "(1)",
+   "id": 48
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 511,
+   "op": "constant",
+   "start": 17882,
+   "end": 17889,
+   "old": "'ascii'",
+   "new": "('XX')",
+   "id": 49
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 616,
+   "op": "statement",
+   "start": 22191,
+   "end": 22199,
+   "old": "continue",
+   "new": "pass",
+   "id": 50
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 667,
+   "op": "statement",
+   "start": 24171,
+   "end": 24192,
+   "old": "delay = DEFAULT_DELAY",
+   "new": "pass",
+   "id": 51
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 671,
+   "op": "comparison",
+   "start": 24325,
+   "end": 24359,
+   "old": "delay > max_delay > last_wait_time",
+   "new": "(delay > max_delay >= last_wait_time)",
+   "id": 52
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 140,
+   "op": "arithmetic",
+   "start": 4257,
+   "end": 4311,
+   "old": "darkgreen('ok        ') + f'{res_uri}{result.message}'",
+   "new": "(darkgreen('ok        ') - f'{res_uri}{result.message}')",
+   "id": 53
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 189,
+   "op": "constant",
+   "start": 6300,
+   "end": 6306,
+   "old": "'text'",
+   "new": "('XX')",
+   "id": 54
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 470,
+   "op": "constant",
+   "start": 16497,
+   "end": 16498,
+   "old": "0",
+   "new": "(1)",
+   "id": 55
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 473,
+   "op": "constant",
+   "start": 16602,
+   "end": 16603,
+   "old": "0",
+   "new": "(1)",
+   "id": 56
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 493,
+   "op": "constant",
+   "start": 17267,
+   "end": 17275,
+   "old": "'stream'",
+   "new": "('XX')",
+   "id": 57
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 506,
+   "op": "statement",
+   "start": 17766,
+   "end": 17771,
+   "old": "break",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 546,
+   "op": "boolean",
+   "start": 19127,
+   "end": 19172,
+   "old": "anchor and self.check_anchors and response.ok",
+   "new": "(anchor or self.check_anchors or response.ok)",
+   "id": 59
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 605,
+   "op": "comparison",
+   "start": 21598,
+   "end": 21616,
+   "old": "status_code == 429",
+   "new": "(status_code != 429)",
+   "id": 60
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 613,
+   "op": "return",
+   "start": 22035,
+   "end": 22083,
+   "old": "return _Status.IGNORED, 'service unavailable', 0",
+   "new": "return None",
+   "id": 61
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 658,
+   "op": "statement",
+   "start": 23829,
+   "end": 23861,
+   "old": "delay = next_check - time.time()",
+   "new": "pass",
+   "id": 62
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 146,
+   "op": "arithmetic",
+   "start": 4607,
+   "end": 4634,
+   "old": "red('timeout   ') + res_uri",
+   "new": "(red('timeout   ') - res_uri)",
+   "id": 63
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 165,
+   "op": "arithmetic",
+   "start": 5367,
+   "end": 5394,
+   "old": "red('broken    ') + res_uri",
+   "new": "(red('broken    ') - res_uri)",
+   "id": 64
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 180,
+   "op": "constant",
+   "start": 5955,
+   "end": 5967,
+   "old": "'with Found'",
+   "new": "('XX')",
+   "id": 65
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 181,
+   "op": "constant",
+   "start": 5993,
+   "end": 5996,
+   "old": "303",
+   "new": "(304)",
+   "id": 66
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 555,
+   "op": "boolean",
+   "start": 19571,
+   "end": 19580,
+   "old": "not found",
+   "new": "(found)",
+   "id": 67
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 600,
+   "op": "return",
+   "start": 21363,
+   "end": 21404,
+   "old": "return _Status.WORKING, 'unauthorized', 0",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 602,
+   "op": "return",
+   "start": 21455,
+   "end": 21495,
+   "old": "return _Status.BROKEN, 'unauthorized', 0",
+   "new": "return None",
+   "id": 69
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 726,
+   "op": "constant",
+   "start": 26029,
+   "end": 26035,
+   "old": "'name'",
+   "new": "('XX')",
+   "id": 70
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 613,
+   "op": "constant",
+   "start": 22059,
+   "end": 22080,
+   "old": "'service unavailable'",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 613,
+   "op": "constant",
+   "start": 22082,
+   "end": 22083,
+   "old": "0",
+   "new": "(1)",
+   "id": 72
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 146,
+   "op": "constant",
+   "start": 4611,
+   "end": 4623,
+   "old": "'timeout   '",
+   "new": "('XX')",
+   "id": 73
+  },
+  {
+   "path": "sphinx/builders/linkcheck.py",
+   "line": 602,
+   "op": "constant",
+   "start": 21494,
+   "end": 21495,
+   "old": "0",
+   "new": "(1)",
+   "id": 74
+  },
+  {
+   "path": "sphinx/directives/patches.py",
+   "line": 222,
+   "op": "statement",
+   "start": 7609,
+   "end": 7675,
+   "old": "rubric = nodes.rubric(rubric_text, '', *textnodes, **self.options)",
+   "new": "pass",
+   "id": 75
+  },
+  {
+   "path": "sphinx/directives/patches.py",
+   "line": 220,
+   "op": "constant",
+   "start": 7489,
+   "end": 7504,
+   "old": "'heading-level'",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "sphinx/directives/patches.py",
+   "line": 221,
+   "op": "constant",
+   "start": 7583,
+   "end": 7598,
+   "old": "'heading-level'",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/images.py",
+   "line": 214,
+   "op": "return",
+   "start": 7723,
+   "end": 7735,
+   "old": "return False",
+   "new": "return None",
+   "id": 78
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/images.py",
+   "line": 225,
+   "op": "return",
+   "start": 8232,
+   "end": 8244,
+   "old": "return False",
+   "new": "return None",
+   "id": 79
+  },
+  {
+   "path": "sphinx/transforms/post_transforms/images.py",
+   "line": 230,
+   "op": "return",
+   "start": 8370,
+   "end": 8382,
+   "old": "return False",
+   "new": "return None",
+   "id": 80
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 31,
+   "op": "statement",
+   "start": 994,
+   "end": 1019,
+   "old": "t = parsedate_tz(rfc1123)",
+   "new": "pass",
+   "id": 81
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 33,
+   "op": "statement",
+   "start": 1046,
+   "end": 1062,
+   "old": "raise ValueError",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 34,
+   "op": "boolean",
+   "start": 1070,
+   "end": 1098,
+   "old": "not rfc1123.endswith(' GMT')",
+   "new": "(rfc1123.endswith(' GMT'))",
+   "id": 83
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 35,
+   "op": "statement",
+   "start": 1108,
+   "end": 1315,
+   "old": "warnings.warn(\n            'HTTP-date string does not meet RFC 7231 requirements '\n            f\"(must end with 'GMT'): {rfc1123!r}\",\n            RemovedInSphinx90Warning,\n            stacklevel=3,\n        )",
+   "new": "pass",
+   "id": 84
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 41,
+   "op": "arithmetic",
+   "start": 1333,
+   "end": 1383,
+   "old": "time.mktime(time.struct_time(t[:9])) + _GMT_OFFSET",
+   "new": "(time.mktime(time.struct_time(t[:9])) - _GMT_OFFSET)",
+   "id": 85
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 43,
+   "op": "statement",
+   "start": 1426,
+   "end": 1630,
+   "old": "warnings.warn(\n            'HTTP-date string does not meet RFC 7231 requirements '\n            f'(must be GMT time): {rfc1123!r}',\n            RemovedInSphinx90Warning,\n            stacklevel=3,\n        )",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 34,
+   "op": "constant",
+   "start": 1091,
+   "end": 1097,
+   "old": "' GMT'",
+   "new": "('XX')",
+   "id": 87
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 39,
+   "op": "constant",
+   "start": 1303,
+   "end": 1304,
+   "old": "3",
+   "new": "(4)",
+   "id": 88
+  },
+  {
+   "path": "sphinx/util/http_date.py",
+   "line": 49,
+   "op": "constant",
+   "start": 1674,
+   "end": 1675,
+   "old": "0",
+   "new": "(1)",
+   "id": 89
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 37,
+   "op": "return",
+   "start": 912,
+   "end": 923,
+   "old": "return True",
+   "new": "return None",
+   "id": 90
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 70,
+   "op": "statement",
+   "start": 1842,
+   "end": 1904,
+   "old": "self._ignored_redirects = kwargs.pop('_ignored_redirects', ())",
+   "new": "pass",
+   "id": 91
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 97,
+   "op": "statement",
+   "start": 3000,
+   "end": 3060,
+   "old": "headers.setdefault('User-Agent', _user_agent or _USER_AGENT)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 45,
+   "op": "return",
+   "start": 1125,
+   "end": 1157,
+   "old": "return certs.get(hostname, True)",
+   "new": "return None",
+   "id": 93
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 103,
+   "op": "statement",
+   "start": 3303,
+   "end": 3338,
+   "old": "verify = kwargs.get('verify', True)",
+   "new": "pass",
+   "id": 94
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 97,
+   "op": "constant",
+   "start": 3019,
+   "end": 3031,
+   "old": "'User-Agent'",
+   "new": "('XX')",
+   "id": 95
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 42,
+   "op": "constant",
+   "start": 1048,
+   "end": 1051,
+   "old": "'@'",
+   "new": "('XX')",
+   "id": 96
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 45,
+   "op": "constant",
+   "start": 1152,
+   "end": 1156,
+   "old": "True",
+   "new": "(False)",
+   "id": 97
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 101,
+   "op": "boolean",
+   "start": 3231,
+   "end": 3275,
+   "old": "verify and _get_tls_cacert(url, tls_cacerts)",
+   "new": "(verify or _get_tls_cacert(url, tls_cacerts))",
+   "id": 98
+  },
+  {
+   "path": "sphinx/util/requests.py",
+   "line": 100,
+   "op": "constant",
+   "start": 3168,
+   "end": 3176,
+   "old": "'verify'",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

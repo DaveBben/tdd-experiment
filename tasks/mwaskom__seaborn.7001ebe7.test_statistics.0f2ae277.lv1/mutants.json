@@ -1,0 +1,1006 @@
+{
+ "task": "mwaskom__seaborn.7001ebe7.test_statistics.0f2ae277.lv1",
+ "pool": 161,
+ "mutants": [
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 698,
+   "op": "return",
+   "start": 24925,
+   "end": 24945,
+   "old": "return method, level",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 93,
+   "op": "statement",
+   "start": 3608,
+   "end": 3657,
+   "old": "clip_hi = +np.inf if clip[1] is None else clip[1]",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 94,
+   "op": "statement",
+   "start": 3666,
+   "end": 3708,
+   "old": "gridmin = max(x.min() - bw * cut, clip_lo)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 96,
+   "op": "return",
+   "start": 3768,
+   "end": 3814,
+   "old": "return np.linspace(gridmin, gridmax, gridsize)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 102,
+   "op": "statement",
+   "start": 4014,
+   "end": 4111,
+   "old": "grid = self._define_support_grid(\n            x, bw, self.cut, self.clip, self.gridsize\n        )",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 105,
+   "op": "return",
+   "start": 4120,
+   "end": 4131,
+   "old": "return grid",
+   "new": "return None",
+   "id": 5
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 109,
+   "op": "statement",
+   "start": 4252,
+   "end": 4268,
+   "old": "clip = self.clip",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 113,
+   "op": "statement",
+   "start": 4362,
+   "end": 4396,
+   "old": "kde = self._fit([x1, x2], weights)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 116,
+   "op": "statement",
+   "start": 4462,
+   "end": 4562,
+   "old": "grid1 = self._define_support_grid(\n            x1, bw[0], self.cut, clip[0], self.gridsize\n        )",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 123,
+   "op": "return",
+   "start": 4681,
+   "end": 4700,
+   "old": "return grid1, grid2",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 135,
+   "op": "return",
+   "start": 5071,
+   "end": 5085,
+   "old": "return support",
+   "new": "return None",
+   "id": 10
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 274,
+   "op": "return",
+   "start": 10029,
+   "end": 10045,
+   "old": "return bin_edges",
+   "new": "return None",
+   "id": 11
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 334,
+   "op": "return",
+   "start": 11983,
+   "end": 11997,
+   "old": "return bin_kws",
+   "new": "return None",
+   "id": 12
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 425,
+   "op": "statement",
+   "start": 15116,
+   "end": 15136,
+   "old": "sorter = x.argsort()",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 427,
+   "op": "statement",
+   "start": 15167,
+   "end": 15192,
+   "old": "weights = weights[sorter]",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 428,
+   "op": "statement",
+   "start": 15201,
+   "end": 15221,
+   "old": "y = weights.cumsum()",
+   "new": "pass",
+   "id": 15
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 435,
+   "op": "statement",
+   "start": 15370,
+   "end": 15391,
+   "old": "x = np.r_[-np.inf, x]",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 436,
+   "op": "statement",
+   "start": 15400,
+   "end": 15415,
+   "old": "y = np.r_[0, y]",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 441,
+   "op": "return",
+   "start": 15485,
+   "end": 15496,
+   "old": "return y, x",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 638,
+   "op": "return",
+   "start": 23126,
+   "end": 23142,
+   "old": "return max(k, 1)",
+   "new": "return None",
+   "id": 19
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 110,
+   "op": "boolean",
+   "start": 4280,
+   "end": 4319,
+   "old": "clip[0] is None or np.isscalar(clip[0])",
+   "new": "(clip[0] is None and np.isscalar(clip[0]))",
+   "id": 20
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 111,
+   "op": "statement",
+   "start": 4333,
+   "end": 4352,
+   "old": "clip = (clip, clip)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 125,
+   "op": "constant",
+   "start": 4764,
+   "end": 4768,
+   "old": "True",
+   "new": "(False)",
+   "id": 22
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 128,
+   "op": "statement",
+   "start": 4869,
+   "end": 4923,
+   "old": "support = self._define_support_univariate(x1, weights)",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 130,
+   "op": "statement",
+   "start": 4950,
+   "end": 5007,
+   "old": "support = self._define_support_bivariate(x1, x2, weights)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 133,
+   "op": "statement",
+   "start": 5039,
+   "end": 5061,
+   "old": "self.support = support",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 141,
+   "op": "statement",
+   "start": 5303,
+   "end": 5331,
+   "old": "fit_kws[\"weights\"] = weights",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 258,
+   "op": "statement",
+   "start": 9412,
+   "end": 9442,
+   "old": "start, stop = x.min(), x.max()",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 276,
+   "op": "constant",
+   "start": 10112,
+   "end": 10116,
+   "old": "True",
+   "new": "(False)",
+   "id": 28
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 278,
+   "op": "comparison",
+   "start": 10206,
+   "end": 10216,
+   "old": "x2 is None",
+   "new": "(x2 is not None)",
+   "id": 29
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 280,
+   "op": "statement",
+   "start": 10231,
+   "end": 10365,
+   "old": "bin_edges = self._define_bin_edges(\n                x1, weights, self.bins, self.binwidth, self.binrange, self.discrete,\n            )",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 293,
+   "op": "statement",
+   "start": 10679,
+   "end": 10693,
+   "old": "bin_edges = []",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 329,
+   "op": "statement",
+   "start": 11882,
+   "end": 11919,
+   "old": "bin_kws = dict(bins=tuple(bin_edges))",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 332,
+   "op": "statement",
+   "start": 11951,
+   "end": 11973,
+   "old": "self.bin_kws = bin_kws",
+   "new": "pass",
+   "id": 33
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 432,
+   "op": "comparison",
+   "start": 15313,
+   "end": 15335,
+   "old": "self.stat == \"percent\"",
+   "new": "(self.stat != 'percent')",
+   "id": 34
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 439,
+   "op": "statement",
+   "start": 15460,
+   "end": 15475,
+   "old": "y = y.max() - y",
+   "new": "pass",
+   "id": 35
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 622,
+   "op": "comparison",
+   "start": 22414,
+   "end": 22436,
+   "old": "self.k_depth == \"full\"",
+   "new": "(self.k_depth != 'full')",
+   "id": 36
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 624,
+   "op": "statement",
+   "start": 22497,
+   "end": 22520,
+   "old": "k = int(np.log2(n)) + 1",
+   "new": "pass",
+   "id": 37
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 93,
+   "op": "comparison",
+   "start": 3629,
+   "end": 3644,
+   "old": "clip[1] is None",
+   "new": "(clip[1] is not None)",
+   "id": 38
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 110,
+   "op": "comparison",
+   "start": 4280,
+   "end": 4295,
+   "old": "clip[0] is None",
+   "new": "(clip[0] is not None)",
+   "id": 39
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 139,
+   "op": "constant",
+   "start": 5230,
+   "end": 5241,
+   "old": "\"bw_method\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 144,
+   "op": "arithmetic",
+   "start": 5407,
+   "end": 5434,
+   "old": "kde.factor * self.bw_adjust",
+   "new": "(kde.factor / self.bw_adjust)",
+   "id": 41
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 265,
+   "op": "statement",
+   "start": 9619,
+   "end": 9634,
+   "old": "step = binwidth",
+   "new": "pass",
+   "id": 42
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 266,
+   "op": "statement",
+   "start": 9647,
+   "end": 9694,
+   "old": "bin_edges = np.arange(start, stop + step, step)",
+   "new": "pass",
+   "id": 43
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 271,
+   "op": "statement",
+   "start": 9927,
+   "end": 10020,
+   "old": "bin_edges = np.histogram_bin_edges(\n                x, bins, binrange, weights,\n            )",
+   "new": "pass",
+   "id": 44
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 287,
+   "op": "statement",
+   "start": 10541,
+   "end": 10585,
+   "old": "bin_kws = dict(bins=n_bins, range=bin_range)",
+   "new": "pass",
+   "id": 45
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 289,
+   "op": "statement",
+   "start": 10620,
+   "end": 10650,
+   "old": "bin_kws = dict(bins=bin_edges)",
+   "new": "pass",
+   "id": 46
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 307,
+   "op": "statement",
+   "start": 11145,
+   "end": 11169,
+   "old": "binwidth = self.binwidth",
+   "new": "pass",
+   "id": 47
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 319,
+   "op": "statement",
+   "start": 11552,
+   "end": 11576,
+   "old": "discrete = self.discrete",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 325,
+   "op": "statement",
+   "start": 11741,
+   "end": 11868,
+   "old": "bin_edges.append(self._define_bin_edges(\n                    x, weights, bins, binwidth, binrange, discrete,\n                ))",
+   "new": "pass",
+   "id": 49
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 421,
+   "op": "constant",
+   "start": 14971,
+   "end": 15006,
+   "old": "\"Bivariate ECDF is not implemented\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 431,
+   "op": "arithmetic",
+   "start": 15290,
+   "end": 15301,
+   "old": "y / y.max()",
+   "new": "(y * y.max())",
+   "id": 51
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 431,
+   "op": "arithmetic",
+   "start": 15290,
+   "end": 15301,
+   "old": "y / y.max()",
+   "new": "(y // y.max())",
+   "id": 52
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 432,
+   "op": "constant",
+   "start": 15326,
+   "end": 15335,
+   "old": "\"percent\"",
+   "new": "('XX')",
+   "id": 53
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 433,
+   "op": "arithmetic",
+   "start": 15353,
+   "end": 15360,
+   "old": "y * 100",
+   "new": "(y / 100)",
+   "id": 54
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 439,
+   "op": "arithmetic",
+   "start": 15464,
+   "end": 15475,
+   "old": "y.max() - y",
+   "new": "(y.max() + y)",
+   "id": 55
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 622,
+   "op": "constant",
+   "start": 22430,
+   "end": 22436,
+   "old": "\"full\"",
+   "new": "('XX')",
+   "id": 56
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 624,
+   "op": "arithmetic",
+   "start": 22501,
+   "end": 22520,
+   "old": "int(np.log2(n)) + 1",
+   "new": "(int(np.log2(n)) - 1)",
+   "id": 57
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 625,
+   "op": "comparison",
+   "start": 22534,
+   "end": 22557,
+   "old": "self.k_depth == \"tukey\"",
+   "new": "(self.k_depth != 'tukey')",
+   "id": 58
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 627,
+   "op": "statement",
+   "start": 22627,
+   "end": 22650,
+   "old": "k = int(np.log2(n)) - 3",
+   "new": "pass",
+   "id": 59
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 638,
+   "op": "constant",
+   "start": 23140,
+   "end": 23141,
+   "old": "1",
+   "new": "(2)",
+   "id": 60
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3655,
+   "end": 3656,
+   "old": "1",
+   "new": "(2)",
+   "id": 61
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 94,
+   "op": "arithmetic",
+   "start": 3690,
+   "end": 3698,
+   "old": "bw * cut",
+   "new": "(bw / cut)",
+   "id": 62
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 95,
+   "op": "arithmetic",
+   "start": 3741,
+   "end": 3749,
+   "old": "bw * cut",
+   "new": "(bw / cut)",
+   "id": 63
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 117,
+   "op": "constant",
+   "start": 4516,
+   "end": 4517,
+   "old": "0",
+   "new": "(1)",
+   "id": 64
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 117,
+   "op": "constant",
+   "start": 4535,
+   "end": 4536,
+   "old": "0",
+   "new": "(1)",
+   "id": 65
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 141,
+   "op": "constant",
+   "start": 5311,
+   "end": 5320,
+   "old": "\"weights\"",
+   "new": "('XX')",
+   "id": 66
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 263,
+   "op": "arithmetic",
+   "start": 9548,
+   "end": 9558,
+   "old": "start - .5",
+   "new": "(start + 0.5)",
+   "id": 67
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 269,
+   "op": "statement",
+   "start": 9844,
+   "end": 9900,
+   "old": "bin_edges = np.append(bin_edges, bin_edges.max() + step)",
+   "new": "pass",
+   "id": 68
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 314,
+   "op": "comparison",
+   "start": 11391,
+   "end": 11407,
+   "old": "binrange is None",
+   "new": "(binrange is not None)",
+   "id": 69
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 321,
+   "op": "statement",
+   "start": 11648,
+   "end": 11670,
+   "old": "discrete = discrete[i]",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 430,
+   "op": "constant",
+   "start": 15259,
+   "end": 15271,
+   "old": "\"proportion\"",
+   "new": "('XX')",
+   "id": 71
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 625,
+   "op": "constant",
+   "start": 22550,
+   "end": 22557,
+   "old": "\"tukey\"",
+   "new": "('XX')",
+   "id": 72
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 627,
+   "op": "arithmetic",
+   "start": 22631,
+   "end": 22650,
+   "old": "int(np.log2(n)) - 3",
+   "new": "(int(np.log2(n)) + 3)",
+   "id": 73
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 93,
+   "op": "constant",
+   "start": 3634,
+   "end": 3635,
+   "old": "1",
+   "new": "(2)",
+   "id": 74
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 110,
+   "op": "constant",
+   "start": 4285,
+   "end": 4286,
+   "old": "0",
+   "new": "(1)",
+   "id": 75
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 110,
+   "op": "constant",
+   "start": 4316,
+   "end": 4317,
+   "old": "0",
+   "new": "(1)",
+   "id": 76
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 266,
+   "op": "arithmetic",
+   "start": 9676,
+   "end": 9687,
+   "old": "stop + step",
+   "new": "(stop - step)",
+   "id": 77
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 268,
+   "op": "comparison",
+   "start": 9782,
+   "end": 9804,
+   "old": "bin_edges.max() < stop",
+   "new": "(bin_edges.max() <= stop)",
+   "id": 78
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 268,
+   "op": "comparison",
+   "start": 9808,
+   "end": 9826,
+   "old": "len(bin_edges) < 2",
+   "new": "(len(bin_edges) <= 2)",
+   "id": 79
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 285,
+   "op": "constant",
+   "start": 10462,
+   "end": 10463,
+   "old": "1",
+   "new": "(2)",
+   "id": 80
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 300,
+   "op": "boolean",
+   "start": 10904,
+   "end": 10912,
+   "old": "not bins",
+   "new": "(bins)",
+   "id": 81
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 310,
+   "op": "boolean",
+   "start": 11253,
+   "end": 11285,
+   "old": "not isinstance(binwidth, Number)",
+   "new": "(isinstance(binwidth, Number))",
+   "id": 82
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 311,
+   "op": "statement",
+   "start": 11307,
+   "end": 11329,
+   "old": "binwidth = binwidth[i]",
+   "new": "pass",
+   "id": 83
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 316,
+   "op": "boolean",
+   "start": 11455,
+   "end": 11490,
+   "old": "not isinstance(binrange[0], Number)",
+   "new": "(isinstance(binrange[0], Number))",
+   "id": 84
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 317,
+   "op": "statement",
+   "start": 11512,
+   "end": 11534,
+   "old": "binrange = binrange[i]",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 627,
+   "op": "constant",
+   "start": 22649,
+   "end": 22650,
+   "old": "3",
+   "new": "(4)",
+   "id": 86
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 630,
+   "op": "comparison",
+   "start": 22781,
+   "end": 22810,
+   "old": "self.k_depth == \"trustworthy\"",
+   "new": "(self.k_depth != 'trustworthy')",
+   "id": 87
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 632,
+   "op": "statement",
+   "start": 22894,
+   "end": 22962,
+   "old": "point_conf = 2 * normal_quantile_func(1 - self.trust_alpha / 2) ** 2",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 633,
+   "op": "statement",
+   "start": 22975,
+   "end": 23011,
+   "old": "k = int(np.log2(n / point_conf)) + 1",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 269,
+   "op": "arithmetic",
+   "start": 9877,
+   "end": 9899,
+   "old": "bin_edges.max() + step",
+   "new": "(bin_edges.max() - step)",
+   "id": 90
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 304,
+   "op": "comparison",
+   "start": 11077,
+   "end": 11091,
+   "old": "len(bins) == 2",
+   "new": "(len(bins) != 2)",
+   "id": 91
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 629,
+   "op": "arithmetic",
+   "start": 22710,
+   "end": 22763,
+   "old": "int(np.log2(n)) - int(np.log2(n * self.outlier_prop))",
+   "new": "(int(np.log2(n)) + int(np.log2(n * self.outlier_prop)))",
+   "id": 92
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 629,
+   "op": "constant",
+   "start": 22766,
+   "end": 22767,
+   "old": "1",
+   "new": "(2)",
+   "id": 93
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 632,
+   "op": "arithmetic",
+   "start": 22907,
+   "end": 22962,
+   "old": "2 * normal_quantile_func(1 - self.trust_alpha / 2) ** 2",
+   "new": "(2 / normal_quantile_func(1 - self.trust_alpha / 2) ** 2)",
+   "id": 94
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 632,
+   "op": "constant",
+   "start": 22907,
+   "end": 22908,
+   "old": "2",
+   "new": "(3)",
+   "id": 95
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 632,
+   "op": "arithmetic",
+   "start": 22932,
+   "end": 22956,
+   "old": "1 - self.trust_alpha / 2",
+   "new": "(1 + self.trust_alpha / 2)",
+   "id": 96
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 633,
+   "op": "arithmetic",
+   "start": 22991,
+   "end": 23005,
+   "old": "n / point_conf",
+   "new": "(n * point_conf)",
+   "id": 97
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 633,
+   "op": "arithmetic",
+   "start": 22991,
+   "end": 23005,
+   "old": "n / point_conf",
+   "new": "(n // point_conf)",
+   "id": 98
+  },
+  {
+   "path": "seaborn/_statistics.py",
+   "line": 632,
+   "op": "arithmetic",
+   "start": 22936,
+   "end": 22956,
+   "old": "self.trust_alpha / 2",
+   "new": "(self.trust_alpha * 2)",
+   "id": 99
+  }
+ ]
+}

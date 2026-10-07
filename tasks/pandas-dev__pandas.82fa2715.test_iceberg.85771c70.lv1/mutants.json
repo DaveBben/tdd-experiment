@@ -1,0 +1,376 @@
+{
+ "task": "pandas-dev__pandas.82fa2715.test_iceberg.85771c70.lv1",
+ "pool": 37,
+ "mutants": [
+  {
+   "path": "pandas/api/internals.py",
+   "line": 59,
+   "op": "statement",
+   "start": 2215,
+   "end": 2269,
+   "old": "block_objs = [_make_block(*block) for block in blocks]",
+   "new": "pass",
+   "id": 0
+  },
+  {
+   "path": "pandas/api/internals.py",
+   "line": 60,
+   "op": "statement",
+   "start": 2274,
+   "end": 2297,
+   "old": "axes = [columns, index]",
+   "new": "pass",
+   "id": 1
+  },
+  {
+   "path": "pandas/api/internals.py",
+   "line": 61,
+   "op": "statement",
+   "start": 2302,
+   "end": 2339,
+   "old": "mgr = _BlockManager(block_objs, axes)",
+   "new": "pass",
+   "id": 2
+  },
+  {
+   "path": "pandas/api/internals.py",
+   "line": 62,
+   "op": "return",
+   "start": 2344,
+   "end": 2385,
+   "old": "return DataFrame._from_mgr(mgr, mgr.axes)",
+   "new": "return None",
+   "id": 3
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 77,
+   "op": "statement",
+   "start": 2343,
+   "end": 2410,
+   "old": "pyiceberg_catalog = import_optional_dependency(\"pyiceberg.catalog\")",
+   "new": "pass",
+   "id": 4
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 78,
+   "op": "statement",
+   "start": 2415,
+   "end": 2490,
+   "old": "pyiceberg_expressions = import_optional_dependency(\"pyiceberg.expressions\")",
+   "new": "pass",
+   "id": 5
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 81,
+   "op": "statement",
+   "start": 2562,
+   "end": 2638,
+   "old": "catalog = pyiceberg_catalog.load_catalog(catalog_name, **catalog_properties)",
+   "new": "pass",
+   "id": 6
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 82,
+   "op": "statement",
+   "start": 2643,
+   "end": 2687,
+   "old": "table = catalog.load_table(table_identifier)",
+   "new": "pass",
+   "id": 7
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 89,
+   "op": "statement",
+   "start": 2901,
+   "end": 3125,
+   "old": "result = table.scan(\n        row_filter=row_filter,\n        selected_fields=selected_fields,\n        case_sensitive=case_sensitive,\n        snapshot_id=snapshot_id,\n        options=scan_properties,\n        limit=limit,\n    )",
+   "new": "pass",
+   "id": 8
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 97,
+   "op": "return",
+   "start": 3130,
+   "end": 3155,
+   "old": "return result.to_pandas()",
+   "new": "return None",
+   "id": 9
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 135,
+   "op": "statement",
+   "start": 4250,
+   "end": 4292,
+   "old": "pa = import_optional_dependency(\"pyarrow\")",
+   "new": "pass",
+   "id": 10
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 136,
+   "op": "statement",
+   "start": 4297,
+   "end": 4364,
+   "old": "pyiceberg_catalog = import_optional_dependency(\"pyiceberg.catalog\")",
+   "new": "pass",
+   "id": 11
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 139,
+   "op": "statement",
+   "start": 4436,
+   "end": 4512,
+   "old": "catalog = pyiceberg_catalog.load_catalog(catalog_name, **catalog_properties)",
+   "new": "pass",
+   "id": 12
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 140,
+   "op": "statement",
+   "start": 4517,
+   "end": 4555,
+   "old": "arrow_table = pa.Table.from_pandas(df)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 141,
+   "op": "statement",
+   "start": 4560,
+   "end": 4865,
+   "old": "table = catalog.create_table_if_not_exists(\n        identifier=table_identifier,\n        schema=arrow_table.schema,\n        location=location,\n        # we could add `partition_spec`, `sort_order` and `properties` in the\n        # future, but it may not be trivial without exposing PyIceberg objects\n    )",
+   "new": "pass",
+   "id": 14
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 19,
+   "op": "constant",
+   "start": 449,
+   "end": 453,
+   "old": "True",
+   "new": "(False)",
+   "id": 15
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 79,
+   "op": "comparison",
+   "start": 2498,
+   "end": 2524,
+   "old": "catalog_properties is None",
+   "new": "(catalog_properties is not None)",
+   "id": 16
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 80,
+   "op": "statement",
+   "start": 2534,
+   "end": 2557,
+   "old": "catalog_properties = {}",
+   "new": "pass",
+   "id": 17
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 83,
+   "op": "comparison",
+   "start": 2695,
+   "end": 2713,
+   "old": "row_filter is None",
+   "new": "(row_filter is not None)",
+   "id": 18
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 84,
+   "op": "statement",
+   "start": 2723,
+   "end": 2770,
+   "old": "row_filter = pyiceberg_expressions.AlwaysTrue()",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 85,
+   "op": "comparison",
+   "start": 2778,
+   "end": 2801,
+   "old": "selected_fields is None",
+   "new": "(selected_fields is not None)",
+   "id": 20
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 86,
+   "op": "statement",
+   "start": 2811,
+   "end": 2835,
+   "old": "selected_fields = (\"*\",)",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 87,
+   "op": "comparison",
+   "start": 2843,
+   "end": 2866,
+   "old": "scan_properties is None",
+   "new": "(scan_properties is not None)",
+   "id": 22
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 88,
+   "op": "statement",
+   "start": 2876,
+   "end": 2896,
+   "old": "scan_properties = {}",
+   "new": "pass",
+   "id": 23
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 11,
+   "op": "constant",
+   "start": 187,
+   "end": 195,
+   "old": "\"pandas\"",
+   "new": "('XX')",
+   "id": 24
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 107,
+   "op": "constant",
+   "start": 3370,
+   "end": 3375,
+   "old": "False",
+   "new": "(True)",
+   "id": 25
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 137,
+   "op": "comparison",
+   "start": 4372,
+   "end": 4398,
+   "old": "catalog_properties is None",
+   "new": "(catalog_properties is not None)",
+   "id": 26
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 138,
+   "op": "statement",
+   "start": 4408,
+   "end": 4431,
+   "old": "catalog_properties = {}",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 148,
+   "op": "comparison",
+   "start": 4873,
+   "end": 4900,
+   "old": "snapshot_properties is None",
+   "new": "(snapshot_properties is not None)",
+   "id": 28
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 149,
+   "op": "statement",
+   "start": 4910,
+   "end": 4934,
+   "old": "snapshot_properties = {}",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 151,
+   "op": "statement",
+   "start": 4958,
+   "end": 5024,
+   "old": "table.append(arrow_table, snapshot_properties=snapshot_properties)",
+   "new": "pass",
+   "id": 30
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 153,
+   "op": "statement",
+   "start": 5043,
+   "end": 5112,
+   "old": "table.overwrite(arrow_table, snapshot_properties=snapshot_properties)",
+   "new": "pass",
+   "id": 31
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 77,
+   "op": "constant",
+   "start": 2390,
+   "end": 2409,
+   "old": "\"pyiceberg.catalog\"",
+   "new": "('XX')",
+   "id": 32
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 78,
+   "op": "constant",
+   "start": 2466,
+   "end": 2489,
+   "old": "\"pyiceberg.expressions\"",
+   "new": "('XX')",
+   "id": 33
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 135,
+   "op": "constant",
+   "start": 4282,
+   "end": 4291,
+   "old": "\"pyarrow\"",
+   "new": "('XX')",
+   "id": 34
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 136,
+   "op": "constant",
+   "start": 4344,
+   "end": 4363,
+   "old": "\"pyiceberg.catalog\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "pandas/io/iceberg.py",
+   "line": 86,
+   "op": "constant",
+   "start": 2830,
+   "end": 2833,
+   "old": "\"*\"",
+   "new": "('XX')",
+   "id": 36
+  }
+ ]
+}

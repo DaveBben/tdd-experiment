@@ -1,0 +1,1006 @@
+{
+ "task": "pydata__xarray.97f3a746.test_range_index.7b95ba66.lv1",
+ "pool": 352,
+ "mutants": [
+  {
+   "path": "xarray/core/common.py",
+   "line": 263,
+   "op": "return",
+   "start": 8298,
+   "end": 8358,
+   "old": "return Frozen(dict(zip(self.dims, self.shape, strict=True)))",
+   "new": "return None",
+   "id": 0
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 172,
+   "op": "comparison",
+   "start": 5135,
+   "end": 5182,
+   "old": "np.lib.NumpyVersion(np.__version__) <= \"1.28.0\"",
+   "new": "(np.lib.NumpyVersion(np.__version__) < '1.28.0')",
+   "id": 1
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 172,
+   "op": "constant",
+   "start": 5174,
+   "end": 5182,
+   "old": "\"1.28.0\"",
+   "new": "('XX')",
+   "id": 2
+  },
+  {
+   "path": "xarray/core/common.py",
+   "line": 177,
+   "op": "statement",
+   "start": 5355,
+   "end": 5389,
+   "old": "np.array([1]).__array__(copy=None)",
+   "new": "pass",
+   "id": 3
+  },
+  {
+   "path": "xarray/core/coordinate_transform.py",
+   "line": 32,
+   "op": "comparison",
+   "start": 785,
+   "end": 798,
+   "old": "dtype is None",
+   "new": "(dtype is not None)",
+   "id": 4
+  },
+  {
+   "path": "xarray/core/coordinate_transform.py",
+   "line": 105,
+   "op": "constant",
+   "start": 3314,
+   "end": 3318,
+   "old": "\"ij\"",
+   "new": "('XX')",
+   "id": 5
+  },
+  {
+   "path": "xarray/core/coordinates.py",
+   "line": 1096,
+   "op": "return",
+   "start": 38223,
+   "end": 38253,
+   "old": "return set(self._data._coords)",
+   "new": "return None",
+   "id": 6
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 799,
+   "op": "return",
+   "start": 26808,
+   "end": 26871,
+   "old": "return array.ndim if hasattr(array, \"ndim\") else np.ndim(array)",
+   "new": "return None",
+   "id": 7
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 245,
+   "op": "comparison",
+   "start": 7765,
+   "end": 7775,
+   "old": "xp is None",
+   "new": "(xp is not None)",
+   "id": 8
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 246,
+   "op": "statement",
+   "start": 7785,
+   "end": 7815,
+   "old": "xp = get_array_namespace(data)",
+   "new": "pass",
+   "id": 9
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 242,
+   "op": "boolean",
+   "start": 7656,
+   "end": 7696,
+   "old": "not hasattr(data, \"__array_namespace__\")",
+   "new": "(hasattr(data, '__array_namespace__'))",
+   "id": 10
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 242,
+   "op": "comparison",
+   "start": 7701,
+   "end": 7711,
+   "old": "xp is None",
+   "new": "(xp is not None)",
+   "id": 11
+  },
+  {
+   "path": "xarray/core/duck_array_ops.py",
+   "line": 799,
+   "op": "constant",
+   "start": 26844,
+   "end": 26850,
+   "old": "\"ndim\"",
+   "new": "('XX')",
+   "id": 12
+  },
+  {
+   "path": "xarray/core/formatting.py",
+   "line": 449,
+   "op": "statement",
+   "start": 15566,
+   "end": 15597,
+   "old": "dims = tuple(coords._data.dims)",
+   "new": "pass",
+   "id": 13
+  },
+  {
+   "path": "xarray/core/formatting.py",
+   "line": 457,
+   "op": "constant",
+   "start": 15878,
+   "end": 15901,
+   "old": "\"display_expand_coords\"",
+   "new": "('XX')",
+   "id": 14
+  },
+  {
+   "path": "xarray/core/formatting.py",
+   "line": 451,
+   "op": "constant",
+   "start": 15691,
+   "end": 15692,
+   "old": "0",
+   "new": "(1)",
+   "id": 15
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1611,
+   "op": "statement",
+   "start": 60287,
+   "end": 60305,
+   "old": "index: PandasIndex",
+   "new": "pass",
+   "id": 16
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2110,
+   "op": "return",
+   "start": 77275,
+   "end": 77314,
+   "old": "return new_indexes, new_index_variables",
+   "new": "return None",
+   "id": 17
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 496,
+   "op": "return",
+   "start": 17818,
+   "end": 17830,
+   "old": "return index",
+   "new": "return None",
+   "id": 18
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1058,
+   "op": "statement",
+   "start": 38419,
+   "end": 38492,
+   "old": "level_coords_dtype = {name: var.dtype for name, var in variables.items()}",
+   "new": "pass",
+   "id": 19
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1061,
+   "op": "return",
+   "start": 38571,
+   "end": 38581,
+   "old": "return obj",
+   "new": "return None",
+   "id": 20
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1527,
+   "op": "statement",
+   "start": 57006,
+   "end": 57050,
+   "old": "dim_size0 = getattr(label0_obj, \"sizes\", {})",
+   "new": "pass",
+   "id": 21
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1617,
+   "op": "statement",
+   "start": 60516,
+   "end": 60593,
+   "old": "duplicate_names = [k for k in index_vars if k in all_variables and k != name]",
+   "new": "pass",
+   "id": 22
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2124,
+   "op": "return",
+   "start": 77915,
+   "end": 77968,
+   "old": "return _apply_indexes_fast(indexes, indexers, \"isel\")",
+   "new": "return None",
+   "id": 23
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2148,
+   "op": "statement",
+   "start": 78642,
+   "end": 78678,
+   "old": "index_coord_names[id(idx)].add(name)",
+   "new": "pass",
+   "id": 24
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1487,
+   "op": "statement",
+   "start": 55524,
+   "end": 55560,
+   "old": "attrs: Mapping[Hashable, Any] | None",
+   "new": "pass",
+   "id": 25
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1523,
+   "op": "statement",
+   "start": 56789,
+   "end": 56858,
+   "old": "missing_labels_str = \",\".join([f\"{name}\" for name in missing_labels])",
+   "new": "pass",
+   "id": 26
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1524,
+   "op": "statement",
+   "start": 56871,
+   "end": 56947,
+   "old": "raise ValueError(f\"missing labels for coordinate(s): {missing_labels_str}.\")",
+   "new": "pass",
+   "id": 27
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1533,
+   "op": "statement",
+   "start": 57208,
+   "end": 57402,
+   "old": "raise TypeError(\n                \"CoordinateTransformIndex only supports advanced (point-wise) indexing \"\n                \"with either xarray.DataArray or xarray.Variable objects.\"\n            )",
+   "new": "pass",
+   "id": 28
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1555,
+   "op": "statement",
+   "start": 58296,
+   "end": 58329,
+   "old": "pos = np.round(pos).astype(\"int\")",
+   "new": "pass",
+   "id": 29
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1609,
+   "op": "constant",
+   "start": 60225,
+   "end": 60226,
+   "old": "0",
+   "new": "(1)",
+   "id": 30
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 490,
+   "op": "constant",
+   "start": 17618,
+   "end": 17619,
+   "old": "0",
+   "new": "(1)",
+   "id": 31
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 520,
+   "op": "statement",
+   "start": 18706,
+   "end": 18737,
+   "old": "index = array.to_pandas_index()",
+   "new": "pass",
+   "id": 32
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1489,
+   "op": "boolean",
+   "start": 55577,
+   "end": 55620,
+   "old": "variables is not None and name in variables",
+   "new": "(variables is not None or name in variables)",
+   "id": 33
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1493,
+   "op": "statement",
+   "start": 55728,
+   "end": 55740,
+   "old": "attrs = None",
+   "new": "pass",
+   "id": 34
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1527,
+   "op": "constant",
+   "start": 57038,
+   "end": 57045,
+   "old": "\"sizes\"",
+   "new": "('XX')",
+   "id": 35
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1560,
+   "op": "statement",
+   "start": 58493,
+   "end": 58534,
+   "old": "results[dim] = DataArray(pos, dims=dims0)",
+   "new": "pass",
+   "id": 36
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1623,
+   "op": "comparison",
+   "start": 60931,
+   "end": 60976,
+   "old": "len(duplicate_names) < len(index.index.names)",
+   "new": "(len(duplicate_names) <= len(index.index.names))",
+   "id": 37
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1632,
+   "op": "statement",
+   "start": 61281,
+   "end": 61322,
+   "old": "conflict_str = \"\\n\".join(duplicate_names)",
+   "new": "pass",
+   "id": 38
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2121,
+   "op": "comparison",
+   "start": 77772,
+   "end": 77800,
+   "old": "type(idx) is not PandasIndex",
+   "new": "(type(idx) is PandasIndex)",
+   "id": 39
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2122,
+   "op": "constant",
+   "start": 77889,
+   "end": 77895,
+   "old": "\"isel\"",
+   "new": "('XX')",
+   "id": 40
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 2124,
+   "op": "constant",
+   "start": 77961,
+   "end": 77967,
+   "old": "\"isel\"",
+   "new": "('XX')",
+   "id": 41
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 242,
+   "op": "comparison",
+   "start": 8589,
+   "end": 8598,
+   "old": "d in dims",
+   "new": "(d not in dims)",
+   "id": 42
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1489,
+   "op": "comparison",
+   "start": 55577,
+   "end": 55598,
+   "old": "variables is not None",
+   "new": "(variables is None)",
+   "id": 43
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1489,
+   "op": "comparison",
+   "start": 55603,
+   "end": 55620,
+   "old": "name in variables",
+   "new": "(name not in variables)",
+   "id": 44
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1515,
+   "op": "constant",
+   "start": 56516,
+   "end": 56588,
+   "old": "\"CoordinateTransformIndex only supports selection with method='nearest'\"",
+   "new": "('XX')",
+   "id": 45
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1538,
+   "op": "comparison",
+   "start": 57496,
+   "end": 57511,
+   "old": "ds != dim_size0",
+   "new": "(ds == dim_size0)",
+   "id": 46
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 526,
+   "op": "comparison",
+   "start": 18914,
+   "end": 18937,
+   "old": "array.dtype.kind == \"O\"",
+   "new": "(array.dtype.kind != 'O')",
+   "id": 47
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 527,
+   "op": "statement",
+   "start": 18955,
+   "end": 18981,
+   "old": "kwargs[\"dtype\"] = \"object\"",
+   "new": "pass",
+   "id": 48
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 1628,
+   "op": "boolean",
+   "start": 61170,
+   "end": 61196,
+   "old": "not dim_variable.equals(v)",
+   "new": "(dim_variable.equals(v))",
+   "id": 49
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 528,
+   "op": "constant",
+   "start": 19014,
+   "end": 19023,
+   "old": "\"float16\"",
+   "new": "('XX')",
+   "id": 50
+  },
+  {
+   "path": "xarray/core/indexes.py",
+   "line": 537,
+   "op": "constant",
+   "start": 19438,
+   "end": 19445,
+   "old": "\"dtype\"",
+   "new": "('XX')",
+   "id": 51
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1483,
+   "op": "statement",
+   "start": 52992,
+   "end": 53056,
+   "old": "arrays = [v for v in indexer.tuple if isinstance(v, np.ndarray)]",
+   "new": "pass",
+   "id": 52
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1484,
+   "op": "statement",
+   "start": 53061,
+   "end": 53109,
+   "old": "n_dim = arrays[0].ndim if len(arrays) > 0 else 0",
+   "new": "pass",
+   "id": 53
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1480,
+   "op": "comparison",
+   "start": 52946,
+   "end": 52962,
+   "old": "len(slices) == 0",
+   "new": "(len(slices) != 0)",
+   "id": 54
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1445,
+   "op": "comparison",
+   "start": 51818,
+   "end": 51829,
+   "old": "indices < 0",
+   "new": "(indices <= 0)",
+   "id": 55
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1480,
+   "op": "constant",
+   "start": 52961,
+   "end": 52962,
+   "old": "0",
+   "new": "(1)",
+   "id": 56
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1484,
+   "op": "comparison",
+   "start": 53087,
+   "end": 53102,
+   "old": "len(arrays) > 0",
+   "new": "(len(arrays) >= 0)",
+   "id": 57
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "statement",
+   "start": 53345,
+   "end": 53418,
+   "old": "shape = (1,) * (n_dim + i_dim) + (-1,) + (1,) * (len(slices) - i_dim - 1)",
+   "new": "pass",
+   "id": 58
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1450,
+   "op": "comparison",
+   "start": 52007,
+   "end": 52022,
+   "old": "indices >= size",
+   "new": "(indices > size)",
+   "id": 59
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "arithmetic",
+   "start": 53353,
+   "end": 53418,
+   "old": "(1,) * (n_dim + i_dim) + (-1,) + (1,) * (len(slices) - i_dim - 1)",
+   "new": "((1,) * (n_dim + i_dim) + (-1,) - (1,) * (len(slices) - i_dim - 1))",
+   "id": 60
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1493,
+   "op": "constant",
+   "start": 53511,
+   "end": 53512,
+   "old": "1",
+   "new": "(2)",
+   "id": 61
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "arithmetic",
+   "start": 53386,
+   "end": 53418,
+   "old": "(1,) * (len(slices) - i_dim - 1)",
+   "new": "((1,) / (len(slices) - i_dim - 1))",
+   "id": 62
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "arithmetic",
+   "start": 53353,
+   "end": 53375,
+   "old": "(1,) * (n_dim + i_dim)",
+   "new": "((1,) / (n_dim + i_dim))",
+   "id": 63
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1489,
+   "op": "arithmetic",
+   "start": 53289,
+   "end": 53307,
+   "old": "(1,) * len(slices)",
+   "new": "((1,) / len(slices))",
+   "id": 64
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "arithmetic",
+   "start": 53394,
+   "end": 53413,
+   "old": "len(slices) - i_dim",
+   "new": "(len(slices) + i_dim)",
+   "id": 65
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "constant",
+   "start": 53354,
+   "end": 53355,
+   "old": "1",
+   "new": "(2)",
+   "id": 66
+  },
+  {
+   "path": "xarray/core/indexing.py",
+   "line": 1491,
+   "op": "constant",
+   "start": 53380,
+   "end": 53381,
+   "old": "1",
+   "new": "(2)",
+   "id": 67
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 108,
+   "op": "return",
+   "start": 3079,
+   "end": 3202,
+   "old": "return pd.api.types.is_extension_array_dtype(dtype) and not isinstance(  # noqa: TID251\n        dtype, pd.StringDtype\n    )",
+   "new": "return None",
+   "id": 68
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 196,
+   "op": "statement",
+   "start": 5706,
+   "end": 5736,
+   "old": "dtype = array.categories.dtype",
+   "new": "pass",
+   "id": 69
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 395,
+   "op": "statement",
+   "start": 12125,
+   "end": 12140,
+   "old": "np.dtype(dtype)",
+   "new": "pass",
+   "id": 70
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 399,
+   "op": "return",
+   "start": 12216,
+   "end": 12227,
+   "old": "return True",
+   "new": "return None",
+   "id": 71
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 938,
+   "op": "statement",
+   "start": 27947,
+   "end": 28063,
+   "old": "raise ValueError(\n                f\"Dimensions {invalid} do not exist. Expected one or more of {dims}\"\n            )",
+   "new": "pass",
+   "id": 72
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 946,
+   "op": "statement",
+   "start": 28160,
+   "end": 28185,
+   "old": "indexers = dict(indexers)",
+   "new": "pass",
+   "id": 73
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 948,
+   "op": "statement",
+   "start": 28195,
+   "end": 28232,
+   "old": "invalid = indexers.keys() - set(dims)",
+   "new": "pass",
+   "id": 74
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 957,
+   "op": "return",
+   "start": 28477,
+   "end": 28492,
+   "old": "return indexers",
+   "new": "return None",
+   "id": 75
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 192,
+   "op": "constant",
+   "start": 5611,
+   "end": 5614,
+   "old": "\"O\"",
+   "new": "('XX')",
+   "id": 76
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 202,
+   "op": "constant",
+   "start": 5907,
+   "end": 5910,
+   "old": "\"O\"",
+   "new": "('XX')",
+   "id": 77
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 959,
+   "op": "comparison",
+   "start": 28503,
+   "end": 28527,
+   "old": "missing_dims == \"ignore\"",
+   "new": "(missing_dims != 'ignore')",
+   "id": 78
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 963,
+   "op": "statement",
+   "start": 28622,
+   "end": 28725,
+   "old": "raise ValueError(\n            f\"Unrecognised option {missing_dims} for missing_dims argument\"\n        )",
+   "new": "pass",
+   "id": 79
+  },
+  {
+   "path": "xarray/core/utils.py",
+   "line": 960,
+   "op": "comparison",
+   "start": 28590,
+   "end": 28601,
+   "old": "key in dims",
+   "new": "(key not in dims)",
+   "id": 80
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 189,
+   "op": "return",
+   "start": 6371,
+   "end": 6381,
+   "old": "return obj",
+   "new": "return None",
+   "id": 81
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 2999,
+   "op": "statement",
+   "start": 110844,
+   "end": 110857,
+   "old": "all_dims = {}",
+   "new": "pass",
+   "id": 82
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 3012,
+   "op": "return",
+   "start": 111358,
+   "end": 111373,
+   "old": "return all_dims",
+   "new": "return None",
+   "id": 83
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 99,
+   "op": "constant",
+   "start": 2910,
+   "end": 2914,
+   "old": "True",
+   "new": "(False)",
+   "id": 84
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 135,
+   "op": "statement",
+   "start": 4169,
+   "end": 4187,
+   "old": "obj = obj.variable",
+   "new": "pass",
+   "id": 85
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 138,
+   "op": "statement",
+   "start": 4231,
+   "end": 4257,
+   "old": "obj = obj.copy(deep=False)",
+   "new": "pass",
+   "id": 86
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 180,
+   "op": "comparison",
+   "start": 6020,
+   "end": 6033,
+   "old": "obj.ndim == 1",
+   "new": "(obj.ndim != 1)",
+   "id": 87
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 148,
+   "op": "statement",
+   "start": 4556,
+   "end": 4756,
+   "old": "raise TypeError(\n                f\"Variable {name!r}: Using a DataArray object to construct a variable is\"\n                \" ambiguous, please extract the data using the .data property.\"\n            )",
+   "new": "pass",
+   "id": 88
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 153,
+   "op": "statement",
+   "start": 4782,
+   "end": 4818,
+   "old": "obj = Variable(dims_, data_, *attrs)",
+   "new": "pass",
+   "id": 89
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 3006,
+   "op": "statement",
+   "start": 111103,
+   "end": 111118,
+   "old": "all_dims[d] = s",
+   "new": "pass",
+   "id": 90
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 161,
+   "op": "comparison",
+   "start": 5188,
+   "end": 5208,
+   "old": "obj.name is not None",
+   "new": "(obj.name is None)",
+   "id": 91
+  },
+  {
+   "path": "xarray/core/variable.py",
+   "line": 173,
+   "op": "statement",
+   "start": 5727,
+   "end": 5768,
+   "old": "obj = Variable(name, data, fastpath=True)",
+   "new": "pass",
+   "id": 92
+  },
+  {
+   "path": "xarray/namedarray/core.py",
+   "line": 1166,
+   "op": "constant",
+   "start": 39712,
+   "end": 39727,
+   "old": "\"This function\"",
+   "new": "('XX')",
+   "id": 93
+  },
+  {
+   "path": "xarray/namedarray/core.py",
+   "line": 1169,
+   "op": "constant",
+   "start": 39834,
+   "end": 39835,
+   "old": "1",
+   "new": "(2)",
+   "id": 94
+  },
+  {
+   "path": "xarray/namedarray/pycompat.py",
+   "line": 127,
+   "op": "return",
+   "start": 4297,
+   "end": 4308,
+   "old": "return data",
+   "new": "return None",
+   "id": 95
+  },
+  {
+   "path": "xarray/namedarray/pycompat.py",
+   "line": 107,
+   "op": "return",
+   "start": 3538,
+   "end": 3560,
+   "old": "return data.to_numpy()",
+   "new": "return None",
+   "id": 96
+  },
+  {
+   "path": "xarray/namedarray/pycompat.py",
+   "line": 116,
+   "op": "statement",
+   "start": 3876,
+   "end": 3919,
+   "old": "chunkmanager = get_chunked_array_type(data)",
+   "new": "pass",
+   "id": 97
+  },
+  {
+   "path": "xarray/namedarray/pycompat.py",
+   "line": 161,
+   "op": "return",
+   "start": 5495,
+   "end": 5531,
+   "old": "return to_duck_array(data, **kwargs)",
+   "new": "return None",
+   "id": 98
+  },
+  {
+   "path": "xarray/namedarray/pycompat.py",
+   "line": 123,
+   "op": "constant",
+   "start": 4222,
+   "end": 4230,
+   "old": "\"sparse\"",
+   "new": "('XX')",
+   "id": 99
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "task": "mlflow__mlflow.93dab383.test_trace_manager.bb95fbcd.lv1",
+ "image": "libercoders/featurebench-specs_mlflow-instance_efffa87e@sha256:5a63b594bc99a6dcd876289974979606b276edd49e966020111db3590c40add4",
+ "test_cmd": "pytest -rA --tb=short --color=no --timeout=20",
+ "gold_f2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 10 passed in 4.12s =============================="
+ },
+ "gold_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 68 passed in 3.50s =============================="
+ },
+ "mutant_pool": 102,
+ "stub_compiles": true,
+ "stub_imports": true,
+ "stub_p2p": {
+  "exit": 0,
+  "failing": [],
+  "summary": "============================== 68 passed in 3.83s =============================="
+ },
+ "leak_lines": 20,
+ "leak_hits": {},
+ "keep": true
+}
