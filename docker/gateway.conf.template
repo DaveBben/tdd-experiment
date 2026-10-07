@@ -1,0 +1,21 @@
+# The only route out of the agent network: the Qwen server, and the Anthropic API with the key added here,
+# so no session container ever holds the key.
+server {
+    listen 8080;
+    location / {
+        proxy_pass http://${QWEN_HOST}:8080;
+        proxy_buffering off;
+        proxy_read_timeout 3600s;
+    }
+}
+server {
+    listen 8081;
+    location / {
+        proxy_pass https://api.anthropic.com;
+        proxy_ssl_server_name on;
+        proxy_set_header Host api.anthropic.com;
+        proxy_set_header x-api-key ${ANTHROPIC_API_KEY};
+        proxy_buffering off;
+        proxy_read_timeout 3600s;
+    }
+}
