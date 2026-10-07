@@ -649,3 +649,10 @@ Changes made after the pilot started, each with its date, reason, and expected e
     At 20 tasks the decision rule has 80% power only for a true effect of about 7–8 points, against 6.4 at n = 47.
     A null result is reported as inconclusive and underpowered, and every result is reported as exploratory.
   This change was decided after the pilot differences were viewed, as logged in the entry above.
+* **2026-10-07, Sonnet extended past the 30 drawn tasks.**
+  Sonnet's first 6 tasks cost about $1 each, so the 30 drawn tasks would use only about $30 of the $100 cap.
+  The experimenter therefore extended Sonnet, before any main-run score existed.
+  When Sonnet's 30 tasks are done, it runs `draws/sonnet-extension.txt` in its own random order, until the $90 spending stop.
+  That file holds the 14 replacement tasks, then the other 39 kept tasks that are not pilot tasks, in the experiment draw's shuffled order.
+  The extension lifts the per-repository limit of 5, so mlflow, pandas, and astropy can each reach more than 5 tasks, and the repository-cluster bootstrap interval matters more.
+  Qwen still runs only the 30 drawn tasks, so the 2 models' task sets differ.
