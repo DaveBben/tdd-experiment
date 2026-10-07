@@ -309,6 +309,9 @@ Qwen3.6 27B was released on 2026-04-22 and Claude Sonnet 5.5 on 2026-09-28, so e
 A model cannot have trained on code published after its release, so this bound holds even when a training cutoff is not published.
 Each fresh task is committed before the pilot and is not published before the run.
 When the pipeline yields fewer than 5 such tasks before the pilot, the experiment runs with those it yields, and the count is reported.
+On 2026-10-07 the pipeline was not run before the pilot, so the experiment has 0 fresh tasks.
+Running it means executing FeatureBench's pipeline code with an LLM behind it and building large images locally, which did not fit the overnight schedule the experimenter set.
+The contamination check is therefore not available, and the results are reported with that limitation.
 
 Fresh tasks run through the same procedure as experiment tasks.
 Their results are reported separately and are not used in the decision rule, because 5 tasks are too few to decide on.
