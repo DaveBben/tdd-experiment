@@ -121,6 +121,11 @@ The following are held constant across all arms:
 * **Limits:** the same turn limit and token limit for test writing in every arm.
   Both limits count from the test-writing prompt, so arm A's design phase does not use up its test-writing budget.
   Arm A's design phase has its own turn and token limit.
+  A turn is 1 model response with its tool calls, and the token count is the sum over turns of each response's input and output tokens, cached tokens included.
+  Pi has no built-in limits, so the harness counts both from Pi's event stream and aborts the session when either is reached.
+  The pilot runs with generous limits: 100 turns and 5,000,000 tokens for the design phase, and 200 turns and 10,000,000 tokens for test writing.
+  After the pilot, each limit is set to 1.5 times the largest value any pilot session used in that phase, over both models and all arms, rounded up to the next 10 turns or 100,000 tokens, and committed with `design-v2`.
+  Every session also has a wall-clock limit of 2 hours, and reaching it counts as a crash.
 * **Context compaction:** Pi's automatic compaction is turned off with `"compaction": {"enabled": false}` in the committed settings.
   Compaction would summarise arm A's design reasoning away, in arm A only.
   A session whose context overflows the model's context length ends there, and the [exclusion rules](#exclusions-and-missing-data) apply.
@@ -138,10 +143,13 @@ The whole experiment runs once per model, on the same tasks.
 | Claude Sonnet 5.5 | The Anthropic API | Model ID `claude-sonnet-5-5` |
 
 Qwen3.6 27B has open weights, which meets the recommendation to include an open model as a baseline ([arXiv 2508.15503](https://arxiv.org/abs/2508.15503)).
-Its sampling settings are set explicitly on the server: temperature 0.6, top-p 0.95, top-k 20, min-p 0, repeat penalty 1.0, and reasoning off.
+Its sampling settings are set explicitly on the server: temperature 0.6, top-p 0.95, top-k 20, min-p 0, and repeat penalty 1.0.
+Thinking is on: the server's default is off, and Pi turns it on for each request with `--thinking high`, which it sends as `chat_template_kwargs: {"enable_thinking": true}`.
+Qwen3.6 has no effort levels, so for Qwen `high` only turns thinking on.
 The harness records the server's `/props` output for every session, so a change in serving shows up in the manifests.
 The server has 1 slot, so Qwen sessions run one at a time.
-Sonnet runs with default sampling settings, which are recorded.
+Sonnet runs with thinking effort `high`, set with `--thinking high`, because Pi cannot turn Sonnet's thinking off.
+Pi sends no temperature, so the API's default sampling applies.
 
 Limits such as the context length may differ between the 2 models, but are the same for every arm within a model.
 The models also differ in size, serving, and quantization, so a comparison across models cannot isolate any one of these.
@@ -157,15 +165,17 @@ Every session and every test run happens in a Docker container built from the ta
   Every container is prepared by the same committed script, which mirrors FeatureBench's own inference preparation.
   It applies the task's removal patch to `/testbed`, deletes the fail-to-pass test files, deletes `/root/my_repo`, every `__pycache__` directory, and `/testbed/.git`, starts a new git repository with 1 commit, and applies the stub.
   Sessions therefore never see the developers' fail-to-pass tests.
-* **Host:** an Apple M4 Max with 16 cores and 64 GB of memory, running Docker Desktop.
-  The images are built for `linux/amd64` and run under Rosetta emulation, which slows every run but applies equally to every arm.
+* **Host:** an Apple M4 Max with 16 cores and 64 GB of memory, running Docker in a Colima virtual machine with 12 CPUs and 32 GB.
+  The images are built for `linux/amd64` and run under emulation, which slows every run but applies equally to every arm.
 * **A new container per session:** each arm A, arm B, and arm C session starts from a fresh container, so nothing from one session can reach another.
 * **Network:** agent sessions may reach only their model's endpoint: the Anthropic API for Sonnet, and the local inference server for Qwen.
+  Session containers sit on an internal Docker network whose only other member is a gateway that forwards to those 2 endpoints.
+  The gateway adds the Anthropic API key, so no session container holds it.
   Test runs and mutant runs have no network.
 * **Timeouts:** each test run against a mutant has a time limit of 3 times the suite's run time on the reference implementation.
   That reference run time is measured in the same batch as the suite's mutant runs, so both face the same machine load.
   A mutant that times out counts as killed, and timeout kills are counted separately for each arm.
-* **Resources:** CPU and memory limits are the same for every container and are recorded.
+* **Resources:** every container is limited to 4 CPUs and 8 GB of memory, and the limits are recorded.
 
 ## Measures
 
@@ -188,6 +198,8 @@ It parses each changed file with Python's `ast` module and makes 1 mutant for ea
 * **Return:** a returned value becomes `None`.
 * **Statement:** an expression statement, assignment, `raise`, `break`, or `continue` becomes `pass`.
 
+Docstrings, type annotations, and the inside of f-strings are not mutated.
+A change there almost never changes behaviour, so such a mutant would be equivalent and only dilute the score.
 A mutant whose source equals the original after unparsing, or that fails to compile, is dropped before sampling.
 Each task's mutants are a random sample of at most 100, drawn once with a seed.
 Every suite, arm, and run on that task is scored against the same sample, so sampling error largely cancels in the paired difference.
@@ -472,7 +484,8 @@ The design rests on these assumptions:
 * **Reference implementations:** every gold patch left after filtering is correct, because it passes its fail-to-pass and pass-to-pass tests.
 * **No implementation:** no implementation of the feature can be reached while either arm writes tests.
   The [preparation](#environment) removes the git history and the second copy that every image holds.
-  Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds.
+  Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds, leaving out lines that also appear in the spec.
+  Those lines, mostly docstrings, reach every arm through the spec and the stub, so a match on them shows no leak.
   A match anywhere, such as in an installed copy of the package under `site-packages`, drops the task.
   Network access during sessions is limited to the model API, so the code cannot be fetched from the original repository.
 
