@@ -3,7 +3,7 @@
     bin/h python -m harness.run filter [REPO_PREFIX ...]        prepare + filter every task (of those repos)
     bin/h python -m harness.run draw-pilot                      -> draws/pilot.txt
     bin/h python -m harness.run draw-experiment N               -> draws/experiment.txt, draws/replacements.txt
-    bin/h python -m harness.run sessions MODEL TASKS RUNS OUT [--aa]
+    bin/h python -m harness.run sessions MODEL TASKS RUNS OUT [--aa] [--budget USD] [--stop-at ISO] [--no-c]
     bin/h python -m harness.run score TASKS OUT
     bin/h python -m harness.run ledger
 
@@ -11,6 +11,7 @@ Layout: OUT/<task>/<arm>/<run>/attempt-<k>/ holds 1 session's raw outputs; OUT/<
 holds manifest.json, locked.json, and score.json for the attempt that counts.
 """
 import concurrent.futures
+import datetime
 import fcntl
 import glob
 import hashlib
@@ -29,6 +30,7 @@ CAP_PER_REPO = 5
 API_BACKOFF = 600
 HALT_AFTER = 3  # consecutive pair errors: something is down, so stop instead of burning through pairs
 REPLACEMENTS = 5
+START_MARGIN = 20 * 60
 
 
 def seed(name):
@@ -129,6 +131,8 @@ def run_arm(row, arm, model, run_dir, spec_text, note=None, check=None):
         attempt = prior + tries
         adir = os.path.join(run_dir, f"attempt-{attempt}")
         info = session.run_session(row, arm, model, adir, spec_text, note)
+        if any(ph.get("limit_reached") == "deadline" for ph in info["phases"]):
+            return adir, {"attempt": attempt, "rerun_reason": reason, "excluded": "stopped at the deadline"}
         if (info["crashed"] or "").startswith(("harness error", "collect error")):
             # The harness, not the agent, failed: write no manifest, so the pair is retried on resume.
             raise RuntimeError(info["crashed"])
@@ -192,13 +196,16 @@ def spent(out):
     return total
 
 
-def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
+def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None, stop_at=None, arm_c=True):
+    """stop_at: epoch seconds. No pair starts within START_MARGIN of it, and a pair still running then is
+    stopped and excluded."""
     rows = data.load_rows()
     tasks = open(tasks_file).read().split()
     rng = random.Random(f"{seed('order')}:{model}")
     pairs = [(t, r) for t in tasks for r in range(1, runs + 1)]
     rng.shuffle(pairs)
-    later = ["B", "C"] + (["B2"] if aa else [])
+    later = ["B"] + (["C"] if arm_c else []) + (["B2"] if aa else [])
+    session.DEADLINE = stop_at
     orders = [rng.sample(later, len(later)) for _ in pairs]
     session.ensure_gateway(model)
     for task in tasks:
@@ -208,6 +215,9 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
         row = rows[task]
         if budget is not None and spent(out) >= budget:
             print(f"BUDGET STOP: spent {spent(out):.2f} of {budget}", flush=True)
+            return
+        if stop_at is not None and time.time() >= stop_at - START_MARGIN:
+            print("DEADLINE STOP", flush=True)
             return
         spec_text = open(os.path.join(ROOT, "tasks", task, "spec.md")).read()
         base = lambda arm: os.path.join(out, task, arm, str(r))
@@ -325,6 +335,15 @@ def cmd_ledger(runs_dir="runs", ledger="runs.sha256"):
         f.writelines(sorted(new, key=lambda l: l.split("  ", 1)[1]))
 
 
+def session_opts(args):
+    """--aa, --budget USD, --stop-at ISO-8601 time with offset, --no-c."""
+    opt = lambda f: args[args.index(f) + 1] if f in args else None
+    stop_at = opt("--stop-at")
+    return {"aa": "--aa" in args, "budget": float(opt("--budget")) if opt("--budget") else None,
+            "stop_at": datetime.datetime.fromisoformat(stop_at).timestamp() if stop_at else None,
+            "arm_c": "--no-c" not in args}
+
+
 def _read(path):
     return open(path, encoding="utf-8", errors="replace").read() if os.path.exists(path) else None
 
@@ -340,8 +359,7 @@ if __name__ == "__main__":
     elif cmd == "setup":
         cmd_setup(args[0])
     elif cmd == "sessions":
-        budget = float(args[args.index("--budget") + 1]) if "--budget" in args else None
-        cmd_sessions(args[0], args[1], int(args[2]), args[3], aa="--aa" in args, budget=budget)
+        cmd_sessions(args[0], args[1], int(args[2]), args[3], **session_opts(args))
     elif cmd == "score":
         cmd_score(args[0], *args[1:])
     elif cmd == "ledger":

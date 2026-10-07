@@ -633,3 +633,19 @@ Changes made after the pilot started, each with its date, reason, and expected e
   The design says the pilot's difference between arms is never analysed.
   Before deciding whether to run the main experiment at its estimated cost and duration, the experimenter viewed each pilot task's mean score per arm.
   Pilot data stays out of every reported result, but a decision to run, change, or stop the main experiment after this view is conditioned on it, and is reported as such.
+* **2026-10-07, main run sized by budget and time.**
+  The pilot rules set σ = 10 (the floor), n = 47 tasks, 3 runs per task, and the final limits: design phase 120 turns and 7,700,000 tokens, test-writing phase 250 turns and 15,400,000 tokens.
+  At n = 47 the run would cost about $800–1,000 for Sonnet and take 3–5 days for Qwen, so the experimenter capped it at about $100 of Sonnet spend and Qwen sessions ending at 06:00 on 2026-10-08.
+  The main run differs from the design as follows:
+  * **1 run per task:** in the pilot, the run-to-run standard deviation of B − A was 3.0 points for Qwen and 1.1 for Sonnet, against 5.2 and 8.7 between tasks, so a fixed budget buys more precision as more tasks than as more runs.
+    A task is kept when its 1 pair is kept, and an excluded pair is not replaced.
+  * **Task count set by the stop rule:** 30 tasks are drawn, and each model runs them in its own random order until it stops.
+    Sonnet starts no new pair once its spend reaches $90, which leaves room for the last pair.
+    Qwen starts no new pair after 05:40, and a Qwen session still running at 06:00 is stopped and its pair excluded.
+    Neither stop depends on any score.
+  * **No arm C for Qwen:** arm C feeds only the secondary comparisons, so Qwen runs arms A and B only, to fit more tasks before its stop.
+    Sonnet runs arms A, B, and C.
+  * **Expected power:** about 20 Sonnet tasks and about 20 Qwen tasks.
+    At 20 tasks the decision rule has 80% power only for a true effect of about 7–8 points, against 6.4 at n = 47.
+    A null result is reported as inconclusive and underpowered, and every result is reported as exploratory.
+  This change was decided after the pilot differences were viewed, as logged in the entry above.

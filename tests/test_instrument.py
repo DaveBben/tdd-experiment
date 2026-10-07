@@ -182,12 +182,12 @@ def test_mutant_sample_is_seeded_and_capped():
 
 # --- analysis -----------------------------------------------------------------
 
-def write_runs(tmp_path, effect, invalid_b=0.0, tasks=20, runs=3, seed=0, exclude=()):
+def write_runs(tmp_path, effect, invalid_b=0.0, tasks=20, runs=3, seed=0, exclude=(), arms="ABC"):
     rng = random.Random(seed)
     for t in range(tasks):
         base = rng.uniform(30, 70)
         for r in range(1, runs + 1):
-            for arm, shift, inv in (("A", 0, 0), ("B", effect, invalid_b), ("C", effect / 2, 0)):
+            for arm, shift, inv in (("A", 0, 0), ("B", effect, invalid_b), ("C", effect / 2, 0))[:len(arms)]:
                 d = tmp_path / f"org__repo{t % 4}.task{t}" / arm / str(r)
                 d.mkdir(parents=True)
                 score = {"mutation_score": base + shift + rng.gauss(0, 2), "invalid_rate": inv,
@@ -222,6 +222,28 @@ def test_exclusion_drops_whole_pair_and_thin_tasks(tmp_path):
     data_ = analyze.load(runs)
     assert len(data_["org__repo0.task0"]["A"]) == 2  # pair 1 dropped from every arm
     assert "org__repo1.task1" not in data_  # 1 pair left: task dropped
+
+
+def test_main_run_one_run_without_arm_c(tmp_path):
+    runs = write_runs(tmp_path, 10, runs=1, arms="AB", exclude={(0, 1)})
+    r = analyze.main(runs)
+    assert r["verdict"] == "supported" and r["primary_B_minus_A"]["n"] == 19  # task 0's 1 pair excluded
+    assert "secondary_C_minus_A" not in r
+    assert "secondary_C_minus_A" in analyze.main(write_runs(tmp_path / "c", 10, runs=1))
+
+
+def test_session_options_and_deadline_exclusion(monkeypatch):
+    from harness import run, session
+    o = run.session_opts(["--budget", "90", "--stop-at", "2026-10-08T06:00:00-04:00", "--no-c"])
+    assert o == {"aa": False, "budget": 90.0, "stop_at": 1791453600.0, "arm_c": False}
+    assert run.session_opts([])["arm_c"] and run.session_opts([])["stop_at"] is None
+    calls = []
+    def fake(*a):
+        calls.append(a)
+        return {"crashed": "final response error: x", "phases": [{"limit_reached": "deadline"}]}
+    monkeypatch.setattr(session, "run_session", fake)
+    _, extra = run.run_arm({}, "B", "qwen", "/tmp/nonexistent-run", "spec")
+    assert extra["excluded"] == "stopped at the deadline" and len(calls) == 1  # never rerun
 
 
 # --- pilot rules -------------------------------------------------------------------

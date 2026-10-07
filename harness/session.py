@@ -24,10 +24,11 @@ MODELS = {
     "sonnet": {"model": "anthropic/claude-sonnet-5-5", "thinking": "high"},
 }
 # Pilot limits (EXPERIMENT.md "Controlled variables"); the final values are set from the pilot.
-LIMITS = {"design": {"turns": 100, "tokens": 5_000_000}, "tests": {"turns": 200, "tokens": 10_000_000}}
+LIMITS = {"design": {"turns": 120, "tokens": 7_700_000}, "tests": {"turns": 250, "tokens": 15_400_000}}  # from the pilot
 # Arm A only, when the design phase ends with no note: 1 prompt to write it from what it learned (added after the pilot).
 NOTE_LIMIT = {"turns": 10, "tokens": 2_000_000}
 WALL_SECONDS = 2 * 3600
+DEADLINE = None  # epoch seconds; a phase still running then is stopped with limit_reached "deadline"
 PI_ENV = {"PI_CODING_AGENT_DIR": "/root/.pi-agent", "PI_OFFLINE": "1", "PI_TELEMETRY": "0",
           "PI_SKIP_VERSION_CHECK": "1"}
 PI_FLAGS = ["--mode", "rpc", "--tools", "read,write,edit,bash", "--no-extensions", "--no-mcp", "--no-skills",
@@ -101,12 +102,16 @@ class Driver:
               "crash": None, "started_at": _now()}
         final_error = None
 
+        secs, why = WALL_SECONDS, "wall"
+        if DEADLINE is not None and DEADLINE - time.time() < secs:
+            secs, why = max(0, DEADLINE - time.time()), "deadline"
+
         def wall():
             if not st["limit_reached"]:
-                st["limit_reached"] = "wall"
+                st["limit_reached"] = why
                 self.send({"type": "abort"})
 
-        timers = [threading.Timer(WALL_SECONDS, wall), threading.Timer(WALL_SECONDS + 300, self.p.kill)]
+        timers = [threading.Timer(secs, wall), threading.Timer(secs + 300, self.p.kill)]
         for t in timers:
             t.start()
         try:

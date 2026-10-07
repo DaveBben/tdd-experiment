@@ -19,15 +19,15 @@ SESOI, GUARD, ALPHA, RESAMPLES = 5.0, 2.0, 0.025, 10_000
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 
-def load(runs_dir, tasks=None):
-    """{task: {arm: [score dicts of kept pairs]}} for tasks with at least 2 kept pairs."""
+def load(runs_dir, tasks=None, arms=ARMS, min_pairs=2):
+    """{task: {arm: [score dicts of kept pairs]}} for tasks with at least min_pairs kept pairs."""
     out = {}
     for task in sorted(tasks or os.listdir(runs_dir)):
-        runs = sorted({r for a in ARMS for r in _ls(runs_dir, task, a) if r.isdigit()}, key=int)
+        runs = sorted({r for a in arms for r in _ls(runs_dir, task, a) if r.isdigit()}, key=int)
         pairs = []
         for r in runs:
             pair = {}
-            for a in ARMS:
+            for a in arms:
                 d = os.path.join(runs_dir, task, a, r)
                 try:
                     manifest = json.load(open(os.path.join(d, "manifest.json")))
@@ -41,8 +41,8 @@ def load(runs_dir, tasks=None):
                 pair[a] = score
             else:
                 pairs.append(pair)
-        if len(pairs) >= 2:
-            out[task] = {a: [p[a] for p in pairs] for a in ARMS}
+        if len(pairs) >= min_pairs:
+            out[task] = {a: [p[a] for p in pairs] for a in arms}
     return out
 
 
@@ -52,7 +52,7 @@ def _ls(*parts):
 
 
 def per_task(data, key):
-    return {t: {a: statistics.fmean(s[key] for s in arms[a]) for a in ARMS} for t, arms in data.items()}
+    return {t: {a: statistics.fmean(s[key] for s in by_arm) for a, by_arm in arms.items()} for t, arms in data.items()}
 
 
 def bootstrap_ci(diffs, seed, clusters=None):
@@ -116,16 +116,20 @@ def verdict(r):
 
 def main(runs_dir, tasks=None):
     seed = int(open(os.path.join(ROOT, "draws", "bootstrap.seed")).read())
-    data = load(runs_dir, tasks)
+    # Main run (deviation log, 2026-10-07): 1 run per task, so a task is kept when its 1 pair is; arm C
+    # is not run for every model.
+    arms = ARMS if any(_ls(runs_dir, t, "C") for t in _ls(runs_dir)) else ("A", "B")
+    data = load(runs_dir, tasks, arms, min_pairs=1)
     primary = compare(data, "B", "A", seed)
     result = {
         "runs_dir": runs_dir,
         "primary_B_minus_A": primary,
         "guard_ok": primary["invalid_rate_diff"] <= GUARD,
-        "secondary_C_minus_A": compare(data, "C", "A", seed + 1),
-        "secondary_B_minus_C": compare(data, "B", "C", seed + 2),
         "verdict": verdict(primary),
     }
+    if "C" in arms:
+        result["secondary_C_minus_A"] = compare(data, "C", "A", seed + 1)
+        result["secondary_B_minus_C"] = compare(data, "B", "C", seed + 2)
     print(json.dumps(result))
     return result
 
