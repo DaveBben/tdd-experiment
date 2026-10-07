@@ -4,3 +4,4 @@
 smoke/
 logs/
 runs.sha256.lock
+__pycache__/
