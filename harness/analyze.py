@@ -23,7 +23,7 @@ def load(runs_dir, tasks=None):
     """{task: {arm: [score dicts of kept pairs]}} for tasks with at least 2 kept pairs."""
     out = {}
     for task in sorted(tasks or os.listdir(runs_dir)):
-        runs = sorted({r for a in ARMS for r in _ls(runs_dir, task, a)}, key=int)
+        runs = sorted({r for a in ARMS for r in _ls(runs_dir, task, a) if r.isdigit()}, key=int)
         pairs = []
         for r in runs:
             pair = {}
@@ -78,6 +78,9 @@ def compare(data, hi, lo, seed):
     d_size = [size[t][hi] - size[t][lo] for t in tasks]
     repos = [t.split(".")[0] for t in tasks]
     p = stats.wilcoxon(d, zero_method="pratt", alternative="two-sided").pvalue if any(d) else 1.0
+    # Which arm the signed ranks favour (Pratt: zeros are ranked, then dropped from the sums).
+    ranks = stats.rankdata([abs(x) for x in d])
+    rank_sum = sum(r for r, x in zip(ranks, d) if x > 0) - sum(r for r, x in zip(ranks, d) if x < 0)
     nonzero = [x for x in d if x]
     sign_p = stats.binomtest(sum(x > 0 for x in nonzero), len(nonzero)).pvalue if nonzero else 1.0
     # Size-adjusted difference: intercept of d_score ~ d_size.
@@ -88,6 +91,7 @@ def compare(data, hi, lo, seed):
         "ci": bootstrap_ci(d, seed),
         "ci_repo_cluster": bootstrap_ci(d, seed, repos),
         "wilcoxon_p": p,
+        "signed_rank_direction": int(rank_sum > 0) - int(rank_sum < 0),
         "sign_test_p": sign_p,
         "wins_ties_losses": [sum(x > 0 for x in d), sum(x == 0 for x in d), sum(x < 0 for x in d)],
         "invalid_rate_diff": statistics.fmean(d_inv),
@@ -101,9 +105,9 @@ def compare(data, hi, lo, seed):
 def verdict(r):
     """EXPERIMENT.md decision rule. No equivalence test is pre-specified, so a null is inconclusive."""
     significant = r["wilcoxon_p"] < ALPHA
-    if significant and r["mean_diff"] < 0:
+    if significant and r["signed_rank_direction"] < 0:
         return "opposite"
-    if significant and r["mean_diff"] >= SESOI:
+    if significant and r["signed_rank_direction"] > 0 and r["mean_diff"] >= SESOI:
         return "supported" if r["invalid_rate_diff"] <= GUARD else "guard failed"
     return "inconclusive"
 

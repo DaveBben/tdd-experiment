@@ -125,7 +125,8 @@ The following are held constant across all arms:
   Pi has no built-in limits, so the harness counts both from Pi's event stream and aborts the session when either is reached.
   The pilot runs with generous limits: 100 turns and 5,000,000 tokens for the design phase, and 200 turns and 10,000,000 tokens for test writing.
   After the pilot, each limit is set to 1.5 times the largest value any pilot session used in that phase, over both models and all arms, rounded up to the next 10 turns or 100,000 tokens, and committed with `design-v2`.
-  Every session also has a wall-clock limit of 2 hours, and reaching it counts as a crash.
+  Each phase also has a wall-clock limit of 2 hours, which works like the other limits: the phase is aborted and what it wrote is kept.
+  A session crashed only when Pi rejected a prompt, exited, or its final response ended in an error after Pi's own retries; a transient error that Pi recovered from is recorded but is not a crash.
 * **Context compaction:** Pi's automatic compaction is turned off with `"compaction": {"enabled": false}` in the committed settings.
   Compaction would summarise arm A's design reasoning away, in arm A only.
   A session whose context overflows the model's context length ends there, and the [exclusion rules](#exclusions-and-missing-data) apply.
@@ -164,6 +165,7 @@ Every session and every test run happens in a Docker container built from the ta
 * **Preparation:** a FeatureBench image holds the complete repository at the task's commit, its git history, and a second copy at `/root/my_repo`.
   Every container is prepared by the same committed script, which mirrors FeatureBench's own inference preparation.
   It applies the task's removal patch to `/testbed`, deletes the fail-to-pass test files, deletes `/root/my_repo`, every `__pycache__` directory, and `/testbed/.git`, starts a new git repository with 1 commit, and applies the stub.
+  It also deletes `/root/.cache`, conda's package cache, and every conda environment except the task's own, because a pre-pilot review found released copies of the feature's package there: a cached pandas wheel and a second environment's sympy.
   Sessions therefore never see the developers' fail-to-pass tests.
 * **Host:** an Apple M4 Max with 16 cores and 64 GB of memory, running Docker in a Colima virtual machine with 12 CPUs and 32 GB.
   The images are built for `linux/amd64` and run under emulation, which slows every run but applies equally to every arm.
@@ -279,6 +281,8 @@ The tests are split into fail-to-pass tests, which check the feature, and pass-t
 FeatureBench is used for 3 reasons.
 Each task is a real feature, with a median of about 470 added lines across 8 files in the `fast` split, which gives arm A real implementation planning to do.
 Its tests are developer-written, which gives the [human reference](#human-reference-secondary).
+A test's outcome is read from pytest's own per-test reports, and test files are always run whole, so test IDs never pass through a command line.
+A test file that cannot be collected against the stub fails there by definition, so all its tests are kept when the suite is locked, and each is then judged on the reference implementation like any other test.
 Each task ships a Docker image, which gives a fixed environment.
 
 The results report each task's repository, the added line count and file count of its gold patch, its fail-to-pass test count, and its mutant count before sampling.
@@ -292,7 +296,10 @@ Tasks are chosen in this order:
 3. Drop every task whose prepared container still holds the feature's code outside the undeveloped source, as checked under [assumptions](#assumptions).
 4. Draw 3 pilot tasks with a fixed random seed.
 5. Run the pilot, then set the task count from [sample size](#sample-size) and commit it here.
-6. Shuffle the rest with a second fixed seed, and take experiment tasks in that order until there are that many, skipping any task that would put more than 5 tasks from 1 repository in the set, pilot tasks included.
+6. Shuffle the rest with a second fixed seed, and take experiment tasks in that order until there are that many, skipping any task that would put more than k tasks from 1 repository in the set, pilot tasks included.
+   k is the smallest number, at least 5, for which this yields the task count plus 5 replacements.
+   The filter kept 83 tasks spread so unevenly that k = 5 allows only 41 experiment tasks, fewer than the planned 47, and the [task cap](#settled-decisions) was set so that it never binds below the planned count.
+   The [repository clustering](#analysis) bootstrap reports how much the larger k matters.
    The tasks after them, in the same order, are the replacements used by the [exclusion rules](#exclusions-and-missing-data).
    The `fast` split's tasks are spread unevenly, from 21 tasks in 1 repository to 1 task in each of 8 others, so this limit allows at most 52 tasks in total, and about 49 after the pilot.
 
@@ -491,11 +498,10 @@ The design rests on these assumptions:
 * **Reference implementations:** every gold patch left after filtering is correct, because it passes its fail-to-pass and pass-to-pass tests.
 * **No implementation:** no implementation of the feature can be reached while either arm writes tests.
   The [preparation](#environment) removes the git history and the second copy that every image holds.
-  Before the pilot, a script then searches each prepared container's whole filesystem for the 20 longest distinct lines that the gold patch adds, leaving out lines that also appear in the spec.
-  It also leaves out lines that the undeveloped repository still holds in the files the gold patch changes.
-  Both kinds reach every arm through the spec, the stub, or the repository itself, so a match on them shows no leak.
-  A file holding at least 5 of those lines anywhere, such as an installed copy of the package under `site-packages`, drops the task.
-  Real copies of a feature held 7 to 17 of the 20 lines when this was checked, and files that only share an idiom with it held 1 or 2.
+  Before the pilot, a script then searches each prepared container's whole filesystem, including the Python files inside wheels, eggs, zips, and tarballs, for each gold-patched file's distinctive lines.
+  A file's distinctive lines are the lines of at least 30 characters that the gold patch adds to it, leaving out lines that also appear in the spec or anywhere in the undeveloped repository, because those reach every arm anyway.
+  A file anywhere that holds at least a quarter of one gold file's distinctive lines, with a minimum of 3 and a maximum of 10, is a copy of it and drops the task, as does an archive the script cannot open that is named after the task's package.
+  A planted copy of a gold file was detected both as a plain file and inside a wheel, and files that only share an idiom with the feature held 1 or 2 lines.
   Network access during sessions is limited to the model API, so the code cannot be fetched from the original repository.
 
 ## Threats to validity

@@ -1,0 +1,11 @@
+# The only route out of the Qwen agent network: the Qwen server's OpenAI-compatible API.
+server {
+    listen 8080;
+    client_max_body_size 0;
+    location /v1/ {
+        proxy_pass http://${QWEN_HOST}:8080;
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_read_timeout 3600s;
+    }
+}

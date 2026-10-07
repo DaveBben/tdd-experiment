@@ -1,82 +1,124 @@
 """Runs inside a task container (stdlib only, the container's Python): test outcomes and mutant kills.
 
-    python runner.py outcomes TEST_CMD TARGETS.json REPEATS      -> {"runs": [{nodeid: outcome}], "seconds": [...]}
-    python runner.py mutants TEST_CMD IDS.json MUTANTS.json      -> {"ref_seconds": s, "results": [{id, killed, timeout}]}
+    python runner.py outcomes TEST_CMD FILES.json REPEATS        -> {"runs": [{nodeid: outcome}], "seconds": [...],
+                                                                    "collection_errors": [[file, ...] per run]}
+    python runner.py mutants TEST_CMD FILES.json MUTANTS.json IDS.json
+                                                                 -> {"ref_seconds": s, "results": [{id, killed, timeout}]}
 
-Outcomes come from pytest's `-rA` summary lines, as FeatureBench reads them.
-A run with no summary line for a test counts it as failed.
+Test files are run whole, and node IDs are never passed to pytest: an ID with a space cannot survive a command
+line. Outcomes come from a pytest plugin (tdd_outcomes, below), not from parsing pytest's text output. A test
+is PASSED only when its setup, call, and teardown all pass; anything else (failed, error, skipped, xfail,
+xpass) is reported as such. A test with no report in a run is MISSING.
 """
 import json
 import os
-import re
 import subprocess
 import sys
 import time
 
-LINE = re.compile(r"^(PASSED|FAILED|ERROR|SKIPPED|XFAIL|XPASS) (\S+)")
-ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+PLUGIN_DIR = "/tmp/tdd_plugin"
+PLUGIN = '''
+import json, os
+
+_out = {}
+_collect_errors = []
 
 
-def pytest(cmd, targets, timeout=None):
-    """({nodeid: outcome}, seconds, timed_out). Targets are test files or node IDs; a node ID target
-    with no summary line is reported as MISSING."""
-    start = time.monotonic()
-    try:
-        p = subprocess.run(f"{cmd} -p no:cacheprovider " + " ".join(_q(t) for t in targets), shell=True, cwd="/testbed",
-                           capture_output=True, text=True, timeout=timeout, env=ENV, executable="/bin/bash")
-    except subprocess.TimeoutExpired:
-        return {}, time.monotonic() - start, True
-    out = {}
-    for line in p.stdout.splitlines():
-        m = LINE.match(line)
-        if m:
-            # ERROR in teardown after PASSED: the test is not clean.
-            out[m.group(2)] = m.group(1) if out.get(m.group(2)) in (None, "PASSED") else out[m.group(2)]
-    for t in targets:
-        if "::" in t:
-            out.setdefault(t, "MISSING")
-    return out, time.monotonic() - start, False
+def pytest_collectreport(report):
+    if report.failed:
+        _collect_errors.append(report.nodeid)
+
+
+def pytest_runtest_logreport(report):
+    prev = _out.get(report.nodeid)
+    if report.when == "call":
+        if hasattr(report, "wasxfail"):
+            outcome = "XPASS" if report.passed else "XFAIL"
+        else:
+            outcome = report.outcome.upper()
+    elif report.failed:
+        outcome = "ERROR"
+    elif report.skipped:
+        outcome = "SKIPPED"
+    else:
+        outcome = "PASSED"
+    # The worst phase wins: PASSED only when setup, call, and teardown all passed.
+    _out[report.nodeid] = outcome if prev in (None, "PASSED") else prev
+
+
+def pytest_sessionfinish(session):
+    with open(os.environ["TDD_OUTCOMES"], "w") as f:
+        json.dump({"tests": _out, "collection_errors": _collect_errors}, f)
+'''
+ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", TDD_OUTCOMES="/tmp/tdd_outcomes.json",
+           PYTHONPATH=PLUGIN_DIR + (os.pathsep + os.environ["PYTHONPATH"] if os.environ.get("PYTHONPATH") else ""))
+RUN_LIMIT = 1800  # seconds for 1 run of a suite on the reference; a hang beyond this marks every test MISSING
 
 
 def _q(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
 
-def outcomes(cmd, targets, repeats):
-    runs, secs = [], []
+def pytest(cmd, files, timeout=RUN_LIMIT, cwd="/testbed"):
+    """({nodeid: outcome}, [files that failed to collect], seconds, timed_out)."""
+    os.makedirs(PLUGIN_DIR, exist_ok=True)
+    with open(os.path.join(PLUGIN_DIR, "tdd_outcomes.py"), "w") as f:
+        f.write(PLUGIN)
+    if os.path.exists(ENV["TDD_OUTCOMES"]):
+        os.remove(ENV["TDD_OUTCOMES"])
+    start = time.monotonic()
+    try:
+        subprocess.run(f"{cmd} -p tdd_outcomes -p no:cacheprovider --continue-on-collection-errors "
+                       + " ".join(_q(f) for f in files), shell=True, cwd=cwd, capture_output=True,
+                       timeout=timeout, env=ENV, executable="/bin/bash")
+    except subprocess.TimeoutExpired:
+        return {}, [], time.monotonic() - start, True
+    seconds = time.monotonic() - start
+    try:
+        with open(ENV["TDD_OUTCOMES"]) as f:
+            res = json.load(f)
+    except (OSError, ValueError):
+        return {}, list(files), seconds, False  # pytest died before the session finished
+    return res["tests"], res["collection_errors"], seconds, False
+
+
+def outcomes(cmd, files, repeats, cwd="/testbed"):
+    runs, secs, errs = [], [], []
     for _ in range(repeats):
-        o, s, _ = pytest(cmd, targets)
+        o, e, s, _ = pytest(cmd, files, cwd=cwd)
         runs.append(o)
+        errs.append(e)
         secs.append(s)
-    return {"runs": runs, "seconds": secs}
+    return {"runs": runs, "seconds": secs, "collection_errors": errs}
 
 
-def mutants(cmd, ids, muts):
-    _, ref_seconds, _ = pytest(cmd, ids)
+def mutants(cmd, files, muts, ids, root="/testbed"):
+    """Each mutant is killed when any test in `ids` is not PASSED, or the run times out."""
+    _, _, ref_seconds, _ = pytest(cmd, files, cwd=root)
+    limit = max(3 * ref_seconds, ref_seconds + 10)
     results = []
     for m in muts:
-        path = os.path.join("/testbed", m["path"])
+        path = os.path.join(root, m["path"])
         with open(path, "rb") as f:
             src = f.read()
         try:
             with open(path, "wb") as f:
                 f.write(src[: m["start"]] + m["new"].encode() + src[m["end"]:])
-            o, _, timed_out = pytest(cmd, ids, timeout=max(3 * ref_seconds, ref_seconds + 10))
+            o, _, _, timed_out = pytest(cmd, files, timeout=limit, cwd=root)
         finally:
             with open(path, "wb") as f:
                 f.write(src)
-        o = {i: o.get(i, "MISSING") for i in ids}
-        killed = timed_out or any(v != "PASSED" for v in o.values())
-        results.append({"id": m["id"], "killed": killed, "timeout": timed_out,
-                        "failing": sorted(k for k, v in o.items() if v != "PASSED")})
-    return {"ref_seconds": ref_seconds, "results": results}
+        failing = sorted(i for i in ids if o.get(i, "MISSING") != "PASSED")
+        results.append({"id": m["id"], "killed": timed_out or bool(failing), "timeout": timed_out,
+                        "failing": failing})
+    return {"ref_seconds": ref_seconds, "limit_seconds": limit, "results": results}
 
 
 if __name__ == "__main__":
-    mode, cmd, ids_path = sys.argv[1:4]
-    ids = json.load(open(ids_path))
+    mode, cmd, files_path = sys.argv[1:4]
+    files = json.load(open(files_path))
     if mode == "outcomes":
-        res = outcomes(cmd, ids, int(sys.argv[4]))
+        res = outcomes(cmd, files, int(sys.argv[4]))
     else:
-        res = mutants(cmd, ids, json.load(open(sys.argv[4]))["mutants"])
+        res = mutants(cmd, files, json.load(open(sys.argv[4]))["mutants"], json.load(open(sys.argv[5])))
     json.dump(res, sys.stdout)

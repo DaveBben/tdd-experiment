@@ -252,10 +252,14 @@ def test_filter_rule():
     base = {"gold_f2p": {"exit": 0, "failing": [], "summary": "== 40 passed in 1s =="},
             "gold_p2p": {"exit": 1, "failing": ["t.py::net"], "summary": ""},
             "stub_p2p": {"exit": 1, "failing": ["t.py::net"], "summary": ""},
-            "stub_compiles": True, "stub_imports": True,
-            "leak_hits": {"/site/numpy/x.py": {"lines": 2, "tracked": False}}}
-    assert prepare.decide(base)  # env failure shared by gold and stub, idiom-only leak hit: kept
-    assert not prepare.decide({**base, "leak_hits": {"/site/pip/_vendor/pkg/m.py": {"lines": 7, "tracked": False}}})
+            "stub_compiles": True, "stub_imports": True, "library": "pkg",
+            "leak_candidates": {"pkg/a.py": 70, "pkg/b.py": 2},
+            "leak_hits": {"/site/numpy/x.py": {"pkg/a.py": 2}}, "unscanned_archives": ["/x/other-1.0.conda"]}
+    assert prepare.decide(base)  # env failure shared by gold and stub, idiom-only hit, unrelated archive: kept
+    assert not prepare.decide({**base, "leak_hits": {"/env2/pkg/a.py": {"pkg/a.py": 10}}})  # copy of a.py
+    assert prepare.decide({**base, "leak_hits": {"/env2/pkg/a.py": {"pkg/a.py": 9}}})
+    assert not prepare.decide({**base, "leak_hits": {"/w.whl!pkg/b.py": {"pkg/b.py": 3}}})  # small file, threshold 3
+    assert not prepare.decide({**base, "unscanned_archives": ["/x/pkg-2.0-py_0.conda"]})
     assert not prepare.decide({**base, "stub_p2p": {"exit": 1, "failing": ["t.py::net", "t.py::other"], "summary": ""}})
     assert not prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a", "b", "c"], "summary": "37 passed"}})
     assert prepare.decide({**base, "gold_f2p": {"exit": 1, "failing": ["a"], "summary": "39 passed"}})

@@ -5,6 +5,7 @@ and the mutant sample. Writes tasks/<task>/{spec.md, stub.diff, filter.json, mut
 """
 import collections
 import json
+import math
 import re
 import os
 import sys
@@ -26,7 +27,10 @@ def undevelop(c, row):
     docker.run(c, f"""set -e
 cd {TB} && git apply --whitespace=nowarn /tmp/removal.patch && rm -f {f2p} /tmp/removal.patch
 rm -rf /root/my_repo {TB}/.git {extra}
-find / -xdev -name __pycache__ -type d -prune -exec rm -rf {{}} + 2>/dev/null || true""")
+find / -xdev -name __pycache__ -type d -prune -exec rm -rf {{}} + 2>/dev/null || true
+# Caches and environments that can hold a released copy of the package (wheels, conda packages, a 2nd env).
+rm -rf /root/.cache /opt/miniconda3/pkgs
+for env in /opt/miniconda3/envs/*; do [ "$(basename "$env")" = testbed ] || rm -rf "$env"; done""")
 
 
 def git_snapshot(c):
@@ -56,22 +60,31 @@ def can_import(c, path):
                       check=False).returncode == 0
 
 
-def leak_lines(row, spec_text, undeveloped):
-    """The 20 longest distinct gold-added lines that appear neither in the spec every arm receives nor
-    in the undeveloped, stubbed versions of the files the gold patch changes."""
+LEAK_MIN_CHARS = 30
+
+
+def leak_candidates(row, spec_text):
+    """{gold-patched .py file: its distinctive added lines}: stripped, at least 30 characters, not in the spec.
+    Lines also present anywhere in the undeveloped repository are removed later, inside the container."""
     spec_lines = {l.strip() for l in spec_text.split("\n")}
-    spec_lines |= {l.strip() for text in undeveloped for l in text.split("\n")}
-    added = set()
+    out = {}
     for path, block in data._file_blocks(data.gold_patch(row)):
+        lines = set()
         for line in block.split("\n"):
             if line.startswith("-") and not line.startswith("---"):
-                s = line[1:].strip()
-                if s and s not in spec_lines:
-                    added.add(s)
-    return sorted(added, key=lambda s: (-len(s), s))[:20]
+                t = line[1:].strip()
+                if len(t) >= LEAK_MIN_CHARS and t not in spec_lines:
+                    lines.add(t)
+        if path.endswith(".py") and lines:
+            out[path] = sorted(lines)
+    return out
 
 
-LEAK_MIN_LINES = 5  # vendored copies of a feature held 7-17 of the 20 lines; incidental matches 1-2
+def leak_threshold(n):
+    """Lines of 1 gold file that a file must hold to count as a copy of it."""
+    return min(10, max(3, math.ceil(0.25 * n)))
+
+
 F2P_MAX_GOLD_FAIL = 0.05
 
 
@@ -88,8 +101,15 @@ def decide(r):
     n_f2p = f2p_count(r)
     gold_ok = n_f2p > 0 and len(r["gold_f2p"]["failing"]) <= F2P_MAX_GOLD_FAIL * n_f2p
     stub_breaks = set(r["stub_p2p"]["failing"]) - set(r["gold_p2p"]["failing"])
-    leak = [p for p, v in r["leak_hits"].items() if v["lines"] >= LEAK_MIN_LINES]
-    return gold_ok and r["stub_compiles"] and r["stub_imports"] and not stub_breaks and not leak
+    return gold_ok and r["stub_compiles"] and r["stub_imports"] and not stub_breaks and not leaks(r)
+
+
+def leaks(r):
+    """Files holding a copy of a gold file, and unscanned archives named after the package."""
+    n = r["leak_candidates"]
+    found = [f"{p} <- {g}" for p, d in r["leak_hits"].items() for g, k in d.items() if k >= leak_threshold(n[g])]
+    lib = r["library"].lower().replace("-", "_")
+    return found + [a for a in r["unscanned_archives"] if lib in os.path.basename(a).lower().replace("-", "_")]
 
 
 def prepare(task_id, rows, seed):
@@ -144,22 +164,20 @@ def prepare(task_id, rows, seed):
         report["stub_p2p"] = run_tests(st, cmd, row["PASS_TO_PASS"])
         docker.run(st, f"find {TB} -name __pycache__ -type d -prune -exec rm -rf {{}} + ; rm -rf {TB}/.pytest_cache")
         git_snapshot(st)
-        undeveloped = [(docker.get(st, f"{TB}/{p}") or b"").decode(errors="replace")
-                       for p, _ in data._file_blocks(data.gold_patch(row))]
-        lines = leak_lines(row, spec_text, undeveloped)
-        docker.put(st, "/tmp/leak.txt", "\n".join(lines) + "\n")
-        out_ = docker.run(st, "grep -rIoF -f /tmp/leak.txt / --exclude-dir=proc --exclude-dir=sys --exclude-dir=dev"
-                              " 2>/dev/null; rm /tmp/leak.txt", check=False).stdout
-        tracked = set(docker.run(st, f"cd {TB} && git ls-files").stdout.split("\n"))
-        matched = collections.defaultdict(set)
-        for line in out_.splitlines():
-            path, _, text = line.partition(":")
-            if path != "/tmp/leak.txt":
-                matched[path].add(text)
-        # Per file: how many of the candidate lines it holds, and whether it is tracked undeveloped source.
-        report["leak_lines"] = len(lines)
-        report["leak_hits"] = {p: {"lines": len(v), "tracked": p.startswith(TB + "/") and p[len(TB) + 1:] in tracked}
-                               for p, v in sorted(matched.items())}
+        cands = leak_candidates(row, spec_text)
+        # Drop lines the undeveloped repository itself holds anywhere: they show nothing about a leak.
+        docker.put(st, "/tmp/cand.txt", "\n".join({l for ls in cands.values() for l in ls}) + "\n")
+        present = set(docker.run(st, f"cd {TB} && git ls-files -z | xargs -0 grep -hoF -f /tmp/cand.txt 2>/dev/null;"
+                                     " rm /tmp/cand.txt", check=False).stdout.splitlines())
+        cands = {g: [l for l in ls if l not in present] for g, ls in cands.items()}
+        docker.put(st, "/tmp/leakscan.py", open(os.path.join(ROOT, "harness", "leakscan.py")).read())
+        docker.put(st, "/tmp/cands.json", json.dumps(cands))
+        scan = json.loads(docker.run(st, f"{docker.CONDA} && python /tmp/leakscan.py /tmp/cands.json;"
+                                         " rm /tmp/leakscan.py /tmp/cands.json", timeout=7200).stdout)
+        report["library"] = row["repo_settings"].get("library_name") or row["repo"].split("/")[1]
+        report["leak_candidates"] = {g: len(ls) for g, ls in cands.items()}
+        report["leak_hits"] = scan["hits"]
+        report["unscanned_archives"] = scan["unscanned_archives"]
         docker.sh("commit", st, docker.tag(row, "stub"))
     finally:
         docker.stop(st)

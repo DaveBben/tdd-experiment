@@ -15,7 +15,8 @@ import uuid
 from harness import docker
 
 ROOT = docker.ROOT
-NETWORK, GATEWAY = "tdd-agents", "tdd-gateway"
+NETWORK = {"qwen": "tdd-net-qwen", "sonnet": "tdd-net-sonnet"}
+GATEWAY = {"qwen": "tdd-gw-qwen", "sonnet": "tdd-gw-sonnet"}
 QWEN_HOST = "192.168.1.16"  # ai-server.local; mDNS names do not resolve inside the gateway
 MODELS = {
     "qwen": {"model": "llamacpp/qwen3.6-27b", "thinking": "high",
@@ -46,18 +47,20 @@ def messages(arm, spec_text, note=None):
     return [("tests", head + prompt("tests.md"))]
 
 
-def ensure_gateway():
-    if docker.sh("network", "inspect", NETWORK, check=False).returncode:
-        docker.sh("network", "create", "--internal", NETWORK)
-    if docker.sh("inspect", GATEWAY, check=False).returncode == 0:
-        docker.sh("start", GATEWAY)  # a no-op when it is already running
+def ensure_gateway(model_name):
+    """The model's own internal network and gateway: a Qwen session cannot reach the Anthropic API, nor the reverse."""
+    net, gw = NETWORK[model_name], GATEWAY[model_name]
+    if docker.sh("network", "inspect", net, check=False).returncode:
+        docker.sh("network", "create", "--internal", net, check=False)
+    if docker.sh("inspect", gw, check=False).returncode == 0:
+        docker.sh("start", gw)  # a no-op when it is already running
         return
     nginx = "nginx@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de"
-    docker.sh("create", "--name", GATEWAY, "-e", f"QWEN_HOST={QWEN_HOST}", "-e", "ANTHROPIC_API_KEY",
-              "-e", "NGINX_ENVSUBST_FILTER=^(QWEN_HOST|ANTHROPIC_API_KEY)$", nginx)
-    docker.sh("cp", os.path.join(ROOT, "docker", "gateway"), f"{GATEWAY}:/etc/nginx/templates")
-    docker.sh("network", "connect", "--alias", "gateway", NETWORK, GATEWAY)
-    docker.sh("start", GATEWAY)
+    docker.sh("create", "--name", gw, "--restart", "unless-stopped", "-e", f"QWEN_HOST={QWEN_HOST}",
+              "-e", "ANTHROPIC_API_KEY", "-e", "NGINX_ENVSUBST_FILTER=^(QWEN_HOST|ANTHROPIC_API_KEY)$", nginx)
+    docker.sh("cp", os.path.join(ROOT, "docker", f"gateway-{model_name}"), f"{gw}:/etc/nginx/templates")
+    docker.sh("network", "connect", "--alias", "gateway", net, gw)
+    docker.sh("start", gw)
 
 
 def build_agent_image(row):
@@ -75,48 +78,79 @@ class Driver:
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=open(log + ".stderr", "wb"))
         self.log = open(log, "ab")
         self.n = 0
+        self.lock = threading.Lock()  # the wall-clock timer sends abort from another thread
 
     def send(self, obj):
-        self.n += 1
-        obj["id"] = f"h{self.n}"
-        self.p.stdin.write((json.dumps(obj) + "\n").encode())
-        self.p.stdin.flush()
+        with self.lock:
+            self.n += 1
+            obj["id"] = f"h{self.n}"
+            self.p.stdin.write((json.dumps(obj) + "\n").encode())
+            self.p.stdin.flush()
 
     def phase(self, phase, text):
-        """Send 1 prompt and consume events until Pi settles. Returns the phase's counts."""
+        """Send 1 prompt and consume events until Pi settles. Returns the phase's counts.
+
+        A limit (turns, tokens, or this phase's wall clock) aborts the phase and keeps what it wrote. The phase
+        crashed only when Pi rejected the prompt, exited, or its final response ended in an error after Pi's own
+        retries; an error Pi recovered from is recorded but is not a crash."""
         lim = LIMITS[phase]
         st = {"phase": phase, "turns": 0, "tokens": 0, "input": 0, "output": 0, "cache_read": 0, "cache_write": 0,
-              "cost": 0.0, "limit_reached": None, "stop_reasons": [], "errors": [], "compactions": 0}
-        self.send({"type": "prompt", "message": text})
-        for line in self.p.stdout:  # LF-only framing, as Pi's RPC docs require
-            self.log.write(line)
-            ev = json.loads(line)
-            t = ev.get("type")
-            if t == "response" and not ev.get("success", True):
-                st["errors"].append(ev.get("error"))
-                if ev.get("command") == "prompt":
+              "cost": 0.0, "limit_reached": None, "stop_reasons": [], "errors": [], "compactions": 0,
+              "crash": None, "started_at": _now()}
+        final_error = None
+
+        def wall():
+            if not st["limit_reached"]:
+                st["limit_reached"] = "wall"
+                self.send({"type": "abort"})
+
+        timers = [threading.Timer(WALL_SECONDS, wall), threading.Timer(WALL_SECONDS + 300, self.p.kill)]
+        for t in timers:
+            t.start()
+        try:
+            self.send({"type": "prompt", "message": text})
+            for line in self.p.stdout:  # LF-only framing, as Pi's RPC docs require
+                self.log.write(line)
+                try:
+                    ev = json.loads(line)
+                except ValueError:
+                    st["errors"].append("unparsable RPC line")
+                    continue
+                t = ev.get("type")
+                if t == "response" and not ev.get("success", True):
+                    st["errors"].append(ev.get("error"))
+                    if ev.get("command") == "prompt":
+                        st["crash"] = f"prompt rejected: {ev.get('error')}"
+                        break
+                elif t == "message_end" and (ev.get("message") or {}).get("role") == "assistant":
+                    m = ev["message"]
+                    u = m.get("usage") or {}
+                    for k, f in (("input", "input"), ("output", "output"), ("cache_read", "cacheRead"),
+                                 ("cache_write", "cacheWrite")):
+                        st[k] += u.get(f, 0) or 0
+                    st["tokens"] = st["input"] + st["output"] + st["cache_read"] + st["cache_write"]
+                    st["cost"] += (u.get("cost") or {}).get("total", 0) or 0
+                    st["stop_reasons"].append(m.get("stopReason"))
+                    final_error = m.get("errorMessage") or "error" if m.get("stopReason") == "error" else None
+                    if final_error:
+                        st["errors"].append(final_error)
+                elif t == "turn_end":
+                    st["turns"] += 1
+                    if not st["limit_reached"] and (st["turns"] >= lim["turns"] or st["tokens"] >= lim["tokens"]):
+                        st["limit_reached"] = "turns" if st["turns"] >= lim["turns"] else "tokens"
+                        self.send({"type": "abort"})
+                elif t and t.startswith("compaction"):
+                    st["compactions"] += 1
+                elif t == "agent_settled":
                     break
-            elif t == "message_end" and ev["message"].get("role") == "assistant":
-                m = ev["message"]
-                u = m.get("usage") or {}
-                for k, f in (("input", "input"), ("output", "output"), ("cache_read", "cacheRead"), ("cache_write", "cacheWrite")):
-                    st[k] += u.get(f, 0)
-                st["tokens"] = st["input"] + st["output"] + st["cache_read"] + st["cache_write"]
-                st["cost"] += (u.get("cost") or {}).get("total", 0)
-                st["stop_reasons"].append(m.get("stopReason"))
-                if m.get("stopReason") == "error":
-                    st["errors"].append(m.get("errorMessage"))
-            elif t == "turn_end":
-                st["turns"] += 1
-                if not st["limit_reached"] and (st["turns"] >= lim["turns"] or st["tokens"] >= lim["tokens"]):
-                    st["limit_reached"] = "turns" if st["turns"] >= lim["turns"] else "tokens"
-                    self.send({"type": "abort"})
-            elif t and t.startswith("compaction"):
-                st["compactions"] += 1
-            elif t == "agent_settled":
-                break
-        else:
-            st["errors"].append("pi exited before settling")
+            else:
+                st["crash"] = "pi exited before settling"
+        finally:
+            for t in timers:
+                t.cancel()
+        if final_error and not st["limit_reached"] and not st["crash"]:
+            st["crash"] = f"final response error: {final_error}"
+        st["finished_at"] = _now()
         return st
 
     def close(self):
@@ -128,38 +162,39 @@ class Driver:
 
 
 def run_session(row, arm, model_name, run_dir, spec_text, note=None):
-    """Run 1 arm's session in a new container and collect its outputs into run_dir."""
+    """Run 1 arm's session in a new container and collect its outputs into run_dir.
+    Any harness error becomes a crash of this session, never an exception that stops the run."""
     os.makedirs(run_dir, exist_ok=True)
     model = MODELS[model_name]
     info = {"arm": arm, "model": model["model"], "thinking": model["thinking"], "limits": LIMITS,
-            "wall_seconds": WALL_SECONDS, "started_at": _now(), "phases": [], "crashed": None}
-    if "props" in model:
-        info["server_props"] = json.load(urllib.request.urlopen(model["props"], timeout=600))
-    name = f"sess-{arm}-{uuid.uuid4().hex[:8]}"
-    c = docker.start(docker.tag(row, "agent"), name, network=NETWORK)
+            "wall_seconds_per_phase": WALL_SECONDS, "started_at": _now(), "phases": [], "crashed": None}
+    c = None
     try:
+        if "props" in model:
+            info["server_props"] = json.load(urllib.request.urlopen(model["props"], timeout=600))
+        c = docker.start(docker.tag(row, "agent"), f"sess-{arm}-{uuid.uuid4().hex[:8]}", network=NETWORK[model_name])
         docker.sh("cp", os.path.join(ROOT, "pi"), f"{c}:/root/.pi-agent")
         drv = Driver(c, model, os.path.join(run_dir, "events.jsonl"))
-        wall = threading.Event()
-        timer = threading.Timer(WALL_SECONDS, lambda: (wall.set(), drv.p.kill()))
-        timer.start()
         try:
             for phase, text in messages(arm, spec_text, note):
                 st = drv.phase(phase, text)
                 info["phases"].append(st)
-                if st["errors"] and not st["limit_reached"]:
-                    info["crashed"] = st["errors"][-1]
+                if st["crash"]:
+                    info["crashed"] = st["crash"]
                     break
         finally:
-            timer.cancel()
             drv.close()
-        if wall.is_set():
-            info["crashed"] = "wall-clock limit"
-        elif drv.p.returncode not in (0, None) and not info["crashed"]:
+        if drv.p.returncode not in (0, None) and not info["crashed"]:
             info["crashed"] = f"pi exited {drv.p.returncode}"
-        collect(c, run_dir, arm)
+    except Exception as e:  # noqa: BLE001 - an unattended run must survive any single session's failure
+        info["crashed"] = f"harness error: {e!r}"[:2000]
     finally:
-        docker.stop(c)
+        if c:
+            try:
+                collect(c, run_dir, arm)
+            except Exception as e:  # noqa: BLE001
+                info["crashed"] = info["crashed"] or f"collect error: {e!r}"[:2000]
+            docker.stop(c)
     info["finished_at"] = _now()
     json.dump(info, open(os.path.join(run_dir, "session.json"), "w"), indent=1)
     return info
@@ -170,15 +205,21 @@ def collect(c, run_dir, arm):
         data = docker.get(c, src)
         if data is not None:
             open(os.path.join(run_dir, dst), "wb").write(data)
-    status = docker.run(c, "cd /testbed && git status --porcelain --untracked-files=all", check=False).stdout
-    tests = [l[3:] for l in status.splitlines() if l.startswith("?? ") and os.path.basename(l[3:]).startswith("test_tdd_")
-             and l.endswith(".py")]
+    # Untracked and ignored files both count: a test file in a git-ignored directory is still a new file.
+    status = docker.run(c, "cd /testbed && git status --porcelain --untracked-files=all --ignored", check=False).stdout
+    tests = [l[3:] for l in status.splitlines() if l[:3] in ("?? ", "!! ")
+             and os.path.basename(l[3:]).startswith("test_tdd_") and l.endswith(".py")]
     for path in tests:
+        content = docker.get(c, f"/testbed/{path}")
+        if content is None:
+            continue
         out = os.path.join(run_dir, "tests", path)
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        open(out, "wb").write(docker.get(c, f"/testbed/{path}"))
+        open(out, "wb").write(content)
     diff = docker.run(c, "cd /testbed && git diff", check=False).stdout
     open(os.path.join(run_dir, "changes.txt"), "w").write(status + "\n" + diff)
+    # Every path the session created or changed anywhere in the container, for the isolation check.
+    open(os.path.join(run_dir, "container_diff.txt"), "w").write(docker.sh("diff", c, check=False).stdout)
 
 
 def _now():

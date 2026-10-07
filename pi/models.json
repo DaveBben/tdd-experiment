@@ -10,18 +10,27 @@
         "supportsStore": false,
         "maxTokensField": "max_tokens"
       },
-      "models": [{
-        "id": "qwen3.6-27b",
-        "name": "Qwen3.6 27B (llama.cpp)",
-        "reasoning": true,
-        "input": ["text"],
-        "contextWindow": 200000,
-        "maxTokens": 32768,
-        "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0}
-      }]
+      "models": [
+        {
+          "id": "qwen3.6-27b",
+          "name": "Qwen3.6 27B (llama.cpp)",
+          "reasoning": true,
+          "input": [
+            "text"
+          ],
+          "contextWindow": 200000,
+          "maxTokens": 32768,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          }
+        }
+      ]
     },
     "anthropic": {
-      "baseUrl": "http://gateway:8081",
+      "baseUrl": "http://gateway:8080",
       "apiKey": "added-by-gateway"
     }
   }

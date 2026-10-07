@@ -23,6 +23,7 @@ from harness import checks, data, docker, prepare, score, session
 
 ROOT = docker.ROOT
 CAP_PER_REPO = 5
+REPLACEMENTS = 5
 
 
 def seed(name):
@@ -81,17 +82,28 @@ def cmd_draw_pilot():
     _write("pilot.txt", kept[:3])
 
 
-def cmd_draw_experiment(n):
-    pilot = open(os.path.join(ROOT, "draws", "pilot.txt")).read().split()
-    rest = [t for t in kept_tasks() if t not in pilot]
-    random.Random(seed("experiment")).shuffle(rest)
+def draw_order(pilot, rest, cap):
     per_repo, order = {}, []
     for t in pilot:
         per_repo[repo(t)] = per_repo.get(repo(t), 0) + 1
     for t in rest:
-        if per_repo.get(repo(t), 0) < CAP_PER_REPO:
+        if per_repo.get(repo(t), 0) < cap:
             per_repo[repo(t)] = per_repo.get(repo(t), 0) + 1
             order.append(t)
+    return order
+
+
+def cmd_draw_experiment(n):
+    """EXPERIMENT.md "Objects" step 6: the per-repository limit is the smallest k >= 5 that yields n tasks plus
+    REPLACEMENTS replacements; when no k does, every kept task is used and the shortfall is reported."""
+    pilot = open(os.path.join(ROOT, "draws", "pilot.txt")).read().split()
+    rest = [t for t in kept_tasks() if t not in pilot]
+    random.Random(seed("experiment")).shuffle(rest)
+    cap = CAP_PER_REPO
+    while len(draw_order(pilot, rest, cap)) < n + REPLACEMENTS and cap < len(rest):
+        cap += 1
+    order = draw_order(pilot, rest, cap)
+    print(f"per-repository limit {cap}: {len(order)} tasks available for n={n}")
     _write("experiment.txt", order[:n])
     _write("replacements.txt", order[n:])
 
@@ -153,7 +165,8 @@ def excluded_manifest(run_dir, reason):
 def cmd_setup(tasks_file):
     """Prepare (if needed) and build every drawn task's images once, before parallel runs start."""
     rows = data.load_rows()
-    session.ensure_gateway()
+    for m in session.MODELS:
+        session.ensure_gateway(m)
     for task in open(tasks_file).read().split():
         ensure_prepared(rows[task])
         session.build_agent_image(rows[task])
@@ -172,7 +185,7 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
     rng.shuffle(pairs)
     later = ["B", "C"] + (["B2"] if aa else [])
     orders = [rng.sample(later, len(later)) for _ in pairs]
-    session.ensure_gateway()
+    session.ensure_gateway(model)
     for (task, r), order in zip(pairs, orders):
         row = rows[task]
         if budget is not None and spent(out) >= budget:
@@ -184,28 +197,41 @@ def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
         if all(done(a) for a in ["A", *order]):
             continue
         print(f"{task} run {r}: A then {order}", flush=True)
-        if done("A"):
-            extra = json.load(open(os.path.join(base("A"), "manifest.json")))
-            adir = os.path.join(base("A"), extra.get("attempt_dir", ""))
-        else:
-            adir, extra = run_arm(row, "A", model, base("A"), spec_text, check=design_check(spec_text))
-            write_manifest(row, model, base("A"), adir, extra)
-        if extra["excluded"]:
-            for arm in [a for a in order if not done(a)]:
-                excluded_manifest(base(arm), "pair excluded: arm A " + extra["excluded"])
+        try:
+            run_pair(row, model, base, order, spec_text, done)
+        except Exception as e:  # noqa: BLE001 - log it and go on; the pair stays incomplete and is visible
+            print(f"PAIR ERROR {task} run {r}: {e!r}", flush=True)
             continue
-        note = _read(os.path.join(adir, "design_note.md"))
-        for arm in order:
-            if done(arm):
-                continue
-            pi_arm = "B" if arm == "B2" else arm
-            bdir, bextra = run_arm(row, pi_arm, model, base(arm), spec_text, note=note if arm == "C" else None)
-            bextra["isolation_suspects"] = checks.isolation_suspects(row, os.path.join(bdir, "session.jsonl"))
-            if bextra["isolation_suspects"] and not bextra["excluded"]:
-                bextra["excluded"] = "isolation check"
-            write_manifest(row, model, base(arm), bdir, bextra)
         print(f"done {task} run {r}; spent {spent(out):.2f}", flush=True)
         cmd_ledger()
+
+
+def run_pair(row, model, base, order, spec_text, done):
+    if done("A"):
+        extra = json.load(open(os.path.join(base("A"), "manifest.json")))
+        adir = os.path.join(base("A"), extra.get("attempt_dir", ""))
+    else:
+        adir, extra = run_arm(row, "A", model, base("A"), spec_text, check=design_check(spec_text))
+        write_manifest(row, model, base("A"), adir, extra)
+    if extra["excluded"]:
+        for arm in [a for a in order if not done(a)]:
+            excluded_manifest(base(arm), "pair excluded: arm A " + extra["excluded"])
+        return
+    note = _read(os.path.join(adir, "design_note.md"))
+    for arm in order:
+        if done(arm):
+            continue
+        pi_arm = "B" if arm == "B2" else arm
+        bdir, bextra = run_arm(row, pi_arm, model, base(arm), spec_text, note=note if arm == "C" else None)
+        try:
+            bextra["isolation_suspects"] = checks.isolation_suspects(
+                row, os.path.join(bdir, "session.jsonl"), os.path.join(bdir, "container_diff.txt"))
+        except Exception as e:  # noqa: BLE001
+            bextra["isolation_suspects"] = None
+            bextra["isolation_check_error"] = repr(e)
+        if bextra["isolation_suspects"] and not bextra["excluded"]:
+            bextra["excluded"] = "isolation check"
+        write_manifest(row, model, base(arm), bdir, bextra)
 
 
 # --- scoring --------------------------------------------------------------------
@@ -216,16 +242,19 @@ def cmd_score(tasks_file, out):
         row = rows[task]
         ensure_prepared(row)
         mutants = json.load(open(os.path.join(ROOT, "tasks", task, "mutants.json")))["mutants"]
-        tdir = os.path.join(ROOT, "tasks", task)
-        if not os.path.exists(os.path.join(tdir, "human_score.json")):
-            score.score_human(row, tdir, mutants)
+        hdir = os.path.join(ROOT, "runs", "human", task)  # model-independent, scored once per task
+        if not os.path.exists(os.path.join(hdir, "human_score.json")):
+            score.score_human(row, hdir, mutants)
         for mpath in sorted(glob.glob(os.path.join(out, task, "*", "*", "manifest.json"))):
             run_dir = os.path.dirname(mpath)
             m = json.load(open(mpath))
             if m.get("excluded") or os.path.exists(os.path.join(run_dir, "score.json")):
                 continue
-            score.score(row, run_dir, mutants, os.path.join(run_dir, m["attempt_dir"], "tests"))
-            print("scored", run_dir, flush=True)
+            try:
+                score.score(row, run_dir, mutants, os.path.join(run_dir, m["attempt_dir"], "tests"))
+                print("scored", run_dir, flush=True)
+            except Exception as e:  # noqa: BLE001 - an unscored run stays visible as missing score.json
+                print(f"SCORE ERROR {run_dir}: {e!r}", flush=True)
     cmd_ledger()
 
 

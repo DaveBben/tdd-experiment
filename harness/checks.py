@@ -55,12 +55,14 @@ def tool_calls(session_path):
     return [(b["name"], b.get("arguments") or {}, errors.get(b["id"])) for b in calls]
 
 
-def isolation_suspects(row, session_path):
-    """Successful reads of paths that were neither in the starting container nor written by the session.
-    Paths used inside bash commands are listed for the hand check of transcripts."""
+def isolation_suspects(row, session_path, diff_path):
+    """Successful reads of paths that were neither in the starting container nor created by the session (by any
+    tool, bash included, per `docker diff`). Paths used inside bash commands are left to the hand check."""
     calls = tool_calls(session_path)
-    written = {_abs(a.get("path")) for n, a, _ in calls if n in ("write", "edit")}
-    reads = sorted({_abs(a.get("path")) for n, a, err in calls if n == "read" and not err} - written - {None})
+    created = set()
+    if os.path.exists(diff_path):
+        created = {l[2:].strip() for l in open(diff_path) if l[:2] in ("A ", "C ")}
+    reads = sorted({_abs(a.get("path")) for n, a, err in calls if n == "read" and not err} - created - {None})
     if not reads:
         return []
     c = docker.start(docker.tag(row, "agent"), f"iso-{uuid.uuid4().hex[:8]}")
