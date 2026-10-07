@@ -71,8 +71,7 @@ def prepare(task_id, rows, seed):
     row = rows[task_id]
     out = os.path.join(ROOT, "tasks", task_id)
     os.makedirs(out, exist_ok=True)
-    settings = row["repo_settings"]
-    cmd = f"{settings['test_cmd']} --timeout={settings['timeout_one']}"
+    cmd = data.test_cmd(row)
     spec_text = data.spec(row)
     open(os.path.join(out, "spec.md"), "w").write(spec_text)
     report = {"task": task_id, "image": docker.image_ref(row), "test_cmd": cmd}

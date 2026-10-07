@@ -5,7 +5,7 @@ import json
 import os
 import uuid
 
-from harness import docker
+from harness import data, docker
 
 ROOT = docker.ROOT
 RUNNER = os.path.join(ROOT, "harness", "runner.py")
@@ -33,9 +33,7 @@ def _runner(c, cmd, mode, targets, arg):
     return json.loads(r.stdout)
 
 
-def test_cmd(row):
-    s = row["repo_settings"]
-    return f"{s['test_cmd']} --timeout={s['timeout_one']}"
+test_cmd = data.test_cmd
 
 
 def lock(row, run_dir, tests_dir):

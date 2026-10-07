@@ -103,3 +103,14 @@ def gold_added_lines(row):
         if lines:
             out[path] = lines
     return out
+
+
+# FeatureBench's MAP_REPO_TO_TEST_CMD (featurebench/harness/test_parsers.py), preferred over repo_settings.
+TEST_CMD_OVERRIDE = {"pydantic/pydantic": "pytest -rA -v --color=no"}
+
+
+def test_cmd(row):
+    """The test command FeatureBench's evaluation uses for this task."""
+    s = row["repo_settings"]
+    cmd = TEST_CMD_OVERRIDE.get(row["repo"], s["test_cmd"])
+    return f"{cmd} --timeout={s['timeout_one']}" if s.get("timeout_one") else cmd
