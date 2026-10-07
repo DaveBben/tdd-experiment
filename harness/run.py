@@ -183,7 +183,11 @@ def cmd_setup(tasks_file):
 
 
 def spent(out):
-    return sum(json.load(open(p)).get("cost") or 0 for p in glob.glob(os.path.join(out, "*", "*", "*", "manifest.json")))
+    """Spend over every session, reruns included."""
+    total = 0.0
+    for p in glob.glob(os.path.join(out, "*", "*", "*", "attempt-*", "session.json")):
+        total += sum(ph.get("cost") or 0 for ph in json.load(open(p)).get("phases", []))
+    return total
 
 
 def cmd_sessions(model, tasks_file, runs, out, aa=False, budget=None):
