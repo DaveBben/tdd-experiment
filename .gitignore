@@ -5,3 +5,5 @@ smoke/
 logs/
 runs.sha256.lock
 __pycache__/
+.DS_Store
+runs/
