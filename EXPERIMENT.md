@@ -662,3 +662,8 @@ Changes made after the pilot started, each with its date, reason, and expected e
   The running process could not take a new deadline, so a watcher applies the same rule from outside it: no pair starts after 23:40, and a pair still running at 00:00 is stopped.
   A stopped pair has no manifest, so the analysis leaves it out, as it would an excluded pair.
   Qwen is expected to finish about 17 tasks, so its result has less power than the earlier entry estimated.
+* **2026-10-08, pilot ledger hashes taken mid-write.**
+  The run check found 14 pilot `events.jsonl` files whose ledger hash does not match.
+  Each recorded hash equals the hash of a prefix of its file: the ledger code used during the pilot hashed sessions that were still being written, which the later manifest guard fixed.
+  The files were last modified before the ledger commit `0d901a6`, and pilot data enter no result.
+  Every main-run file matches its ledger hash.
