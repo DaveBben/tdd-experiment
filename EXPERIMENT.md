@@ -656,3 +656,9 @@ Changes made after the pilot started, each with its date, reason, and expected e
   That file holds the 14 replacement tasks, then the other 39 kept tasks that are not pilot tasks, in the experiment draw's shuffled order.
   The extension lifts the per-repository limit of 5, so mlflow, pandas, and astropy can each reach more than 5 tasks, and the repository-cluster bootstrap interval matters more.
   Qwen still runs only the 30 drawn tasks, so the 2 models' task sets differ.
+* **2026-10-07, Qwen stop moved to midnight.**
+  At 21:30, with 12 Qwen tasks done, the experimenter moved Qwen's stop from 06:00 to 00:00 on 2026-10-08, because the Qwen server was needed sooner.
+  No main-run score had been computed.
+  The running process could not take a new deadline, so a watcher applies the same rule from outside it: no pair starts after 23:40, and a pair still running at 00:00 is stopped.
+  A stopped pair has no manifest, so the analysis leaves it out, as it would an excluded pair.
+  Qwen is expected to finish about 17 tasks, so its result has less power than the earlier entry estimated.
